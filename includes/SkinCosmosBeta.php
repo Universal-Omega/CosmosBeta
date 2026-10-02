@@ -315,7 +315,7 @@ class SkinCosmosBeta extends SkinMustache {
 			$this->getConfig(),
 			$this->cookieWarningDecisions,
 			$this->userOptionsManager
-		)
+		);
 
 		$html = '';
 		$hooks->onSkinAfterContent( $html, $this );
