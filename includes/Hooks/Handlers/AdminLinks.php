@@ -8,6 +8,7 @@ use ALItem;
 use ALRow;
 use ALSection;
 use ALTree;
+use function wfMessage;
 
 class AdminLinks {
 
