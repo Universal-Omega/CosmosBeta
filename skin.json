@@ -398,6 +398,7 @@
 				"cosmosbeta-themedesigner-color-invalid",
 				"cosmosbeta-themedesigner-color-link",
 				"cosmosbeta-themedesigner-color-link-help",
+				"cosmosbeta-themedesigner-color-opacity",
 				"cosmosbeta-themedesigner-color-reset",
 				"cosmosbeta-themedesigner-color-toolbar",
 				"cosmosbeta-themedesigner-color-toolbar-help",
@@ -432,6 +433,8 @@
 				"cosmosbeta-themedesigner-image-wordmark",
 				"cosmosbeta-themedesigner-images-intro",
 				"cosmosbeta-themedesigner-inherit",
+				"cosmosbeta-themedesigner-layout-backdrop-blur",
+				"cosmosbeta-themedesigner-layout-backdrop-blur-help",
 				"cosmosbeta-themedesigner-layout-banner-icon-opacity",
 				"cosmosbeta-themedesigner-layout-header-icon-opacity",
 				"cosmosbeta-themedesigner-layout-opacity",
@@ -681,6 +684,12 @@
 				"mainpage"
 			],
 			"description": "List of pages to disable the rail in."
+		},
+		"CosmosBetaRailSidebarPortlets": {
+			"value": [
+				"USER-SIDEBAR"
+			],
+			"description": "Names of sidebar sections, such as the one from the DynamicSidebar extension, that are shown as rail modules instead of in the top navigation."
 		},
 		"CosmosBetaSearchDescriptionSource": {
 			"value": "textextracts"
