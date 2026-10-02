@@ -66,15 +66,9 @@
 	display: inline-block;
 	height: 1.42857143em;
 	margin-top: 10.5px;
-	.cdx-mixin-css-icon-background-image( @cdx-icon-message, #000 );
-	.skin-cosmos-outline-icon( @cdx-icon-message );
 	background-image: none;
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
-	-webkit-mask-position: center;
-	mask-position: center;
-	-webkit-mask-size: contain;
-	mask-size: contain;
+	background-color: #000;
+	.skin-cosmos-outline-icon( @cdx-icon-message, 0.9 );
 	vertical-align: middle;
 }
 
@@ -83,14 +77,9 @@
 	display: inline-block;
 	height: 1.42857143em;
 	margin-top: 10.5px;
-	.cdx-mixin-css-icon-background-image( @cdx-icon-bell-outline, #000 );
 	background-image: none;
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
-	-webkit-mask-position: center;
-	mask-position: center;
-	-webkit-mask-size: contain;
-	mask-size: contain;
+	background-color: #000;
+	.skin-cosmos-mask-icon( @cdx-icon-bell-outline );
 	vertical-align: middle;
 }
 
