@@ -6,7 +6,7 @@ namespace MediaWiki\Skins\CosmosBeta;
 
 use CookieWarning\Decisions as CookieWarningDecisions;
 use CookieWarning\Hooks as CookieWarningHooks;
-use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\Language;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Permissions\PermissionManager;
@@ -33,11 +33,24 @@ use function trim;
 
 class SkinCosmosBeta extends SkinMustache {
 
+	public const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::EnablePortableInfoboxEuropaTheme,
+		ConfigNames::RailSidebarPortlets,
+		ConfigNames::SocialProfileAllowBio,
+		ConfigNames::SocialProfileModernTabs,
+		ConfigNames::SocialProfileRoundAvatar,
+		ConfigNames::SocialProfileShowEditCount,
+		ConfigNames::SocialProfileShowGroupTags,
+		...BannerComponent::CONSTRUCTOR_OPTIONS,
+		...CreatePageDialogComponent::CONSTRUCTOR_OPTIONS,
+		...WikiHeaderComponent::CONSTRUCTOR_OPTIONS,
+	];
+
 	public function __construct(
 		private readonly AltModules $altModules,
 		public readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosNavigation $navigation,
-		private readonly Config $cosmosOptions,
+		private readonly ServiceOptions $serviceOptions,
 		private readonly CosmosRailBuilder $railBuilder,
 		private readonly CosmosWordmarkLookup $wordmarkLookup,
 		private readonly Language $contentLanguage,
@@ -51,6 +64,8 @@ class SkinCosmosBeta extends SkinMustache {
 		array $options,
 	) {
 		parent::__construct( $options );
+
+		$serviceOptions->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	/** @inheritDoc */
@@ -62,10 +77,10 @@ class SkinCosmosBeta extends SkinMustache {
 		$context = $this->getContext();
 		$mainPage = $data['link-mainpage'];
 
-		$banner = new BannerComponent( $context, $this->cosmosOptions, $this->extensionRegistry );
+		$banner = new BannerComponent( $context, $this->serviceOptions, $this->extensionRegistry );
 		$header = new WikiHeaderComponent(
 			$context,
-			$this->getConfig(),
+			$this->serviceOptions,
 			$this->permissionManager,
 			$this->extensionRegistry,
 			$this->wordmarkLookup,
@@ -79,7 +94,7 @@ class SkinCosmosBeta extends SkinMustache {
 		);
 		$dialog = new CreatePageDialogComponent(
 			$context,
-			$this->cosmosOptions,
+			$this->serviceOptions,
 			$this->specialPageFactory,
 			$this->titleFactory
 		);
@@ -90,7 +105,10 @@ class SkinCosmosBeta extends SkinMustache {
 		$toolsInRail = $this->shouldPutToolsInRail();
 		$this->railBuilder->setToolsModule( $toolsInRail, $toolsInRail ? $chrome->getToolItems( $sidebar ) : [] );
 
-		$tree = $this->navigation->getTree( $this, $this->getLanguage() );
+		$tree = $this->navigation->mergeSidebar(
+			$this->navigation->getTree( $this, $this->getLanguage() ),
+			array_merge( [ $sidebar['data-portlets-first'] ?? [] ], $sidebar['array-portlets-rest'] ?? [] )
+		);
 		$siteNotice = $data['html-site-notice'] ?? null;
 		$search = $this->getSearchData( $data['data-search-box'] ?? [] );
 		$dismissable = $this->extensionRegistry->isLoaded( 'DismissableSiteNotice' );
@@ -120,24 +138,27 @@ class SkinCosmosBeta extends SkinMustache {
 	public function getDefaultModules(): array {
 		$modules = parent::getDefaultModules();
 
-		$this->railBuilder->setToolsModule( $this->shouldPutToolsInRail() );
+		$this->railBuilder->setToolsModule( $this->shouldPutToolsInRail(), [] );
 
 		if (
 			!$this->railBuilder->isHidden() &&
-			( $this->railBuilder->hasModules() || (array)$this->cosmosOptions->get( ConfigNames::RailSidebarPortlets ) !== [] )
+			( $this->railBuilder->hasModules() || (array)$this->serviceOptions->get( ConfigNames::RailSidebarPortlets ) !== [] )
 		) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.rail';
 		}
 
 		if ( $this->extensionRegistry->isLoaded( 'PortableInfobox' ) ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.portableinfobox';
-			$modules['styles']['skin'][] = $this->cosmosOptions->get( ConfigNames::EnablePortableInfoboxEuropaTheme ) ?
+			$modules['styles']['skin'][] = $this->serviceOptions->get( ConfigNames::EnablePortableInfoboxEuropaTheme ) ?
 				'skins.cosmosbeta.portableinfobox.europa' :
 				'skins.cosmosbeta.portableinfobox.default';
 		}
 
 		if (
-			LessUtil::isThemeDark( 'content-background-color' ) &&
+			LessUtil::isThemeDark(
+				'content-background-color',
+				LessUtil::getCosmosSettings( $this->cosmosConfig->getRenderMode() )
+			) &&
 			$this->extensionRegistry->isLoaded( 'CodeMirror' ) &&
 			$this->extensionRegistry->isLoaded( 'VisualEditor' )
 		) {
@@ -165,7 +186,7 @@ class SkinCosmosBeta extends SkinMustache {
 	 * Sidebar sections such as the dynamic user sidebar are moved out of the top navigation into the rail.
 	 */
 	private function getRailSidebarModules( array $sidebar ): array {
-		$names = array_map( strtoupper( ... ), (array)$this->cosmosOptions->get( ConfigNames::RailSidebarPortlets ) );
+		$names = array_map( strtoupper( ... ), (array)$this->serviceOptions->get( ConfigNames::RailSidebarPortlets ) );
 		$portlets = array_merge( [ $sidebar['data-portlets-first'] ?? null ], $sidebar['array-portlets-rest'] ?? [] );
 		$modules = [];
 
@@ -235,7 +256,7 @@ class SkinCosmosBeta extends SkinMustache {
 		];
 
 		foreach ( $map as $option => $module ) {
-			if ( $this->cosmosOptions->get( $option ) ) {
+			if ( $this->serviceOptions->get( $option ) ) {
 				$modules[] = $module;
 			}
 		}
