@@ -45,8 +45,8 @@
 
 		$item.attr( { title: label, 'aria-label': label } );
 		$item.find( '.skin-cosmos-icon' )
-			.removeClass( 'skin-cosmos-icon-moon skin-cosmos-icon-lightbulb' )
-			.addClass( mode === 'dark' ? 'skin-cosmos-icon-lightbulb' : 'skin-cosmos-icon-moon' );
+			.removeClass( 'skin-cosmos-icon-moon skin-cosmos-icon-bright' )
+			.addClass( mode === 'dark' ? 'skin-cosmos-icon-bright' : 'skin-cosmos-icon-moon' );
 	}
 
 	// The alternative stylesheets are style only modules, so they are loaded the way load.php serves styles.
