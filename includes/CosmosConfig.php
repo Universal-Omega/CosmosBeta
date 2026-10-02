@@ -139,10 +139,6 @@ class CosmosConfig {
 			$this->options->get( ConfigNames::ContentOpacityLevel ) );
 	}
 
-	public function getBannerIconOpacity(): int {
-		return (int)$this->getTheme()->getSection( 'layout' )['bannerIconOpacity'];
-	}
-
 	public function getHeaderButtonOpacity(): int {
 		return (int)$this->getTheme()->getSection( 'layout' )['headerButtonOpacity'];
 	}
