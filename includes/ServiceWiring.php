@@ -8,6 +8,7 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Skins\CosmosBeta\ConfigNames;
 use MediaWiki\Skins\CosmosBeta\CosmosBackgroundLookup;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
 use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
@@ -65,7 +66,8 @@ return [
 			$services->getContentLanguage(),
 			$services->getUrlUtils(),
 			$services->getTitleFactory(),
-			$services->get( 'ExtensionRegistry' )
+			$services->get( 'ExtensionRegistry' ),
+			(array)$services->get( 'CosmosBetaOptions' )->get( ConfigNames::RailSidebarPortlets )
 		);
 	},
 
