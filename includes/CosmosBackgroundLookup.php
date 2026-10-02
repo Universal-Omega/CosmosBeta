@@ -15,17 +15,16 @@ class CosmosBackgroundLookup {
 	public function __construct(
 		private readonly TitleFactory $titleFactory,
 		private readonly RepoGroup $repoGroup,
-		private readonly string $main,
-		private readonly string $wikiHeader,
+		private readonly CosmosConfig $cosmosConfig,
 	) {
 	}
 
 	public function getMainBackgroundUrl(): ?string {
-		return $this->resolve( $this->main );
+		return $this->resolve( $this->cosmosConfig->getBackgroundImage() );
 	}
 
 	public function getWikiHeaderBackgroundUrl(): ?string {
-		return $this->resolve( $this->wikiHeader );
+		return $this->resolve( $this->cosmosConfig->getWikiHeaderBackgroundImage() );
 	}
 
 	public function isBackgroundUrl( string $background ): bool {
