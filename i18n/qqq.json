@@ -112,7 +112,7 @@
 	"cosmosbeta-themedesigner-layout-backdrop-blur": "Label of a slider on Special:CosmosBetaThemeDesigner. It sets how strongly the background behind see through areas is blurred.",
 	"cosmosbeta-themedesigner-layout-backdrop-blur-help": "Help text under the background blur slider on Special:CosmosBetaThemeDesigner.",
 	"cosmosbeta-themedesigner-layout-banner-icon-opacity": "Label of a slider on Special:CosmosBetaThemeDesigner that sets how see through the icons in the top bar are.",
-	"cosmosbeta-themedesigner-layout-header-icon-opacity": "Label of a slider on Special:CosmosBetaThemeDesigner that sets how see through the icons of the wiki header buttons are.",
+	"cosmosbeta-themedesigner-layout-header-button-opacity": "Label of a slider on Special:CosmosBetaThemeDesigner. It sets how solid the background behind the wiki header buttons is.",
 	"cosmosbeta-themedesigner-layout-opacity": "Text used on Special:ThemeDesigner.",
 	"cosmosbeta-themedesigner-layout-width": "Text used on Special:ThemeDesigner.",
 	"cosmosbeta-themedesigner-layout-width-default": "Text used on Special:ThemeDesigner.",
