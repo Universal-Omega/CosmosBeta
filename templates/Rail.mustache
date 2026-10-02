@@ -1,7 +1,7 @@
 <div class="skin-cosmos-rail CosmosRail" id="CosmosRailWrapper">
 	<div class="skin-cosmos-rail-inner cosmos-rail-inner" id="CosmosRail">
 		{{#array-modules}}
-		<section class="railModule module {{#is-sticky}}rail-sticky-module {{/is-sticky}}{{class}}">
+		<section class="skin-cosmos-rail-module railModule module{{#is-sticky}} skin-cosmos-rail-module--sticky rail-sticky-module{{/is-sticky}} {{class}}">
 			{{#header}}<h3>{{.}}</h3>{{/header}}
 			{{#array-recentchanges}}
 			<li>
