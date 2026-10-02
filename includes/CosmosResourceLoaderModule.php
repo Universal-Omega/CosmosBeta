@@ -223,8 +223,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 		return [
 			'banner-font-color' =>
 				$isBannerBackgroundColorDark ? '#fff' : '#000',
-			'banner-echo-icon-filter' =>
-				$isBannerBackgroundColorDark ? 'invert( 1 )' : 'none',
 			'banner-search-background' =>
 				$isBannerBackgroundColorDark ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)',
 			'banner-search-focus-background' =>
