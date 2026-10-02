@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta\Components;
 
-use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\MainConfigNames;
 use MediaWiki\SiteStats\SiteStats;
@@ -19,16 +19,25 @@ use function preg_match;
 
 class CreatePageDialogComponent {
 
+	public const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::EnableWantedPages,
+		ConfigNames::FetchWantedPagesFromCache,
+		ConfigNames::WantedPagesFetchedNamespaces,
+		ConfigNames::WantedPagesMaxTitlesCount,
+		MainConfigNames::Script,
+	];
+
 	public function __construct(
 		private readonly IContextSource $context,
-		private readonly Config $config,
+		private readonly ServiceOptions $options,
 		private readonly SpecialPageFactory $specialPageFactory,
 		private readonly TitleFactory $titleFactory,
 	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	public function getTemplateData(): array {
-		$wantedPagesEnabled = (bool)$this->config->get( ConfigNames::EnableWantedPages );
+		$wantedPagesEnabled = (bool)$this->options->get( ConfigNames::EnableWantedPages );
 
 		$wantedPagesMessage = $wantedPagesEnabled ?
 			$this->context->msg( 'cosmosbeta-createpage-wanted-pages' )->text() :
@@ -38,7 +47,7 @@ class CreatePageDialogComponent {
 			)->text();
 
 		return [
-			'form-action' => $this->config->get( MainConfigNames::Script ),
+			'form-action' => $this->options->get( MainConfigNames::Script ),
 			'msg-close' => $this->context->msg( 'cosmosbeta-createpage-close' )->text(),
 			'msg-header' => $this->context->msg( 'cosmosbeta-createpage-header' )->text(),
 			'msg-label' => $this->context->msg( 'cosmosbeta-createpage-input-label' )->text(),
@@ -60,12 +69,12 @@ class CreatePageDialogComponent {
 			return [];
 		}
 
-		$rows = $this->config->get( ConfigNames::FetchWantedPagesFromCache ) ?
+		$rows = $this->options->get( ConfigNames::FetchWantedPagesFromCache ) ?
 			$page->fetchFromCache( false ) :
 			$page->doQuery();
 
-		$namespaces = $this->config->get( ConfigNames::WantedPagesFetchedNamespaces );
-		$max = (int)$this->config->get( ConfigNames::WantedPagesMaxTitlesCount );
+		$namespaces = $this->options->get( ConfigNames::WantedPagesFetchedNamespaces );
+		$max = (int)$this->options->get( ConfigNames::WantedPagesMaxTitlesCount );
 		$pages = [];
 
 		foreach ( $rows as $row ) {
