@@ -16,17 +16,18 @@
 	"ValidSkinNames": {
 		"cosmosbeta": {
 			"displayname": "CosmosBeta",
-			"class": "MediaWiki\\Skins\\CosmosBeta\\SkinCosmosBeta",
+			"factory": "MediaWiki\\Skins\\CosmosBeta\\SkinCosmosBeta::factory",
 			"services": [
 				"CosmosBetaAltModules",
+				"ConfigFactory",
 				"CosmosBetaConfig",
 				"CosmosBetaNavigation",
-				"CosmosBetaSkinOptions",
 				"CosmosBetaRailBuilder",
 				"CosmosBetaWordmarkLookup",
 				"ContentLanguage",
 				"ExtensionRegistry",
 				"LanguageNameUtils",
+				"MainConfig",
 				"PermissionManager",
 				"SpecialPageFactory",
 				"TitleFactory",
@@ -435,7 +436,6 @@
 				"cosmosbeta-themedesigner-inherit",
 				"cosmosbeta-themedesigner-layout-backdrop-blur",
 				"cosmosbeta-themedesigner-layout-backdrop-blur-help",
-				"cosmosbeta-themedesigner-layout-banner-icon-opacity",
 				"cosmosbeta-themedesigner-layout-header-button-opacity",
 				"cosmosbeta-themedesigner-layout-opacity",
 				"cosmosbeta-themedesigner-layout-width",
@@ -810,9 +810,9 @@
 			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\PersonalTools"
 		},
 		"socialprofile": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile",
+			"factory": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
-				"CosmosBetaSocialProfileOptions",
+				"ConfigFactory",
 				"CosmosBetaTemplateParser",
 				"TitleFactory",
 				"UserGroupManager",
