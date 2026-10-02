@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 
-use MediaWiki\Config\ConfigFactory;
+use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Content\TextContent;
 use MediaWiki\Context\IContextSource;
@@ -36,31 +36,35 @@ class SocialProfile {
 		ConfigNames::SocialProfileTagGroups,
 	];
 
+	public function __construct(
+		private readonly TemplateParser $templateParser,
+		private readonly TitleFactory $titleFactory,
+		private readonly UserGroupManager $userGroupManager,
+		private readonly WikiPageFactory $wikiPageFactory,
+		private readonly ServiceOptions $options,
+	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+	}
+
 	public static function factory(
-		ConfigFactory $configFactory,
+		Config $cosmosOptions,
 		TemplateParser $templateParser,
 		TitleFactory $titleFactory,
 		UserGroupManager $userGroupManager,
 		WikiPageFactory $wikiPageFactory
 	): self {
 		return new self(
-			new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $configFactory->makeConfig( 'CosmosBeta' ) ),
 			$templateParser,
 			$titleFactory,
 			$userGroupManager,
-			$wikiPageFactory
+			$wikiPageFactory,
+			new ServiceOptions(
+				self::CONSTRUCTOR_OPTIONS,
+				$cosmosOptions
+			),
 		);
 	}
 
-	public function __construct(
-		private readonly ServiceOptions $options,
-		private readonly TemplateParser $templateParser,
-		private readonly TitleFactory $titleFactory,
-		private readonly UserGroupManager $userGroupManager,
-		private readonly WikiPageFactory $wikiPageFactory,
-	) {
-		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
-	}
 
 	/** @inheritDoc */
 	public function onUserProfileGetProfileTitle( UserProfilePage $userProfilePage, string &$profileTitle ): void {
