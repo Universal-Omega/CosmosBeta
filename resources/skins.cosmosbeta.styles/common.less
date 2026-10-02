@@ -2528,16 +2528,37 @@ table.mw-datatable {
 
 #cosmos-banner {
 	.oo-ui-icon-bell,
-	.oo-ui-icon-tray,
-	.mw-ui-icon-bell::before,
-	.mw-ui-icon-tray::before {
-		filter: @banner-echo-icon-filter;
+	.oo-ui-icon-tray {
+		position: relative;
+		background-image: none;
+
+		&::before {
+			position: absolute;
+			background-color: @banner-font-color;
+			content: '';
+			inset: 0;
+		}
 	}
 
-	.oo-ui-icon-bell::after,
-	.oo-ui-icon-tray::after {
-		filter: @banner-echo-icon-filter;
+	.oo-ui-icon-bell::before {
+		.skin-cosmos-mask-icon( @cdx-icon-bell-outline );
 	}
+
+	.oo-ui-icon-tray::before {
+		.skin-cosmos-mask-icon( @cdx-icon-message );
+	}
+}
+
+.mw-ui-icon-bell::before {
+	background-color: @banner-font-color;
+	background-image: none;
+	.skin-cosmos-mask-icon( @cdx-icon-bell-outline );
+}
+
+.mw-ui-icon-tray::before {
+	background-color: @banner-font-color;
+	background-image: none;
+	.skin-cosmos-mask-icon( @cdx-icon-message );
 }
 
 table.mw-interwikitable.body td.mw-interwikitable-local-yes {
@@ -2722,16 +2743,16 @@ div.thumbinner {
 	}
 
 	&.skin-cosmos-icon-speechBubble::before {
-		.skin-cosmos-outline-icon( @cdx-icon-speech-bubble, @skin-cosmos-outline-thickness );
+		.skin-cosmos-mask-icon( @cdx-icon-speech-bubble );
 	}
 }
 
 .skin-cosmos-header-button .skin-cosmos-icon-moon::before {
-	.skin-cosmos-outline-icon( @cdx-icon-moon, @skin-cosmos-outline-thickness );
+	.skin-cosmos-mask-icon( @cdx-icon-moon );
 }
 
-.skin-cosmos-header-button .skin-cosmos-icon-lightbulb::before {
-	.skin-cosmos-outline-icon( @cdx-icon-lightbulb, @skin-cosmos-outline-thickness );
+.skin-cosmos-header-button .skin-cosmos-icon-bright::before {
+	.skin-cosmos-mask-icon( @cdx-icon-bright );
 }
 
 #cosmos-notification-icons {
