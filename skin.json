@@ -1,10 +1,7 @@
 {
 	"name": "CosmosBeta",
-	"version": "7.1.0",
-	"author": [
-		"Universal Omega",
-		"..."
-	],
+	"version": "10.0.0",
+	"author": "Universal Omega",
 	"url": "https://www.mediawiki.org/wiki/Skin:Cosmos",
 	"descriptionmsg": "cosmosbeta-desc",
 	"namemsg": "skinname-cosmosbeta",
@@ -563,6 +560,7 @@
 				"upload",
 				"userAvatarOutline",
 				"userGroup",
+				"verticalEllipsis",
 				"watchlist"
 			]
 		}
