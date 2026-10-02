@@ -21,7 +21,7 @@
 				"CosmosBetaAltModules",
 				"CosmosBetaConfig",
 				"CosmosBetaNavigation",
-				"CosmosBetaOptions",
+				"CosmosBetaSkinOptions",
 				"CosmosBetaRailBuilder",
 				"CosmosBetaWordmarkLookup",
 				"ContentLanguage",
@@ -436,7 +436,7 @@
 				"cosmosbeta-themedesigner-layout-backdrop-blur",
 				"cosmosbeta-themedesigner-layout-backdrop-blur-help",
 				"cosmosbeta-themedesigner-layout-banner-icon-opacity",
-				"cosmosbeta-themedesigner-layout-header-icon-opacity",
+				"cosmosbeta-themedesigner-layout-header-button-opacity",
 				"cosmosbeta-themedesigner-layout-opacity",
 				"cosmosbeta-themedesigner-layout-width",
 				"cosmosbeta-themedesigner-layout-width-default",
@@ -812,7 +812,7 @@
 		"socialprofile": {
 			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile",
 			"services": [
-				"CosmosBetaOptions",
+				"CosmosBetaSocialProfileOptions",
 				"CosmosBetaTemplateParser",
 				"TitleFactory",
 				"UserGroupManager",
