@@ -39,12 +39,38 @@
 		document.body.classList.toggle( 'theme-dark', mode === 'dark' );
 		document.body.classList.toggle( 'theme-light', mode !== 'dark' );
 
-		const $item = $( '#m-colormode' );
+		const $item = $( '#m-colormode' ),
+			// eslint-disable-next-line mediawiki/msg-doc
+			label = mw.msg( 'cosmosbeta-colormode-switch-' + mode );
 
-		$item.find( '.skin-cosmos-colormode-text' ).text( mw.msg( 'cosmosbeta-colormode-switch-' + mode ) );
+		$item.attr( { title: label, 'aria-label': label } );
 		$item.find( '.skin-cosmos-icon' )
 			.removeClass( 'skin-cosmos-icon-moon skin-cosmos-icon-bright' )
 			.addClass( mode === 'dark' ? 'skin-cosmos-icon-bright' : 'skin-cosmos-icon-moon' );
+	}
+
+	// The alternative stylesheets are style only modules, so they are loaded the way load.php serves styles.
+	function loadAltStyles() {
+		return new Promise( ( resolve, reject ) => {
+			if ( !config.altModules.length ) {
+				reject( new Error( 'No alternative styles' ) );
+				return;
+			}
+
+			const link = document.createElement( 'link' ),
+				params = new URLSearchParams( {
+					lang: mw.config.get( 'wgUserLanguage' ),
+					modules: config.altModules.join( '|' ),
+					only: 'styles',
+					skin: mw.config.get( 'skin' )
+				} );
+
+			link.rel = 'stylesheet';
+			link.href = mw.config.get( 'wgLoadScript' ) + '?' + params.toString();
+			link.onload = resolve;
+			link.onerror = reject;
+			document.head.appendChild( link );
+		} );
 	}
 
 	function switchForVisitor( mode ) {
@@ -56,7 +82,7 @@
 			return;
 		}
 
-		mw.loader.using( config.altModules ).then(
+		loadAltStyles().then(
 			() => applyMode( mode ),
 			() => root.classList.remove( 'skin-cosmos-colormode-pending' )
 		);
@@ -71,7 +97,7 @@
 	}
 
 	$( () => {
-		$( '#m-colormode a' ).on( 'click', function ( event ) {
+		$( '#m-colormode' ).on( 'click', function ( event ) {
 			event.preventDefault();
 
 			const next = getCurrentMode() === 'dark' ? 'light' : 'dark';
