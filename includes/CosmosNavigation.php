@@ -27,6 +27,10 @@ class CosmosNavigation {
 
 	public const string MESSAGE = 'cosmosbeta-navigation';
 
+	private const string ICON_PATTERN = '/\s*\{icon\s*=\s*([A-Za-z0-9-]+)\s*\}/';
+
+	private const string EXPLORE_ICON = 'globe';
+
 	public function __construct(
 		private readonly WANObjectCache $cache,
 		private readonly Language $contentLanguage,
@@ -77,6 +81,7 @@ class CosmosNavigation {
 				'href' => $node['href'] !== '' && $node['text'] !== 'Navigation' && !$isExplore ? $node['href'] : '#',
 				'rel-nofollow' => !$node['internal'],
 				'is-explore' => $isExplore,
+				'icon' => $node['icon'] ?? ( $isExplore ? self::EXPLORE_ICON : null ),
 				'has-children' => $children !== [],
 				'array-children' => $this->buildChildren( $nodes, $children ),
 			];
@@ -98,6 +103,7 @@ class CosmosNavigation {
 				'text' => $node['text'],
 				'href' => $node['href'] !== '' ? $node['href'] : '#',
 				'rel-nofollow' => !$node['internal'],
+				'icon' => $node['icon'] ?? null,
 				'has-children' => $grandChildren !== [],
 				'is-sticked' => $position > count( $grandChildren ) - 1,
 				'array-children' => $this->buildChildren( $nodes, $grandChildren ),
@@ -149,6 +155,13 @@ class CosmosNavigation {
 	}
 
 	public function parseLine( MessageLocalizer $localizer, string $line ): array {
+		$icon = null;
+
+		if ( preg_match( self::ICON_PATTERN, $line, $matches ) ) {
+			$icon = in_array( $matches[1], $this->getAllowedIcons(), true ) ? $matches[1] : null;
+			$line = (string)preg_replace( self::ICON_PATTERN, '', $line, 1 );
+		}
+
 		$parts = explode( '|', trim( $line, '* ' ), 2 );
 		$parts[0] = trim( $parts[0], '[]' );
 		$internal = false;
@@ -182,6 +195,7 @@ class CosmosNavigation {
 			'text' => $text,
 			'href' => $href,
 			'internal' => $internal,
+			'icon' => $icon,
 		];
 	}
 
@@ -224,6 +238,15 @@ class CosmosNavigation {
 		$message = trim( $cleaned . $exploreChildUrl . $exploreChildText . $forceChildUrl . $forceChildText );
 
 		return $message !== '' && $message !== '-' ? explode( "\n", $message ) : [];
+	}
+
+	/**
+	 * @return string[] Icons that the skin icon module provides
+	 */
+	public function getAllowedIcons(): array {
+		$modules = $this->extensionRegistry->getAttribute( 'ResourceModules' );
+
+		return $modules['skins.cosmosbeta.icons']['icons'] ?? [];
 	}
 
 	private function getCacheKey(): string {
