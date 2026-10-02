@@ -39,7 +39,12 @@
 		document.body.classList.toggle( 'theme-dark', mode === 'dark' );
 		document.body.classList.toggle( 'theme-light', mode !== 'dark' );
 
-		$( '#pt-cosmosbeta-colormode a' ).text( mw.msg( 'cosmosbeta-colormode-switch-' + mode ) );
+		const $item = $( '#m-colormode' );
+
+		$item.find( '.skin-cosmos-colormode-text' ).text( mw.msg( 'cosmosbeta-colormode-switch-' + mode ) );
+		$item.find( '.skin-cosmos-icon' )
+			.removeClass( 'skin-cosmos-icon-moon skin-cosmos-icon-bright' )
+			.addClass( mode === 'dark' ? 'skin-cosmos-icon-bright' : 'skin-cosmos-icon-moon' );
 	}
 
 	function switchForVisitor( mode ) {
@@ -66,7 +71,7 @@
 	}
 
 	$( () => {
-		$( '#pt-cosmosbeta-colormode a' ).on( 'click', function ( event ) {
+		$( '#m-colormode a' ).on( 'click', function ( event ) {
 			event.preventDefault();
 
 			const next = getCurrentMode() === 'dark' ? 'light' : 'dark';

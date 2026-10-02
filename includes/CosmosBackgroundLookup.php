@@ -8,6 +8,7 @@ use MediaWiki\FileRepo\File\File;
 use MediaWiki\FileRepo\RepoGroup;
 use MediaWiki\Title\TitleFactory;
 use function preg_match;
+use const NS_FILE;
 
 class CosmosBackgroundLookup {
 

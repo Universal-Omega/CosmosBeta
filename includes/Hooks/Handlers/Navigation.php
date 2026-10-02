@@ -16,6 +16,7 @@ use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use function trim;
+use const NS_MEDIAWIKI;
 
 class Navigation implements
 	AlternateEditPreviewHook,

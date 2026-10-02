@@ -10,10 +10,13 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use function array_diff;
+use function array_values;
 
 class CosmosConfig {
 
 	public const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::AllowFooterIconHiding,
 		ConfigNames::BackgroundImage,
 		ConfigNames::BackgroundImageFixed,
 		ConfigNames::BackgroundImageRepeat,
@@ -24,6 +27,7 @@ class CosmosConfig {
 		ConfigNames::ContentOpacityLevel,
 		ConfigNames::ContentWidth,
 		ConfigNames::FooterBackgroundColor,
+		ConfigNames::FooterProtectedLinks,
 		ConfigNames::LinkColor,
 		ConfigNames::MainBackgroundColor,
 		ConfigNames::ToolbarBackgroundColor,
@@ -137,6 +141,14 @@ class CosmosConfig {
 			$this->options->get( ConfigNames::ContentOpacityLevel ) );
 	}
 
+	public function getBannerIconOpacity(): int {
+		return (int)$this->getTheme()->getSection( 'layout' )['bannerIconOpacity'];
+	}
+
+	public function getHeaderIconOpacity(): int {
+		return (int)$this->getTheme()->getSection( 'layout' )['headerIconOpacity'];
+	}
+
 	public function getFooterOpacity(): int {
 		return (int)$this->getTheme()->getSection( 'footer' )['opacity'];
 	}
@@ -146,7 +158,25 @@ class CosmosConfig {
 	}
 
 	public function getFooterSettings(): array {
-		return $this->getTheme()->getSection( 'footer' );
+		$settings = $this->getTheme()->getSection( 'footer' );
+
+		$settings['hiddenLinks'] = array_values(
+			array_diff( $settings['hiddenLinks'], $this->getFooterProtectedLinks() )
+		);
+		$settings['showIcons'] = $settings['showIcons'] || !$this->canHideFooterIcons();
+
+		return $settings;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getFooterProtectedLinks(): array {
+		return (array)$this->options->get( ConfigNames::FooterProtectedLinks );
+	}
+
+	public function canHideFooterIcons(): bool {
+		return (bool)$this->options->get( ConfigNames::AllowFooterIconHiding );
 	}
 
 	public function getRailSettings(): array {

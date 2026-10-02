@@ -15,6 +15,8 @@ use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\SelectQueryBuilder;
 use function sha1;
+use function wfTimestamp;
+use const TS_MW;
 
 /**
  * Stores every published theme as a row. The newest row is the live theme,

@@ -21,7 +21,7 @@ use function preg_match;
 use function round;
 use function rtrim;
 use function sprintf;
-use function stripos;
+use function str_starts_with;
 use function strlen;
 use function substr;
 use function trim;
@@ -75,7 +75,7 @@ class ThemeSettings {
 
 	public const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
 	public const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
-	public const array TOOLBAR_STYLES = [ 'floating', 'bar' ];
+	public const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
 	public const array RAIL_RECENT_CHANGES = [ 'off', 'normal', 'sticky' ];
 
 	private const int MAX_LIST_ITEMS = 100;
@@ -161,6 +161,8 @@ class ThemeSettings {
 			'layout' => [
 				'contentWidth' => '',
 				'contentOpacity' => null,
+				'bannerIconOpacity' => 100,
+				'headerIconOpacity' => 100,
 			],
 			'toolbar' => [
 				'enabled' => true,
@@ -237,6 +239,8 @@ class ThemeSettings {
 			}
 
 			$data['layout']['contentOpacity'] = self::toPercent( $layout['contentOpacity'] ?? null, null );
+			$data['layout']['bannerIconOpacity'] = self::toPercent( $layout['bannerIconOpacity'] ?? null, 100 );
+			$data['layout']['headerIconOpacity'] = self::toPercent( $layout['headerIconOpacity'] ?? null, 100 );
 		}
 
 		$toolbar = $raw['toolbar'] ?? [];
@@ -338,7 +342,7 @@ class ThemeSettings {
 			return '';
 		}
 
-		if ( stripos( $value, 'file:' ) === 0 ) {
+		if ( str_starts_with( strtolower( $value ), 'file:' ) ) {
 			$value = trim( substr( $value, 5 ) );
 		}
 

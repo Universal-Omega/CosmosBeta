@@ -1,12 +1,12 @@
-<div class="page-header__categories">
-	<span class="page-header__categories-in">{{msg-in}}</span>
-	<div class="page-header__categories-links">
+<div class="page-header__categories skin-cosmos-categories">
+	<span class="page-header__categories-in skin-cosmos-categories__label">{{msg-in}}</span>
+	<div class="page-header__categories-links skin-cosmos-categories__links">
 		{{#array-links}}<a href="{{href}}" id="{{id}}">{{text}}</a>{{#has-next}}, {{/has-next}}{{/array-links}}
 		{{#has-more}}
 		{{msg-more-separator}}
-		<div class="skin-cosmos-menu wds-dropdown page-header__categories-dropdown">
+		<div class="skin-cosmos-menu wds-dropdown page-header__categories-dropdown skin-cosmos-categories__menu">
 			<a class="skin-cosmos-menu__toggle wds-dropdown__toggle">{{msg-more}}</a>
-			<div class="skin-cosmos-menu__content wds-dropdown__content page-header__categories-dropdown-content skin-cosmos-is-left wds-is-left-aligned">
+			<div class="skin-cosmos-menu__content wds-dropdown__content page-header__categories-dropdown-content skin-cosmos-categories__menu-content skin-cosmos-is-left wds-is-left-aligned">
 				<ul class="skin-cosmos-list wds-list skin-cosmos-list--linked wds-is-linked">
 					{{#array-more-links}}<li><a href="{{href}}" id="{{id}}">{{text}}</a></li>{{/array-more-links}}
 				</ul>

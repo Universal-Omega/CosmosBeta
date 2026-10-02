@@ -7,7 +7,7 @@ namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 use MediaWiki\Config\Config;
 use MediaWiki\Content\TextContent;
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Html\Html;
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Skins\CosmosBeta\ConfigNames;
@@ -17,15 +17,18 @@ use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
 use MediaWiki\User\UserGroupManager;
 use UserProfilePage;
+use function count;
 use function date;
 use function in_array;
 use function strtotime;
 use function ucfirst;
+use const NS_USER;
 
 class SocialProfile {
 
 	public function __construct(
 		private readonly Config $config,
+		private readonly TemplateParser $templateParser,
 		private readonly TitleFactory $titleFactory,
 		private readonly UserGroupManager $userGroupManager,
 		private readonly WikiPageFactory $wikiPageFactory,
@@ -50,62 +53,56 @@ class SocialProfile {
 
 		$owner = $userProfilePage->profileOwner;
 
-		$profileTitle = Html::rawElement( 'div', [ 'class' => 'hgroup' ],
-			Html::element( 'h1', [ 'itemprop' => 'name' ], $owner->getName() ) .
-			( $showTags ? $this->getUserGroupTags( $context, $owner ) : '' )
-		) . ( $showEdits ? $this->getEditCount( $context, $owner ) : '' ) .
-			( $allowBio ? $this->getUserBio( $owner ) : '' );
+		$profileTitle = $this->templateParser->processTemplate( 'ProfileHeader', [
+			'name' => $owner->getName(),
+			'array-tags' => $showTags ? $this->getUserGroupTags( $context, $owner ) : [],
+			'data-editcount' => $showEdits ? $this->getEditCount( $context, $owner ) : null,
+			'bio' => $allowBio ? $this->getUserBio( $owner ) : null,
+		] );
 	}
 
-	private function getEditCount( IContextSource $context, User $owner ): string {
-		$contributions = SpecialPage::getTitleFor( 'Contributions', $owner->getName() )->getFullURL();
-		$registration = date( 'F j, Y', strtotime( (string)$owner->getRegistration() ) );
-
-		return Html::rawElement( 'div', [ 'class' => [ 'contributions-details', 'tally' ] ],
-			Html::rawElement( 'a', [ 'href' => $contributions ],
-				Html::element( 'em', [], (string)$owner->getEditCount() ) .
-				Html::rawElement( 'span', [],
-					$context->msg( 'cosmosbeta-editcount-label' )->escaped() . '<br>' . $registration
-				)
-			)
-		);
+	private function getEditCount( IContextSource $context, User $owner ): array {
+		return [
+			'url' => SpecialPage::getTitleFor( 'Contributions', $owner->getName() )->getFullURL(),
+			'count' => (string)$owner->getEditCount(),
+			'label' => $context->msg( 'cosmosbeta-editcount-label' )->text(),
+			'registration' => date( 'F j, Y', strtotime( (string)$owner->getRegistration() ) ),
+		];
 	}
 
-	private function getUserGroupTags( IContextSource $context, User $owner ): string {
+	private function getUserGroupTags( IContextSource $context, User $owner ): array {
 		if ( $owner->getBlock() ) {
-			return Html::element(
-				'span',
-				[ 'class' => 'tag tag-blocked' ],
-				$context->msg( 'cosmosbeta-user-blocked' )->text()
-			);
+			return [ [
+				'class' => 'tag-blocked',
+				'text' => $context->msg( 'cosmosbeta-user-blocked' )->text(),
+			] ];
 		}
 
 		$max = (int)$this->config->get( ConfigNames::SocialProfileNumberofGroupTags );
 		$groups = $this->userGroupManager->getUserGroups( $owner );
-		$tags = '';
-		$count = 0;
+		$tags = [];
 
 		foreach ( $this->config->get( ConfigNames::SocialProfileTagGroups ) as $group ) {
-			if ( !in_array( $group, $groups, true ) || ++$count > $max ) {
+			if ( !in_array( $group, $groups, true ) || count( $tags ) >= $max ) {
 				continue;
 			}
 
 			$message = $context->msg( "group-$group-member" );
-			$tags .= Html::element(
-				'span',
-				[ 'class' => 'tag tag-' . Sanitizer::escapeClass( $group ) ],
-				ucfirst( $message->isDisabled() ? $group : $message->text() )
-			);
+
+			$tags[] = [
+				'class' => 'tag-' . Sanitizer::escapeClass( $group ),
+				'text' => ucfirst( $message->isDisabled() ? $group : $message->text() ),
+			];
 		}
 
 		return $tags;
 	}
 
-	private function getUserBio( User $owner ): string {
+	private function getUserBio( User $owner ): ?string {
 		$title = $this->titleFactory->newFromText( $owner->getName(), NS_USER )?->getSubpage( 'bio' );
 
 		if ( !$title || !$title->isKnown() ) {
-			return '';
+			return null;
 		}
 
 		$content = $this->wikiPageFactory->newFromTitle( $title )->getContent();
@@ -119,8 +116,6 @@ class SocialProfile {
 			$content = $this->wikiPageFactory->newFromTitle( $content->getRedirectTarget() )->getContent();
 		}
 
-		return $content instanceof TextContent ?
-			Html::element( 'p', [ 'class' => 'bio' ], $content->getText() ) :
-			'';
+		return $content instanceof TextContent ? $content->getText() : null;
 	}
 }

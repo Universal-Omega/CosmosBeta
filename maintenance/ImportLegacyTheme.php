@@ -14,6 +14,7 @@ use function file_get_contents;
 use function is_array;
 use function is_file;
 use function json_decode;
+use const MW_INSTALL_PATH;
 
 class ImportLegacyTheme extends LoggedUpdateMaintenance {
 
@@ -27,7 +28,7 @@ class ImportLegacyTheme extends LoggedUpdateMaintenance {
 	}
 
 	protected function getUpdateKey(): string {
-		return __CLASS__;
+		return self::class;
 	}
 
 	private function initServices(): void {

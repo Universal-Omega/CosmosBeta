@@ -9,9 +9,6 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
 use MediaWiki\SpecialPage\SpecialPage;
 use function in_array;
-use function preg_match;
-use function preg_replace;
-use function str_ends_with;
 
 class ChromeComponent {
 
@@ -26,33 +23,34 @@ class ChromeComponent {
 		$settings = $this->config->getFooterSettings();
 
 		return [
-			'array-info' => $this->filterLinks( $footer['data-info']['array-items'] ?? [], $settings['hiddenLinks'] ),
-			'array-places' => $this->filterLinks( $footer['data-places']['array-items'] ?? [], $settings['hiddenLinks'] ),
+			'array-info' => $this->getLinks( $footer['data-info']['array-items'] ?? [], $settings['hiddenLinks'] ),
+			'array-places' => $this->getLinks( $footer['data-places']['array-items'] ?? [], $settings['hiddenLinks'] ),
 			'array-icons' => $settings['showIcons'] ? $this->getIcons( $footer['data-icons']['array-items'] ?? [] ) : [],
 		];
 	}
 
-	public function getToolbarData( array $sidebar ): ?array {
+	public function getToolItems( array $sidebar ): array {
 		$settings = $this->config->getToolbarSettings();
+		$items = [];
 		$portlet = PortletReader::findPortlet( $sidebar, 'p-tb' );
 
-		if ( !$settings['enabled'] ) {
-			return null;
-		}
-
-		$items = [];
 		foreach ( $portlet['array-items'] ?? [] as $item ) {
-			$id = $item['attrs']['id'] ?? '';
-			$hidden = false;
-
-			foreach ( $settings['hiddenItems'] as $name ) {
-				$hidden = $hidden || $id === "t-$name";
-			}
-
-			if ( !$hidden ) {
+			if ( !in_array( (string)( $item['name'] ?? '' ), $settings['hiddenItems'], true ) ) {
 				$items[] = [ 'html-item' => $item['html-item'] ];
 			}
 		}
+
+		return $items;
+	}
+
+	public function getToolbarData( array $sidebar, bool $inRail = false ): ?array {
+		$settings = $this->config->getToolbarSettings();
+
+		if ( !$settings['enabled'] || $inRail ) {
+			return null;
+		}
+
+		$items = $this->getToolItems( $sidebar );
 
 		if (
 			$this->extensionRegistry->isLoaded( 'CreateRedirect' ) &&
@@ -70,47 +68,36 @@ class ChromeComponent {
 		}
 
 		return [
-			'style' => $settings['style'],
+			'style' => $settings['style'] === 'rail' ? 'bar' : $settings['style'],
 			'array-items' => $items,
 		];
+	}
+
+	private function getLinks( array $items, array $hidden ): array {
+		$links = [];
+
+		foreach ( $items as $item ) {
+			if ( !in_array( (string)( $item['name'] ?? '' ), $hidden, true ) ) {
+				$links[] = [
+					'id' => $item['id'] ?? null,
+					'html' => $item['html'] ?? '',
+				];
+			}
+		}
+
+		return $links;
 	}
 
 	private function getIcons( array $items ): array {
 		$icons = [];
 
 		foreach ( $items as $item ) {
-			$id = (string)( $item['attrs']['id'] ?? '' );
-
-			if ( preg_match( '/^<li[^>]*>(.*)<\/li>\s*$/s', $item['html-item'] ?? '', $matches ) ) {
-				$icons[] = [
-					'name' => preg_replace( '/^footer-|ico$/', '', $id ),
-					'html' => $matches[1],
-				];
-			}
+			$icons[] = [
+				'name' => $item['name'] ?? '',
+				'html' => $item['html'] ?? '',
+			];
 		}
 
 		return $icons;
-	}
-
-	private function filterLinks( array $items, array $hidden ): array {
-		$links = [];
-
-		foreach ( $items as $item ) {
-			$id = (string)( $item['attrs']['id'] ?? '' );
-			$skip = false;
-
-			foreach ( $hidden as $name ) {
-				$skip = $skip || str_ends_with( $id, "-$name" );
-			}
-
-			if ( !$skip && preg_match( '/^<li[^>]*>(.*)<\/li>\s*$/s', $item['html-item'] ?? '', $matches ) ) {
-				$links[] = [
-					'id' => $id,
-					'html' => preg_replace( '/\s+$/', '', $matches[1] ),
-				];
-			}
-		}
-
-		return $links;
 	}
 }

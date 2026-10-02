@@ -25,6 +25,7 @@ use function strlen;
 use function strtolower;
 use function substr;
 use function trim;
+use const PREG_SPLIT_NO_EMPTY;
 
 class LessUtil {
 	private static array $cosmosSettings = [];
@@ -73,7 +74,7 @@ class LessUtil {
 		$backgroundColor = $cosmosSettings[$background];
 
 		$parsed = self::parseColor( $backgroundColor );
-		if ( $parsed === null || $parsed['a'] == 0 ) {
+		if ( $parsed === null || (float)$parsed['a'] === 0.0 ) {
 			return true;
 		}
 
@@ -89,9 +90,9 @@ class LessUtil {
 		$parsed = self::parseColor( $rgbhex ) ?? [ 'r' => 0, 'g' => 0, 'b' => 0 ];
 		$rgb = [ $parsed['r'], $parsed['g'], $parsed['b'] ];
 
-		$clrR = ( !empty( $rgb[0] ) ? ( $rgb[0] / 255 ) : 0 );
-		$clrG = ( !empty( $rgb[1] ) ? ( $rgb[1] / 255 ) : 0 );
-		$clrB = ( !empty( $rgb[2] ) ? ( $rgb[2] / 255 ) : 0 );
+		$clrR = (float)( !empty( $rgb[0] ) ? ( $rgb[0] / 255 ) : 0 );
+		$clrG = (float)( !empty( $rgb[1] ) ? ( $rgb[1] / 255 ) : 0 );
+		$clrB = (float)( !empty( $rgb[2] ) ? ( $rgb[2] / 255 ) : 0 );
 
 		$clrMin = min( $clrR, $clrG, $clrB );
 		$clrMax = max( $clrR, $clrG, $clrB );
@@ -99,7 +100,7 @@ class LessUtil {
 
 		$L = ( $clrMax + $clrMin ) / 2;
 
-		if ( $deltaMax == 0 ) {
+		if ( $deltaMax === 0.0 ) {
 			$H = 0;
 			$S = 0;
 		} else {
@@ -113,11 +114,11 @@ class LessUtil {
 			$deltaG = ( ( ( $clrMax - $clrG ) / 6 ) + ( $deltaMax / 2 ) ) / $deltaMax;
 			$deltaB = ( ( ( $clrMax - $clrB ) / 6 ) + ( $deltaMax / 2 ) ) / $deltaMax;
 
-			if ( $clrR == $clrMax ) {
+			if ( $clrR === $clrMax ) {
 				$H = $deltaB - $deltaG;
-			} elseif ( $clrG == $clrMax ) {
+			} elseif ( $clrG === $clrMax ) {
 				$H = ( 1 / 3 ) + $deltaR - $deltaB;
-			} elseif ( $clrB == $clrMax ) {
+			} elseif ( $clrB === $clrMax ) {
 				$H = ( 2 / 3 ) + $deltaG - $deltaR;
 			} else {
 				throw new LogicException( 'Unreachable' );
@@ -376,13 +377,13 @@ class LessUtil {
 		$hex = str_replace( '#', '', $hex );
 		$length = strlen( $hex );
 
-		if ( $length == 6 ) {
+		if ( $length === 6 ) {
 			$rgb = [
 				'r' => hexdec( substr( $hex, 0, 2 ) ),
 				'g' => hexdec( substr( $hex, 2, 2 ) ),
 				'b' => hexdec( substr( $hex, 4, 2 ) )
 			];
-		} elseif ( $length == 3 ) {
+		} elseif ( $length === 3 ) {
 			$rgb = [
 				'r' => hexdec( str_repeat( substr( $hex, 0, 1 ), 2 ) ),
 				'g' => hexdec( str_repeat( substr( $hex, 1, 1 ), 2 ) ),

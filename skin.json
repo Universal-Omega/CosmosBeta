@@ -102,10 +102,14 @@
 	],
 	"SpecialPages": {
 		"CosmosBetaThemeDesigner": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Special\\SpecialThemeDesigner",
+			"class": "MediaWiki\\Skins\\CosmosBeta\\Specials\\SpecialThemeDesigner",
 			"services": [
 				"CosmosBetaConfig",
-				"CosmosBetaThemeStore"
+				"CosmosBetaThemeStore",
+				"ExtensionRegistry",
+				"SkinFactory",
+				"CosmosBetaTemplateParser",
+				"TitleFactory"
 			]
 		}
 	},
@@ -347,6 +351,155 @@
 			},
 			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
 		},
+		"skins.cosmosbeta.themedesigner.codex": {
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexComponents": [
+				"CdxAccordion",
+				"CdxButton",
+				"CdxCheckbox",
+				"CdxField",
+				"CdxMessage",
+				"CdxSelect",
+				"CdxTab",
+				"CdxTabs",
+				"CdxTextArea",
+				"CdxTextInput",
+				"CdxToggleSwitch"
+			]
+		},
+		"skins.cosmosbeta.themedesigner": {
+			"dependencies": [
+				"vue",
+				"skins.cosmosbeta.themedesigner.codex"
+			],
+			"packageFiles": [
+				"resources/skins.cosmosbeta.themedesigner/init.js",
+				"resources/skins.cosmosbeta.themedesigner/App.vue",
+				"resources/skins.cosmosbeta.themedesigner/colors.js"
+			],
+			"styles": [
+				"resources/skins.cosmosbeta.themedesigner/themedesigner.less"
+			],
+			"messages": [
+				"cosmosbeta-themedesigner-advanced",
+				"cosmosbeta-themedesigner-advanced-help",
+				"cosmosbeta-themedesigner-color-banner",
+				"cosmosbeta-themedesigner-color-banner-help",
+				"cosmosbeta-themedesigner-color-body",
+				"cosmosbeta-themedesigner-color-body-help",
+				"cosmosbeta-themedesigner-color-button",
+				"cosmosbeta-themedesigner-color-button-help",
+				"cosmosbeta-themedesigner-color-content",
+				"cosmosbeta-themedesigner-color-content-help",
+				"cosmosbeta-themedesigner-color-footer",
+				"cosmosbeta-themedesigner-color-footer-help",
+				"cosmosbeta-themedesigner-color-header",
+				"cosmosbeta-themedesigner-color-header-help",
+				"cosmosbeta-themedesigner-color-invalid",
+				"cosmosbeta-themedesigner-color-link",
+				"cosmosbeta-themedesigner-color-link-help",
+				"cosmosbeta-themedesigner-color-reset",
+				"cosmosbeta-themedesigner-color-toolbar",
+				"cosmosbeta-themedesigner-color-toolbar-help",
+				"cosmosbeta-themedesigner-colors-intro",
+				"cosmosbeta-themedesigner-comment",
+				"cosmosbeta-themedesigner-darkmode-builtin",
+				"cosmosbeta-themedesigner-darkmode-default",
+				"cosmosbeta-themedesigner-darkmode-generate",
+				"cosmosbeta-themedesigner-darkmode-generated",
+				"cosmosbeta-themedesigner-darkmode-intro",
+				"cosmosbeta-themedesigner-darkmode-toggle",
+				"cosmosbeta-themedesigner-editing",
+				"cosmosbeta-themedesigner-error-json",
+				"cosmosbeta-themedesigner-error-permission",
+				"cosmosbeta-themedesigner-error-revision",
+				"cosmosbeta-themedesigner-error-token",
+				"cosmosbeta-themedesigner-footer-hidden",
+				"cosmosbeta-themedesigner-footer-hidden-help",
+				"cosmosbeta-themedesigner-footer-icons",
+				"cosmosbeta-themedesigner-footer-icons-locked",
+				"cosmosbeta-themedesigner-footer-opacity",
+				"cosmosbeta-themedesigner-history-empty",
+				"cosmosbeta-themedesigner-history-intro",
+				"cosmosbeta-themedesigner-history-live",
+				"cosmosbeta-themedesigner-history-restore",
+				"cosmosbeta-themedesigner-image-background",
+				"cosmosbeta-themedesigner-image-default",
+				"cosmosbeta-themedesigner-image-fixed",
+				"cosmosbeta-themedesigner-image-header",
+				"cosmosbeta-themedesigner-image-repeat",
+				"cosmosbeta-themedesigner-image-size",
+				"cosmosbeta-themedesigner-image-wordmark",
+				"cosmosbeta-themedesigner-images-intro",
+				"cosmosbeta-themedesigner-inherit",
+				"cosmosbeta-themedesigner-layout-banner-icon-opacity",
+				"cosmosbeta-themedesigner-layout-header-icon-opacity",
+				"cosmosbeta-themedesigner-layout-opacity",
+				"cosmosbeta-themedesigner-layout-width",
+				"cosmosbeta-themedesigner-layout-width-default",
+				"cosmosbeta-themedesigner-layout-width-full",
+				"cosmosbeta-themedesigner-layout-width-large",
+				"cosmosbeta-themedesigner-mode-dark",
+				"cosmosbeta-themedesigner-mode-light",
+				"cosmosbeta-themedesigner-no",
+				"cosmosbeta-themedesigner-nojs",
+				"cosmosbeta-themedesigner-preset-applied",
+				"cosmosbeta-themedesigner-preset-cosmos-dark",
+				"cosmosbeta-themedesigner-preset-cosmos-light",
+				"cosmosbeta-themedesigner-preset-ember",
+				"cosmosbeta-themedesigner-preset-forest",
+				"cosmosbeta-themedesigner-preset-lavender",
+				"cosmosbeta-themedesigner-preset-midnight",
+				"cosmosbeta-themedesigner-preset-moss",
+				"cosmosbeta-themedesigner-preset-sky",
+				"cosmosbeta-themedesigner-preset-sunset",
+				"cosmosbeta-themedesigner-presets-intro",
+				"cosmosbeta-themedesigner-preview",
+				"cosmosbeta-themedesigner-preview-button",
+				"cosmosbeta-themedesigner-preview-footer",
+				"cosmosbeta-themedesigner-preview-heading",
+				"cosmosbeta-themedesigner-preview-link",
+				"cosmosbeta-themedesigner-preview-rail",
+				"cosmosbeta-themedesigner-preview-text",
+				"cosmosbeta-themedesigner-preview-toolbar",
+				"cosmosbeta-themedesigner-preview-wordmark",
+				"cosmosbeta-themedesigner-protected",
+				"cosmosbeta-themedesigner-publish",
+				"cosmosbeta-themedesigner-rail-anons",
+				"cosmosbeta-themedesigner-rail-enabled",
+				"cosmosbeta-themedesigner-rail-namespaces",
+				"cosmosbeta-themedesigner-rail-namespaces-help",
+				"cosmosbeta-themedesigner-rail-pages",
+				"cosmosbeta-themedesigner-rail-pages-help",
+				"cosmosbeta-themedesigner-rail-recentchanges",
+				"cosmosbeta-themedesigner-rail-recentchanges-config",
+				"cosmosbeta-themedesigner-rail-recentchanges-normal",
+				"cosmosbeta-themedesigner-rail-recentchanges-off",
+				"cosmosbeta-themedesigner-rail-recentchanges-sticky",
+				"cosmosbeta-themedesigner-readonly",
+				"cosmosbeta-themedesigner-restore-comment",
+				"cosmosbeta-themedesigner-success",
+				"cosmosbeta-themedesigner-swatches",
+				"cosmosbeta-themedesigner-tab-chrome",
+				"cosmosbeta-themedesigner-tab-colors",
+				"cosmosbeta-themedesigner-tab-darkmode",
+				"cosmosbeta-themedesigner-tab-history",
+				"cosmosbeta-themedesigner-tab-images",
+				"cosmosbeta-themedesigner-tab-layout",
+				"cosmosbeta-themedesigner-tab-rail",
+				"cosmosbeta-themedesigner-tab-themes",
+				"cosmosbeta-themedesigner-text",
+				"cosmosbeta-themedesigner-toolbar-enabled",
+				"cosmosbeta-themedesigner-toolbar-hidden",
+				"cosmosbeta-themedesigner-toolbar-hidden-help",
+				"cosmosbeta-themedesigner-toolbar-style",
+				"cosmosbeta-themedesigner-toolbar-style-bar",
+				"cosmosbeta-themedesigner-toolbar-style-floating",
+				"cosmosbeta-themedesigner-toolbar-style-help",
+				"cosmosbeta-themedesigner-toolbar-style-rail",
+				"cosmosbeta-themedesigner-yes"
+			]
+		},
 		"skins.cosmosbeta.icons": {
 			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
 			"selectorWithoutVariant": ".skin-cosmos-icon-{name}::before",
@@ -355,128 +508,60 @@
 			"useMaskImage": true,
 			"variants": {},
 			"icons": [
-				"arrowPrevious",
+				"add",
+				"article",
 				"articleAdd",
+				"bell",
+				"bellOutline",
+				"book",
+				"bookmark",
+				"bright",
+				"calendar",
+				"camera",
+				"chart",
+				"check",
+				"clock",
 				"close",
+				"code",
 				"edit",
 				"ellipsis",
 				"expand",
 				"eye",
+				"feedback",
+				"flag",
+				"folderPlaceholder",
+				"globe",
+				"heart",
+				"help",
+				"history",
+				"home",
+				"image",
+				"info",
+				"key",
+				"language",
+				"lightbulb",
+				"link",
+				"lock",
 				"map",
+				"menu",
+				"message",
+				"moon",
 				"next",
+				"notice",
 				"recentChanges",
 				"search",
 				"settings",
+				"share",
+				"specialPages",
+				"speechBubble",
 				"speechBubbles",
-				"userAvatar"
-			]
-		},
-		"skins.cosmosbeta.themedesigner": {
-			"scripts": [
-				"resources/skins.cosmosbeta.themedesigner/colors.js",
-				"resources/skins.cosmosbeta.themedesigner/themedesigner.js"
-			],
-			"styles": [
-				"resources/skins.cosmosbeta.themedesigner/themedesigner.less"
-			],
-			"dependencies": [
-				"mediawiki.util"
-			],
-			"messages": [
-				"cosmosbeta-themedesigner-tab-themes",
-				"cosmosbeta-themedesigner-tab-colors",
-				"cosmosbeta-themedesigner-tab-images",
-				"cosmosbeta-themedesigner-tab-layout",
-				"cosmosbeta-themedesigner-tab-chrome",
-				"cosmosbeta-themedesigner-tab-rail",
-				"cosmosbeta-themedesigner-tab-darkmode",
-				"cosmosbeta-themedesigner-tab-history",
-				"cosmosbeta-themedesigner-editing",
-				"cosmosbeta-themedesigner-mode-light",
-				"cosmosbeta-themedesigner-mode-dark",
-				"cosmosbeta-themedesigner-presets-intro",
-				"cosmosbeta-themedesigner-preset-applied",
-				"cosmosbeta-themedesigner-preset-cosmos-light",
-				"cosmosbeta-themedesigner-preset-sky",
-				"cosmosbeta-themedesigner-preset-forest",
-				"cosmosbeta-themedesigner-preset-sunset",
-				"cosmosbeta-themedesigner-preset-lavender",
-				"cosmosbeta-themedesigner-preset-cosmos-dark",
-				"cosmosbeta-themedesigner-preset-midnight",
-				"cosmosbeta-themedesigner-preset-ember",
-				"cosmosbeta-themedesigner-preset-moss",
-				"cosmosbeta-themedesigner-colors-intro",
-				"cosmosbeta-themedesigner-color-banner",
-				"cosmosbeta-themedesigner-color-header",
-				"cosmosbeta-themedesigner-color-body",
-				"cosmosbeta-themedesigner-color-content",
-				"cosmosbeta-themedesigner-color-button",
-				"cosmosbeta-themedesigner-color-link",
-				"cosmosbeta-themedesigner-color-footer",
-				"cosmosbeta-themedesigner-color-toolbar",
-				"cosmosbeta-themedesigner-color-banner-help",
-				"cosmosbeta-themedesigner-color-header-help",
-				"cosmosbeta-themedesigner-color-body-help",
-				"cosmosbeta-themedesigner-color-content-help",
-				"cosmosbeta-themedesigner-color-button-help",
-				"cosmosbeta-themedesigner-color-link-help",
-				"cosmosbeta-themedesigner-color-footer-help",
-				"cosmosbeta-themedesigner-color-toolbar-help",
-				"cosmosbeta-themedesigner-color-invalid",
-				"cosmosbeta-themedesigner-color-reset",
-				"cosmosbeta-themedesigner-swatches",
-				"cosmosbeta-themedesigner-images-intro",
-				"cosmosbeta-themedesigner-image-wordmark",
-				"cosmosbeta-themedesigner-image-header",
-				"cosmosbeta-themedesigner-image-background",
-				"cosmosbeta-themedesigner-image-size",
-				"cosmosbeta-themedesigner-image-repeat",
-				"cosmosbeta-themedesigner-image-fixed",
-				"cosmosbeta-themedesigner-image-default",
-				"cosmosbeta-themedesigner-inherit",
-				"cosmosbeta-themedesigner-layout-width",
-				"cosmosbeta-themedesigner-layout-width-default",
-				"cosmosbeta-themedesigner-layout-width-large",
-				"cosmosbeta-themedesigner-layout-width-full",
-				"cosmosbeta-themedesigner-layout-opacity",
-				"cosmosbeta-themedesigner-toolbar-enabled",
-				"cosmosbeta-themedesigner-toolbar-style",
-				"cosmosbeta-themedesigner-toolbar-style-floating",
-				"cosmosbeta-themedesigner-toolbar-style-bar",
-				"cosmosbeta-themedesigner-toolbar-hidden",
-				"cosmosbeta-themedesigner-footer-opacity",
-				"cosmosbeta-themedesigner-footer-icons",
-				"cosmosbeta-themedesigner-footer-hidden",
-				"cosmosbeta-themedesigner-rail-enabled",
-				"cosmosbeta-themedesigner-rail-anons",
-				"cosmosbeta-themedesigner-rail-recentchanges",
-				"cosmosbeta-themedesigner-rail-recentchanges-config",
-				"cosmosbeta-themedesigner-rail-recentchanges-off",
-				"cosmosbeta-themedesigner-rail-recentchanges-normal",
-				"cosmosbeta-themedesigner-rail-recentchanges-sticky",
-				"cosmosbeta-themedesigner-rail-namespaces",
-				"cosmosbeta-themedesigner-rail-namespaces-help",
-				"cosmosbeta-themedesigner-rail-pages",
-				"cosmosbeta-themedesigner-rail-pages-help",
-				"cosmosbeta-themedesigner-darkmode-intro",
-				"cosmosbeta-themedesigner-darkmode-toggle",
-				"cosmosbeta-themedesigner-darkmode-default",
-				"cosmosbeta-themedesigner-darkmode-generate",
-				"cosmosbeta-themedesigner-darkmode-generated",
-				"cosmosbeta-themedesigner-darkmode-builtin",
-				"cosmosbeta-themedesigner-history-intro",
-				"cosmosbeta-themedesigner-history-empty",
-				"cosmosbeta-themedesigner-history-restore",
-				"cosmosbeta-themedesigner-history-live",
-				"cosmosbeta-themedesigner-preview",
-				"cosmosbeta-themedesigner-preview-heading",
-				"cosmosbeta-themedesigner-preview-text",
-				"cosmosbeta-themedesigner-preview-link",
-				"cosmosbeta-themedesigner-preview-button",
-				"cosmosbeta-themedesigner-preview-rail",
-				"cosmosbeta-themedesigner-preview-toolbar",
-				"cosmosbeta-themedesigner-preview-footer",
-				"cosmosbeta-themedesigner-preview-wordmark"
+				"star",
+				"tray",
+				"undo",
+				"upload",
+				"userAvatarOutline",
+				"userGroup",
+				"watchlist"
 			]
 		}
 	},
@@ -495,105 +580,93 @@
 		}
 	},
 	"config": {
-		"CosmosBetaBannerBackgroundColor": {
-			"value": "#c0c0c0",
-			"description": "Changes the background color of the personal navigation"
-		},
-		"CosmosBetaWikiHeaderBackgroundColor": {
-			"value": "#c0c0c0",
-			"description": "Changes the background color of the wiki navigation"
-		},
-		"CosmosBetaMainBackgroundColor": {
-			"value": "#1A1A1A",
-			"description": "Adds a background color to the page body (behind the content area)"
-		},
-		"CosmosBetaContentBackgroundColor": {
-			"value": "#ffffff",
-			"description": "Changes the background color of the wiki article area"
-		},
-		"CosmosBetaButtonBackgroundColor": {
-			"value": "#c0c0c0",
-			"description": "Changes the background color of the page action buttons for Cosmos"
-		},
-		"CosmosBetaToolbarBackgroundColor": {
-			"value": "#000000",
-			"description": "Changes the background color of the toolbar"
-		},
-		"CosmosBetaFooterBackgroundColor": {
-			"value": "#c0c0c0",
-			"description": "Changes the background color of the footer"
-		},
-		"CosmosBetaLinkColor": {
-			"value": "#0645ad",
-			"description": "Changes the color of links in the cosmos wiki article area"
-		},
-		"CosmosBetaContentOpacityLevel": {
-			"value": 100,
-			"description": "Set the content area background opacity in percentage (without the percent symbol)"
-		},
-		"CosmosBetaWordmark": {
-			"value": false,
-			"description": "Adds a wordmark to the wiki navigation"
-		},
-		"CosmosBetaWikiHeaderBackgroundImage": {
-			"value": false,
-			"description": "Adds a background image to the wiki navigation"
+		"CosmosBetaAllowFooterIconHiding": {
+			"value": true,
+			"description": "Whether the theme designer may hide the footer icons."
 		},
 		"CosmosBetaBackgroundImage": {
 			"value": false,
 			"description": "Adds a background image to the page body (behind the content area)"
 		},
-		"CosmosBetaBackgroundImageSize": {
-			"value": "cover",
-			"description": "Sets the background image size for the body background if set"
-		},
-		"CosmosBetaContentWidth": {
-			"value": "default",
-			"description": "Sets the main content area width. Can be 'default', 'large', or 'full'."
+		"CosmosBetaBackgroundImageFixed": {
+			"value": true,
+			"description": "If true the background image will be set to position: fixed"
 		},
 		"CosmosBetaBackgroundImageRepeat": {
 			"value": false,
 			"description": "If true the background image will be set to 'repeat' otherwise, if false, it will be set to 'no-repeat'"
 		},
-		"CosmosBetaBackgroundImageFixed": {
+		"CosmosBetaBackgroundImageSize": {
+			"value": "cover",
+			"description": "Sets the background image size for the body background if set"
+		},
+		"CosmosBetaBannerBackgroundColor": {
+			"value": "#c0c0c0",
+			"description": "Changes the background color of the personal navigation"
+		},
+		"CosmosBetaButtonBackgroundColor": {
+			"value": "#c0c0c0",
+			"description": "Changes the background color of the page action buttons for Cosmos"
+		},
+		"CosmosBetaContentBackgroundColor": {
+			"value": "#ffffff",
+			"description": "Changes the background color of the wiki article area"
+		},
+		"CosmosBetaContentOpacityLevel": {
+			"value": 100,
+			"description": "Set the content area background opacity in percentage (without the percent symbol)"
+		},
+		"CosmosBetaContentWidth": {
+			"value": "default",
+			"description": "Sets the main content area width. Can be 'default', 'large', or 'full'."
+		},
+		"CosmosBetaEnablePortableInfoboxEuropaTheme": {
 			"value": true,
-			"description": "If true the background image will be set to position: fixed"
-		},
-		"CosmosBetaSearchHost": {
-			"value": ""
-		},
-		"CosmosBetaSearchOptions": {
-			"value": {
-				"showThumbnail": true,
-				"showDescription": true
-			}
-		},
-		"CosmosBetaSearchDescriptionSource": {
-			"value": "textextracts"
-		},
-		"CosmosBetaMaxSearchResults": {
-			"value": 10
-		},
-		"CosmosBetaSearchUseActionAPI": {
-			"value": false
+			"description": "Enables the Europa theme from Fandom's portable infobox extension on the ported extension."
 		},
 		"CosmosBetaEnableWantedPages": {
 			"value": true,
 			"description": "Whether or not to enable the WantedPages feature of the create page dialogue."
 		},
+		"CosmosBetaEnabledRailModules": {
+			"value": {
+				"recentchanges": false,
+				"interface": [
+					{
+						"cosmosbeta-custom-rail-module": "normal",
+						"cosmosbeta-custom-sticky-rail-module": "sticky"
+					}
+				]
+			},
+			"description": "Sets which rail modules will be enabled on Cosmos, and whether they are 'sticky' or 'normal'"
+		},
 		"CosmosBetaFetchWantedPagesFromCache": {
 			"value": false,
 			"description": "Whether or not to fetch the wanted pages shown within the create page dialogue from cache. If enabled you will need to run php updateSpecialPages.php --only=WantedPages in order to update the wanted pages. It is recommended to set this to true on large wikis."
 		},
-		"CosmosBetaWantedPagesMaxTitlesCount": {
-			"value": 6,
-			"description": "Set to the max number of wanted pages to display in the create page dialogue, if wanted pages are enabled."
+		"CosmosBetaFooterBackgroundColor": {
+			"value": "#c0c0c0",
+			"description": "Changes the background color of the footer"
 		},
-		"CosmosBetaWantedPagesFetchedNamespaces": {
+		"CosmosBetaFooterProtectedLinks": {
 			"value": [
-				0
+				"about",
+				"copyright",
+				"disclaimers",
+				"privacy"
 			],
-			"description": "Set to an array of namespaces to fetch wanted pages from, if wanted pages are enabled for the create page dialogue."
+			"description": "Names of footer links that the theme designer is not allowed to hide."
+		},
+		"CosmosBetaLinkColor": {
+			"value": "#0645ad",
+			"description": "Changes the color of links in the cosmos wiki article area"
+		},
+		"CosmosBetaMainBackgroundColor": {
+			"value": "#1A1A1A",
+			"description": "Adds a background color to the page body (behind the content area)"
+		},
+		"CosmosBetaMaxSearchResults": {
+			"value": 10
 		},
 		"CosmosBetaRailDisabledNamespaces": {
 			"value": [
@@ -609,33 +682,20 @@
 			],
 			"description": "List of pages to disable the rail in."
 		},
-		"CosmosBetaEnabledRailModules": {
+		"CosmosBetaSearchDescriptionSource": {
+			"value": "textextracts"
+		},
+		"CosmosBetaSearchHost": {
+			"value": ""
+		},
+		"CosmosBetaSearchOptions": {
 			"value": {
-				"recentchanges": false,
-				"interface": [
-					{
-						"cosmosbeta-custom-rail-module": "normal",
-						"cosmosbeta-custom-sticky-rail-module": "sticky"
-					}
-				]
-			},
-			"description": "Sets which rail modules will be enabled on Cosmos, and whether they are 'sticky' or 'normal'"
+				"showThumbnail": true,
+				"showDescription": true
+			}
 		},
-		"CosmosBetaEnablePortableInfoboxEuropaTheme": {
-			"value": true,
-			"description": "Enables the Europa theme from Fandom's portable infobox extension on the ported extension."
-		},
-		"CosmosBetaSocialProfileModernTabs": {
-			"value": true,
-			"description": "Enables a modern version of the tabs on SocialProfile profile pages"
-		},
-		"CosmosBetaSocialProfileRoundAvatar": {
-			"value": true,
-			"description": "Makes the avatar round on SocialProfile profile pages"
-		},
-		"CosmosBetaSocialProfileShowEditCount": {
-			"value": true,
-			"description": "Show's the edit count and registration date for the user on SocialProfile profile pages, underneath their username"
+		"CosmosBetaSearchUseActionAPI": {
+			"value": false
 		},
 		"CosmosBetaSocialProfileAllowBio": {
 			"value": true,
@@ -644,6 +704,22 @@
 		"CosmosBetaSocialProfileFollowBioRedirects": {
 			"value": false,
 			"description": "Whether or not to follow redirects from Special:MyPage/bio and display the redirect target as bio instead (experimental)"
+		},
+		"CosmosBetaSocialProfileModernTabs": {
+			"value": true,
+			"description": "Enables a modern version of the tabs on SocialProfile profile pages"
+		},
+		"CosmosBetaSocialProfileNumberofGroupTags": {
+			"value": 2,
+			"description": "Set the max number of group tags to show on a user's SocialProfile page if they have them"
+		},
+		"CosmosBetaSocialProfileRoundAvatar": {
+			"value": true,
+			"description": "Makes the avatar round on SocialProfile profile pages"
+		},
+		"CosmosBetaSocialProfileShowEditCount": {
+			"value": true,
+			"description": "Show's the edit count and registration date for the user on SocialProfile profile pages, underneath their username"
 		},
 		"CosmosBetaSocialProfileShowGroupTags": {
 			"value": true,
@@ -658,9 +734,9 @@
 			],
 			"description": "Array of usergroups to show on SocialProfile pages if the user has them"
 		},
-		"CosmosBetaSocialProfileNumberofGroupTags": {
-			"value": 2,
-			"description": "Set the max number of group tags to show on a user's SocialProfile page if they have them"
+		"CosmosBetaToolbarBackgroundColor": {
+			"value": "#000000",
+			"description": "Changes the background color of the toolbar"
 		},
 		"CosmosBetaUseSocialProfileAvatar": {
 			"value": true,
@@ -669,6 +745,28 @@
 		"CosmosBetaUseUPv2Avatar": {
 			"value": true,
 			"description": "Use UserProfileV2 avatar as avatar next to username in top banner"
+		},
+		"CosmosBetaWantedPagesFetchedNamespaces": {
+			"value": [
+				0
+			],
+			"description": "Set to an array of namespaces to fetch wanted pages from, if wanted pages are enabled for the create page dialogue."
+		},
+		"CosmosBetaWantedPagesMaxTitlesCount": {
+			"value": 6,
+			"description": "Set to the max number of wanted pages to display in the create page dialogue, if wanted pages are enabled."
+		},
+		"CosmosBetaWikiHeaderBackgroundColor": {
+			"value": "#c0c0c0",
+			"description": "Changes the background color of the wiki navigation"
+		},
+		"CosmosBetaWikiHeaderBackgroundImage": {
+			"value": false,
+			"description": "Adds a background image to the wiki navigation"
+		},
+		"CosmosBetaWordmark": {
+			"value": false,
+			"description": "Adds a wordmark to the wiki navigation"
 		}
 	},
 	"HookHandlers": {
@@ -706,6 +804,7 @@
 			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile",
 			"services": [
 				"CosmosBetaOptions",
+				"CosmosBetaTemplateParser",
 				"TitleFactory",
 				"UserGroupManager",
 				"WikiPageFactory"
@@ -752,14 +851,9 @@
 		"SkinPageReadyConfig": {
 			"handler": "output"
 		},
-		"SkinTemplateNavigation::Universal": [
-			{
-				"handler": "personaltools"
-			},
-			{
-				"handler": "colormode"
-			}
-		],
+		"SkinTemplateNavigation::Universal": {
+			"handler": "personaltools"
+		},
 		"UserProfileGetProfileTitle": {
 			"handler": "socialprofile"
 		}

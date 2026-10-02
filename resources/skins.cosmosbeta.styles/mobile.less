@@ -1,8 +1,7 @@
 .skin-cosmos-header__sitename a,
 .skin-cosmos-header__local-navigation,
 .skin-cosmos-header__wordmark,
-#cosmos-search-buttonContainer,
-.skin-cosmos-header-button.skin-cosmos-is-secondary.skin-cosmos-menu__toggle {
+#cosmos-search-buttonContainer {
 	display: none;
 }
 
@@ -93,10 +92,10 @@ div.thumb {
 	border-radius: 4px;
 	box-shadow: 0 8px 16px 0 rgba( 0, 0, 0, 0.3 );
 
-	&__tab {
+	&__item {
 		margin: 0 9px;
 
-		&-label {
+		.skin-cosmos-nav__label {
 			border-bottom: 1px solid #eee;
 		}
 	}
@@ -155,4 +154,19 @@ div.thumb {
 	-moz-column-count: 1 !important;
 	-webkit-column-count: 1 !important;
 	column-count: 1 !important;
+}
+
+#p-search .cdx-button {
+	display: none;
+}
+
+#cosmos-banner.skin-cosmos-search-active {
+	#cosmos-banner-userOptions,
+	.skin-cosmos-mobile-menu-button {
+		display: none;
+	}
+
+	#p-search .cdx-button {
+		display: inline-flex;
+	}
 }

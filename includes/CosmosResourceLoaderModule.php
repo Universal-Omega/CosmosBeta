@@ -10,7 +10,9 @@ use MediaWiki\ResourceLoader\SkinModule;
 use Wikimedia\Minify\CSSMin;
 use function array_merge;
 use function array_values;
+use function in_array;
 use function sprintf;
+use function strtolower;
 
 class CosmosResourceLoaderModule extends SkinModule {
 
@@ -111,6 +113,9 @@ class CosmosResourceLoaderModule extends SkinModule {
 		[ $r, $g, $b ] = $contentRgb;
 
 		$contentOpacityLevelConfig = $this->cosmosConfig->getContentOpacityLevel();
+		$lessVars['banner-icon-opacity'] = $this->cosmosConfig->getBannerIconOpacity() / 100;
+		$lessVars['header-icon-opacity'] = $this->cosmosConfig->getHeaderIconOpacity() / 100;
+
 		$lessVars['content-opacity-level'] = "rgba($r, $g, $b, " . $contentOpacityLevelConfig / 100.00 . ')';
 
 		$footerBackgroundColor = $this->cosmosConfig->getColor( 'footer', $mode );
@@ -161,9 +166,9 @@ class CosmosResourceLoaderModule extends SkinModule {
 		return [
 			'toolbar-background-color2' => $toolbarBackgroundColor,
 			'toolbar-background-color-mix' =>
-				$toolbarBackgroundColor == '#000' ||
-				$toolbarBackgroundColor == '#000000' ||
-				$toolbarBackgroundColor == 'black' ? '#404040' : '#000',
+				in_array( strtolower( $toolbarBackgroundColor ), [ '#000', '#000000', 'black' ], true ) ?
+					'#404040' :
+					'#000',
 			'toolbar-font-color' => LessUtil::isThemeDark( 'toolbar-background-color', $settings ) ? '#fff' : '#000',
 		];
 	}
