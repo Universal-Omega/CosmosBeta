@@ -162,7 +162,6 @@ class ThemeSettings {
 			'layout' => [
 				'contentWidth' => '',
 				'contentOpacity' => null,
-				'bannerIconOpacity' => 100,
 				'headerButtonOpacity' => 20,
 				'backdropBlur' => 0,
 			],
@@ -241,7 +240,6 @@ class ThemeSettings {
 			}
 
 			$data['layout']['contentOpacity'] = self::toPercent( $layout['contentOpacity'] ?? null, null );
-			$data['layout']['bannerIconOpacity'] = self::toPercent( $layout['bannerIconOpacity'] ?? null, 100 );
 			$data['layout']['headerButtonOpacity'] = self::toPercent( $layout['headerButtonOpacity'] ?? null, 20 );
 			$data['layout']['backdropBlur'] = is_numeric( $layout['backdropBlur'] ?? null ) ?
 				max( 0, min( 40, (int)round( (float)$layout['backdropBlur'] ) ) ) :
