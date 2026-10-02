@@ -105,7 +105,7 @@
 	"cosmosbeta-themedesigner-layout-backdrop-blur": "Background blur behind see through areas",
 	"cosmosbeta-themedesigner-layout-backdrop-blur-help": "Blurs what is behind the banner, content area, footer and page tools when their colors are see through. Browsers that cannot blur get a more opaque background instead.",
 	"cosmosbeta-themedesigner-layout-banner-icon-opacity": "Top bar icon opacity",
-	"cosmosbeta-themedesigner-layout-header-icon-opacity": "Wiki header button icon opacity",
+	"cosmosbeta-themedesigner-layout-header-button-opacity": "Wiki header button background opacity",
 	"cosmosbeta-themedesigner-layout-opacity": "Content area opacity",
 	"cosmosbeta-themedesigner-layout-width": "Content width",
 	"cosmosbeta-themedesigner-layout-width-default": "Default",
