@@ -1,4 +1,5 @@
 @import 'mediawiki.skin.variables.less';
+@import '../mixins.less';
 
 @skin-cosmos-font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 
@@ -1711,11 +1712,15 @@ button.skin-cosmos-header-button {
 }
 
 .skin-cosmos-modal-close {
-	border: -;
 	color: #aaa;
 	float: right;
-	font-size: 28px;
-	font-weight: bold;
+	cursor: pointer;
+	line-height: 0;
+
+	.skin-cosmos-icon {
+		width: 24px;
+		height: 24px;
+	}
 
 	&:hover {
 		color: #000;
@@ -2205,6 +2210,7 @@ body h6 {
 @toolbar-background-color1: mix(@toolbar-background-color2, @toolbar-background-color-mix, 25%);
 
 #cosmos-toolbar {
+	box-sizing: border-box;
 	position: sticky;
 	z-index: 399;
 	right: 9px;
@@ -2549,6 +2555,7 @@ table.mw-datatable {
 
 	.oo-ui-icon-tray::before {
 		.cdx-mixin-css-icon-background-image( @cdx-icon-message, @banner-font-color );
+		.skin-cosmos-outline-icon( @cdx-icon-message );
 	}
 }
 
@@ -2560,6 +2567,7 @@ table.mw-datatable {
 
 .mw-ui-icon-tray::before {
 	.cdx-mixin-css-icon-background-image( @cdx-icon-message, @banner-font-color );
+	.skin-cosmos-outline-icon( @cdx-icon-message );
 	background-image: none;
 	.skin-cosmos-mask-icon();
 }
@@ -2747,4 +2755,31 @@ div.thumbinner {
 	.skin-cosmos-menu__chevron {
 		transform: rotate( 180deg );
 	}
+}
+
+.skin-cosmos-button-icon {
+	&.skin-cosmos-icon-edit::before {
+		.skin-cosmos-outline-icon( @cdx-icon-edit );
+	}
+
+	&.skin-cosmos-icon-speechBubble::before {
+		.skin-cosmos-outline-icon( @cdx-icon-ongoing-conversation );
+	}
+}
+
+#cosmos-notification-icons {
+	gap: 10px;
+}
+
+#cosmos-notification-icons #pt-notifications-notice {
+	padding-left: 14px;
+}
+
+.skin-cosmos-bannerOption-dropdownIcon {
+	margin-left: 0;
+}
+
+.skin-cosmos-bannerOption-dropdownIcon .skin-cosmos-icon {
+	width: 12px;
+	height: 12px;
 }
