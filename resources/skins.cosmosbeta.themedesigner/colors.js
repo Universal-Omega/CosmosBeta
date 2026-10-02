@@ -1,7 +1,4 @@
-/* global mw */
-
-( function ( mw ) {
-	const designer = mw.cosmosBetaThemeDesigner = mw.cosmosBetaThemeDesigner || {};
+( function () {
 	const cache = new Map();
 	const BLOCKED = [ 'inherit', 'initial', 'unset', 'revert', 'currentcolor' ];
 
@@ -232,7 +229,7 @@
 		return result;
 	}
 
-	designer.colors = {
+	module.exports = {
 		parse: parse,
 		normalize: normalize,
 		toHex: toHex,
@@ -241,4 +238,4 @@
 		contentTextOn: contentTextOn,
 		deriveDark: deriveDark
 	};
-}( mediaWiki ) );
+}() );
