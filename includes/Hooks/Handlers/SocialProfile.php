@@ -51,7 +51,7 @@ class SocialProfile {
 
 		$owner = $userProfilePage->profileOwner;
 
-		$profileTitle = Html::rawElement( 'div', [ 'class' => 'hgroup' ],
+		$profileTitle = Html::rawElement( 'div', [ 'class' => [ 'skin-cosmos-profile-heading', 'hgroup' ] ],
 			Html::element( 'h1', [ 'itemprop' => 'name' ], $owner->getName() ) .
 			( $showTags ? $this->getUserGroupTags( $context, $owner ) : '' )
 		) . ( $showEdits ? $this->getEditCount( $context, $owner ) : '' ) .
@@ -62,7 +62,7 @@ class SocialProfile {
 		$contributions = SpecialPage::getTitleFor( 'Contributions', $owner->getName() )->getFullURL();
 		$registration = date( 'F j, Y', strtotime( (string)$owner->getRegistration() ) );
 
-		return Html::rawElement( 'div', [ 'class' => [ 'contributions-details', 'tally' ] ],
+		return Html::rawElement( 'div', [ 'class' => [ 'skin-cosmos-profile-contributions', 'skin-cosmos-profile-tally', 'contributions-details', 'tally' ] ],
 			Html::rawElement( 'a', [ 'href' => $contributions ],
 				Html::element( 'em', [], (string)$owner->getEditCount() ) .
 				Html::rawElement( 'span', [],
@@ -76,7 +76,7 @@ class SocialProfile {
 		if ( $owner->getBlock() ) {
 			return Html::element(
 				'span',
-				[ 'class' => 'tag tag-blocked' ],
+				[ 'class' => 'skin-cosmos-profile-tag tag tag-blocked' ],
 				$context->msg( 'cosmosbeta-user-blocked' )->text()
 			);
 		}
@@ -94,7 +94,7 @@ class SocialProfile {
 			$message = $context->msg( "group-$group-member" );
 			$tags .= Html::element(
 				'span',
-				[ 'class' => 'tag tag-' . Sanitizer::escapeClass( $group ) ],
+				[ 'class' => 'skin-cosmos-profile-tag tag tag-' . Sanitizer::escapeClass( $group ) ],
 				ucfirst( $message->isDisabled() ? $group : $message->text() )
 			);
 		}
@@ -121,7 +121,7 @@ class SocialProfile {
 		}
 
 		return $content instanceof TextContent ?
-			Html::element( 'p', [ 'class' => 'bio' ], $content->getText() ) :
+			Html::element( 'p', [ 'class' => 'skin-cosmos-profile-bio bio' ], $content->getText() ) :
 			'';
 	}
 }
