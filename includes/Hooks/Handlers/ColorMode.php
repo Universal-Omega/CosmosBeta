@@ -9,24 +9,19 @@ use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Preferences\Hook\GetPreferencesHook;
 use MediaWiki\ResourceLoader\Hook\ResourceLoaderRegisterModulesHook;
 use MediaWiki\ResourceLoader\ResourceLoader;
-use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
 use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
 use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
 use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
-use MediaWiki\SpecialPage\SpecialPage;
 use function array_merge;
 use function array_unique;
 
 class ColorMode implements
 	BeforePageDisplayHook,
 	GetPreferencesHook,
-	ResourceLoaderRegisterModulesHook,
-	SkinTemplateNavigation__UniversalHook
+	ResourceLoaderRegisterModulesHook
 {
-
-	private const string ITEM_KEY = 'cosmosbeta-colormode';
 
 	public function __construct(
 		private readonly CosmosConfig $config,
@@ -56,38 +51,6 @@ class ColorMode implements
 			],
 			'hide-if' => [ '!==', 'skin', 'cosmosbeta' ],
 		];
-	}
-
-	/** @inheritDoc */
-	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
-		if (
-			!$sktemplate instanceof SkinCosmosBeta ||
-			!isset( $links['user-menu'] ) ||
-			!$this->config->isColorModeToggleEnabled()
-		) {
-			return;
-		}
-
-		$mode = $this->config->getRenderMode();
-		$item = [
-			'text' => $sktemplate->msg( "cosmosbeta-colormode-switch-$mode" )->text(),
-			'href' => $sktemplate->getUser()->isRegistered() ?
-				SpecialPage::getTitleFor( 'Preferences' )->getLocalURL() . '#mw-prefsection-rendering' :
-				'#',
-			'class' => 'skin-cosmos-colormode-toggle',
-		];
-
-		$menu = [];
-		foreach ( $links['user-menu'] as $key => $value ) {
-			if ( $key === 'logout' ) {
-				$menu[self::ITEM_KEY] = $item;
-			}
-
-			$menu[$key] = $value;
-		}
-
-		$menu[self::ITEM_KEY] ??= $item;
-		$links['user-menu'] = $menu;
 	}
 
 	/** @inheritDoc */

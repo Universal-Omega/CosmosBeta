@@ -3,7 +3,7 @@
 ( function ( $, mw ) {
 	let modal = document.getElementById( 'createPageModal' ),
 		btn = document.getElementById( 'createpage' ),
-		span = document.getElementsByClassName( 'close' )[ 0 ],
+		span = document.getElementsByClassName( 'skin-cosmos-modal-close' )[ 0 ],
 		$top = 0;
 
 	if ( modal && btn ) {
@@ -25,20 +25,63 @@
 		};
 	}
 
-	$( '.create-page-dialog__wrapper #create-page-dialog__title' ).on( 'keyup', () => {
+	$( '.skin-cosmos-create-dialog #create-page-dialog__title' ).on( 'keyup', () => {
 		let empty = false;
 
-		$( '.create-page-dialog__wrapper #create-page-dialog__title' ).each( function () {
+		$( '.skin-cosmos-create-dialog #create-page-dialog__title' ).each( function () {
 			if ( $( this ).val() === '' ) {
 				empty = true;
 			}
 		} );
 
 		if ( empty ) {
-			$( '.create-page-dialog__button' ).prop( 'disabled', true );
+			$( '.skin-cosmos-create-dialog__button' ).prop( 'disabled', true );
 		} else {
-			$( '.create-page-dialog__button' ).prop( 'disabled', false );
+			$( '.skin-cosmos-create-dialog__button' ).prop( 'disabled', false );
 		}
+	} );
+
+	$( document ).on( 'click', '.skin-cosmos-dropdown-button', function () {
+		const $dropdown = $( this ).closest( '.skin-cosmos-dropdown' ),
+			willOpen = !$dropdown.hasClass( 'skin-cosmos-is-open' );
+
+		$( '.skin-cosmos-dropdown' ).removeClass( 'skin-cosmos-is-open' );
+		$dropdown.toggleClass( 'skin-cosmos-is-open', willOpen );
+	} );
+
+	if ( window.matchMedia( '(hover: none)' ).matches ) {
+		$( '.skin-cosmos-menu' ).addClass( 'skin-cosmos-is-touch' );
+	}
+
+	$( document ).on( 'click', '.skin-cosmos-menu__toggle', function ( event ) {
+		const $menu = $( this ).closest( '.skin-cosmos-menu' );
+
+		if ( $menu.closest( '.skin-cosmos-mobile-navigation' ).length ) {
+			return;
+		}
+
+		const willOpen = !$menu.hasClass( 'skin-cosmos-is-open' );
+
+		if ( $( this ).find( 'a[href="#"]' ).length || $( this ).is( 'a[href="#"]' ) ) {
+			event.preventDefault();
+		}
+
+		$( '.skin-cosmos-menu' ).removeClass( 'skin-cosmos-is-open' );
+		$menu.toggleClass( 'skin-cosmos-is-open', willOpen );
+	} );
+
+	$( document ).on( 'click', ( event ) => {
+		if ( !$( event.target ).closest( '.skin-cosmos-dropdown' ).length ) {
+			$( '.skin-cosmos-dropdown' ).removeClass( 'skin-cosmos-is-open' );
+		}
+
+		if ( !$( event.target ).closest( '.skin-cosmos-menu' ).length ) {
+			$( '.skin-cosmos-menu' ).removeClass( 'skin-cosmos-is-open' );
+		}
+	} );
+
+	$( document ).on( 'click', '.skin-cosmos-personalTools-list .uls-trigger', () => {
+		$( '.skin-cosmos-dropdown' ).removeClass( 'skin-cosmos-is-open' );
 	} );
 
 	mw.hook( 've.activationComplete' ).add( () => {
@@ -46,8 +89,8 @@
 	} );
 
 	$( '.skin-cosmos-rail .skin-cosmos-rail-inner' ).addClass( 'loaded' );
-	$( '.rail-sticky-module' ).each( function () {
-		const $module = $( this ).nextAll( '.rail-sticky-module' );
+	$( '.skin-cosmos-rail-module--sticky' ).each( function () {
+		const $module = $( this ).nextAll( '.skin-cosmos-rail-module--sticky' );
 
 		$top += $( this ).outerHeight() + 20;
 

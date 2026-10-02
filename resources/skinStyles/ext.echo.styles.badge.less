@@ -1,3 +1,5 @@
+@import 'mediawiki.skin.variables.less';
+
 @media screen {
 	div.mw-echo-ui-overlay {
 		z-index: 1000000000;
@@ -63,8 +65,14 @@
 	display: inline-block;
 	height: 1.42857143em;
 	margin-top: 10.5px;
-	background: url( data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' stroke='%23000' stroke-width = '2px' fill='none' viewBox='0 0 28 28'%3e%3cpath d='M 2 5 L 26 5 L 26 23 L 2 23 Z M 2 9 L 14 19 L 26 9 L 26 23 L 2 23 Z M 2 23 L 10 15 Z M 26 23 L 18 15 Z'/%3e%3c/svg%3e ) no-repeat;
-	background-size: contain;
+	.cdx-mixin-css-icon-background-image( @cdx-icon-message, #000 );
+	background-image: none;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
 	vertical-align: middle;
 }
 
@@ -73,8 +81,14 @@
 	display: inline-block;
 	height: 1.42857143em;
 	margin-top: 10.5px;
-	background: url( data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' stroke='%23000' stroke-width = '2px' fill='none' viewBox='0 0 28 28'%3e%3cpath d='M 2 21 L 6 15 L 6 10 A 5 5 180 0 1 22 10 L 22 15 L 26 21 Z M 18 21.5 A 4 4.5 180 0 1 10 21.5'/%3e%3c/svg%3e ) no-repeat;
-	background-size: contain;
+	.cdx-mixin-css-icon-background-image( @cdx-icon-bell-outline, #000 );
+	background-image: none;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
 	vertical-align: middle;
 }
 
@@ -94,12 +108,13 @@
 	display: flex;
 	height: 100%;
 	place-items: center center;
-	padding: 5px 15px;
+	padding: 5px 2px;
+	gap: 4px;
 	list-style: none;
 }
 
 #cosmos-notification-icons #pt-notifications-notice {
-	padding-left: 15px;
+	padding-left: 8px;
 }
 
 .mw-echo-ui-notificationBadgeButtonPopupWidget-popup * {

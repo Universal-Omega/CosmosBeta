@@ -18,6 +18,7 @@ use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\SelectQueryBuilder;
+use function array_unique;
 use function htmlspecialchars;
 use function implode;
 use function in_array;
@@ -37,6 +38,10 @@ class CosmosRailBuilder {
 
 	protected array $disabledModules = [];
 
+	private bool $toolsInRail = false;
+
+	private array $toolItems = [];
+
 	public function __construct(
 		private readonly CosmosHookRunner $hookRunner,
 		private readonly IConnectionProvider $dbProvider,
@@ -52,15 +57,23 @@ class CosmosRailBuilder {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
+	public function setToolsModule( bool $enabled, array $items = [] ): self {
+		$this->toolsInRail = $enabled;
+		$this->toolItems = $items;
+
+		return $this;
+	}
+
 	public function buildRail(): string {
 		$modules = [];
 
 		foreach ( $this->getModules() as $module ) {
 			$modules[] = [
-				'class' => implode( ' ', (array)( $module['class'] ?? 'custom-module' ) ),
+				'class' => $this->getModuleClasses( (array)( $module['class'] ?? 'custom-module' ) ),
 				'is-sticky' => ( $module['type'] ?? 'normal' ) === 'sticky',
 				'header' => isset( $module['header'] ) ? $this->getHeader( $module['header'] ) : null,
 				'array-recentchanges' => $module['recentchanges'] ?? null,
+				'array-tools' => $module['tools'] ?? null,
 				'html-body' => $module['body'] ?? '',
 			];
 		}
@@ -78,7 +91,7 @@ class CosmosRailBuilder {
 		$hasRecentChangesModule = ( $this->getEnabledModules()['recentchanges'] ?? false ) &&
 			$this->getRecentChanges() !== [];
 
-		$hasModules = $hasRecentChangesModule || $this->getModules() !== [];
+		$hasModules = $hasRecentChangesModule || $this->toolsInRail || $this->getModules() !== [];
 
 		$this->resetDisabledModules();
 
@@ -137,6 +150,14 @@ class CosmosRailBuilder {
 		}
 
 		$this->hookRunner->onCosmosRailBuilder( $modules, $this->context->getSkin() );
+
+		if ( $this->toolsInRail && $this->toolItems ) {
+			$modules['page-tools'] = [
+				'class' => 'page-tools-module',
+				'header' => 'cosmosbeta-rail-page-tools',
+				'tools' => $this->toolItems,
+			];
+		}
 
 		return $modules;
 	}
@@ -239,6 +260,20 @@ class CosmosRailBuilder {
 				return $changes;
 			}
 		);
+	}
+
+	/**
+	 * @param string[] $classes
+	 */
+	private function getModuleClasses( array $classes ): string {
+		$all = [];
+
+		foreach ( $classes as $class ) {
+			$all[] = $class;
+			$all[] = "skin-cosmos-$class";
+		}
+
+		return implode( ' ', array_unique( $all ) );
 	}
 
 	private function getHeader( string $label ): string {

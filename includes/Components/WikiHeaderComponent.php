@@ -10,6 +10,7 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SiteStats\SiteStats;
+use MediaWiki\Skins\CosmosBeta\CosmosConfig;
 use MediaWiki\Skins\CosmosBeta\CosmosWordmarkLookup;
 use MediaWiki\SpecialPage\SpecialPage;
 use function ucwords;
@@ -22,6 +23,7 @@ class WikiHeaderComponent {
 		private readonly PermissionManager $permissionManager,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly CosmosWordmarkLookup $wordmarkLookup,
+		private readonly CosmosConfig $cosmosConfig,
 	) {
 	}
 
@@ -68,7 +70,11 @@ class WikiHeaderComponent {
 		}
 
 		$onlyRead = !$canEdit && !$canCreate;
-		$hasMore = ( !$isAnon && ( $canUpload || $canAddVideo ) ) || ( ( $canUpload || $canAddVideo ) && $onlyRead );
+		$hasColorMode = $this->cosmosConfig->isColorModeToggleEnabled();
+		$mode = $this->cosmosConfig->getRenderMode();
+		$hasMore = $hasColorMode ||
+			( !$isAnon && ( $canUpload || $canAddVideo ) ) ||
+			( ( $canUpload || $canAddVideo ) && $onlyRead );
 
 		return [
 			'has-create' => $canCreate && $canEdit,
@@ -83,6 +89,12 @@ class WikiHeaderComponent {
 			'admin-url' => SpecialPage::getTitleFor( 'AdminLinks' )->getFullURL(),
 			'admin-title' => ucwords( $this->context->msg( 'adminlinks' )->text() ),
 			'has-more' => $hasMore,
+			'has-colormode' => $hasColorMode,
+			'colormode-icon' => $mode === 'dark' ? 'bright' : 'moon',
+			'colormode-text' => $this->context->msg( "cosmosbeta-colormode-switch-$mode" )->text(),
+			'colormode-url' => $user->isRegistered() ?
+				SpecialPage::getTitleFor( 'Preferences' )->getLocalURL() . '#mw-prefsection-rendering' :
+				'#',
 			'has-more-image' => $canUpload,
 			'more-image-url' => $uploadUrl,
 			'msg-more-image' => $this->context->msg( 'cosmosbeta-add-new-image' )->text(),

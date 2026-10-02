@@ -7,7 +7,6 @@ namespace MediaWiki\Skins\CosmosBeta;
 use CookieWarning\Decisions as CookieWarningDecisions;
 use CookieWarning\Hooks as CookieWarningHooks;
 use MediaWiki\Config\Config;
-use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Permissions\PermissionManager;
@@ -63,7 +62,8 @@ class SkinCosmosBeta extends SkinMustache {
 			$this->getConfig(),
 			$this->permissionManager,
 			$this->extensionRegistry,
-			$this->wordmarkLookup
+			$this->wordmarkLookup,
+			$this->cosmosConfig
 		);
 		$pageHeader = new PageHeaderComponent(
 			$context,
@@ -78,6 +78,9 @@ class SkinCosmosBeta extends SkinMustache {
 			$this->titleFactory
 		);
 		$chrome = new ChromeComponent( $context, $this->cosmosConfig, $this->extensionRegistry );
+
+		$toolsInRail = $this->shouldPutToolsInRail();
+		$this->railBuilder->setToolsModule( $toolsInRail, $toolsInRail ? $chrome->getToolItems( $sidebar ) : [] );
 
 		$tree = $this->navigation->getTree( $this, $this->getLanguage() );
 		$siteNotice = $data['html-site-notice'] ?? null;
@@ -95,7 +98,7 @@ class SkinCosmosBeta extends SkinMustache {
 			],
 			'data-cosmos-dialog' => $dialog->getTemplateData(),
 			'data-cosmos-footer' => $chrome->getFooterData( $data['data-footer'] ?? [] ),
-			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar ),
+			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar, $toolsInRail ),
 			'html-cosmos-rail' => $this->railBuilder->buildRail(),
 			'html-cosmos-cookiewarning' => $this->getCookieWarning(),
 			'is-cosmos-dismissable-notice' => $siteNotice !== null && $dismissable,
@@ -108,6 +111,8 @@ class SkinCosmosBeta extends SkinMustache {
 	/** @inheritDoc */
 	public function getDefaultModules(): array {
 		$modules = parent::getDefaultModules();
+
+		$this->railBuilder->setToolsModule( $this->shouldPutToolsInRail() );
 
 		if ( !$this->railBuilder->isHidden() && $this->railBuilder->hasModules() ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.rail';
@@ -145,24 +150,28 @@ class SkinCosmosBeta extends SkinMustache {
 		return $modules;
 	}
 
+	private function shouldPutToolsInRail(): bool {
+		$settings = $this->cosmosConfig->getToolbarSettings();
+
+		return $settings['enabled'] && $settings['style'] === 'rail' && !$this->railBuilder->isHidden();
+	}
+
 	private function getSearchData( array $search ): array {
-		$classes = 'skin-cosmos-search-button cosmos-search-button';
+		$classes = 'searchButton skin-cosmos-search-button cosmos-search-button';
 
 		return [
-			'html-input' => Html::element( 'input', [
+			'html-input' => $this->makeSearchInput( [
 				'id' => 'searchInput',
 				'class' => 'skin-cosmos-search-input cosmos-search-input',
-			] + ( $search['array-input-attributes'] ?? [] ) ),
-			'html-button-search' => Html::element( 'input', [
+			] ),
+			'html-button-search' => $this->makeSearchButton( 'go', [
 				'id' => 'searchButton',
 				'class' => $classes,
-				'value' => $this->msg( 'searcharticle' )->text(),
-			] + ( $search['array-button-go-attributes'] ?? [] ) ),
-			'html-button-search-fallback' => Html::element( 'input', [
+			] ),
+			'html-button-search-fallback' => $this->makeSearchButton( 'fulltext', [
 				'id' => 'mw-searchButton',
 				'class' => "mw-fallbackSearchButton $classes",
-				'value' => $this->msg( 'searchbutton' )->text(),
-			] + ( $search['array-button-fulltext-attributes'] ?? [] ) ),
+			] ),
 		] + $search;
 	}
 
