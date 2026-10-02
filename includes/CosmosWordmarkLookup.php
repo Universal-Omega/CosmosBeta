@@ -15,33 +15,31 @@ class CosmosWordmarkLookup {
 	public function __construct(
 		private readonly TitleFactory $titleFactory,
 		private readonly RepoGroup $repoGroup,
-		private readonly string $wordmark,
+		private readonly CosmosConfig $cosmosConfig,
 	) {
 	}
 
 	public function getWordmarkUrl(): ?string {
-		if ( $this->wordmark === '' ) {
+		if ( $this->cosmosConfig->getWordmark() === '' ) {
 			return null;
 		}
 
 		if ( !$this->isWordmarkUrl() ) {
 			$file = $this->getWordmarkFile();
-
 			if ( $file && $file->exists() ) {
 				return $file->getUrl();
 			}
 		}
 
-		return $this->wordmark;
+		return $this->cosmosConfig->getWordmark();
 	}
 
 	public function isWordmarkUrl(): bool {
-		return (bool)preg_match( '%^(?:(http|https|ftp):|)//(?:www\.)?.*$%i', $this->wordmark );
+		return (bool)preg_match( '%^(?:(http|https|ftp):|)//(?:www\.)?.*$%i', $this->cosmosConfig->getWordmark() );
 	}
 
 	public function getWordmarkFile(): ?File {
-		$title = $this->titleFactory->makeTitle( NS_FILE, $this->wordmark );
-
+		$title = $this->titleFactory->makeTitle( NS_FILE, $this->cosmosConfig->getWordmark() );
 		return $this->repoGroup->findFile( $title ) ?: null;
 	}
 }
