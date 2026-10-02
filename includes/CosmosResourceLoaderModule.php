@@ -113,6 +113,9 @@ class CosmosResourceLoaderModule extends SkinModule {
 		[ $r, $g, $b ] = $contentRgb;
 
 		$contentOpacityLevelConfig = $this->cosmosConfig->getContentOpacityLevel();
+		$lessVars['banner-icon-opacity'] = $this->cosmosConfig->getBannerIconOpacity() / 100;
+		$lessVars['header-icon-opacity'] = $this->cosmosConfig->getHeaderIconOpacity() / 100;
+
 		$lessVars['content-opacity-level'] = "rgba($r, $g, $b, " . $contentOpacityLevelConfig / 100.00 . ')';
 
 		$footerBackgroundColor = $this->cosmosConfig->getColor( 'footer', $mode );

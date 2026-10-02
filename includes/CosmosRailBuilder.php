@@ -38,6 +38,10 @@ class CosmosRailBuilder {
 
 	protected array $disabledModules = [];
 
+	private bool $toolsInRail = false;
+
+	private array $toolItems = [];
+
 	public function __construct(
 		private readonly CosmosHookRunner $hookRunner,
 		private readonly IConnectionProvider $dbProvider,
@@ -53,6 +57,13 @@ class CosmosRailBuilder {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
+	public function setToolsModule( bool $enabled, array $items = [] ): self {
+		$this->toolsInRail = $enabled;
+		$this->toolItems = $items;
+
+		return $this;
+	}
+
 	public function buildRail(): string {
 		$modules = [];
 
@@ -62,6 +73,7 @@ class CosmosRailBuilder {
 				'is-sticky' => ( $module['type'] ?? 'normal' ) === 'sticky',
 				'header' => isset( $module['header'] ) ? $this->getHeader( $module['header'] ) : null,
 				'array-recentchanges' => $module['recentchanges'] ?? null,
+				'array-tools' => $module['tools'] ?? null,
 				'html-body' => $module['body'] ?? '',
 			];
 		}
@@ -79,7 +91,7 @@ class CosmosRailBuilder {
 		$hasRecentChangesModule = ( $this->getEnabledModules()['recentchanges'] ?? false ) &&
 			$this->getRecentChanges() !== [];
 
-		$hasModules = $hasRecentChangesModule || $this->getModules() !== [];
+		$hasModules = $hasRecentChangesModule || $this->toolsInRail || $this->getModules() !== [];
 
 		$this->resetDisabledModules();
 
@@ -138,6 +150,14 @@ class CosmosRailBuilder {
 		}
 
 		$this->hookRunner->onCosmosRailBuilder( $modules, $this->context->getSkin() );
+
+		if ( $this->toolsInRail && $this->toolItems ) {
+			$modules['page-tools'] = [
+				'class' => 'page-tools-module',
+				'header' => 'cosmosbeta-rail-page-tools',
+				'tools' => $this->toolItems,
+			];
+		}
 
 		return $modules;
 	}

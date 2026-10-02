@@ -1,7 +1,7 @@
 <div class="skin-cosmos-nav__label wds-tabs__tab-label{{#has-children}} skin-cosmos-menu__toggle wds-dropdown__toggle{{/has-children}}" id="p-{{id}}-label">
 	<a href="{{href}}"{{#rel-nofollow}} rel="nofollow"{{/rel-nofollow}}>
-		{{#is-explore}}<span class="skin-cosmos-icon skin-cosmos-icon-globe" id="cosmos-icons-explore" aria-hidden="true"></span>{{/is-explore}}
-		<span{{#is-explore}} style="padding-top: 2px;"{{/is-explore}}>{{text}}</span>
+		{{#icon}}<span class="skin-cosmos-icon skin-cosmos-icon-{{.}} skin-cosmos-nav__icon"{{#is-explore}} id="cosmos-icons-explore"{{/is-explore}} aria-hidden="true"></span>{{/icon}}
+		<span>{{text}}</span>
 		{{#has-children}}<span class="skin-cosmos-icon skin-cosmos-icon-expand skin-cosmos-menu__chevron wds-dropdown__toggle-chevron" aria-hidden="true"></span>{{/has-children}}
 	</a>
 </div>

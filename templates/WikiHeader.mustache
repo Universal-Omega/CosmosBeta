@@ -16,7 +16,7 @@
 		<div class="skin-cosmos-header__wiki-buttons cosmos-header__wiki-buttons skin-cosmos-header-buttons wds-button-group">
 			{{#has-create}}
 			<a class="skin-cosmos-header-button wds-button skin-cosmos-is-secondary wds-is-secondary createpage{{#create-flush}} skin-cosmos-is-flush cosmos-is-flush{{/create-flush}}" id="createpage" href="#create-article" title="{{create-title}}">
-				<span class="skin-cosmos-icon skin-cosmos-icon-articleAdd" aria-hidden="true"></span>{{create-text}}
+				<span class="skin-cosmos-icon skin-cosmos-icon-add" aria-hidden="true"></span>{{create-text}}
 			</a>
 			{{/has-create}}
 			{{#has-recentchanges}}
@@ -36,6 +36,7 @@
 				</div>
 				<div class="skin-cosmos-menu__content wds-dropdown__content skin-cosmos-is-unscrollable wds-is-not-scrollable skin-cosmos-is-right wds-is-right-aligned">
 					<ul class="skin-cosmos-list wds-list skin-cosmos-list--linked wds-is-linked">
+						{{#has-colormode}}<li id="m-colormode" class="skin-cosmos-colormode-toggle"><a href="{{colormode-url}}"><span class="skin-cosmos-icon skin-cosmos-icon-{{colormode-icon}}" aria-hidden="true"></span><span class="skin-cosmos-colormode-text">{{colormode-text}}</span></a></li>{{/has-colormode}}
 						{{#has-more-image}}<li id="m-add-new-image"><a href="{{more-image-url}}">{{msg-more-image}}</a></li>{{/has-more-image}}
 						{{#has-more-video}}<li id="m-add-new-video"><a href="{{more-video-url}}">{{msg-more-video}}</a></li>{{/has-more-video}}
 						<li id="m-recentchanges"><a href="{{recentchanges-url}}">{{msg-recentchanges}}</a></li>

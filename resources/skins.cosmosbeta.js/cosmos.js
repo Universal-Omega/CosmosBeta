@@ -49,9 +49,34 @@
 		$dropdown.toggleClass( 'skin-cosmos-is-open', willOpen );
 	} );
 
+	if ( window.matchMedia( '(hover: none)' ).matches ) {
+		$( '.skin-cosmos-menu' ).addClass( 'skin-cosmos-is-touch' );
+	}
+
+	$( document ).on( 'click', '.skin-cosmos-menu__toggle', function ( event ) {
+		const $menu = $( this ).closest( '.skin-cosmos-menu' );
+
+		if ( $menu.closest( '.skin-cosmos-mobile-navigation' ).length ) {
+			return;
+		}
+
+		const willOpen = !$menu.hasClass( 'skin-cosmos-is-open' );
+
+		if ( $( this ).find( 'a[href="#"]' ).length || $( this ).is( 'a[href="#"]' ) ) {
+			event.preventDefault();
+		}
+
+		$( '.skin-cosmos-menu' ).removeClass( 'skin-cosmos-is-open' );
+		$menu.toggleClass( 'skin-cosmos-is-open', willOpen );
+	} );
+
 	$( document ).on( 'click', ( event ) => {
 		if ( !$( event.target ).closest( '.skin-cosmos-dropdown' ).length ) {
 			$( '.skin-cosmos-dropdown' ).removeClass( 'skin-cosmos-is-open' );
+		}
+
+		if ( !$( event.target ).closest( '.skin-cosmos-menu' ).length ) {
+			$( '.skin-cosmos-menu' ).removeClass( 'skin-cosmos-is-open' );
 		}
 	} );
 

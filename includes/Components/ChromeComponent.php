@@ -29,13 +29,8 @@ class ChromeComponent {
 		];
 	}
 
-	public function getToolbarData( array $sidebar ): ?array {
+	public function getToolItems( array $sidebar ): array {
 		$settings = $this->config->getToolbarSettings();
-
-		if ( !$settings['enabled'] ) {
-			return null;
-		}
-
 		$items = [];
 		$portlet = PortletReader::findPortlet( $sidebar, 'p-tb' );
 
@@ -44,6 +39,18 @@ class ChromeComponent {
 				$items[] = [ 'html-item' => $item['html-item'] ];
 			}
 		}
+
+		return $items;
+	}
+
+	public function getToolbarData( array $sidebar, bool $inRail = false ): ?array {
+		$settings = $this->config->getToolbarSettings();
+
+		if ( !$settings['enabled'] || $inRail ) {
+			return null;
+		}
+
+		$items = $this->getToolItems( $sidebar );
 
 		if (
 			$this->extensionRegistry->isLoaded( 'CreateRedirect' ) &&
@@ -61,7 +68,7 @@ class ChromeComponent {
 		}
 
 		return [
-			'style' => $settings['style'],
+			'style' => $settings['style'] === 'rail' ? 'bar' : $settings['style'],
 			'array-items' => $items,
 		];
 	}

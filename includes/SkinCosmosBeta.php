@@ -62,7 +62,8 @@ class SkinCosmosBeta extends SkinMustache {
 			$this->getConfig(),
 			$this->permissionManager,
 			$this->extensionRegistry,
-			$this->wordmarkLookup
+			$this->wordmarkLookup,
+			$this->cosmosConfig
 		);
 		$pageHeader = new PageHeaderComponent(
 			$context,
@@ -77,6 +78,9 @@ class SkinCosmosBeta extends SkinMustache {
 			$this->titleFactory
 		);
 		$chrome = new ChromeComponent( $context, $this->cosmosConfig, $this->extensionRegistry );
+
+		$toolsInRail = $this->shouldPutToolsInRail();
+		$this->railBuilder->setToolsModule( $toolsInRail, $toolsInRail ? $chrome->getToolItems( $sidebar ) : [] );
 
 		$tree = $this->navigation->getTree( $this, $this->getLanguage() );
 		$siteNotice = $data['html-site-notice'] ?? null;
@@ -94,7 +98,7 @@ class SkinCosmosBeta extends SkinMustache {
 			],
 			'data-cosmos-dialog' => $dialog->getTemplateData(),
 			'data-cosmos-footer' => $chrome->getFooterData( $data['data-footer'] ?? [] ),
-			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar ),
+			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar, $toolsInRail ),
 			'html-cosmos-rail' => $this->railBuilder->buildRail(),
 			'html-cosmos-cookiewarning' => $this->getCookieWarning(),
 			'is-cosmos-dismissable-notice' => $siteNotice !== null && $dismissable,
@@ -107,6 +111,8 @@ class SkinCosmosBeta extends SkinMustache {
 	/** @inheritDoc */
 	public function getDefaultModules(): array {
 		$modules = parent::getDefaultModules();
+
+		$this->railBuilder->setToolsModule( $this->shouldPutToolsInRail() );
 
 		if ( !$this->railBuilder->isHidden() && $this->railBuilder->hasModules() ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.rail';
@@ -142,6 +148,12 @@ class SkinCosmosBeta extends SkinMustache {
 		}
 
 		return $modules;
+	}
+
+	private function shouldPutToolsInRail(): bool {
+		$settings = $this->cosmosConfig->getToolbarSettings();
+
+		return $settings['enabled'] && $settings['style'] === 'rail' && !$this->railBuilder->isHidden();
 	}
 
 	private function getSearchData( array $search ): array {
