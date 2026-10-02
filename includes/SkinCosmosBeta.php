@@ -7,7 +7,6 @@ namespace MediaWiki\Skins\CosmosBeta;
 use CookieWarning\Decisions as CookieWarningDecisions;
 use CookieWarning\Hooks as CookieWarningHooks;
 use MediaWiki\Config\Config;
-use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\Language;
 use MediaWiki\Languages\LanguageNameUtils;
@@ -35,7 +34,7 @@ use function trim;
 
 class SkinCosmosBeta extends SkinMustache {
 
-	public const array CONSTRUCTOR_OPTIONS = [
+	private const array CONSTRUCTOR_OPTIONS = [
 		ConfigNames::EnablePortableInfoboxEuropaTheme,
 		ConfigNames::RailSidebarPortlets,
 		ConfigNames::SocialProfileAllowBio,
@@ -45,9 +44,31 @@ class SkinCosmosBeta extends SkinMustache {
 		ConfigNames::SocialProfileShowGroupTags,
 	];
 
+	public function __construct(
+		private readonly AltModules $altModules,
+		public readonly CosmosConfig $cosmosConfig,
+		private readonly CosmosNavigation $navigation,
+		private readonly Config $cosmosOptions,
+		private readonly CosmosRailBuilder $railBuilder,
+		private readonly CosmosWordmarkLookup $wordmarkLookup,
+		private readonly Language $contentLanguage,
+		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly LanguageNameUtils $languageNameUtils,
+		private readonly PermissionManager $permissionManager,
+		private readonly ServiceOptions $serviceOptions,
+		private readonly SpecialPageFactory $specialPageFactory,
+		private readonly TitleFactory $titleFactory,
+		private readonly UserOptionsManager $userOptionsManager,
+		private readonly ?CookieWarningDecisions $cookieWarningDecisions,
+		array $options,
+	) {
+		parent::__construct( $options );
+		$serviceOptions->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+	}
+
 	public static function factory(
 		AltModules $altModules,
-		ConfigFactory $configFactory,
+		Config $cosmosOptions,
 		CosmosConfig $cosmosConfig,
 		CosmosNavigation $navigation,
 		CosmosRailBuilder $railBuilder,
@@ -62,13 +83,10 @@ class SkinCosmosBeta extends SkinMustache {
 		?CookieWarningDecisions $cookieWarningDecisions,
 		array $options,
 	): self {
-		$cosmosOptions = $configFactory->makeConfig( 'CosmosBeta' );
-
 		return new self(
 			$altModules,
 			$cosmosConfig,
 			$navigation,
-			new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $cosmosOptions ),
 			$cosmosOptions,
 			$railBuilder,
 			$wordmarkLookup,
@@ -76,35 +94,16 @@ class SkinCosmosBeta extends SkinMustache {
 			$extensionRegistry,
 			$languageNameUtils,
 			$permissionManager,
+			new ServiceOptions(
+				self::CONSTRUCTOR_OPTIONS,
+				$cosmosOptions
+			),
 			$specialPageFactory,
 			$titleFactory,
 			$userOptionsManager,
 			$cookieWarningDecisions,
 			$options
 		);
-	}
-
-	public function __construct(
-		private readonly AltModules $altModules,
-		public readonly CosmosConfig $cosmosConfig,
-		private readonly CosmosNavigation $navigation,
-		private readonly ServiceOptions $serviceOptions,
-		private readonly Config $cosmosOptions,
-		private readonly CosmosRailBuilder $railBuilder,
-		private readonly CosmosWordmarkLookup $wordmarkLookup,
-		private readonly Language $contentLanguage,
-		private readonly ExtensionRegistry $extensionRegistry,
-		private readonly LanguageNameUtils $languageNameUtils,
-		private readonly PermissionManager $permissionManager,
-		private readonly SpecialPageFactory $specialPageFactory,
-		private readonly TitleFactory $titleFactory,
-		private readonly UserOptionsManager $userOptionsManager,
-		private readonly ?CookieWarningDecisions $cookieWarningDecisions,
-		array $options,
-	) {
-		parent::__construct( $options );
-
-		$serviceOptions->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	/** @inheritDoc */
@@ -308,22 +307,18 @@ class SkinCosmosBeta extends SkinMustache {
 	}
 
 	private function getCookieWarning(): ?string {
-		if ( !$this->extensionRegistry->isLoaded( 'CookieWarning' ) ) {
+		if ( $this->cookieWarningDecisions === null ) {
 			return null;
 		}
 
-		$hooks = $this->cookieWarningDecisions ?
-			new CookieWarningHooks(
-				$this->getConfig(),
-				$this->cookieWarningDecisions,
-				$this->userOptionsManager
-			) :
-			// @phan-suppress-next-line PhanParamTooFew
-			new CookieWarningHooks();
+		$hooks = new CookieWarningHooks(
+			$this->getConfig(),
+			$this->cookieWarningDecisions,
+			$this->userOptionsManager
+		)
 
 		$html = '';
 		$hooks->onSkinAfterContent( $html, $this );
-
 		return $html !== '' ? $html : null;
 	}
 }
