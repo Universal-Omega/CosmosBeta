@@ -7,6 +7,7 @@ namespace MediaWiki\Skins\CosmosBeta;
 use CookieWarning\Decisions as CookieWarningDecisions;
 use CookieWarning\Hooks as CookieWarningHooks;
 use MediaWiki\Config\Config;
+use MediaWiki\Html\Html;
 use MediaWiki\Language\Language;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Permissions\PermissionManager;
@@ -145,21 +146,23 @@ class SkinCosmosBeta extends SkinMustache {
 	}
 
 	private function getSearchData( array $search ): array {
-		$button = static fn ( string $id ): array => [
-			'id' => $id,
-			'class' => 'skin-cosmos-search-button cosmos-search-button',
-		];
+		$classes = 'skin-cosmos-search-button cosmos-search-button';
 
 		return [
-			'html-input' => $this->makeSearchInput( [
+			'html-input' => Html::element( 'input', [
 				'id' => 'searchInput',
 				'class' => 'skin-cosmos-search-input cosmos-search-input',
-			] ),
-			'html-button-search' => $this->makeSearchButton( 'go', $button( 'searchButton' ) ),
-			'html-button-search-fallback' => $this->makeSearchButton(
-				'fulltext',
-				[ 'id' => 'mw-searchButton' ] + [ 'class' => 'mw-fallbackSearchButton skin-cosmos-search-button cosmos-search-button' ]
-			),
+			] + ( $search['array-input-attributes'] ?? [] ) ),
+			'html-button-search' => Html::element( 'input', [
+				'id' => 'searchButton',
+				'class' => $classes,
+				'value' => $this->msg( 'searcharticle' )->text(),
+			] + ( $search['array-button-go-attributes'] ?? [] ) ),
+			'html-button-search-fallback' => Html::element( 'input', [
+				'id' => 'mw-searchButton',
+				'class' => "mw-fallbackSearchButton $classes",
+				'value' => $this->msg( 'searchbutton' )->text(),
+			] + ( $search['array-button-fulltext-attributes'] ?? [] ) ),
 		] + $search;
 	}
 
