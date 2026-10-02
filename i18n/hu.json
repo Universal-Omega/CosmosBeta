@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dj",
+			"Eukarióta",
+			"Hanna Tardos",
+			"Krisztina",
+			"Misibacsi"
+		]
+	},
+	"cosmosbeta-adminlinks-edit-css": "CSS-fájl szerkesztése",
+	"cosmosbeta-adminlinks-edit-js": "JavaScript-fájl szerkesztése",
+	"cosmosbeta-anonymous": "Névtelen",
+	"cosmosbeta-counter-label": "$1 szócikk",
+	"cosmosbeta-createpage-header": "Új szócikk létrehozása",
+	"cosmosbeta-createpage-input-label": "Írd ide az oldalad címét:",
+	"cosmosbeta-createpage-next": "Tovább",
+	"cosmosbeta-personaltools-userpage": "Felhasználói lap",
+	"cosmosbeta-personaltools-usertalk": "Szerkesztővita",
+	"cosmosbeta-personaltools-anontalk": "Vitalapom",
+	"cosmosbeta-editcount-label": "Szerkesztések a wikihez csatlakozás óta",
+	"cosmosbeta-action-addsection": "Új téma",
+	"cosmosbeta-action-cancel": "Mégse",
+	"cosmosbeta-action-backtopage": "Vissza ide: $1",
+	"cosmosbeta-action-back": "Vissza",
+	"cosmosbeta-add-new-image": "Új kép hozzáadás",
+	"cosmosbeta-add-new-video": "Új videó hozzáadása",
+	"cosmosbeta-add-new-page-title": "Új oldal hozzáadása",
+	"cosmosbeta-add-new-page-text": "Hozzáadás",
+	"cosmosbeta-anon-add-new-page-text": "Új oldal hozzáadása",
+	"cosmosbeta-explore": "Felfedezés",
+	"cosmosbeta-newfiles": "Új fájlok",
+	"cosmosbeta-user-blocked": "Blokkolva",
+	"cosmosbeta-search-loader": "Keresési javaslatok betöltése"
+}

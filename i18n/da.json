@@ -1,0 +1,29 @@
+{
+	"@metadata": {
+		"authors": [
+			"IBDJ",
+			"Saederup92"
+		]
+	},
+	"cosmosbeta-anonymous": "Anonym",
+	"cosmosbeta-counter-label": "$1 {{PLURAL:$1|Artikel|Artikler}}",
+	"cosmosbeta-createpage-header": "Opret en ny artikel",
+	"cosmosbeta-createpage-next": "Næste",
+	"cosmosbeta-personaltools-userpage": "Brugerside",
+	"cosmosbeta-personaltools-usertalk": "Brugerdiskussion",
+	"cosmosbeta-personaltools-anontalk": "Min diskussion",
+	"cosmosbeta-editcount-label": "Redigeringer siden start i denne wiki",
+	"cosmosbeta-action-addsection": "Nyt emne",
+	"cosmosbeta-action-cancel": "Annuller",
+	"cosmosbeta-action-backtopage": "Tilbage til $1",
+	"cosmosbeta-action-back": "Tilbage",
+	"cosmosbeta-add-new-image": "Tilføj nyt billede",
+	"cosmosbeta-add-new-video": "Tilføj ny video",
+	"cosmosbeta-add-new-page-title": "Tilføj ny side",
+	"cosmosbeta-add-new-page-text": "Tilføj",
+	"cosmosbeta-anon-add-new-page-text": "Tilføj ny side",
+	"cosmosbeta-explore": "Udforks",
+	"cosmosbeta-newfiles": "Nye filer",
+	"cosmosbeta-user-blocked": "Blokeret",
+	"cosmosbeta-article-header-categories-in": "i:"
+}

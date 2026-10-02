@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Les Meloures",
+			"Robby",
+			"Volvox"
+		]
+	},
+	"cosmosbeta-adminlinks-edit-css": "CSS-Fichier änneren",
+	"cosmosbeta-adminlinks-edit-js": "JS-Fichier änneren",
+	"cosmosbeta-anonymous": "Anonym",
+	"cosmosbeta-counter-label": "{{PLURAL:$1|Artikel|Artikelen}}",
+	"cosmosbeta-createpage-header": "En neien Artikel uleeën",
+	"cosmosbeta-createpage-input-label": "Schreift hei Äre Säitentitel:",
+	"cosmosbeta-createpage-next": "Nächst",
+	"cosmosbeta-personaltools-userpage": "Benotzersäit",
+	"cosmosbeta-personaltools-usertalk": "Benotzerdiskussioun",
+	"cosmosbeta-personaltools-anontalk": "Meng Diskussioun",
+	"cosmosbeta-action-addsection": "Neit Theema",
+	"cosmosbeta-action-cancel": "Ofbriechen",
+	"cosmosbeta-action-backtopage": "Zeréck op $1",
+	"cosmosbeta-action-back": "Zeréck",
+	"cosmosbeta-add-new-image": "Neit Bild derbäisetzen",
+	"cosmosbeta-add-new-video": "Neie Video derbäisetzen",
+	"cosmosbeta-add-new-page-title": "Nei Säit derbäisetzen",
+	"cosmosbeta-add-new-page-text": "Derbäisetzen",
+	"cosmosbeta-anon-add-new-page-text": "Nei Säit derbäisetzen",
+	"cosmosbeta-explore": "Entdecken",
+	"cosmosbeta-newfiles": "Nei Fichieren",
+	"cosmosbeta-user-blocked": "Gespaart",
+	"cosmosbeta-search-loader": "Sichvirschléi gi gelueden",
+	"cosmosbeta-searchsuggest-containing": "No Säite mat <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong> sichen",
+	"cosmosbeta-article-header-categories-in": "an:",
+	"cosmosbeta-article-header-categories-more": "an $1 méi"
+}

@@ -1,0 +1,63 @@
+[
+	{
+		"name": "cosmosbeta_theme",
+		"comment": "Every theme published through Special:ThemeDesigner. The newest row is the live theme.",
+		"columns": [
+			{
+				"name": "cth_id",
+				"comment": "Revision id.",
+				"type": "integer",
+				"options": { "unsigned": true, "notnull": true, "autoincrement": true }
+			},
+			{
+				"name": "cth_timestamp",
+				"comment": "When the theme was published.",
+				"type": "mwtimestamp",
+				"options": { "notnull": true }
+			},
+			{
+				"name": "cth_actor",
+				"comment": "Key to actor_id of the publisher.",
+				"type": "bigint",
+				"options": { "unsigned": true, "notnull": true }
+			},
+			{
+				"name": "cth_comment",
+				"comment": "Short summary written by the publisher.",
+				"type": "binary",
+				"options": { "notnull": true, "default": "", "length": 767 }
+			},
+			{
+				"name": "cth_version",
+				"comment": "Version of the settings format in cth_data.",
+				"type": "smallint",
+				"options": { "unsigned": true, "notnull": true, "default": 1 }
+			},
+			{
+				"name": "cth_hash",
+				"comment": "SHA-1 of cth_data, used to skip saves that change nothing.",
+				"type": "binary",
+				"options": { "notnull": true, "length": 40 }
+			},
+			{
+				"name": "cth_data",
+				"comment": "Theme settings as JSON.",
+				"type": "blob",
+				"options": { "notnull": true, "length": 16777215 }
+			}
+		],
+		"indexes": [
+			{
+				"name": "cth_timestamp",
+				"columns": [ "cth_timestamp" ],
+				"unique": false
+			},
+			{
+				"name": "cth_actor",
+				"columns": [ "cth_actor" ],
+				"unique": false
+			}
+		],
+		"pk": [ "cth_id" ]
+	}
+]

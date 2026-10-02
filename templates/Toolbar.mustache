@@ -1,0 +1,9 @@
+<section id="cosmos-toolbar" class="skin-cosmos-toolbar-{{style}} cosmos-toolbar-{{style}}">
+	<div id="p-tb" class="skin-cosmos-toolbar-tools cosmos-toolbar-tools">
+		<div class="body skin-cosmos-tools-list cosmos-tools-list">
+			<ul>
+				{{#array-items}}{{#html-item}}{{{.}}}{{/html-item}}{{#redirect-url}}<li id="t-createredirect"><a href="{{.}}">{{redirect-text}}</a></li>{{/redirect-url}}{{/array-items}}
+			</ul>
+		</div>
+	</div>
+</section>

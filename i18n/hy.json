@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kareyac",
+			"Սերգեյ Սաֆարյան"
+		]
+	},
+	"cosmosbeta-adminlinks-edit-css": "Խմբագրել CSS նիշքը",
+	"cosmosbeta-adminlinks-edit-js": "Խմբագրել JS նիշքը",
+	"cosmosbeta-counter-label": "$1 {{PLURAL:$1|հոդված}}",
+	"cosmosbeta-action-cancel": "Չեղարկել",
+	"cosmosbeta-add-new-page-title": "Ավելացնել Նոր Էջ",
+	"cosmosbeta-article-header-categories-more": "և $1 այլ"
+}

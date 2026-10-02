@@ -1,0 +1,32 @@
+{
+	"@metadata": {
+		"authors": [
+			"Beta16",
+			"Mpayansilva",
+			"Stefano"
+		]
+	},
+	"cosmosbeta-adminlinks-edit-css": "Modifica file CSS",
+	"cosmosbeta-adminlinks-edit-js": "Modifica file JS",
+	"cosmosbeta-anonymous": "Anonimo",
+	"cosmosbeta-counter-label": "{{PLURAL:$1|Voce|Voci}}",
+	"cosmosbeta-createpage-header": "Crea una nuova voce",
+	"cosmosbeta-createpage-next": "Avanti",
+	"cosmosbeta-personaltools-userpage": "Pagina utente",
+	"cosmosbeta-personaltools-usertalk": "Discussioni utente",
+	"cosmosbeta-action-addsection": "Nuovo argomento",
+	"cosmosbeta-action-cancel": "Annulla",
+	"cosmosbeta-action-backtopage": "Torna a $1",
+	"cosmosbeta-action-back": "Indietro",
+	"cosmosbeta-add-new-image": "Aggiungi nuova immagine",
+	"cosmosbeta-add-new-video": "Aggiungi nuovo video",
+	"cosmosbeta-add-new-page-title": "Aggiungi nuova pagina",
+	"cosmosbeta-add-new-page-text": "Aggiungi",
+	"cosmosbeta-anon-add-new-page-text": "Aggiungi nuova pagina",
+	"cosmosbeta-explore": "Esplora",
+	"cosmosbeta-newfiles": "Nuovi file",
+	"cosmosbeta-user-blocked": "Bloccato",
+	"cosmosbeta-search-loader": "Carica suggerimenti per la ricerca",
+	"cosmosbeta-searchsuggest-containing": "Cerca le pagine che contengono <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
+	"cosmosbeta-article-header-categories-more": "e altre $1"
+}

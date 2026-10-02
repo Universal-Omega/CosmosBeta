@@ -1,0 +1,11 @@
+{{#data-categories}}{{> Categories}}{{/data-categories}}
+{{#data-interlang}}{{> Interlang}}{{/data-interlang}}
+<div id="cosmos-header-articleHeader">
+	<h1 id="firstHeading" class="firstHeading mw-first-heading">
+		<span id="cosmos-title-text">{{{html-title}}}</span>
+		<div class="mw-indicators">{{#array-indicators}}<div id="mw-indicator-{{id}}" class="mw-indicator">{{{html}}}</div>{{/array-indicators}}</div>
+	</h1>
+	<div id="cosmos-articleHeader-actions">
+		{{#data-actions}}{{> ActionButtons}}{{/data-actions}}
+	</div>
+</div>

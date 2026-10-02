@@ -1,0 +1,91 @@
+/* global mw, jQuery */
+
+( function ( mw, $ ) {
+	const config = mw.config.get( 'wgCosmosBetaColorMode' );
+
+	if ( !config ) {
+		return;
+	}
+
+	const STORAGE_KEY = 'skin-cosmos-colormode';
+	const root = document.documentElement;
+
+	function getStoredMode() {
+		try {
+			const mode = window.localStorage.getItem( STORAGE_KEY );
+
+			return mode === 'light' || mode === 'dark' ? mode : null;
+		} catch ( e ) {
+			return null;
+		}
+	}
+
+	function storeMode( mode ) {
+		try {
+			window.localStorage.setItem( STORAGE_KEY, mode );
+		} catch ( e ) {
+			// Storage can be unavailable. The switch still works for this page view.
+		}
+	}
+
+	function getCurrentMode() {
+		return root.classList.contains( 'skin-cosmos-colormode-dark' ) ? 'dark' : 'light';
+	}
+
+	function applyMode( mode ) {
+		root.classList.remove( 'skin-cosmos-colormode-light', 'skin-cosmos-colormode-dark', 'skin-cosmos-colormode-pending' );
+		root.classList.add( 'skin-cosmos-colormode-' + mode );
+
+		document.body.classList.toggle( 'theme-dark', mode === 'dark' );
+		document.body.classList.toggle( 'theme-light', mode !== 'dark' );
+
+		$( '#pt-cosmosbeta-colormode a' ).text( mw.msg( 'cosmosbeta-colormode-switch-' + mode ) );
+	}
+
+	function switchForVisitor( mode ) {
+		storeMode( mode );
+
+		// Going back to what the server rendered means dropping the extra styles.
+		if ( mode === config.render ) {
+			window.location.reload();
+			return;
+		}
+
+		mw.loader.using( config.altModules ).then(
+			() => applyMode( mode ),
+			() => root.classList.remove( 'skin-cosmos-colormode-pending' )
+		);
+	}
+
+	function switchForUser( mode ) {
+		const value = mode === config.default ? '' : mode;
+
+		new mw.Api().saveOption( config.option, value ).then( () => {
+			window.location.reload();
+		} );
+	}
+
+	$( () => {
+		$( '#pt-cosmosbeta-colormode a' ).on( 'click', function ( event ) {
+			event.preventDefault();
+
+			const next = getCurrentMode() === 'dark' ? 'light' : 'dark';
+
+			if ( config.registered ) {
+				switchForUser( next );
+			} else {
+				switchForVisitor( next );
+			}
+		} );
+
+		if ( !config.registered ) {
+			const stored = getStoredMode();
+
+			if ( stored && stored !== config.render ) {
+				switchForVisitor( stored );
+			} else {
+				root.classList.remove( 'skin-cosmos-colormode-pending' );
+			}
+		}
+	} );
+}( mediaWiki, jQuery ) );

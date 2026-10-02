@@ -1,0 +1,11 @@
+{{#is-cosmos-dismissable-notice}}
+<div id="siteNotice">{{{html-site-notice}}}</div>
+{{/is-cosmos-dismissable-notice}}
+{{#is-cosmos-closable-notice}}
+<div id="cosmos-content-siteNotice" data-site-notice-hash="{{cosmos-notice-hash}}">
+	<div class="skin-cosmos-button cosmos-button skin-cosmos-button-primary cosmos-button-primary" id="cosmos-siteNotice-closeButton">
+		<span class="skin-cosmos-icon skin-cosmos-icon-close" id="cosmos-siteNotice-closeIcon" aria-hidden="true"></span>
+	</div>
+	<div id="siteNotice">{{{html-site-notice}}}</div>
+</div>
+{{/is-cosmos-closable-notice}}

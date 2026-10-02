@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"A2y4",
+			"MathXplore",
+			"Omotecho",
+			"Shirayuki",
+			"UsagiNeko",
+			"Waki285",
+			"Yaakiyu.jp",
+			"ひまり"
+		]
+	},
+	"cosmosbeta-desc": "コスモス外装は Fandom のオアシス外装をもとに設計されました。その設計を改良し、Fandom を利用しない利用者や Fandom から移行する利用者にとって効率的な MediaWiki 外装を提供します。テーマの設定やその他のサポートが必要な場合は、[https://discord.gg/GPVgFTaQTJ Cosmos Discord サーバー]に参加することもできます。",
+	"cosmosbeta-adminlinks-edit-css": "CSSファイルを編集する",
+	"cosmosbeta-adminlinks-edit-js": "JSファイルを編集",
+	"cosmosbeta-adminlinks-edit-navigation": "ナビゲーションの編集",
+	"cosmosbeta-anonymous": "匿名利用者",
+	"cosmosbeta-counter-label": "{{PLURAL:$1|記事}}",
+	"cosmosbeta-createpage-header": "新規記事を作成",
+	"cosmosbeta-createpage-input-label": "ここにページのタイトルを記入:",
+	"cosmosbeta-createpage-next": "次へ",
+	"cosmosbeta-personaltools-userpage": "利用者ページ",
+	"cosmosbeta-personaltools-usertalk": "利用者・トーク",
+	"cosmosbeta-action-addsection": "新しい話題",
+	"cosmosbeta-action-cancel": "キャンセル",
+	"cosmosbeta-action-backtopage": "$1に戻る",
+	"cosmosbeta-action-back": "戻る",
+	"cosmosbeta-add-new-image": "新しい画像を追加",
+	"cosmosbeta-add-new-video": "新しいビデオを追加",
+	"cosmosbeta-add-new-page-title": "新規ページを追加",
+	"cosmosbeta-add-new-page-text": "追加",
+	"cosmosbeta-anon-add-new-page-text": "新規ページを追加",
+	"cosmosbeta-explore": "探索",
+	"cosmosbeta-newfiles": "新しいファイル",
+	"cosmosbeta-user-blocked": "ブロック済み",
+	"cosmosbeta-search-loader": "検索候補を読み込んでいます",
+	"cosmosbeta-themedesigner-text": "'''Cosmos''' 外装のテーマをカスタマイズします。",
+	"cosmosbetathemedesigner": "テーマデザイナー",
+	"cosmos.js": "/* ここにあるすべてのJavaScriptは、コスモス外装を使用している利用者に対して読み込まれます */"
+}

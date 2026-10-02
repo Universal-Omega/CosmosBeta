@@ -1,0 +1,29 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kizule",
+			"Milicevic01"
+		]
+	},
+	"cosmosbeta-adminlinks-edit-css": "Уреди CSS датотеку",
+	"cosmosbeta-adminlinks-edit-js": "Уреди JS датотеку",
+	"cosmosbeta-anonymous": "Анонимно",
+	"cosmosbeta-createpage-header": "Нови чланак",
+	"cosmosbeta-createpage-input-label": "Наслов странице:",
+	"cosmosbeta-createpage-next": "Следеће",
+	"cosmosbeta-personaltools-userpage": "Корисничка страница",
+	"cosmosbeta-personaltools-usertalk": "Корисничка страница за разговор",
+	"cosmosbeta-personaltools-anontalk": "Моја страница за разговор",
+	"cosmosbeta-action-addsection": "Нова тема",
+	"cosmosbeta-action-cancel": "Откажи",
+	"cosmosbeta-action-backtopage": "Назад на $1",
+	"cosmosbeta-action-back": "Назад",
+	"cosmosbeta-add-new-image": "Додај нову слику",
+	"cosmosbeta-add-new-video": "Додај нов видео",
+	"cosmosbeta-add-new-page-title": "Додај нову страницу",
+	"cosmosbeta-add-new-page-text": "Додај",
+	"cosmosbeta-anon-add-new-page-text": "Додај нову страницу",
+	"cosmosbeta-explore": "Истражи",
+	"cosmosbeta-newfiles": "Нове датотеке",
+	"cosmosbeta-user-blocked": "Блокиран"
+}

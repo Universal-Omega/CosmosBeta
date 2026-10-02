@@ -1,0 +1,12 @@
+<li id="n-{{id}}" class="{{#is-sticked}}skin-cosmos-is-attached wds-is-sticked-to-parent {{/is-sticked}}{{#has-children}}skin-cosmos-submenu wds-dropdown-level-2{{/has-children}}">
+	<a href="{{href}}"{{#has-children}} class="skin-cosmos-submenu__toggle wds-dropdown-level-2__toggle"{{/has-children}}{{#rel-nofollow}} rel="nofollow"{{/rel-nofollow}}>{{text}}{{#has-children}}<span class="skin-cosmos-icon skin-cosmos-icon-next skin-cosmos-submenu__chevron wds-dropdown-chevron" aria-hidden="true"></span>{{/has-children}}</a>
+	{{#has-children}}
+	<div class="skin-cosmos-is-unscrollable wds-is-not-scrollable skin-cosmos-submenu__content wds-dropdown-level-2__content" id="p-{{id}}" aria-labelledby="p-{{id}}-label">
+		<div>
+			<ul class="skin-cosmos-list wds-list skin-cosmos-list--linked wds-is-linked">
+				{{#array-children}}{{> NavigationItem}}{{/array-children}}
+			</ul>
+		</div>
+	</div>
+	{{/has-children}}
+</li>

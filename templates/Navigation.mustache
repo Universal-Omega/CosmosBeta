@@ -1,0 +1,19 @@
+<ul class="skin-cosmos-nav wds-tabs">
+	{{#data-cosmos-navigation}}
+	<li class="skin-cosmos-nav__item wds-tabs__tab">
+		{{#has-children}}
+		<div class="skin-cosmos-menu wds-dropdown" id="p-{{id}}" aria-labelledby="p-{{id}}-label">
+			{{> NavigationLabel}}
+			<div class="skin-cosmos-is-unscrollable wds-is-not-scrollable skin-cosmos-menu__content wds-dropdown__content">
+				<div>
+					<ul class="skin-cosmos-list wds-list skin-cosmos-list--linked wds-is-linked skin-cosmos-list--bold wds-has-bolded-items">
+						{{#array-children}}{{> NavigationItem}}{{/array-children}}
+					</ul>
+				</div>
+			</div>
+		</div>
+		{{/has-children}}
+		{{^has-children}}{{> NavigationLabel}}{{/has-children}}
+	</li>
+	{{/data-cosmos-navigation}}
+</ul>

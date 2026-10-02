@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Seipinne",
+			"Yupik"
+		]
+	},
+	"cosmosbeta-adminlinks-edit-navigation": "Mute navigistem",
+	"cosmosbeta-anonymous": "Anonyym",
+	"cosmosbeta-counter-label": "{{PLURAL:$1|artikkâl|artikkâl|artikkâl|artikkâlid}}",
+	"cosmosbeta-createpage-header": "Räähti uđđâ artikkâl",
+	"cosmosbeta-createpage-input-label": "Čääli siijđo noomâ taas:",
+	"cosmosbeta-createpage-next": "Čuávuvâš",
+	"cosmosbeta-personaltools-userpage": "Kevtteesijđo",
+	"cosmosbeta-personaltools-usertalk": "Savâstâllâm kevttest",
+	"cosmosbeta-personaltools-anontalk": "Savâstâllâmsijđom",
+	"cosmosbeta-action-addsection": "Uđđâ fáddá",
+	"cosmosbeta-action-cancel": "Jooskâ",
+	"cosmosbeta-action-back": "Maassâd",
+	"cosmosbeta-add-new-page-title": "Lasseet uđđâ siijđo",
+	"cosmosbeta-add-new-page-text": "Lasseet",
+	"cosmosbeta-anon-add-new-page-text": "Lasseet uđđâ siijđo",
+	"cosmosbeta-user-blocked": "Estum",
+	"cosmosbeta-search-loader": "Luođiimin uuccâmiävtuttâsâid",
+	"cosmosbeta-article-header-categories-more": "já $1 lase"
+}

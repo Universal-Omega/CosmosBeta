@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dr Lotus Black"
+		]
+	},
+	"cosmosbeta-anonymous": "အမည်မသိ",
+	"cosmosbeta-counter-label": "{{PLURAL:$1|ဆောင်းပါး|ဆောင်းပါးများ}}",
+	"cosmosbeta-createpage-header": "ဆောင်းပါးသစ်တစ်ခု ဖန်တီးရန်",
+	"cosmosbeta-createpage-next": "ရှေ့သို့",
+	"cosmosbeta-personaltools-userpage": "အသုံးပြုသူ စာမျက်နှာ",
+	"cosmosbeta-personaltools-usertalk": "အသုံးပြုသူ ဆွေးနွေးခန်း",
+	"cosmosbeta-action-back": "နောက်သို့",
+	"cosmosbeta-add-new-image": "ပုံအသစ်ထည့်ရန်",
+	"cosmosbeta-add-new-video": "ဗီဒီယိုအသစ်ထည့်ရန်",
+	"cosmosbeta-add-new-page-title": "စာမျက်နှာအသစ်ထည့်ရန်",
+	"cosmosbeta-add-new-page-text": "ပေါင်းထည့်ရန်",
+	"cosmosbeta-anon-add-new-page-text": "စာမျက်နှာသစ် ပေါင်းထည့်ရန်",
+	"cosmosbeta-explore": "ရှာဖွေစူးစမ်းပါ",
+	"cosmosbeta-newfiles": "ဖိုင်အသစ်များ"
+}

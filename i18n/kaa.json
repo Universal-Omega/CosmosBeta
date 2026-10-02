@@ -1,0 +1,32 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ajiniyaz Nurniyazov"
+		]
+	},
+	"cosmosbeta-adminlinks-edit-navigation": "Navigaciyanı ózgertiw",
+	"cosmosbeta-adminlinks-edit-tagline": "Súrendi ózgertiw",
+	"cosmosbeta-anonymous": "Anonim",
+	"cosmosbeta-counter-label": "{{PLURAL:$1|dana maqala}}",
+	"cosmosbeta-createpage-header": "Jańa maqala baslaw",
+	"cosmosbeta-createpage-input-label": "Maqalanıń atamasın mına jerge jazıń:",
+	"cosmosbeta-createpage-next": "Keyingi",
+	"cosmosbeta-personaltools-userpage": "Paydalanıwshı beti",
+	"cosmosbeta-personaltools-usertalk": "Paydalanıwshı talqılawı",
+	"cosmosbeta-personaltools-anontalk": "Meniń talqılawım",
+	"cosmosbeta-editcount-label": "Usı wikige qosılǵannan berli redaktorlaw sanı",
+	"cosmosbeta-action-addsection": "Jańa tema",
+	"cosmosbeta-action-cancel": "Biykar etiw",
+	"cosmosbeta-action-back": "Artqa",
+	"cosmosbeta-add-new-image": "Jańa súwret qosıw",
+	"cosmosbeta-add-new-video": "Jańa video qosıw",
+	"cosmosbeta-add-new-page-title": "Jańa bet qosıw",
+	"cosmosbeta-add-new-page-text": "Qosıw",
+	"cosmosbeta-anon-add-new-page-text": "Jańa bet qosıw",
+	"cosmosbeta-explore": "Izertlew",
+	"cosmosbeta-newfiles": "Jańa fayllar",
+	"cosmosbeta-user-blocked": "Bloklanǵan",
+	"cosmosbeta-search-loader": "Izlew usınısları júklenbekte",
+	"cosmosbeta-searchsuggest-containing": "<strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong> tekstin óz ishine alǵan betlerdi izlew",
+	"cosmosbeta-article-header-categories-in": "kategoriyalarda:"
+}

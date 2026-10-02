@@ -1,0 +1,95 @@
+<?php
+
+declare( strict_types = 1 );
+
+namespace MediaWiki\Skins\CosmosBeta\Components;
+
+use MediaWiki\Config\Config;
+use MediaWiki\Context\IContextSource;
+use MediaWiki\MainConfigNames;
+use MediaWiki\Permissions\PermissionManager;
+use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\SiteStats\SiteStats;
+use MediaWiki\Skins\CosmosBeta\CosmosWordmarkLookup;
+use MediaWiki\SpecialPage\SpecialPage;
+use function ucwords;
+
+class WikiHeaderComponent {
+
+	public function __construct(
+		private readonly IContextSource $context,
+		private readonly Config $config,
+		private readonly PermissionManager $permissionManager,
+		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly CosmosWordmarkLookup $wordmarkLookup,
+	) {
+	}
+
+	public function getTemplateData( string $mainPageUrl ): array {
+		$user = $this->context->getUser();
+		$canRead = $this->permissionManager->userHasRight( $user, 'read' );
+		$articles = SiteStats::articles();
+
+		$data = [
+			'link-mainpage' => $mainPageUrl,
+			'wordmark-url' => $this->wordmarkLookup->getWordmarkUrl(),
+			'sitename' => $this->context->msg( 'sitetitle' )->text(),
+			'can-read' => $canRead,
+			'counter-value' => $this->context->getLanguage()->formatNum( $articles ),
+			'counter-label' => $this->context->msg( 'cosmosbeta-counter-label' )->numParams( $articles )->escaped(),
+		];
+
+		return $canRead ? $data + $this->getButtons( $user->isAnon() ) : $data;
+	}
+
+	private function getButtons( bool $isAnon ): array {
+		$user = $this->context->getUser();
+		$can = fn ( string $right ): bool => $this->permissionManager->userHasRight( $user, $right );
+
+		$canCreate = $can( 'createpage' );
+		$canEdit = $can( 'edit' );
+		$canUpload = $can( 'upload' ) && $this->config->get( MainConfigNames::EnableUploads );
+		$canAddVideo = $can( 'addvideo' ) && $this->extensionRegistry->isLoaded( 'Video' );
+		$canViewAdminLinks = $can( 'adminlinks' );
+
+		$recentChanges = $this->context->msg( 'recentchanges' );
+		$addNewPage = $this->context->msg( 'cosmosbeta-add-new-page-text' );
+		$uploadUrl = $this->config->get( MainConfigNames::UploadNavigationUrl ) ?:
+			SpecialPage::getTitleFor( 'Upload' )->getFullURL();
+		$recentChangesUrl = SpecialPage::getTitleFor( 'Recentchanges' )->getFullURL();
+
+		$createText = null;
+		if ( $canViewAdminLinks ) {
+			$createText = $isAnon ? $addNewPage->text() : null;
+		} else {
+			$createText = $isAnon ?
+				$this->context->msg( 'cosmosbeta-anon-add-new-page-text' )->text() :
+				$addNewPage->text();
+		}
+
+		$onlyRead = !$canEdit && !$canCreate;
+		$hasMore = ( !$isAnon && ( $canUpload || $canAddVideo ) ) || ( ( $canUpload || $canAddVideo ) && $onlyRead );
+
+		return [
+			'has-create' => $canCreate && $canEdit,
+			'create-text' => $createText,
+			'create-flush' => !$isAnon && $canViewAdminLinks,
+			'create-title' => $this->context->msg( 'cosmosbeta-add-new-page-title' )->text(),
+			'has-recentchanges' => !$isAnon || $onlyRead,
+			'recentchanges-text' => $onlyRead ? $recentChanges->text() : null,
+			'recentchanges-url' => $recentChangesUrl,
+			'recentchanges-title' => ucwords( $recentChanges->text() ),
+			'has-admin' => $canViewAdminLinks && $this->extensionRegistry->isLoaded( 'Admin Links' ),
+			'admin-url' => SpecialPage::getTitleFor( 'AdminLinks' )->getFullURL(),
+			'admin-title' => ucwords( $this->context->msg( 'adminlinks' )->text() ),
+			'has-more' => $hasMore,
+			'has-more-image' => $canUpload,
+			'more-image-url' => $uploadUrl,
+			'msg-more-image' => $this->context->msg( 'cosmosbeta-add-new-image' )->text(),
+			'has-more-video' => $canAddVideo,
+			'more-video-url' => SpecialPage::getTitleFor( 'AddVideo' )->getFullURL(),
+			'msg-more-video' => $this->context->msg( 'cosmosbeta-add-new-video' )->text(),
+			'msg-recentchanges' => $recentChanges->text(),
+		];
+	}
+}

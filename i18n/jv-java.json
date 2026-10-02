@@ -1,0 +1,34 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bennylin"
+		]
+	},
+	"cosmosbeta-adminlinks-edit-css": "ꦧꦼꦱꦸꦠ꧀ꦧꦼꦂꦏꦱ꧀​CSS",
+	"cosmosbeta-adminlinks-edit-js": "ꦧꦼꦱꦸꦠ꧀ꦧꦼꦂꦏꦱ꧀​JS",
+	"cosmosbeta-adminlinks-edit-navigation": "ꦧꦼꦱꦸꦠ꧀ꦤꦥ꦳ꦶꦒꦱꦶ",
+	"cosmosbeta-anonymous": "ꦲꦤꦺꦴꦤꦶꦩꦸꦱ꧀",
+	"cosmosbeta-counter-label": "{{PLURAL:$1|ꦄꦂꦠꦶꦏꦼꦭ꧀}}",
+	"cosmosbeta-createpage-header": "ꦒꦮꦺ​ꦄꦂꦠꦶꦏꦼꦭ꧀ꦲꦚꦂ",
+	"cosmosbeta-createpage-input-label": "ꦠꦸꦭꦶꦱ꧀ꦱꦼꦱꦶꦫꦃ​ꦏꦕ​ꦱꦩ꧀ꦥꦺꦪꦤ꧀:",
+	"cosmosbeta-createpage-next": "ꦱꦧꦚ꧀ꦗꦸꦂꦫꦺ",
+	"cosmosbeta-personaltools-userpage": "ꦏꦕ​ꦤꦫꦒꦸꦤ",
+	"cosmosbeta-personaltools-usertalk": "ꦉꦩ꧀ꦧꦸꦒ꧀ꦒꦤ꧀ꦤꦫꦒꦸꦤ",
+	"cosmosbeta-personaltools-anontalk": "ꦉꦩ꧀ꦧꦸꦒ꧀ꦒꦤ꧀ꦏꦸ",
+	"cosmosbeta-editcount-label": "ꦧꦼꦱꦸꦠ꧀ꦠꦤ꧀ꦮꦶꦮꦶꦠ꧀ꦒꦧꦸꦁ​ꦏꦫꦺꦴ​ꦮꦶꦏꦶ​ꦲꦶꦏꦶ",
+	"cosmosbeta-action-addsection": "ꦠꦺꦴꦥꦶꦏ꧀ꦲꦚꦂ",
+	"cosmosbeta-action-cancel": "ꦮꦸꦫꦸꦁ",
+	"cosmosbeta-action-backtopage": "ꦧꦭꦶ​ꦩꦼꦚꦁ​$1",
+	"cosmosbeta-action-back": "ꦧꦭꦶ",
+	"cosmosbeta-add-new-image": "ꦠꦩ꧀ꦧꦃ​ꦧꦼꦂꦏꦱ꧀ꦲꦚꦂ",
+	"cosmosbeta-add-new-video": "ꦠꦩ꧀ꦧꦃ​ꦥ꦳ꦶꦢꦺꦪꦺꦴ​ꦲꦚꦂ",
+	"cosmosbeta-add-new-page-title": "ꦠꦩ꧀ꦧꦃ​ꦏꦕ​ꦲꦚꦂ",
+	"cosmosbeta-add-new-page-text": "ꦠꦩ꧀ꦧꦃ",
+	"cosmosbeta-anon-add-new-page-text": "ꦠꦩ꧀ꦧꦃ​ꦏꦕ​ꦲꦚꦂ",
+	"cosmosbeta-explore": "ꦢ꧀ꦭꦗꦃ",
+	"cosmosbeta-newfiles": "ꦧꦼꦂꦏꦱ꧀ꦲꦚꦂ",
+	"cosmosbeta-user-blocked": "ꦢꦶꦥꦼꦁꦒꦏ꧀",
+	"cosmosbeta-search-loader": "ꦒꦺꦴꦭꦺꦏ꧀ꦱꦫꦤ꧀ꦥꦤꦼꦭꦸꦱꦸꦂꦫꦤ꧀",
+	"cosmosbeta-article-header-categories-in": "ꦲꦶꦁ:",
+	"cosmosbeta-article-header-categories-more": "ꦭꦤ꧀​$1ꦩꦤꦺꦃ"
+}

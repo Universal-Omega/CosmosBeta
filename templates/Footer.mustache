@@ -1,0 +1,21 @@
+<footer id="cosmos-footer">
+	<div class="skin-cosmos-pageAligned cosmos-pageAligned">
+		<div id="cosmos-footer-footerContent">
+			<div class="skin-cosmos-articleContainer cosmos-articleContainer">
+				<div id="cosmos-footerContent-footerLinks" class="skin-cosmos-articleAligned cosmos-articleAligned">
+					<ul id="footer-info" class="skin-cosmos-footerLinks-list cosmos-footerLinks-list">
+						{{#array-info}}<li id="{{id}}" class="skin-cosmos-footerLinks-listItem cosmos-footerLinks-listItem">{{{html}}}</li>{{/array-info}}
+					</ul>
+					<ul id="footer-places" class="skin-cosmos-footerLinks-list cosmos-footerLinks-list">
+						{{#array-places}}<li id="{{id}}" class="skin-cosmos-footerLinks-listItem cosmos-footerLinks-listItem">{{{html}}}</li>{{/array-places}}
+					</ul>
+				</div>
+				<div id="cosmos-footerContent-footerIcons" class="skin-cosmos-sidebarAligned cosmos-sidebarAligned">
+					<ul id="cosmos-footerIcons-list">
+						{{#array-icons}}<li id="cosmos-footerIcons-{{name}}" class="skin-cosmos-footerIcons-listItem cosmos-footerIcons-listItem">{{{html}}}</li>{{/array-icons}}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>

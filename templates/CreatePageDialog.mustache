@@ -1,0 +1,29 @@
+<div id="createPageModal" class="skin-cosmos-modal cosmos-modal">
+	<div class="skin-cosmos-modal-content cosmos-modal-content">
+		<span class="close">&times;</span>
+		<form class="skin-cosmos-dialog wds-dialog__wrapper create-page-dialog__wrapper" action="{{form-action}}" method="get">
+			<input type="hidden" name="action" value="edit">
+			<header class="skin-cosmos-dialog__title wds-dialog__title">
+				{{msg-header}}
+				<span class="skin-cosmos-icon skin-cosmos-icon-close create-page-dialog__close" aria-hidden="true"></span>
+			</header>
+			<div class="skin-cosmos-dialog__content wds-dialog__content">
+				<div id="create-page-dialog__message">{{msg-label}}</div>
+				<div class="skin-cosmos-field wds-input create-page-dialog__title-wrapper">
+					<input type="text" name="title" value="" class="skin-cosmos-field__input wds-input__field" id="create-page-dialog__title">
+				</div>
+				<div id="create-page-dialog__message">{{{html-text}}}</div>
+				<div class="create-page-dialog__proposals">
+					<ul class="articleProposals">
+						{{#array-proposals}}<li><a href="{{url}}" class="new">{{title}}</a></li>{{/array-proposals}}
+					</ul>
+				</div>
+			</div>
+			<footer>
+				<div class="skin-cosmos-dialog__actions wds-dialog__actions">
+					<button type="submit" class="skin-cosmos-header-button wds-button skin-cosmos-is-text wds-is-text create-page-dialog__button" disabled>{{msg-next}}</button>
+				</div>
+			</footer>
+		</form>
+	</div>
+</div>

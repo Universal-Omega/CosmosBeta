@@ -1,0 +1,32 @@
+<div id="cosmos-header-interlang">
+	{{#data-variants}}
+	<div class="skin-cosmos-menu wds-dropdown page-header__variants mw-portlet mw-portlet-variants" id="p-variants" aria-labelledby="p-variants-label">
+		<div class="skin-cosmos-nav__label wds-tabs__tab-label skin-cosmos-menu__toggle wds-dropdown__toggle" id="p-variants-label">
+			<span class="user-variant" style="padding-top: 2px; font-size: 14px;">{{label}}</span>
+		</div>
+		<span class="skin-cosmos-icon skin-cosmos-icon-expand skin-cosmos-menu__chevron wds-dropdown__toggle-chevron" aria-hidden="true"></span>
+		<div class="skin-cosmos-menu__content wds-dropdown__content skin-cosmos-is-unscrollable wds-is-not-scrollable skin-cosmos-is-right wds-is-right-aligned">
+			<ul class="skin-cosmos-list wds-list skin-cosmos-list--linked wds-is-linked">
+				{{#array-items}}
+				<li id="{{id}}" class="{{class}} ca-variants-{{hreflang}} mw-list-item skin-cosmos-nav__item wds-tabs__tab variant-link variant-{{hreflang}}"><a href="{{href}}" lang="{{lang}}" hreflang="{{hreflang}}" id="variant-{{hreflang}}">{{text}}</a></li>
+				{{/array-items}}
+			</ul>
+		</div>
+	</div>
+	{{/data-variants}}
+	{{#data-languages}}
+	<div class="skin-cosmos-menu wds-dropdown page-header__languages mw-portlet mw-portlet-lang" id="p-lang" aria-labelledby="p-lang-label">
+		<div class="skin-cosmos-nav__label wds-tabs__tab-label skin-cosmos-menu__toggle wds-dropdown__toggle" id="p-lang-label">
+			<span class="user-language" style="padding-top: 2px; font-size: 14px;">{{label}}</span>
+		</div>
+		<span class="skin-cosmos-icon skin-cosmos-icon-expand skin-cosmos-menu__chevron wds-dropdown__toggle-chevron" aria-hidden="true"></span>
+		<div class="skin-cosmos-menu__content wds-dropdown__content skin-cosmos-is-right wds-is-right-aligned">
+			<ul class="skin-cosmos-list wds-list skin-cosmos-list--linked wds-is-linked">
+				{{#array-items}}
+				<li class="skin-cosmos-nav__item wds-tabs__tab interlanguage-link interwiki-{{hreflang}}"><a href="{{href}}" lang="{{lang}}" hreflang="{{hreflang}}" title="{{title}}" id="lang-{{hreflang}}">{{text}}</a></li>
+				{{/array-items}}
+			</ul>
+		</div>
+	</div>
+	{{/data-languages}}
+</div>

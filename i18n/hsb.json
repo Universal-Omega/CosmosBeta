@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"J budissin"
+		]
+	},
+	"cosmosbeta-createpage-header": "Nowy zapisk wutworić",
+	"cosmosbeta-createpage-input-label": "Napisaj titul strony tule:",
+	"cosmosbeta-createpage-next": "Přichodny",
+	"cosmosbeta-personaltools-userpage": "Wužiwarska strona",
+	"cosmosbeta-personaltools-anontalk": "Moja diskusijna strona",
+	"cosmosbeta-action-addsection": "Nowa tema",
+	"cosmosbeta-action-cancel": "Přetorhnyć",
+	"cosmosbeta-action-backtopage": "Wróćo k $1",
+	"cosmosbeta-action-back": "Wróćo",
+	"cosmosbeta-add-new-image": "Nowy wobraz dodać",
+	"cosmosbeta-add-new-video": "Nowe widejo dodać",
+	"cosmosbeta-add-new-page-title": "Nowu stronu dodać",
+	"cosmosbeta-add-new-page-text": "Dodać",
+	"cosmosbeta-anon-add-new-page-text": "Nowu stronu dodać",
+	"cosmosbeta-explore": "Wotkrywać",
+	"cosmosbeta-newfiles": "Nowe dataje",
+	"cosmosbeta-user-blocked": "Zablokowany",
+	"cosmosbeta-search-loader": "Pytanske namjety začitać",
+	"cosmosbeta-searchsuggest-containing": "Pytać za stronami, kotrež wobsahuja <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
+	"cosmosbeta-article-header-categories-in": "w:"
+}

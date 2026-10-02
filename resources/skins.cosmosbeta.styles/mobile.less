@@ -1,0 +1,158 @@
+.skin-cosmos-header__sitename a,
+.skin-cosmos-header__local-navigation,
+.skin-cosmos-header__wordmark,
+#cosmos-search-buttonContainer,
+.skin-cosmos-header-button.skin-cosmos-is-secondary.skin-cosmos-menu__toggle {
+	display: none;
+}
+
+#cosmos-banner {
+	position: relative;
+}
+
+#cosmos-toolbar {
+	position: static;
+	width: 100%;
+	max-width: unset;
+	padding: 5px;
+	border-radius: 0;
+}
+
+body > #mw-content-container {
+	padding-top: 0;
+}
+
+/* Page header */
+h1.firstHeading {
+	clear: right;
+}
+
+/* Full-width thumbnails */
+div.thumb {
+	display: flex;
+	justify-content: center;
+	margin: 0.5em 0;
+	float: none;
+}
+
+.thumb {
+	margin: 1em auto;
+}
+
+.floatright,
+.tright {
+	padding-left: 0;
+	margin-left: 0;
+}
+
+.floatleft,
+.tleft {
+	padding-right: 0;
+	margin-right: 0;
+}
+
+.mw-body {
+	border: 0;
+
+	/* Keep images from overflowing */
+	a > img {
+		max-width: 100% !important;
+		height: auto !important;
+	}
+}
+
+#mw-content {
+	padding: 0 20px;
+}
+
+/* Table of contents */
+.toc,
+.mw-warning {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Misc */
+.nomobile {
+	display: none;
+}
+
+/* Mobile menu */
+.skin-cosmos-nav {
+	position: absolute !important;
+	z-index: 999999999999;
+	top: 100%;
+	right: 16px;
+	left: 16px;
+	display: none;
+	overflow: auto;
+	max-height: 300px;
+	padding: 7px 0;
+	border: 1px solid #ccc;
+	background-color: #fff;
+	border-radius: 4px;
+	box-shadow: 0 8px 16px 0 rgba( 0, 0, 0, 0.3 );
+
+	&__tab {
+		margin: 0 9px;
+
+		&-label {
+			border-bottom: 1px solid #eee;
+		}
+	}
+}
+
+.skin-cosmos-menu {
+	flex-direction: column;
+}
+
+.skin-cosmos-nav__item .skin-cosmos-menu__content,
+.skin-cosmos-submenu__content {
+	position: relative !important;
+	display: block !important;
+	border: 0 !important;
+	background-color: transparent !important;
+}
+
+.skin-cosmos-menu__content .skin-cosmos-list.skin-cosmos-list--linked .skin-cosmos-submenu .skin-cosmos-submenu__content {
+	left: 0 !important;
+}
+
+.skin-cosmos-menu:not( .skin-cosmos-is-touch ):not( .skin-cosmos-is-static ):hover:not( .skin-cosmos-no-chevron )::before,
+.skin-cosmos-menu:not( .skin-cosmos-is-touch ):not( .skin-cosmos-is-static ):hover:not( .skin-cosmos-no-chevron )::after,
+.skin-cosmos-menu__chevron,
+.skin-cosmos-submenu__chevron {
+	display: none;
+}
+
+.skin-cosmos-nav__label span {
+	color: #000;
+}
+
+.skin-cosmos-mobile-menu-button {
+	font-size: 18px;
+	font-weight: bold;
+	transform: scale( 1.4, 1 );
+}
+
+.skin-cosmos-mobile-navigation {
+	display: flex;
+}
+
+.skin-cosmos-button.skin-cosmos-button-primary.skin-cosmos-mobile-menu-button {
+	background: transparent;
+}
+
+.skin-cosmos-menu__content .skin-cosmos-list.skin-cosmos-list--linked > li:hover > a:not( .skin-cosmos-header-button ) {
+	color: #088488;
+}
+
+#mw-content-wrapper {
+	padding: 0 !important;
+}
+
+.skin-cosmos-rail {
+	-moz-column-count: 1 !important;
+	-webkit-column-count: 1 !important;
+	column-count: 1 !important;
+}

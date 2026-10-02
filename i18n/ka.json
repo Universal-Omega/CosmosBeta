@@ -1,0 +1,42 @@
+{
+	"@metadata": {
+		"authors": [
+			"Lisztomaniac"
+		]
+	},
+	"cosmosbeta-desc": "„კოსმოსის“ იერსახე დაფუძნებულია Fandom-ის „ოაზისის“ იერსახეზე. მისი დანიშნულებაა იერსახის გაუმჯობესება მედიავიკის იმ მომხმარებელთათვის, რომლებიც არ იყენებენ Fandom-ს, ან მისგან გადადიან. სურვილის შემთხვევაში შეგიძლიათ შემოუერთდეთ [https://discord.gg/GPVgFTaQTJ „კოსმოსის“ დისკორდის სერვერს], სადაც მიიღებთ ნებისმიერ დახმარებას.",
+	"cosmosbeta-adminlinks-edit-navigation": "ნავიგაცის რედაქტირება",
+	"cosmosbeta-anonymous": "ანონიმური",
+	"cosmosbeta-counter-label": "{{PLURAL:$1|სტატია}}",
+	"cosmosbeta-createpage-header": "ახალი სტატიის შექმნა",
+	"cosmosbeta-createpage-input-label": "ჩაწერეთ გვერდის სათაური აქ:",
+	"cosmosbeta-createpage-next": "შემდეგი",
+	"cosmosbeta-createpage-text": "ამჟამად გვაქვს '''$1''' {{PLURAL:$1|სტატია}} $2-ის შესახებ. თქვენი სტატიის სათაური შეიყვანეთ $3-ის ზემოთ",
+	"cosmosbeta-createpage-wanted-pages": "ან დააჭირეთ ქვემოთ მოყვანილი სათაურებიდან ერთ-ერთს და დაიწყეთ წერა!",
+	"cosmosbeta-createpage-no-wanted-pages": "ან შექმენით [[$1|აქ]] ჩამოთვლილი სტატიებიდან ერთ-ერთი!",
+	"cosmosbeta-personaltools-userpage": "მომხმარებლის გვერდი",
+	"cosmosbeta-personaltools-usertalk": "მომხმარებლის განხილვა",
+	"cosmosbeta-personaltools-anontalk": "ჩემი განხილვა",
+	"cosmosbeta-editcount-label": "ვიკიში გაწევრიანების შემდეგ განხორციელებული რედაქტირებების რაოდენობა",
+	"cosmosbeta-action-addsection": "ახალი თემა",
+	"cosmosbeta-action-cancel": "გაუქმება",
+	"cosmosbeta-action-backtopage": "$1-ზე დაბრუნება",
+	"cosmosbeta-action-back": "უკან",
+	"cosmosbeta-add-new-image": "ახალი სურათის დამატება",
+	"cosmosbeta-add-new-video": "ახალი ვიდეოს დამატება",
+	"cosmosbeta-add-new-page-title": "ახალი გვერდის დამატება",
+	"cosmosbeta-add-new-page-text": "დამატება",
+	"cosmosbeta-anon-add-new-page-text": "ახალი გვერდის დამატება",
+	"cosmosbeta-explore": "გამოკვლევა",
+	"cosmosbeta-newfiles": "ახალი ფაილები",
+	"cosmosbeta-user-blocked": "დაბლოკილია",
+	"cosmosbeta-search-loader": "იტვირთვება ძიების შეთავაზებები",
+	"cosmosbeta-searchsuggest-containing": "იმ გვერდების მოძებნა, რომლებიც შეიცავენ <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>-ს",
+	"cosmosbeta-article-header-categories-in": "კატეგორიები:",
+	"cosmosbeta-article-header-categories-more": "და კიდევ $1",
+	"cosmosbeta-themedesigner-success": "Cosmos-ის კონფიგურაცია წარმატებით განახლდა.",
+	"cosmosbeta-themedesigner-text": "'''კოსმოსის''' იერსახის რედაქტირება",
+	"cosmosbetathemedesigner": "იერსახის დიზაინერი",
+	"right-cosmosbeta-themedesigner": "კოსმოსის იერსახის დიზანიერის გამოყენება",
+	"action-cosmosbeta-themedesigner": "კოსმოსის იერსახის დიზაინერის გამოყენება"
+}

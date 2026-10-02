@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Giannaras99",
+			"Norhorn",
+			"SkarletWitch"
+		]
+	},
+	"cosmosbeta-desc": "Το Cosmos είναι ένα θέμα βασισμένο στο θέμα του Fandom - Oasis. Σχεδιασμένο και βελτιωμένο από το αρχικό, μπορεί να παρέχει ένα πλήρες θέμα του MediaWiki για χρήστες που μεταφέρονται από το Fandom, ή και όχι.",
+	"cosmosbeta-anonymous": "Ανώνυμος",
+	"cosmosbeta-counter-label": "$1 {{PLURAL:$1|λήμμα|λήμματα}}",
+	"cosmosbeta-createpage-header": "Δημιουργία ενός νέου άρθρου",
+	"cosmosbeta-createpage-input-label": "Γράψτε εδώ τον τίτλο της σελίδας:",
+	"cosmosbeta-createpage-next": "Επόμενο",
+	"cosmosbeta-personaltools-userpage": "Σελίδα Χρήστη",
+	"cosmosbeta-personaltools-usertalk": "Συζήτηση Χρήστη",
+	"cosmosbeta-personaltools-anontalk": "Η συζήτηση μου",
+	"cosmosbeta-action-addsection": "Νέο θέμα",
+	"cosmosbeta-action-cancel": "Ακύρωση",
+	"cosmosbeta-action-backtopage": "Πίσω σε $1",
+	"cosmosbeta-action-back": "Πίσω",
+	"cosmosbeta-add-new-image": "Προσθήκη νέας εικόνας",
+	"cosmosbeta-add-new-video": "Προσθήκη νέου βίντεο",
+	"cosmosbeta-add-new-page-title": "Προσθήκη νέας σελίδας",
+	"cosmosbeta-add-new-page-text": "Προσθήκη",
+	"cosmosbeta-anon-add-new-page-text": "Προσθήκη νέας σελίδας",
+	"cosmosbeta-explore": "Εξερεύνηση",
+	"cosmosbeta-newfiles": "Νέα αρχεία",
+	"cosmosbeta-user-blocked": "Φραγμένος"
+}

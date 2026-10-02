@@ -1,0 +1,31 @@
+{{> Banner}}
+{{#data-cosmos-dialog}}{{> CreatePageDialog}}{{/data-cosmos-dialog}}
+<div id="mw-content-container" class="ts-container">
+	<div id="mw-content-block" class="ts-inner">
+		<div id="mw-content-wrapper">
+			{{#data-cosmos-header}}{{> WikiHeader}}{{/data-cosmos-header}}
+			<section id="mw-content">
+				<div id="content" class="skin-cosmos-pageAligned cosmos-pageAligned mw-body">
+					<a id="top"></a>
+					<header id="cosmos-page-header">
+						{{#data-cosmos-page-header}}{{> PageHeader}}{{/data-cosmos-page-header}}
+					</header>
+					<div class="skin-cosmos-articleContainer cosmos-articleContainer" id="bodyContent">
+						<article id="cosmos-pageBody-content">
+							{{#html-subtitle}}<div id="cosmos-pageContent-subtitle">{{{.}}}</div>{{/html-subtitle}}
+							{{#html-undelete-link}}<div id="cosmos-pageContent-undelete">{{{.}}}</div>{{/html-undelete-link}}
+							{{> SiteNotice}}
+							{{{html-body-content}}}
+							{{#html-categories}}<span id="cosmos-content-categories">{{{.}}}</span>{{/html-categories}}
+							{{#html-after-content}}<span id="cosmos-content-additionalContent">{{{.}}}</span>{{/html-after-content}}
+						</article>
+						{{{html-cosmos-rail}}}
+					</div>
+				</div>
+			</section>
+			{{#data-cosmos-footer}}{{> Footer}}{{/data-cosmos-footer}}
+		</div>
+	</div>
+</div>
+{{#data-cosmos-toolbar}}{{> Toolbar}}{{/data-cosmos-toolbar}}
+{{{html-cosmos-cookiewarning}}}
