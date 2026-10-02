@@ -162,7 +162,7 @@ class PageHeaderComponent {
 					$isViewSource = $selected;
 					break;
 				case 'talk':
-					$talk = $item + [ 'icon' => 'speechBubbles' ];
+					$talk = $item + [ 'icon' => 'speechBubble' ];
 					break;
 				case 'view':
 					break;
@@ -198,14 +198,14 @@ class PageHeaderComponent {
 					'text' => $this->context->msg( 'cosmosbeta-action-cancel' )->text(),
 					'href' => $talkUrl ?? $talk['href'],
 				] + $talk : null;
-				$secondary = $view ? [ 'icon' => 'arrowPrevious', 'text' => $backToPage ] + $view : null;
+				$secondary = $view ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
 			} else {
 				$primary = $view ? [
 					'icon' => 'close',
 					'text' => $this->context->msg( 'cosmosbeta-action-cancel' )->text(),
 					'href' => $pageUrl,
 				] + $view : null;
-				$secondary = $talk ? [ 'icon' => 'speechBubbles' ] + $talk : null;
+				$secondary = $talk ? [ 'icon' => 'speechBubble' ] + $talk : null;
 			}
 
 			if ( !$isEditing && $edit ) {
@@ -214,13 +214,13 @@ class PageHeaderComponent {
 		} elseif ( $isHistory || $isViewSource ) {
 			if ( $isTalkPage ) {
 				$primary = $talk ? [
-					'icon' => 'arrowPrevious',
+					'icon' => 'undo',
 					'text' => $this->context->msg( 'cosmosbeta-action-back' )->text(),
 				] + $talk : null;
-				$secondary = $view ? [ 'icon' => 'arrowPrevious', 'text' => $backToPage ] + $view : null;
+				$secondary = $view ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
 			} else {
 				$primary = $view ? [
-					'icon' => 'arrowPrevious',
+					'icon' => 'undo',
 					'text' => $this->context->msg( 'cosmosbeta-action-back' )->text(),
 				] + $view : null;
 				$secondary = $talk;
@@ -231,7 +231,7 @@ class PageHeaderComponent {
 			}
 		} elseif ( $isTalkPage ) {
 			$primary = $edit;
-			$secondary = $view ? [ 'icon' => 'arrowPrevious', 'text' => $backToPage ] + $view : null;
+			$secondary = $view ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
 		} else {
 			$primary = $edit;
 			$secondary = $view ? $talk : null;
