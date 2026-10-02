@@ -2528,37 +2528,16 @@ table.mw-datatable {
 
 #cosmos-banner {
 	.oo-ui-icon-bell,
-	.oo-ui-icon-tray {
-		position: relative;
-		background-image: none;
-
-		&::before {
-			position: absolute;
-			background-color: @banner-font-color;
-			content: '';
-			inset: 0;
-		}
+	.oo-ui-icon-tray,
+	.mw-ui-icon-bell::before,
+	.mw-ui-icon-tray::before {
+		filter: @banner-echo-icon-filter;
 	}
 
-	.oo-ui-icon-bell::before {
-		.skin-cosmos-mask-icon( @cdx-icon-bell-outline );
+	.oo-ui-icon-bell::after,
+	.oo-ui-icon-tray::after {
+		filter: @banner-echo-icon-filter;
 	}
-
-	.oo-ui-icon-tray::before {
-		.skin-cosmos-outline-icon-merged( @cdx-icon-message, @skin-cosmos-outline-thickness, 1.25, 0.85 );
-	}
-}
-
-.mw-ui-icon-bell::before {
-	background-color: @banner-font-color;
-	background-image: none;
-	.skin-cosmos-mask-icon( @cdx-icon-bell-outline );
-}
-
-.mw-ui-icon-tray::before {
-	background-color: @banner-font-color;
-	background-image: none;
-	.skin-cosmos-outline-icon-merged( @cdx-icon-message, @skin-cosmos-outline-thickness, 1.25, 0.85 );
 }
 
 table.mw-interwikitable.body td.mw-interwikitable-local-yes {
