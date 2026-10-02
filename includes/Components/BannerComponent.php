@@ -4,8 +4,10 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta\Components;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Skins\CosmosBeta\ConfigNames;
 use Telepedia\UserProfileV2\Avatar\UserProfileV2Avatar;
 use wAvatar;
 use function class_exists;
@@ -14,8 +16,7 @@ class BannerComponent {
 
 	public function __construct(
 		private readonly IContextSource $context,
-		private readonly bool $useSocialProfileAvatar,
-		private readonly bool $useUserProfileV2Avatar,
+		private readonly Config $config,
 		private readonly ExtensionRegistry $extensionRegistry,
 	) {
 	}
@@ -43,13 +44,13 @@ class BannerComponent {
 	}
 
 	private function getAvatar( int $userId ): ?string {
-		if ( class_exists( wAvatar::class ) && $this->useSocialProfileAvatar ) {
+		if ( class_exists( wAvatar::class ) && $this->config->get( ConfigNames::UseSocialProfileAvatar ) ) {
 			return ( new wAvatar( $userId, 'm' ) )->getAvatarURL();
 		}
 
 		if (
 			$this->extensionRegistry->isLoaded( 'UserProfileV2' ) &&
-			$this->useUserProfileV2Avatar
+			$this->config->get( ConfigNames::UseUPv2Avatar )
 		) {
 			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension
 			return ( new UserProfileV2Avatar( $userId ) )->getAvatarUrl( [ 'raw' => false ] );
