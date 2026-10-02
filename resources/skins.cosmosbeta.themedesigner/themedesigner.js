@@ -41,22 +41,26 @@
 	}
 
 	function field( label, input, help ) {
-		return el( 'label', { class: 'cosmos-td-field' }, [
-			el( 'span', { class: 'cosmos-td-label', text: label } ),
+		return el( 'label', { class: 'skin-cosmos-td-field' }, [
+			el( 'span', { class: 'skin-cosmos-td-label', text: label } ),
 			input,
-			help ? el( 'span', { class: 'cosmos-td-help', text: help } ) : null
+			help ? el( 'span', { class: 'skin-cosmos-td-help', text: help } ) : null
 		] );
 	}
 
-	function checkbox( label, checked, onChange ) {
-		const input = el( 'input', { type: 'checkbox', disabled: !data.canEdit } );
+	function checkbox( label, checked, onChange, lockedReason ) {
+		const locked = !data.canEdit || !!lockedReason;
+		const input = el( 'input', { type: 'checkbox', disabled: locked } );
 		input.checked = !!checked;
 		input.addEventListener( 'change', () => {
 			onChange( input.checked );
 			sync();
 		} );
 
-		return el( 'label', { class: 'cosmos-td-check' }, [ input, el( 'span', { text: label } ) ] );
+		return el( 'label', { class: 'skin-cosmos-td-check', title: lockedReason || null }, [
+			input,
+			el( 'span', { text: label } )
+		] );
 	}
 
 	function select( options, value, onChange ) {
@@ -106,23 +110,23 @@
 	}
 
 	function renderThemes() {
-		const grid = el( 'div', { class: 'cosmos-td-presets' } );
+		const grid = el( 'div', { class: 'skin-cosmos-td-presets' } );
 
 		data.presets.forEach( ( preset ) => {
 			const colorsList = preset.colors;
 			const card = el( 'button', {
 				type: 'button',
-				class: 'cosmos-td-preset' + ( state.presets[ preset.mode ] === preset.name ? ' is-active' : '' ),
+				class: 'skin-cosmos-td-preset' + ( state.presets[ preset.mode ] === preset.name ? ' is-active' : '' ),
 				disabled: !data.canEdit
 			}, [
-				el( 'span', { class: 'cosmos-td-preset-swatches' }, [ 'banner', 'body', 'content', 'button', 'link' ].map( ( slot ) => {
-					const swatch = el( 'span', { class: 'cosmos-td-swatch' } );
+				el( 'span', { class: 'skin-cosmos-td-preset-swatches' }, [ 'banner', 'body', 'content', 'button', 'link' ].map( ( slot ) => {
+					const swatch = el( 'span', { class: 'skin-cosmos-td-swatch' } );
 					swatch.style.background = colorsList[ slot ];
 
 					return swatch;
 				} ) ),
-				el( 'span', { class: 'cosmos-td-preset-name', text: msg( 'preset-' + preset.name ).text() } ),
-				el( 'span', { class: 'cosmos-td-preset-mode', text: msg( 'mode-' + preset.mode ).text() } )
+				el( 'span', { class: 'skin-cosmos-td-preset-name', text: msg( 'preset-' + preset.name ).text() } ),
+				el( 'span', { class: 'skin-cosmos-td-preset-mode', text: msg( 'mode-' + preset.mode ).text() } )
 			] );
 
 			card.addEventListener( 'click', () => {
@@ -141,14 +145,14 @@
 	}
 
 	function modeSwitch() {
-		const wrap = el( 'div', { class: 'cosmos-td-modes' }, [
+		const wrap = el( 'div', { class: 'skin-cosmos-td-modes' }, [
 			el( 'span', { text: msg( 'editing' ).text() } )
 		] );
 
 		MODES.forEach( ( mode ) => {
 			const button = el( 'button', {
 				type: 'button',
-				class: 'cosmos-td-chip' + ( editing === mode ? ' is-active' : '' ),
+				class: 'skin-cosmos-td-chip' + ( editing === mode ? ' is-active' : '' ),
 				text: msg( 'mode-' + mode ).text()
 			} );
 
@@ -178,10 +182,10 @@
 			placeholder: data.fallbacks[ editing ][ slot ],
 			disabled: !data.canEdit
 		} );
-		const error = el( 'span', { class: 'cosmos-td-error', text: '' } );
+		const error = el( 'span', { class: 'skin-cosmos-td-error', text: '' } );
 		const reset = el( 'button', {
 			type: 'button',
-			class: 'cosmos-td-link',
+			class: 'skin-cosmos-td-link',
 			text: msg( 'color-reset' ).text(),
 			disabled: !data.canEdit
 		} );
@@ -234,12 +238,12 @@
 			sync();
 		} );
 
-		return el( 'div', { class: 'cosmos-td-colorrow' }, [
-			el( 'div', { class: 'cosmos-td-colorhead' }, [
+		return el( 'div', { class: 'skin-cosmos-td-colorrow' }, [
+			el( 'div', { class: 'skin-cosmos-td-colorhead' }, [
 				el( 'strong', { text: msg( 'color-' + slot ).text() } ),
-				el( 'span', { class: 'cosmos-td-help', text: msg( 'color-' + slot + '-help' ).text() } )
+				el( 'span', { class: 'skin-cosmos-td-help', text: msg( 'color-' + slot + '-help' ).text() } )
 			] ),
-			el( 'div', { class: 'cosmos-td-colorinputs' }, [ picker, text, reset ] ),
+			el( 'div', { class: 'skin-cosmos-td-colorinputs' }, [ picker, text, reset ] ),
 			error
 		] );
 	}
@@ -321,32 +325,39 @@
 			], layout.contentWidth, ( v ) => {
 				layout.contentWidth = v;
 			} ) ),
-			field( msg( 'layout-opacity' ).text(), el( 'span', { class: 'cosmos-td-range' }, [ range, readout ] ) )
+			field( msg( 'layout-opacity' ).text(), el( 'span', { class: 'skin-cosmos-td-range' }, [ range, readout ] ) )
 		] );
 	}
 
 	function renderChrome() {
 		const toolbar = state.toolbar;
 		const footer = state.footer;
-		const hiddenTools = el( 'div', { class: 'cosmos-td-checks' } );
-		const hiddenLinks = el( 'div', { class: 'cosmos-td-checks' } );
+		const hiddenTools = el( 'div', { class: 'skin-cosmos-td-checks' } );
+		const hiddenLinks = el( 'div', { class: 'skin-cosmos-td-checks' } );
 
-		data.toolbarItems.forEach( ( id ) => {
-			hiddenTools.appendChild( checkbox( id, toolbar.hiddenItems.indexOf( id ) !== -1, ( on ) => {
-				toolbar.hiddenItems = toolbar.hiddenItems.filter( ( item ) => item !== id );
+		data.toolbarItems.forEach( ( item ) => {
+			hiddenTools.appendChild( checkbox( item.label, toolbar.hiddenItems.indexOf( item.name ) !== -1, ( on ) => {
+				toolbar.hiddenItems = toolbar.hiddenItems.filter( ( name ) => name !== item.name );
 				if ( on ) {
-					toolbar.hiddenItems.push( id );
+					toolbar.hiddenItems.push( item.name );
 				}
 			} ) );
 		} );
 
-		data.footerLinks.forEach( ( id ) => {
-			hiddenLinks.appendChild( checkbox( id, footer.hiddenLinks.indexOf( id ) !== -1, ( on ) => {
-				footer.hiddenLinks = footer.hiddenLinks.filter( ( item ) => item !== id );
-				if ( on ) {
-					footer.hiddenLinks.push( id );
-				}
-			} ) );
+		data.footerLinks.forEach( ( item ) => {
+			const reason = item.protected ? msg( 'protected' ).text() : '';
+
+			hiddenLinks.appendChild( checkbox(
+				item.label,
+				!item.protected && footer.hiddenLinks.indexOf( item.name ) !== -1,
+				( on ) => {
+					footer.hiddenLinks = footer.hiddenLinks.filter( ( name ) => name !== item.name );
+					if ( on ) {
+						footer.hiddenLinks.push( item.name );
+					}
+				},
+				reason
+			) );
 		} );
 
 		const opacity = el( 'input', {
@@ -375,13 +386,20 @@
 			], toolbar.style, ( v ) => {
 				toolbar.style = v;
 			} ) ),
-			el( 'div', { class: 'cosmos-td-label', text: msg( 'toolbar-hidden' ).text() } ),
+			el( 'div', { class: 'skin-cosmos-td-label', text: msg( 'toolbar-hidden' ).text() } ),
+			el( 'span', { class: 'skin-cosmos-td-help', text: msg( 'toolbar-hidden-help' ).text() } ),
 			hiddenTools,
-			field( msg( 'footer-opacity' ).text(), el( 'span', { class: 'cosmos-td-range' }, [ opacity, readout ] ) ),
-			checkbox( msg( 'footer-icons' ).text(), footer.showIcons, ( on ) => {
-				footer.showIcons = on;
-			} ),
-			el( 'div', { class: 'cosmos-td-label', text: msg( 'footer-hidden' ).text() } ),
+			field( msg( 'footer-opacity' ).text(), el( 'span', { class: 'skin-cosmos-td-range' }, [ opacity, readout ] ) ),
+			checkbox(
+				msg( 'footer-icons' ).text(),
+				data.canHideFooterIcons ? footer.showIcons : true,
+				( on ) => {
+					footer.showIcons = on;
+				},
+				data.canHideFooterIcons ? '' : msg( 'footer-icons-locked' ).text()
+			),
+			el( 'div', { class: 'skin-cosmos-td-label', text: msg( 'footer-hidden' ).text() } ),
+			el( 'span', { class: 'skin-cosmos-td-help', text: msg( 'footer-hidden-help' ).text() } ),
 			hiddenLinks
 		] );
 	}
@@ -437,7 +455,7 @@
 		const mode = state.colorMode;
 		const generate = el( 'button', {
 			type: 'button',
-			class: 'cosmos-td-button',
+			class: 'skin-cosmos-td-button',
 			text: msg( 'darkmode-generate' ).text(),
 			disabled: !data.canEdit
 		} );
@@ -462,7 +480,7 @@
 			], mode.default, ( v ) => {
 				mode.default = v;
 			} ) ),
-			el( 'p', { class: 'cosmos-td-help', text: msg( 'darkmode-builtin' ).text() } ),
+			el( 'p', { class: 'skin-cosmos-td-help', text: msg( 'darkmode-builtin' ).text() } ),
 			generate
 		] );
 	}
@@ -471,26 +489,26 @@
 		const wrap = el( 'div', {}, [ el( 'p', { text: msg( 'history-intro' ).text() } ) ] );
 
 		if ( !data.history.length ) {
-			wrap.appendChild( el( 'p', { class: 'cosmos-td-help', text: msg( 'history-empty' ).text() } ) );
+			wrap.appendChild( el( 'p', { class: 'skin-cosmos-td-help', text: msg( 'history-empty' ).text() } ) );
 
 			return wrap;
 		}
 
-		const list = el( 'ul', { class: 'cosmos-td-history' } );
+		const list = el( 'ul', { class: 'skin-cosmos-td-history' } );
 
 		data.history.forEach( ( row ) => {
 			const live = row.id === data.revisionId;
 			const item = el( 'li', {}, [
-				el( 'span', { class: 'cosmos-td-history-main', text: row.time + ' \u00b7 ' + row.user } ),
-				row.comment ? el( 'span', { class: 'cosmos-td-help', text: row.comment } ) : null
+				el( 'span', { class: 'skin-cosmos-td-history-main', text: row.time + ' \u00b7 ' + row.user } ),
+				row.comment ? el( 'span', { class: 'skin-cosmos-td-help', text: row.comment } ) : null
 			] );
 
 			if ( live ) {
-				item.appendChild( el( 'span', { class: 'cosmos-td-badge', text: msg( 'history-live' ).text() } ) );
+				item.appendChild( el( 'span', { class: 'skin-cosmos-td-badge', text: msg( 'history-live' ).text() } ) );
 			} else if ( data.canEdit ) {
 				const button = el( 'button', {
 					type: 'button',
-					class: 'cosmos-td-link',
+					class: 'skin-cosmos-td-link',
 					text: msg( 'history-restore' ).text()
 				} );
 
@@ -526,20 +544,20 @@
 	function buildPreview() {
 		const part = ( cls, key ) => el( 'div', { class: cls, text: msg( key ).text() } );
 
-		return el( 'div', { class: 'cosmos-td-preview', 'aria-label': msg( 'preview' ).text() }, [
-			el( 'div', { class: 'cosmos-td-pv-banner' }, [ el( 'span', { text: msg( 'preview-wordmark' ).text() } ) ] ),
-			el( 'div', { class: 'cosmos-td-pv-header' }, [ el( 'span', { text: 'Menu  Menu  Menu' } ) ] ),
-			el( 'div', { class: 'cosmos-td-pv-body' }, [
-				el( 'div', { class: 'cosmos-td-pv-main' }, [
-					part( 'cosmos-td-pv-heading', 'preview-heading' ),
-					part( 'cosmos-td-pv-text', 'preview-text' ),
-					part( 'cosmos-td-pv-link', 'preview-link' ),
-					part( 'cosmos-td-pv-button', 'preview-button' )
+		return el( 'div', { class: 'skin-cosmos-td-preview', 'aria-label': msg( 'preview' ).text() }, [
+			el( 'div', { class: 'skin-cosmos-td-pv-banner' }, [ el( 'span', { text: msg( 'preview-wordmark' ).text() } ) ] ),
+			el( 'div', { class: 'skin-cosmos-td-pv-header' }, [ el( 'span', { text: 'Menu  Menu  Menu' } ) ] ),
+			el( 'div', { class: 'skin-cosmos-td-pv-body' }, [
+				el( 'div', { class: 'skin-cosmos-td-pv-main' }, [
+					part( 'skin-cosmos-td-pv-heading', 'preview-heading' ),
+					part( 'skin-cosmos-td-pv-text', 'preview-text' ),
+					part( 'skin-cosmos-td-pv-link', 'preview-link' ),
+					part( 'skin-cosmos-td-pv-button', 'preview-button' )
 				] ),
-				part( 'cosmos-td-pv-rail', 'preview-rail' )
+				part( 'skin-cosmos-td-pv-rail', 'preview-rail' )
 			] ),
-			part( 'cosmos-td-pv-footer', 'preview-footer' ),
-			part( 'cosmos-td-pv-toolbar', 'preview-toolbar' )
+			part( 'skin-cosmos-td-pv-footer', 'preview-footer' ),
+			part( 'skin-cosmos-td-pv-toolbar', 'preview-toolbar' )
 		] );
 	}
 
@@ -580,7 +598,7 @@
 			const button = el( 'button', {
 				type: 'button',
 				role: 'tab',
-				class: 'cosmos-td-tab' + ( name === activeTab ? ' is-active' : '' ),
+				class: 'skin-cosmos-td-tab' + ( name === activeTab ? ' is-active' : '' ),
 				'aria-selected': name === activeTab ? 'true' : 'false',
 				text: msg( 'tab-' + name ).text()
 			} );
@@ -606,10 +624,10 @@
 
 		$root = $( app ).empty();
 		$root.append(
-			$( '<div>' ).addClass( 'cosmos-td-tabs' ).attr( 'role', 'tablist' ),
-			$( '<div>' ).addClass( 'cosmos-td-layout' ).append(
-				$( '<div>' ).addClass( 'cosmos-td-panel' ),
-				$( '<div>' ).addClass( 'cosmos-td-side' ).append( buildPreview() )
+			$( '<div>' ).addClass( 'skin-cosmos-td-tabs' ).attr( 'role', 'tablist' ),
+			$( '<div>' ).addClass( 'skin-cosmos-td-layout' ).append(
+				$( '<div>' ).addClass( 'skin-cosmos-td-panel' ),
+				$( '<div>' ).addClass( 'skin-cosmos-td-side' ).append( buildPreview() )
 			)
 		);
 
