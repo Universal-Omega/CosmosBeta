@@ -39,6 +39,7 @@ class CreatePageDialogComponent {
 
 		return [
 			'form-action' => $this->config->get( MainConfigNames::Script ),
+			'msg-close' => $this->context->msg( 'cosmosbeta-createpage-close' )->text(),
 			'msg-header' => $this->context->msg( 'cosmosbeta-createpage-header' )->text(),
 			'msg-label' => $this->context->msg( 'cosmosbeta-createpage-input-label' )->text(),
 			'html-text' => $this->context->msg(
