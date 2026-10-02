@@ -18,6 +18,7 @@ use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\SelectQueryBuilder;
+use function array_unique;
 use function htmlspecialchars;
 use function implode;
 use function in_array;
@@ -57,7 +58,7 @@ class CosmosRailBuilder {
 
 		foreach ( $this->getModules() as $module ) {
 			$modules[] = [
-				'class' => implode( ' ', (array)( $module['class'] ?? 'custom-module' ) ),
+				'class' => $this->getModuleClasses( (array)( $module['class'] ?? 'custom-module' ) ),
 				'is-sticky' => ( $module['type'] ?? 'normal' ) === 'sticky',
 				'header' => isset( $module['header'] ) ? $this->getHeader( $module['header'] ) : null,
 				'array-recentchanges' => $module['recentchanges'] ?? null,
@@ -239,6 +240,20 @@ class CosmosRailBuilder {
 				return $changes;
 			}
 		);
+	}
+
+	/**
+	 * @param string[] $classes
+	 */
+	private function getModuleClasses( array $classes ): string {
+		$all = [];
+
+		foreach ( $classes as $class ) {
+			$all[] = $class;
+			$all[] = "skin-cosmos-$class";
+		}
+
+		return implode( ' ', array_unique( $all ) );
 	}
 
 	private function getHeader( string $label ): string {
