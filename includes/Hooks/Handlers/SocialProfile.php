@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 
+use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Content\TextContent;
 use MediaWiki\Context\IContextSource;
@@ -34,6 +35,22 @@ class SocialProfile {
 		ConfigNames::SocialProfileShowGroupTags,
 		ConfigNames::SocialProfileTagGroups,
 	];
+
+	public static function factory(
+		ConfigFactory $configFactory,
+		TemplateParser $templateParser,
+		TitleFactory $titleFactory,
+		UserGroupManager $userGroupManager,
+		WikiPageFactory $wikiPageFactory
+	): self {
+		return new self(
+			new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $configFactory->makeConfig( 'CosmosBeta' ) ),
+			$templateParser,
+			$titleFactory,
+			$userGroupManager,
+			$wikiPageFactory
+		);
+	}
 
 	public function __construct(
 		private readonly ServiceOptions $options,
