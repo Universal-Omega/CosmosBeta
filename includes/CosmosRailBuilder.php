@@ -59,7 +59,7 @@ class CosmosRailBuilder {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
-	public function setToolsModule( bool $enabled, array $items = [] ): self {
+	public function setToolsModule( bool $enabled, array $items ): self {
 		$this->toolsInRail = $enabled;
 		$this->toolItems = $items;
 
@@ -71,13 +71,11 @@ class CosmosRailBuilder {
 	 */
 	public function setSidebarModules( array $modules ): self {
 		$this->sidebarModules = $modules;
-
 		return $this;
 	}
 
 	public function buildRail(): string {
 		$modules = [];
-
 		foreach ( $this->getModules() as $module ) {
 			$modules[] = [
 				'class' => $this->getModuleClasses( (array)( $module['class'] ?? 'custom-module' ) ),
@@ -298,7 +296,6 @@ class CosmosRailBuilder {
 
 	private function getHeader( string $label ): string {
 		$message = $this->context->msg( $label );
-
-		return $message->exists() && !$message->isDisabled() ? $message->text() : $label;
+		return $message->isDisabled() ? $label : $message->text();
 	}
 }
