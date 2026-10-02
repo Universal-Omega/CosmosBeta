@@ -27,7 +27,6 @@
 				"ContentLanguage",
 				"ExtensionRegistry",
 				"LanguageNameUtils",
-				"MainConfig",
 				"PermissionManager",
 				"SpecialPageFactory",
 				"TitleFactory",
