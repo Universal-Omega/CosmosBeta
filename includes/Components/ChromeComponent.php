@@ -43,7 +43,7 @@ class ChromeComponent {
 		return $items;
 	}
 
-	public function getToolbarData( array $sidebar, bool $inRail = false ): ?array {
+	public function getToolbarData( array $sidebar, bool $inRail ): ?array {
 		$settings = $this->config->getToolbarSettings();
 
 		if ( !$settings['enabled'] || $inRail ) {
