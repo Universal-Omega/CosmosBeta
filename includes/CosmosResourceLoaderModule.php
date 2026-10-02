@@ -121,7 +121,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$blur = $this->cosmosConfig->getBackdropBlur();
 		$lessVars['backdrop-blur'] = $blur . 'px';
 		$lessVars['backdrop-blur-enabled'] = $blur > 0 ? 1 : 0;
-		$lessVars['banner-icon-opacity'] = $this->cosmosConfig->getBannerIconOpacity() / 100;
 		$buttonOpacity = $this->cosmosConfig->getHeaderButtonOpacity() / 100;
 		$lessVars['header-button-background'] = "rgba(0, 30, 59, $buttonOpacity)";
 		$lessVars['header-button-background-hover'] = 'rgba(0, 30, 59, ' . min( 1, $buttonOpacity + 0.2 ) . ')';
