@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta\Components;
 
-use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
@@ -17,20 +17,14 @@ use function ucwords;
 
 class WikiHeaderComponent {
 
-	public const array CONSTRUCTOR_OPTIONS = [
-		MainConfigNames::EnableUploads,
-		MainConfigNames::UploadNavigationUrl,
-	];
-
 	public function __construct(
 		private readonly IContextSource $context,
-		private readonly ServiceOptions $options,
+		private readonly Config $config,
 		private readonly PermissionManager $permissionManager,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly CosmosWordmarkLookup $wordmarkLookup,
 		private readonly CosmosConfig $cosmosConfig,
 	) {
-		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	public function getTemplateData( string $mainPageUrl ): array {
@@ -56,13 +50,13 @@ class WikiHeaderComponent {
 
 		$canCreate = $can( 'createpage' );
 		$canEdit = $can( 'edit' );
-		$canUpload = $can( 'upload' ) && $this->options->get( MainConfigNames::EnableUploads );
+		$canUpload = $can( 'upload' ) && $this->config->get( MainConfigNames::EnableUploads );
 		$canAddVideo = $can( 'addvideo' ) && $this->extensionRegistry->isLoaded( 'Video' );
 		$canViewAdminLinks = $can( 'adminlinks' );
 
 		$recentChanges = $this->context->msg( 'recentchanges' );
 		$addNewPage = $this->context->msg( 'cosmosbeta-add-new-page-text' );
-		$uploadUrl = $this->options->get( MainConfigNames::UploadNavigationUrl ) ?:
+		$uploadUrl = $this->config->get( MainConfigNames::UploadNavigationUrl ) ?:
 			SpecialPage::getTitleFor( 'Upload' )->getFullURL();
 		$recentChangesUrl = SpecialPage::getTitleFor( 'Recentchanges' )->getFullURL();
 
