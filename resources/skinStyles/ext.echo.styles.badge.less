@@ -1,6 +1,3 @@
-@import 'mediawiki.skin.variables.less';
-@import '../mixins.less';
-
 @media screen {
 	div.mw-echo-ui-overlay {
 		z-index: 1000000000;
@@ -59,28 +56,6 @@
 			}
 		}
 	}
-}
-
-.mw-echo-ui-notificationBadgeButtonPopupWidget-popup > .oo-ui-popupWidget-popup > .oo-ui-popupWidget-head > .oo-ui-iconWidget.oo-ui-icon-tray {
-	top: auto;
-	display: inline-block;
-	height: 1.42857143em;
-	margin-top: 10.5px;
-	background-image: none;
-	background-color: #000;
-	.skin-cosmos-outline-icon-merged( @cdx-icon-message, @skin-cosmos-outline-thickness, 1.25, 0.85 );
-	vertical-align: middle;
-}
-
-.mw-echo-ui-notificationBadgeButtonPopupWidget-popup > .oo-ui-popupWidget-popup > .oo-ui-popupWidget-head > .oo-ui-iconWidget.oo-ui-icon-bell {
-	top: auto;
-	display: inline-block;
-	height: 1.42857143em;
-	margin-top: 10.5px;
-	background-image: none;
-	background-color: #000;
-	.skin-cosmos-mask-icon( @cdx-icon-bell-outline );
-	vertical-align: middle;
 }
 
 #pt-notifications-alert .mw-echo-notifications-badge.mw-echo-notifications-badge-all-read,
