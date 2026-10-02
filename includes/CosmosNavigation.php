@@ -5,12 +5,12 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skins\CosmosBeta;
 
 use MediaWiki\Language\Language;
+use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\Utils\UrlUtils;
-use MessageLocalizer;
 use Wikimedia\ObjectCache\WANObjectCache;
 use function count;
 use function explode;
@@ -18,8 +18,8 @@ use function htmlspecialchars;
 use function in_array;
 use function preg_match;
 use function preg_replace;
+use function str_contains;
 use function str_replace;
-use function strpos;
 use function strrpos;
 use function trim;
 
@@ -197,18 +197,18 @@ class CosmosNavigation {
 
 		if (
 			$this->extensionRegistry->isLoaded( 'Video' ) &&
-			( strpos( $navigation, '{$NEWVIDEOS_CONDITIONAL}' ) !== false || strpos( $navigation, '{$NEWVIDEOS}' ) !== false )
+			( str_contains( $navigation, '{$NEWVIDEOS_CONDITIONAL}' ) || str_contains( $navigation, '{$NEWVIDEOS}' ) )
 		) {
 			$exploreChildUrl = '**' . htmlspecialchars( (string)SpecialPage::getTitleFor( 'NewVideos' ) ) . '|';
 			$exploreChildText = 'newvideos';
 
-			if ( strpos( $navigation, '{$WANTEDPAGES_FORCE}' ) !== false ) {
+			if ( str_contains( $navigation, '{$WANTEDPAGES_FORCE}' ) ) {
 				$forceChildUrl = "\n**" . htmlspecialchars( (string)SpecialPage::getTitleFor( 'Wantedpages' ) ) . '|';
 				$forceChildText = 'wantedpages';
 			}
 		} elseif (
-			strpos( $navigation, '{$WANTEDPAGES_CONDITIONAL}' ) !== false ||
-			strpos( $navigation, '{$WANTEDPAGES}' ) !== false
+			str_contains( $navigation, '{$WANTEDPAGES_CONDITIONAL}' ) ||
+			str_contains( $navigation, '{$WANTEDPAGES}' )
 		) {
 			$exploreChildUrl = '**' . htmlspecialchars( (string)SpecialPage::getTitleFor( 'Wantedpages' ) ) . '|';
 			$exploreChildText = 'wantedpages';
