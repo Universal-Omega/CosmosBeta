@@ -15,12 +15,14 @@ use Wikimedia\ObjectCache\WANObjectCache;
 use function count;
 use function explode;
 use function htmlspecialchars;
+use function array_map;
 use function in_array;
 use function preg_match;
 use function preg_replace;
 use function str_contains;
 use function str_replace;
 use function strrpos;
+use function strtoupper;
 use function trim;
 
 class CosmosNavigation {
@@ -37,6 +39,7 @@ class CosmosNavigation {
 		private readonly UrlUtils $urlUtils,
 		private readonly TitleFactory $titleFactory,
 		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly array $railPortlets = [],
 	) {
 	}
 
@@ -51,7 +54,7 @@ class CosmosNavigation {
 			$this->getCacheKey(),
 			WANObjectCache::TTL_HOUR * 8,
 			$build,
-			[ 'version' => 1 ]
+			[ 'version' => 4 ]
 		);
 	}
 
@@ -141,7 +144,7 @@ class CosmosNavigation {
 				}
 			}
 
-			if ( !empty( $node['original'] ) && in_array( $node['original'], [ 'SEARCH', 'TOOLBOX', 'LANGUAGES' ], true ) ) {
+			if ( !empty( $node['original'] ) && $this->isSkippedLine( (string)$node['original'] ) ) {
 				continue;
 			}
 
@@ -247,6 +250,14 @@ class CosmosNavigation {
 		$modules = $this->extensionRegistry->getAttribute( 'ResourceModules' );
 
 		return $modules['skins.cosmosbeta.icons']['icons'] ?? [];
+	}
+
+	private function isSkippedLine( string $name ): bool {
+		if ( in_array( $name, [ 'SEARCH', 'TOOLBOX', 'LANGUAGES' ], true ) ) {
+			return true;
+		}
+
+		return in_array( strtoupper( $name ), array_map( strtoupper( ... ), $this->railPortlets ), true );
 	}
 
 	private function getCacheKey(): string {
