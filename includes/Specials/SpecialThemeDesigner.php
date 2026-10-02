@@ -6,6 +6,7 @@ namespace MediaWiki\Skins\CosmosBeta\Specials;
 
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Html\Html;
+use MediaWiki\Html\TemplateParser;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinFactory;
 use MediaWiki\Skins\CosmosBeta\Components\PortletReader;
@@ -42,6 +43,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		private readonly ThemeStore $store,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly SkinFactory $skinFactory,
+		private readonly TemplateParser $templateParser,
 		private readonly TitleFactory $titleFactory,
 	) {
 		parent::__construct( 'CosmosBetaThemeDesigner' );
@@ -137,44 +139,20 @@ class SpecialThemeDesigner extends SpecialPage {
 	}
 
 	private function buildForm(): string {
-		$comment = $this->msg( 'cosmosbeta-themedesigner-comment' )->text();
-
-		return Html::rawElement( 'form', [
-			'id' => 'cosmosbeta-themedesigner-form',
-			'class' => 'skin-cosmos-td',
-			'method' => 'post',
+		return $this->templateParser->processTemplate( 'ThemeDesigner', [
+			'form-id' => 'cosmosbeta-themedesigner-form',
 			'action' => $this->getPageTitle()->getLocalURL(),
-		],
-			Html::hidden( 'wpEditToken', $this->getContext()->getCsrfTokenSet()->getToken()->toString() ) .
-			Html::rawElement( 'div', [ 'id' => 'skin-cosmos-themedesigner-app' ],
-				Html::element( 'noscript', [], $this->msg( 'cosmosbeta-themedesigner-nojs' )->text() )
-			) .
-			Html::rawElement( 'details', [ 'class' => 'skin-cosmos-td-advanced' ],
-				Html::element( 'summary', [], $this->msg( 'cosmosbeta-themedesigner-advanced' )->text() ) .
-				Html::element( 'p', [], $this->msg( 'cosmosbeta-themedesigner-advanced-help' )->text() ) .
-				Html::textarea(
-					'wpThemeJson',
-					json_encode(
-						$this->store->getCurrent()->toArray(),
-						JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
-					),
-					[ 'id' => 'skin-cosmos-themedesigner-json', 'rows' => 14, 'spellcheck' => 'false' ]
-				)
-			) .
-			Html::rawElement( 'div', [ 'class' => 'skin-cosmos-td-publish' ],
-				Html::element( 'input', [
-					'type' => 'text',
-					'name' => 'wpComment',
-					'maxlength' => 200,
-					'placeholder' => $comment,
-					'aria-label' => $comment,
-				] ) .
-				Html::element( 'button', [
-					'type' => 'submit',
-					'class' => 'skin-cosmos-td-button skin-cosmos-td-button-primary',
-				], $this->msg( 'cosmosbeta-themedesigner-publish' )->text() )
-			)
-		);
+			'html-token' => Html::hidden( 'wpEditToken', $this->getContext()->getCsrfTokenSet()->getToken()->toString() ),
+			'msg-nojs' => $this->msg( 'cosmosbeta-themedesigner-nojs' )->text(),
+			'msg-advanced' => $this->msg( 'cosmosbeta-themedesigner-advanced' )->text(),
+			'msg-advanced-help' => $this->msg( 'cosmosbeta-themedesigner-advanced-help' )->text(),
+			'json' => json_encode(
+				$this->store->getCurrent()->toArray(),
+				JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+			),
+			'msg-comment' => $this->msg( 'cosmosbeta-themedesigner-comment' )->text(),
+			'msg-publish' => $this->msg( 'cosmosbeta-themedesigner-publish' )->text(),
+		] );
 	}
 
 	private function getClientData(): array {
@@ -205,6 +183,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		return [
 			'canEdit' => true,
 			'settings' => $current->toArray(),
+			'defaults' => ThemeSettings::getDefaults(),
 			'revisionId' => $current->getRevisionId(),
 			'slots' => ThemeSettings::COLOR_SLOTS,
 			'fallbacks' => $fallbacks,
