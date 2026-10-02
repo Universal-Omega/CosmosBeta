@@ -1,3 +1,5 @@
+@import 'mediawiki.skin.variables.less';
+
 @skin-cosmos-font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 
 :where( body.skin-cosmosbeta ) {
@@ -66,7 +68,8 @@ body a:focus {
 
 #p-search {
 	display: flex;
-	width: 100%;
+	min-width: 0;
+	flex: 1 1 auto;
 	margin: 0 10px;
 }
 
@@ -199,8 +202,11 @@ body > #mw-content-container {
 		border-radius: 0;
 	}
 
+	.cdx-text-input,
+	.cdx-search-input,
+	.cdx-typeahead-search,
 	.cdx-text-input__input {
-		min-width: unset;
+		min-width: 0;
 	}
 
 	.cdx-button {
@@ -261,14 +267,14 @@ body > #mw-content-container {
 	min-width: 350px;
 }
 
-.articleProposals {
+.skin-cosmos-article-proposals {
 	width: 100%;
 	padding: 0;
 	margin: 0.3em 0 0 1.6em;
 	list-style: none;
 }
 
-.articleProposals li {
+.skin-cosmos-article-proposals li {
 	width: 50%;
 	float: left;
 }
@@ -331,7 +337,19 @@ body > #mw-content-container {
 		transition: transform 250ms ease;
 	}
 
-	&:hover {
+	&.skin-cosmos-is-open {
+		>.skin-cosmos-dropdown-list {
+			display: block;
+		}
+
+		.skin-cosmos-dropdown-icon {
+			transform: rotate( 180deg );
+		}
+	}
+}
+
+@media ( hover: hover ) {
+	.skin-cosmos-dropdown:hover {
 		>.skin-cosmos-button-secondary {
 			opacity: 0.8;
 			transition: 0.4s;
@@ -345,6 +363,10 @@ body > #mw-content-container {
 			transform: rotate( 180deg );
 		}
 	}
+}
+
+body .uls-menu {
+	z-index: 1001;
 }
 
 .skin-cosmos-button-text {
@@ -1688,7 +1710,7 @@ button.skin-cosmos-header-button {
 	color: #000;
 }
 
-.close {
+.skin-cosmos-modal-close {
 	border: -;
 	color: #aaa;
 	float: right;
@@ -2059,7 +2081,7 @@ body {
 	padding: 20px 0 10px 0;
 }
 
-.page-header__categories {
+.skin-cosmos-categories {
 	position: relative;
 	z-index: 30000;
 	display: -webkit-box;
@@ -2353,7 +2375,14 @@ body .mw-notification {
 body .postedit::after {
 	top: auto;
 	bottom: 1.5px;
-	background: url( 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" stroke="%23@{notice-close-button-color}" width="20" height="20" viewBox="0 0 20 20"%3E %3Cpath d="M3.636 2.222l14.142 14.142-1.414 1.414L2.222 3.636z%22/%3E %3Cpath d="M17.778 3.636L3.636 17.778l-1.414-1.414L16.364 2.222z"/%3E %3C/svg%3E' ) no-repeat;
+	.cdx-mixin-css-icon-background-image( @cdx-icon-close, ~'#@{notice-close-button-color}' );
+	background-image: none;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
 }
 
 body .postedit-container {
@@ -2493,14 +2522,26 @@ table.mw-datatable {
 
 body .oo-ui-icon-tray,
 .mw-ui-icon-tray::before {
-	background: url( "data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' stroke='%23@{banner-echo-font-color}' stroke-width = '2px' fill='none' viewBox='0 0 28 28'%3e%3cpath d='M 2 5 L 26 5 L 26 23 L 2 23 Z M 2 9 L 14 19 L 26 9 L 26 23 L 2 23 Z M 2 23 L 10 15 Z M 26 23 L 18 15 Z'/%3e%3c/svg%3e" ) no-repeat;
-	background-size: cover;
+	.cdx-mixin-css-icon-background-image( @cdx-icon-tray, @banner-font-color );
+	background-image: none;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
 }
 
 body .oo-ui-icon-bell,
 .mw-ui-icon-bell::before {
-	background: url( "data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' stroke='%23@{banner-echo-font-color}' stroke-width = '2px' fill='none' viewBox='0 0 28 28'%3e%3cpath d='M 2 21 L 6 15 L 6 10 A 5 5 180 0 1 22 10 L 22 15 L 26 21 Z M 18 21.5 A 4 4.5 180 0 1 10 21.5'/%3e%3c/svg%3e" ) no-repeat;
-	background-size: cover;
+	.cdx-mixin-css-icon-background-image( @cdx-icon-bell-outline, @banner-font-color );
+	background-image: none;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
 }
 
 table.mw-interwikitable.body td.mw-interwikitable-local-yes {
@@ -2524,7 +2565,7 @@ table.mw-interwikitable.body td.mw-interwikitable-local-yes {
 	float: right;
 }
 
-.skin-cosmos-rail .module h3 {
+.skin-cosmos-rail .skin-cosmos-rail-module h3 {
 	border-bottom: 3px solid @rail-header-bottom-border;
 }
 
@@ -2564,6 +2605,7 @@ div.thumbinner {
 	width: 20px;
 	height: 20px;
 	flex: none;
+	aspect-ratio: 1 / 1;
 	vertical-align: middle;
 
 	&::before {
@@ -2593,10 +2635,15 @@ div.thumbinner {
 	height: 12px;
 }
 
-.skin-cosmos-bannerOption-icon .skin-cosmos-icon,
-.skin-cosmos-button-icon {
+.skin-cosmos-bannerOption-icon .skin-cosmos-icon {
 	width: 28px;
 	height: 28px;
+}
+
+.skin-cosmos-button-icon {
+	width: 20px;
+	height: 20px;
+	margin-right: 6px;
 }
 
 .skin-cosmos-bannerOption-icon {
@@ -2621,4 +2668,17 @@ div.thumbinner {
 		background-image: none;
 		text-indent: 0;
 	}
+}
+
+.skin-cosmos-header-button .skin-cosmos-icon {
+	width: 18px;
+	min-width: 18px;
+	height: 18px;
+	min-height: 18px;
+}
+
+#cosmos-icons-explore {
+	width: 22px;
+	height: 22px;
+	margin-right: 4px;
 }
