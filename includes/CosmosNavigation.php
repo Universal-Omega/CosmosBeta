@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta;
 
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\Language;
 use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Parser\Sanitizer;
@@ -12,10 +13,11 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\Utils\UrlUtils;
 use Wikimedia\ObjectCache\WANObjectCache;
+use function array_map;
+use function array_merge;
 use function count;
 use function explode;
 use function htmlspecialchars;
-use function array_map;
 use function in_array;
 use function preg_match;
 use function preg_replace;
@@ -26,6 +28,10 @@ use function strtoupper;
 use function trim;
 
 class CosmosNavigation {
+
+	public const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::RailSidebarPortlets,
+	];
 
 	public const string MESSAGE = 'cosmosbeta-navigation';
 
@@ -39,8 +45,9 @@ class CosmosNavigation {
 		private readonly UrlUtils $urlUtils,
 		private readonly TitleFactory $titleFactory,
 		private readonly ExtensionRegistry $extensionRegistry,
-		private readonly array $railPortlets = [],
+		private readonly ServiceOptions $options,
 	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	public function getTree( MessageLocalizer $localizer, Language $userLanguage ): array {
@@ -54,8 +61,102 @@ class CosmosNavigation {
 			$this->getCacheKey(),
 			WANObjectCache::TTL_HOUR * 8,
 			$build,
-			[ 'version' => 4 ]
+			[ 'version' => 5 ]
 		);
+	}
+
+	/**
+	 * Adds links that hooks put into the sidebar, such as the ones from extensions, to the tree.
+	 * Links that are already in the tree are left out, and sections that are shown elsewhere are skipped.
+	 *
+	 * @param array[] $portlets Sidebar portlets from the skin template data
+	 */
+	public function mergeSidebar( array $tree, array $portlets ): array {
+		$skipIds = [ 'P-SEARCH', 'P-TB', 'P-LANG', 'SEARCH', 'TB', 'LANG' ];
+		$railNames = array_map( strtoupper( ... ), (array)$this->options->get( ConfigNames::RailSidebarPortlets ) );
+		$known = [];
+
+		$collect = static function ( array $nodes ) use ( &$collect, &$known ): void {
+			foreach ( $nodes as $node ) {
+				$known[(string)$node['href']] = true;
+				$collect( $node['array-children'] );
+			}
+		};
+		$collect( $tree );
+
+		foreach ( $portlets as $portlet ) {
+			$id = strtoupper( (string)( $portlet['id'] ?? '' ) );
+			$label = trim( (string)( $portlet['label'] ?? '' ) );
+			$bare = (string)preg_replace( '/^P-/', '', $id );
+
+			if (
+				in_array( $id, $skipIds, true ) ||
+				in_array( $bare, $railNames, true ) ||
+				in_array( strtoupper( $label ), $railNames, true )
+			) {
+				continue;
+			}
+
+			$children = [];
+
+			foreach ( $portlet['array-items'] ?? [] as $item ) {
+				$link = $item['array-links'][0] ?? [];
+				$href = '';
+
+				foreach ( $link['array-attributes'] ?? [] as $attribute ) {
+					if ( $attribute['key'] === 'href' ) {
+						$href = (string)$attribute['value'];
+					}
+				}
+
+				if ( $href === '' || isset( $known[$href] ) ) {
+					continue;
+				}
+
+				$known[$href] = true;
+				$text = (string)( $link['text'] ?? '' );
+				$children[] = [
+					'id' => Sanitizer::escapeIdForAttribute( $text ),
+					'text' => $text,
+					'href' => $href,
+					'rel-nofollow' => false,
+					'icon' => false,
+					'has-children' => false,
+					'is-sticked' => true,
+					'array-children' => [],
+				];
+			}
+
+			if ( !$children ) {
+				continue;
+			}
+
+			$matched = false;
+
+			foreach ( $tree as $index => $node ) {
+				if ( strtoupper( $node['text'] ) === strtoupper( $label ) ) {
+					$tree[$index]['array-children'] = array_merge( $node['array-children'], $children );
+					$tree[$index]['has-children'] = true;
+					$matched = true;
+					break;
+				}
+			}
+
+			if ( !$matched ) {
+				$tree[] = [
+					'id' => Sanitizer::escapeIdForAttribute( $label ),
+					'text' => $label,
+					'href' => '#',
+					'rel-nofollow' => false,
+					'is-explore' => false,
+					'icon' => false,
+					'has-children' => true,
+					'array-children' => $children,
+				];
+			}
+		}
+
+		return $tree;
 	}
 
 	public function purge(): void {
@@ -84,7 +185,7 @@ class CosmosNavigation {
 				'href' => $node['href'] !== '' && $node['text'] !== 'Navigation' && !$isExplore ? $node['href'] : '#',
 				'rel-nofollow' => !$node['internal'],
 				'is-explore' => $isExplore,
-				'icon' => $node['icon'] ?? ( $isExplore ? self::EXPLORE_ICON : null ),
+				'icon' => $node['icon'] ?? ( $isExplore ? self::EXPLORE_ICON : false ),
 				'has-children' => $children !== [],
 				'array-children' => $this->buildChildren( $nodes, $children ),
 			];
@@ -106,7 +207,7 @@ class CosmosNavigation {
 				'text' => $node['text'],
 				'href' => $node['href'] !== '' ? $node['href'] : '#',
 				'rel-nofollow' => !$node['internal'],
-				'icon' => $node['icon'] ?? null,
+				'icon' => $node['icon'] ?? false,
 				'has-children' => $grandChildren !== [],
 				'is-sticked' => $position > count( $grandChildren ) - 1,
 				'array-children' => $this->buildChildren( $nodes, $grandChildren ),
@@ -257,7 +358,7 @@ class CosmosNavigation {
 			return true;
 		}
 
-		return in_array( strtoupper( $name ), array_map( strtoupper( ... ), $this->railPortlets ), true );
+		return in_array( strtoupper( $name ), array_map( strtoupper( ... ), (array)$this->options->get( ConfigNames::RailSidebarPortlets ) ), true );
 	}
 
 	private function getCacheKey(): string {
