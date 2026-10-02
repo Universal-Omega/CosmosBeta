@@ -163,6 +163,7 @@ class ThemeSettings {
 				'contentOpacity' => null,
 				'bannerIconOpacity' => 100,
 				'headerIconOpacity' => 100,
+				'backdropBlur' => 0,
 			],
 			'toolbar' => [
 				'enabled' => true,
@@ -241,6 +242,9 @@ class ThemeSettings {
 			$data['layout']['contentOpacity'] = self::toPercent( $layout['contentOpacity'] ?? null, null );
 			$data['layout']['bannerIconOpacity'] = self::toPercent( $layout['bannerIconOpacity'] ?? null, 100 );
 			$data['layout']['headerIconOpacity'] = self::toPercent( $layout['headerIconOpacity'] ?? null, 100 );
+			$data['layout']['backdropBlur'] = is_numeric( $layout['backdropBlur'] ?? null ) ?
+				max( 0, min( 40, (int)round( (float)$layout['backdropBlur'] ) ) ) :
+				0;
 		}
 
 		$toolbar = $raw['toolbar'] ?? [];
