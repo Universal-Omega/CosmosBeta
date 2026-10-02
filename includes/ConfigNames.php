@@ -10,6 +10,8 @@ namespace MediaWiki\Skins\CosmosBeta;
  */
 class ConfigNames {
 
+	public const string AllowFooterIconHiding = 'CosmosBetaAllowFooterIconHiding';
+
 	public const string BackgroundImage = 'CosmosBetaBackgroundImage';
 
 	public const string BackgroundImageFixed = 'CosmosBetaBackgroundImageFixed';
@@ -37,6 +39,8 @@ class ConfigNames {
 	public const string FetchWantedPagesFromCache = 'CosmosBetaFetchWantedPagesFromCache';
 
 	public const string FooterBackgroundColor = 'CosmosBetaFooterBackgroundColor';
+
+	public const string FooterProtectedLinks = 'CosmosBetaFooterProtectedLinks';
 
 	public const string LinkColor = 'CosmosBetaLinkColor';
 
