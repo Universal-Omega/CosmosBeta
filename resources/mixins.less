@@ -1,0 +1,11 @@
+@import 'mediawiki.skin.variables.less';
+
+// Draws a Codex icon as an outline by stroking its paths instead of filling them
+.skin-cosmos-outline-icon( @icon, @stroke-width: 1.5 ) {
+	@outline-paths: extract( @icon, 1 );
+	@outline-color: escape( #000 );
+	@outline-url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="@{outline-color}" stroke-width="@{stroke-width}" stroke-linejoin="round">@{outline-paths}</svg>';
+
+	-webkit-mask-image: url( @outline-url );
+	mask-image: url( @outline-url );
+}
