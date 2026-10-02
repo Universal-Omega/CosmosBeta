@@ -23,6 +23,7 @@ use function rtrim;
 use function sprintf;
 use function str_starts_with;
 use function strlen;
+use function strtolower;
 use function substr;
 use function trim;
 use const JSON_UNESCAPED_SLASHES;
@@ -83,13 +84,13 @@ class ThemeSettings {
 	private readonly array $data;
 
 	public function __construct(
-		array $data = [],
-		private readonly int $revisionId = 0,
+		array $data,
+		private readonly int $revisionId,
 	) {
 		$this->data = self::normalize( $data );
 	}
 
-	public static function newFromJson( string $json, int $revisionId = 0 ): self {
+	public static function newFromJson( string $json, int $revisionId ): self {
 		$decoded = json_decode( $json, true );
 
 		return new self( is_array( $decoded ) ? $decoded : [], $revisionId );
@@ -132,7 +133,7 @@ class ThemeSettings {
 			'layout' => [
 				'contentOpacity' => $opacity > 0 ? $opacity : null,
 			],
-		] );
+		], 0 );
 	}
 
 	public static function getDefaults(): array {
@@ -162,7 +163,7 @@ class ThemeSettings {
 				'contentWidth' => '',
 				'contentOpacity' => null,
 				'bannerIconOpacity' => 100,
-				'headerIconOpacity' => 100,
+				'headerButtonOpacity' => 20,
 				'backdropBlur' => 0,
 			],
 			'toolbar' => [
@@ -241,7 +242,7 @@ class ThemeSettings {
 
 			$data['layout']['contentOpacity'] = self::toPercent( $layout['contentOpacity'] ?? null, null );
 			$data['layout']['bannerIconOpacity'] = self::toPercent( $layout['bannerIconOpacity'] ?? null, 100 );
-			$data['layout']['headerIconOpacity'] = self::toPercent( $layout['headerIconOpacity'] ?? null, 100 );
+			$data['layout']['headerButtonOpacity'] = self::toPercent( $layout['headerButtonOpacity'] ?? null, 20 );
 			$data['layout']['backdropBlur'] = is_numeric( $layout['backdropBlur'] ?? null ) ?
 				max( 0, min( 40, (int)round( (float)$layout['backdropBlur'] ) ) ) :
 				0;
