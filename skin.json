@@ -53,8 +53,7 @@
 						"user-menu"
 					],
 					"styles": [
-						"skins.cosmosbeta.styles",
-						"skins.cosmosbeta.icons"
+						"skins.cosmosbeta.styles"
 					],
 					"scripts": [
 						"skins.cosmosbeta.searchLoader",
@@ -127,6 +126,9 @@
 			},
 			"styles": {
 				"resources/skins.cosmosbeta.styles/common.less": {
+					"media": "screen"
+				},
+				"resources/skins.cosmosbeta.styles/icons.less": {
 					"media": "screen"
 				},
 				"resources/skins.cosmosbeta.styles/desktop.less": {
@@ -349,30 +351,6 @@
 				}
 			},
 			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
-		},
-		"skins.cosmosbeta.icons": {
-			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
-			"selectorWithoutVariant": ".skin-cosmos-icon-{name}::before",
-			"useDataURI": false,
-			"defaultColor": "#000",
-			"useMaskImage": true,
-			"variants": {},
-			"icons": [
-				"arrowPrevious",
-				"articleAdd",
-				"close",
-				"edit",
-				"ellipsis",
-				"expand",
-				"eye",
-				"map",
-				"next",
-				"recentChanges",
-				"search",
-				"settings",
-				"speechBubbles",
-				"userAvatarOutline"
-			]
 		},
 		"skins.cosmosbeta.themedesigner": {
 			"scripts": [
