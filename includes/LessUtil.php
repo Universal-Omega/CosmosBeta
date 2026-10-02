@@ -30,14 +30,9 @@ use const PREG_SPLIT_NO_EMPTY;
 class LessUtil {
 	private static array $cosmosSettings = [];
 
-	/**
-	 * Gets theme settings from Config class
-	 *
-	 * @param string|null $mode Color mode, defaults to the mode rendered for this request
-	 */
-	public static function getCosmosSettings( ?string $mode = null ): array {
+	/** Gets the theme colors of a color mode in the form the stylesheets use them */
+	public static function getCosmosSettings( string $mode ): array {
 		$themeSettings = MediaWikiServices::getInstance()->get( 'CosmosBetaConfig' );
-		$mode ??= $themeSettings->getRenderMode();
 
 		if ( empty( static::$cosmosSettings[$mode] ) ) {
 			$settings = [
@@ -66,11 +61,7 @@ class LessUtil {
 		return $color;
 	}
 
-	public static function isThemeDark( string $background, ?array $cosmosSettings = null ): bool {
-		if ( empty( $cosmosSettings ) ) {
-			$cosmosSettings = self::getCosmosSettings();
-		}
-
+	public static function isThemeDark( string $background, array $cosmosSettings ): bool {
 		$backgroundColor = $cosmosSettings[$background];
 
 		$parsed = self::parseColor( $backgroundColor );

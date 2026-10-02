@@ -29,7 +29,7 @@ class RestoreTheme extends Maintenance {
 		$this->initServices();
 
 		if ( $this->hasOption( 'list' ) ) {
-			foreach ( $this->themeStore->getHistory() as $row ) {
+			foreach ( $this->themeStore->getHistory( 30 ) as $row ) {
 				$this->output( "{$row['id']}\t{$row['timestamp']}\t{$row['user']}\t{$row['comment']}\n" );
 			}
 

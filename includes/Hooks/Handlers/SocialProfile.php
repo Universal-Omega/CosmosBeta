@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Content\TextContent;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\TemplateParser;
@@ -26,20 +27,50 @@ use const NS_USER;
 
 class SocialProfile {
 
+	private const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::SocialProfileAllowBio,
+		ConfigNames::SocialProfileFollowBioRedirects,
+		ConfigNames::SocialProfileNumberofGroupTags,
+		ConfigNames::SocialProfileShowEditCount,
+		ConfigNames::SocialProfileShowGroupTags,
+		ConfigNames::SocialProfileTagGroups,
+	];
+
 	public function __construct(
-		private readonly Config $config,
+		private readonly ServiceOptions $options,
 		private readonly TemplateParser $templateParser,
 		private readonly TitleFactory $titleFactory,
 		private readonly UserGroupManager $userGroupManager,
 		private readonly WikiPageFactory $wikiPageFactory,
 	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
+
+	public static function factory(
+		Config $cosmosOptions,
+		TemplateParser $templateParser,
+		TitleFactory $titleFactory,
+		UserGroupManager $userGroupManager,
+		WikiPageFactory $wikiPageFactory
+	): self {
+		return new self(
+			new ServiceOptions(
+				self::CONSTRUCTOR_OPTIONS,
+				$cosmosOptions
+			),
+			$templateParser,
+			$titleFactory,
+			$userGroupManager,
+			$wikiPageFactory,
+		);
+	}
+
 
 	/** @inheritDoc */
 	public function onUserProfileGetProfileTitle( UserProfilePage $userProfilePage, string &$profileTitle ): void {
-		$showTags = (bool)$this->config->get( ConfigNames::SocialProfileShowGroupTags );
-		$showEdits = (bool)$this->config->get( ConfigNames::SocialProfileShowEditCount );
-		$allowBio = (bool)$this->config->get( ConfigNames::SocialProfileAllowBio );
+		$showTags = (bool)$this->options->get( ConfigNames::SocialProfileShowGroupTags );
+		$showEdits = (bool)$this->options->get( ConfigNames::SocialProfileShowEditCount );
+		$allowBio = (bool)$this->options->get( ConfigNames::SocialProfileAllowBio );
 
 		if ( !$showTags && !$showEdits && !$allowBio ) {
 			return;
@@ -78,11 +109,11 @@ class SocialProfile {
 			] ];
 		}
 
-		$max = (int)$this->config->get( ConfigNames::SocialProfileNumberofGroupTags );
+		$max = (int)$this->options->get( ConfigNames::SocialProfileNumberofGroupTags );
 		$groups = $this->userGroupManager->getUserGroups( $owner );
 		$tags = [];
 
-		foreach ( $this->config->get( ConfigNames::SocialProfileTagGroups ) as $group ) {
+		foreach ( $this->options->get( ConfigNames::SocialProfileTagGroups ) as $group ) {
 			if ( !in_array( $group, $groups, true ) || count( $tags ) >= $max ) {
 				continue;
 			}
@@ -108,7 +139,7 @@ class SocialProfile {
 		$content = $this->wikiPageFactory->newFromTitle( $title )->getContent();
 
 		if (
-			$this->config->get( ConfigNames::SocialProfileFollowBioRedirects ) &&
+			$this->options->get( ConfigNames::SocialProfileFollowBioRedirects ) &&
 			$title->isRedirect() &&
 			$content?->getRedirectTarget()?->isKnown() &&
 			$content->getRedirectTarget()->inNamespace( NS_USER )

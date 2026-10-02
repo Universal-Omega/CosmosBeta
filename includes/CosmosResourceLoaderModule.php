@@ -11,6 +11,8 @@ use Wikimedia\Minify\CSSMin;
 use function array_merge;
 use function array_values;
 use function in_array;
+use function min;
+use function round;
 use function sprintf;
 use function strtolower;
 
@@ -72,7 +74,10 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$contentBackgroundColor = $this->cosmosConfig->getColor( 'content', $mode );
 		$contentRgb = $this->resolveColor( $contentBackgroundColor );
 
-		$lessVars['banner-background-color'] = $this->cosmosConfig->getColor( 'banner', $mode );
+		$bannerColor = $this->cosmosConfig->getColor( 'banner', $mode );
+		$lessVars['banner-background-color'] = $bannerColor;
+		[ $br, $bg, $bb, $ba ] = $this->resolveColor( $bannerColor );
+		$lessVars['banner-background-color-fallback'] = $this->getFallbackColor( $br, $bg, $bb, $ba, $this->cosmosConfig->getBackdropBlur() );
 
 		if ( $mainBackground ) {
 			$lessVars['main-background-image'] = CSSMin::buildUrlValue( $mainBackground );
@@ -110,18 +115,25 @@ class CosmosResourceLoaderModule extends SkinModule {
 		}
 
 		// Convert content background to rgba for opacity.
-		[ $r, $g, $b ] = $contentRgb;
+		[ $r, $g, $b, $contentAlpha ] = $contentRgb;
 
 		$contentOpacityLevelConfig = $this->cosmosConfig->getContentOpacityLevel();
-		$lessVars['banner-icon-opacity'] = $this->cosmosConfig->getBannerIconOpacity() / 100;
-		$lessVars['header-icon-opacity'] = $this->cosmosConfig->getHeaderIconOpacity() / 100;
+		$blur = $this->cosmosConfig->getBackdropBlur();
+		$lessVars['backdrop-blur'] = $blur . 'px';
+		$lessVars['backdrop-blur-enabled'] = $blur > 0 ? 1 : 0;
+		$buttonOpacity = $this->cosmosConfig->getHeaderButtonOpacity() / 100;
+		$lessVars['header-button-background'] = "rgba(0, 30, 59, $buttonOpacity)";
+		$lessVars['header-button-background-hover'] = 'rgba(0, 30, 59, ' . min( 1, $buttonOpacity + 0.2 ) . ')';
 
-		$lessVars['content-opacity-level'] = "rgba($r, $g, $b, " . $contentOpacityLevelConfig / 100.00 . ')';
+		$contentFinalAlpha = round( $contentAlpha * $contentOpacityLevelConfig / 100, 3 );
+		$lessVars['content-opacity-level'] = "rgba($r, $g, $b, $contentFinalAlpha)";
+		$lessVars['content-opacity-level-fallback'] = $this->getFallbackColor( $r, $g, $b, $contentFinalAlpha, $blur );
 
 		$footerBackgroundColor = $this->cosmosConfig->getColor( 'footer', $mode );
 		[ $r, $g, $b, $footerAlpha ] = $this->resolveColor( $footerBackgroundColor );
-		$footerOpacity = $footerAlpha > 0 ? $this->cosmosConfig->getFooterOpacity() / 100 : 0;
+		$footerOpacity = round( $footerAlpha * $this->cosmosConfig->getFooterOpacity() / 100, 3 );
 		$lessVars['footer-background-color'] = "rgba($r, $g, $b, $footerOpacity)";
+		$lessVars['footer-background-color-fallback'] = $this->getFallbackColor( $r, $g, $b, $footerOpacity, $blur );
 
 		$isFooterBackgroundColorDark = LessUtil::isThemeDark( 'footer-background-color', $settings );
 		$lessVars['footer-font-color1'] = $isFooterBackgroundColorDark ? '#999' : '#666';
@@ -129,13 +141,14 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 		$headerBackgroundColor = $this->cosmosConfig->getColor( 'header', $mode );
 		[ $r, $g, $b, $headerAlpha ] = $this->resolveColor( $headerBackgroundColor );
-		$colorName = $headerAlpha > 0 ? sprintf( '#%02x%02x%02x', $r, $g, $b ) : 'transparent';
+		$colorName = $headerAlpha > 0 ? "rgba($r,$g,$b,$headerAlpha)" : 'transparent';
+		$halfAlpha = round( $headerAlpha * 0.5, 3 );
 
-		$rightGradient = "linear-gradient(to right,rgba($r,$g,$b,0.5),rgba($r,$g,$b,0.5))";
+		$rightGradient = "linear-gradient(to right,rgba($r,$g,$b,$halfAlpha),rgba($r,$g,$b,$halfAlpha))";
 		$leftGradient = "linear-gradient(to left,rgba($r,$g,$b,0) 200px,$colorName 430px)";
 		$lessVars['header-background-color'] = "$rightGradient,$leftGradient";
 
-		$rightGradient = "linear-gradient(to right,rgba($r,$g,$b,0.5),rgba($r,$g,$b,0.5))";
+		$rightGradient = "linear-gradient(to right,rgba($r,$g,$b,$halfAlpha),rgba($r,$g,$b,$halfAlpha))";
 		$leftGradient = "linear-gradient(to left,rgba($r,$g,$b,0) 200px,$colorName 471px)";
 		$lessVars['header-background-color2'] = "$rightGradient,$leftGradient";
 
@@ -152,6 +165,21 @@ class CosmosResourceLoaderModule extends SkinModule {
 	}
 
 	/**
+	 * Browsers without backdrop-filter get a more opaque background instead of the blur.
+	 */
+	private function getFallbackColor( int $r, int $g, int $b, float $alpha, int $blur ): string {
+		$boosted = $blur > 0 ? $alpha + ( 1 - $alpha ) * 0.6 : $alpha;
+
+		return sprintf( 'rgba(%d, %d, %d, %s)', $r, $g, $b, round( $boosted, 3 ) );
+	}
+
+	private function getToolbarFallback( string $color ): string {
+		[ $r, $g, $b, $a ] = $this->resolveColor( $color );
+
+		return $this->getFallbackColor( $r, $g, $b, (float)$a, $this->cosmosConfig->getBackdropBlur() );
+	}
+
+	/**
 	 * Values that cannot be parsed, like none, are treated as transparent.
 	 *
 	 * @return array{0: int, 1: int, 2: int, 3: float} Red, green, blue and alpha
@@ -165,6 +193,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 		return [
 			'toolbar-background-color2' => $toolbarBackgroundColor,
+			'toolbar-background-color-fallback' => $this->getToolbarFallback( $toolbarBackgroundColor ),
 			'toolbar-background-color-mix' =>
 				in_array( strtolower( $toolbarBackgroundColor ), [ '#000', '#000000', 'black' ], true ) ?
 					'#404040' :
@@ -194,8 +223,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 		return [
 			'banner-font-color' =>
 				$isBannerBackgroundColorDark ? '#fff' : '#000',
-			'banner-echo-font-color' =>
-				$isBannerBackgroundColorDark ? 'fff' : '111',
 			'banner-search-background' =>
 				$isBannerBackgroundColorDark ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.4)',
 			'banner-search-focus-background' =>

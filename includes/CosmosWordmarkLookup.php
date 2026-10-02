@@ -26,7 +26,6 @@ class CosmosWordmarkLookup {
 
 		if ( !$this->isWordmarkUrl() ) {
 			$file = $this->getWordmarkFile();
-
 			if ( $file && $file->exists() ) {
 				return $file->getUrl();
 			}
@@ -41,7 +40,6 @@ class CosmosWordmarkLookup {
 
 	public function getWordmarkFile(): ?File {
 		$title = $this->titleFactory->makeTitle( NS_FILE, $this->wordmark );
-
 		return $this->repoGroup->findFile( $title ) ?: null;
 	}
 }

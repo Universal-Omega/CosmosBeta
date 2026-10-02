@@ -16,12 +16,12 @@
 	"ValidSkinNames": {
 		"cosmosbeta": {
 			"displayname": "CosmosBeta",
-			"class": "MediaWiki\\Skins\\CosmosBeta\\SkinCosmosBeta",
+			"factory": "MediaWiki\\Skins\\CosmosBeta\\SkinCosmosBeta::factory",
 			"services": [
 				"CosmosBetaAltModules",
+				"CosmosBetaOptions",
 				"CosmosBetaConfig",
 				"CosmosBetaNavigation",
-				"CosmosBetaOptions",
 				"CosmosBetaRailBuilder",
 				"CosmosBetaWordmarkLookup",
 				"ContentLanguage",
@@ -398,6 +398,7 @@
 				"cosmosbeta-themedesigner-color-invalid",
 				"cosmosbeta-themedesigner-color-link",
 				"cosmosbeta-themedesigner-color-link-help",
+				"cosmosbeta-themedesigner-color-opacity",
 				"cosmosbeta-themedesigner-color-reset",
 				"cosmosbeta-themedesigner-color-toolbar",
 				"cosmosbeta-themedesigner-color-toolbar-help",
@@ -432,8 +433,9 @@
 				"cosmosbeta-themedesigner-image-wordmark",
 				"cosmosbeta-themedesigner-images-intro",
 				"cosmosbeta-themedesigner-inherit",
-				"cosmosbeta-themedesigner-layout-banner-icon-opacity",
-				"cosmosbeta-themedesigner-layout-header-icon-opacity",
+				"cosmosbeta-themedesigner-layout-backdrop-blur",
+				"cosmosbeta-themedesigner-layout-backdrop-blur-help",
+				"cosmosbeta-themedesigner-layout-header-button-opacity",
 				"cosmosbeta-themedesigner-layout-opacity",
 				"cosmosbeta-themedesigner-layout-width",
 				"cosmosbeta-themedesigner-layout-width-default",
@@ -682,6 +684,12 @@
 			],
 			"description": "List of pages to disable the rail in."
 		},
+		"CosmosBetaRailSidebarPortlets": {
+			"value": [
+				"USER-SIDEBAR"
+			],
+			"description": "Names of sidebar sections, such as the one from the DynamicSidebar extension, that are shown as rail modules instead of in the top navigation."
+		},
 		"CosmosBetaSearchDescriptionSource": {
 			"value": "textextracts"
 		},
@@ -801,7 +809,7 @@
 			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\PersonalTools"
 		},
 		"socialprofile": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile",
+			"factory": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
 				"CosmosBetaOptions",
 				"CosmosBetaTemplateParser",

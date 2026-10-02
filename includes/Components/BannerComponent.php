@@ -27,7 +27,11 @@ class BannerComponent {
 
 		$items = '';
 		foreach ( [ 'data-user-interface-preferences', 'data-user-page', 'data-user-menu' ] as $menu ) {
-			$items .= $portlets[$menu]['html-items'] ?? '';
+			foreach ( $portlets[$menu]['array-items'] ?? [] as $item ) {
+				if ( ( $item['name'] ?? '' ) !== 'adminlinks' ) {
+					$items .= $item['html-item'] ?? '';
+				}
+			}
 		}
 
 		return [

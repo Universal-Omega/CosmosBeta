@@ -7,22 +7,37 @@
 		$top = 0;
 
 	if ( modal && btn ) {
+		const closeModal = function () {
+			modal.style.display = 'none';
+		};
+
 		btn.onclick = function ( event ) {
 			event.preventDefault();
 			modal.style.display = 'flex';
+			$( '#create-page-dialog__title' ).trigger( 'focus' );
 		};
 
 		if ( span ) {
-			span.onclick = function () {
-				modal.style.display = 'none';
+			span.onclick = closeModal;
+			span.onkeydown = function ( event ) {
+				if ( event.key === 'Enter' || event.key === ' ' ) {
+					event.preventDefault();
+					closeModal();
+				}
 			};
 		}
 
 		window.onclick = function ( event ) {
 			if ( event.target === modal ) {
-				modal.style.display = 'none';
+				closeModal();
 			}
 		};
+
+		document.addEventListener( 'keydown', ( event ) => {
+			if ( event.key === 'Escape' ) {
+				closeModal();
+			}
+		} );
 	}
 
 	$( '.skin-cosmos-create-dialog #create-page-dialog__title' ).on( 'keyup', () => {

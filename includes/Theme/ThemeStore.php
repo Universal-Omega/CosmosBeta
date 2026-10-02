@@ -80,7 +80,7 @@ class ThemeStore {
 			);
 
 			$this->current = $value['json'] === '' ?
-				new ThemeSettings() :
+				new ThemeSettings( [], 0 ) :
 				ThemeSettings::newFromJson( $value['json'], $value['id'] );
 		}
 
@@ -99,7 +99,7 @@ class ThemeStore {
 	}
 
 	/** @return array[] Newest first, each with id, timestamp, user and comment */
-	public function getHistory( int $limit = 30 ): array {
+	public function getHistory( int $limit ): array {
 		$res = $this->dbProvider->getReplicaDatabase()->newSelectQueryBuilder()
 			->select( [ 'cth_id', 'cth_timestamp', 'cth_comment', 'actor_name' ] )
 			->from( self::TABLE )
@@ -123,7 +123,7 @@ class ThemeStore {
 	}
 
 	/** @return int Id of the live revision. Unchanged settings do not create a new one. */
-	public function save( ThemeSettings $settings, UserIdentity $user, string $comment = '' ): int {
+	public function save( ThemeSettings $settings, UserIdentity $user, string $comment ): int {
 		$dbw = $this->dbProvider->getPrimaryDatabase();
 
 		$json = $settings->toJson();
@@ -165,7 +165,7 @@ class ThemeStore {
 	 *
 	 * @return int|null New revision id, or null if the revision does not exist
 	 */
-	public function restore( int $id, UserIdentity $user, string $comment = '' ): ?int {
+	public function restore( int $id, UserIdentity $user, string $comment ): ?int {
 		$settings = $this->getRevision( $id );
 
 		return $settings ? $this->save( $settings, $user, $comment ) : null;

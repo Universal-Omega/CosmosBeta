@@ -5,7 +5,7 @@
 				{{ msg( 'readonly' ) }}
 			</cdx-message>
 
-			<cdx-tabs v-model:active="activeTab" :framed="true">
+			<cdx-tabs v-model:active="activeTab" :framed="false">
 				<cdx-tab name="themes" :label="msg( 'tab-themes' )">
 					<p>{{ msg( 'presets-intro' ) }}</p>
 					<div class="skin-cosmos-td-presets">
@@ -42,6 +42,7 @@
 						<cdx-button
 							v-for="mode in modes"
 							:key="mode"
+							type="button"
 							:action="editing === mode ? 'progressive' : 'default'"
 							:weight="editing === mode ? 'primary' : 'normal'"
 							@click="editing = mode"
@@ -69,7 +70,7 @@
 								:value="pickerValue( slot )"
 								:disabled="!designer.canEdit"
 								:aria-label="msg( 'color-' + slot )"
-								@input="setColor( slot, $event.target.value )"
+								@input="setPicked( slot, $event.target.value )"
 							>
 							<cdx-text-input
 								:model-value="colorText( slot )"
@@ -78,12 +79,27 @@
 								@update:model-value="setColor( slot, $event )"
 							></cdx-text-input>
 							<cdx-button
+								type="button"
 								weight="quiet"
 								:disabled="!designer.canEdit"
 								@click="resetColor( slot )"
 							>
 								{{ msg( 'color-reset' ) }}
 							</cdx-button>
+						</div>
+						<div class="skin-cosmos-td-range skin-cosmos-td-alpha">
+							<span>{{ msg( 'color-opacity' ) }}</span>
+							<input
+								type="range"
+								min="0"
+								max="100"
+								step="1"
+								:value="alphaValue( slot )"
+								:disabled="!designer.canEdit"
+								:aria-label="msg( 'color-opacity' )"
+								@input="setAlpha( slot, Number( $event.target.value ) )"
+							>
+							<output>{{ alphaValue( slot ) }}%</output>
 						</div>
 					</cdx-field>
 				</cdx-tab>
@@ -147,17 +163,20 @@
 						<template #label>
 							{{ msg( range.label ) }}
 						</template>
+						<template v-if="range.help" #help-text>
+							{{ msg( range.help ) }}
+						</template>
 						<div class="skin-cosmos-td-range">
 							<input
 								type="range"
 								min="0"
-								max="100"
+								:max="range.max"
 								step="1"
 								:value="range.get()"
 								:disabled="!designer.canEdit"
 								@input="range.set( Number( $event.target.value ) )"
 							>
-							<output>{{ range.get() }}%</output>
+							<output>{{ range.get() }}{{ range.unit }}</output>
 						</div>
 					</cdx-field>
 				</cdx-tab>
@@ -317,7 +336,7 @@
 						{{ msg( 'darkmode-builtin' ) }}
 					</cdx-message>
 					<p>
-						<cdx-button :disabled="!designer.canEdit" @click="generateDark">
+						<cdx-button type="button" :disabled="!designer.canEdit" @click="generateDark">
 							{{ msg( 'darkmode-generate' ) }}
 						</cdx-button>
 					</p>
@@ -340,6 +359,7 @@
 								{{ msg( 'history-live' ) }}
 							</span>
 							<cdx-button
+							type="button"
 								v-else-if="designer.canEdit"
 								weight="quiet"
 								action="progressive"
@@ -538,6 +558,8 @@ module.exports = exports = defineComponent( {
 		const layoutRanges = [
 			{
 				key: 'content',
+				max: 100,
+				unit: '%',
 				label: 'layout-opacity',
 				get: () => state.layout.contentOpacity === null ? props.designer.config.contentOpacity : state.layout.contentOpacity,
 				set: ( value ) => {
@@ -545,19 +567,24 @@ module.exports = exports = defineComponent( {
 				}
 			},
 			{
-				key: 'banner',
-				label: 'layout-banner-icon-opacity',
-				get: () => state.layout.bannerIconOpacity,
+				key: 'header',
+				max: 100,
+				unit: '%',
+				label: 'layout-header-button-opacity',
+				get: () => state.layout.headerButtonOpacity,
 				set: ( value ) => {
-					state.layout.bannerIconOpacity = value;
+					state.layout.headerButtonOpacity = value;
 				}
 			},
 			{
-				key: 'header',
-				label: 'layout-header-icon-opacity',
-				get: () => state.layout.headerIconOpacity,
+				key: 'blur',
+				max: 40,
+				unit: 'px',
+				label: 'layout-backdrop-blur',
+				help: 'layout-backdrop-blur-help',
+				get: () => state.layout.backdropBlur,
 				set: ( value ) => {
-					state.layout.headerIconOpacity = value;
+					state.layout.backdropBlur = value;
 				}
 			}
 		];
@@ -572,6 +599,21 @@ module.exports = exports = defineComponent( {
 
 				return parsed ? colors.toHex( parsed ) : '#000000';
 			};
+
+		function setPicked( slot, hex ) {
+			const alpha = colors.parse( effectiveColor( editing.value, slot ) )?.a ?? 1,
+				picked = colors.parse( hex );
+
+			if ( !picked ) {
+				return;
+			}
+
+			picked.a = alpha;
+			delete rawColors[ rawKey( slot ) ];
+			colorErrors[ rawKey( slot ) ] = false;
+			state.palettes[ editing.value ][ slot ] = colors.toCanonical( picked );
+			state.presets[ editing.value ] = '';
+		}
 
 		function setColor( slot, value ) {
 			const key = rawKey( slot );
@@ -593,6 +635,26 @@ module.exports = exports = defineComponent( {
 
 			colorErrors[ key ] = false;
 			state.palettes[ editing.value ][ slot ] = normal;
+			state.presets[ editing.value ] = '';
+		}
+
+		function alphaValue( slot ) {
+			const parsed = colors.parse( effectiveColor( editing.value, slot ) );
+
+			return parsed ? Math.round( parsed.a * 100 ) : 100;
+		}
+
+		function setAlpha( slot, percent ) {
+			const parsed = colors.parse( effectiveColor( editing.value, slot ) );
+
+			if ( !parsed ) {
+				return;
+			}
+
+			parsed.a = percent / 100;
+			delete rawColors[ rawKey( slot ) ];
+			colorErrors[ rawKey( slot ) ] = false;
+			state.palettes[ editing.value ][ slot ] = colors.toCanonical( parsed );
 			state.presets[ editing.value ] = '';
 		}
 
@@ -641,6 +703,7 @@ module.exports = exports = defineComponent( {
 
 			return {
 				root: { background: color( 'body' ) },
+				blur: state.layout.backdropBlur > 0 ? { backdropFilter: 'blur(' + state.layout.backdropBlur + 'px)' } : {},
 				banner: on( 'banner' ),
 				header: on( 'header' ),
 				content: {
@@ -710,6 +773,9 @@ module.exports = exports = defineComponent( {
 			hasColorError,
 			pickerValue,
 			setColor,
+			setPicked,
+			setAlpha,
+			alphaValue,
 			resetColor,
 			applyPreset,
 			generateDark,

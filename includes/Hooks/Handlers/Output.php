@@ -27,7 +27,10 @@ class Output implements
 
 		$classes = [
 			$skin->getUser()->isRegistered() ? 'user-logged' : 'user-anon',
-			LessUtil::isThemeDark( 'content-background-color' ) ? 'theme-dark' : 'theme-light',
+			LessUtil::isThemeDark(
+				'content-background-color',
+				LessUtil::getCosmosSettings( $skin->cosmosConfig->getRenderMode() )
+			) ? 'theme-dark' : 'theme-light',
 		];
 
 		if ( $out->getTitle()->isMainPage() ) {

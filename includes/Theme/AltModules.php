@@ -30,7 +30,7 @@ class AltModules {
 			foreach ( $this->extensionRegistry->getAttribute( 'ResourceModules' ) as $name => $definition ) {
 				if (
 					str_starts_with( $name, 'skins.cosmosbeta.' ) &&
-					( $definition['class'] ?? null ) === CosmosResourceLoaderModule::class
+					( $definition['factory'] ?? null ) === CosmosResourceLoaderModule::class . '::create'
 				) {
 					$this->definitions[$name . self::SUFFIX] = [ 'variant' => 'alt' ] + $definition;
 				}

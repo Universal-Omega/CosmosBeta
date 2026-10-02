@@ -72,8 +72,7 @@ class WikiHeaderComponent {
 		$onlyRead = !$canEdit && !$canCreate;
 		$hasColorMode = $this->cosmosConfig->isColorModeToggleEnabled();
 		$mode = $this->cosmosConfig->getRenderMode();
-		$hasMore = $hasColorMode ||
-			( !$isAnon && ( $canUpload || $canAddVideo ) ) ||
+		$hasMore = ( !$isAnon && ( $canUpload || $canAddVideo ) ) ||
 			( ( $canUpload || $canAddVideo ) && $onlyRead );
 
 		return [

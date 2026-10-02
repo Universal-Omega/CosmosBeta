@@ -76,9 +76,7 @@ class CosmosConfig {
 		return $this->colorModeResolver->getRenderMode( RequestContext::getMain()->getUser() );
 	}
 
-	public function getColor( string $slot, ?string $mode = null ): string {
-		$mode ??= $this->getRenderMode();
-
+	public function getColor( string $slot, string $mode ): string {
 		return $this->getTheme()->getColor( $mode, $slot ) ?? $this->getFallbackColor( $slot, $mode );
 	}
 
@@ -141,12 +139,12 @@ class CosmosConfig {
 			$this->options->get( ConfigNames::ContentOpacityLevel ) );
 	}
 
-	public function getBannerIconOpacity(): int {
-		return (int)$this->getTheme()->getSection( 'layout' )['bannerIconOpacity'];
+	public function getHeaderButtonOpacity(): int {
+		return (int)$this->getTheme()->getSection( 'layout' )['headerButtonOpacity'];
 	}
 
-	public function getHeaderIconOpacity(): int {
-		return (int)$this->getTheme()->getSection( 'layout' )['headerIconOpacity'];
+	public function getBackdropBlur(): int {
+		return (int)$this->getTheme()->getSection( 'layout' )['backdropBlur'];
 	}
 
 	public function getFooterOpacity(): int {

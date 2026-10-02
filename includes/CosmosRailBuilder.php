@@ -42,6 +42,8 @@ class CosmosRailBuilder {
 
 	private array $toolItems = [];
 
+	private array $sidebarModules = [];
+
 	public function __construct(
 		private readonly CosmosHookRunner $hookRunner,
 		private readonly IConnectionProvider $dbProvider,
@@ -57,23 +59,30 @@ class CosmosRailBuilder {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
-	public function setToolsModule( bool $enabled, array $items = [] ): self {
+	public function setToolsModule( bool $enabled, array $items ): self {
 		$this->toolsInRail = $enabled;
 		$this->toolItems = $items;
 
 		return $this;
 	}
 
+	/**
+	 * @param array[] $modules Each with a label and a list of html-item entries
+	 */
+	public function setSidebarModules( array $modules ): self {
+		$this->sidebarModules = $modules;
+		return $this;
+	}
+
 	public function buildRail(): string {
 		$modules = [];
-
 		foreach ( $this->getModules() as $module ) {
 			$modules[] = [
 				'class' => $this->getModuleClasses( (array)( $module['class'] ?? 'custom-module' ) ),
 				'is-sticky' => ( $module['type'] ?? 'normal' ) === 'sticky',
 				'header' => isset( $module['header'] ) ? $this->getHeader( $module['header'] ) : null,
 				'array-recentchanges' => $module['recentchanges'] ?? null,
-				'array-tools' => $module['tools'] ?? null,
+				'data-tools' => isset( $module['tools'] ) ? [ 'array-items' => $module['tools'] ] : null,
 				'html-body' => $module['body'] ?? '',
 			];
 		}
@@ -91,7 +100,8 @@ class CosmosRailBuilder {
 		$hasRecentChangesModule = ( $this->getEnabledModules()['recentchanges'] ?? false ) &&
 			$this->getRecentChanges() !== [];
 
-		$hasModules = $hasRecentChangesModule || $this->toolsInRail || $this->getModules() !== [];
+		$hasModules = $hasRecentChangesModule || $this->toolsInRail || $this->sidebarModules !== [] ||
+			$this->getModules() !== [];
 
 		$this->resetDisabledModules();
 
@@ -150,6 +160,14 @@ class CosmosRailBuilder {
 		}
 
 		$this->hookRunner->onCosmosRailBuilder( $modules, $this->context->getSkin() );
+
+		foreach ( $this->sidebarModules as $index => $sidebar ) {
+			$modules["sidebar-$index"] = [
+				'class' => 'sidebar-module',
+				'header' => $sidebar['label'],
+				'tools' => $sidebar['items'],
+			];
+		}
 
 		if ( $this->toolsInRail && $this->toolItems ) {
 			$modules['page-tools'] = [
@@ -278,7 +296,6 @@ class CosmosRailBuilder {
 
 	private function getHeader( string $label ): string {
 		$message = $this->context->msg( $label );
-
 		return $message->isDisabled() ? $label : $message->text();
 	}
 }

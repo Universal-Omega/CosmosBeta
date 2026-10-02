@@ -9,9 +9,9 @@
 				<div class="skin-cosmos-recentChanges-info cosmos-recentChanges-info">{{{html-user}}} &bull; {{{time}}}</div>
 			</li>
 			{{/array-recentchanges}}
-			{{#array-tools}}
-			<ul class="skin-cosmos-rail-tools">{{#.}}{{{html-item}}}{{/.}}</ul>
-			{{/array-tools}}
+			{{#data-tools}}
+			<ul class="skin-cosmos-rail-tools">{{#array-items}}{{{html-item}}}{{/array-items}}</ul>
+			{{/data-tools}}
 			{{{html-body}}}
 		</section>
 		{{/array-modules}}

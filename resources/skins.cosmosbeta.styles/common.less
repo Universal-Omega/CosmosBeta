@@ -1,4 +1,5 @@
 @import 'mediawiki.skin.variables.less';
+@import '../mixins.less';
 
 @skin-cosmos-font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 
@@ -1395,12 +1396,12 @@ button.skin-cosmos-header-button {
 
 	.skin-cosmos-header-button.skin-cosmos-is-secondary {
 		border-color: #fff;
-		background-color: rgba( 0, 30, 59, 0.2 );
+		background-color: @header-button-background;
 		color: #fff;
 
 		&:hover {
 			border-color: rgba( 255, 255, 255, 0.8 );
-			background-color: rgba( 0, 30, 59, 0.4 );
+			background-color: @header-button-background-hover;
 			opacity: 0.8;
 
 			a {
@@ -1711,11 +1712,15 @@ button.skin-cosmos-header-button {
 }
 
 .skin-cosmos-modal-close {
-	border: -;
 	color: #aaa;
 	float: right;
-	font-size: 28px;
-	font-weight: bold;
+	cursor: pointer;
+	line-height: 0;
+
+	.skin-cosmos-icon {
+		width: 24px;
+		height: 24px;
+	}
 
 	&:hover {
 		color: #000;
@@ -2205,6 +2210,7 @@ body h6 {
 @toolbar-background-color1: mix(@toolbar-background-color2, @toolbar-background-color-mix, 25%);
 
 #cosmos-toolbar {
+	box-sizing: border-box;
 	position: sticky;
 	z-index: 399;
 	right: 9px;
@@ -2520,15 +2526,6 @@ table.mw-datatable {
 	position: initial;
 }
 
-.skin-cosmos-mask-icon() {
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
-	-webkit-mask-position: center;
-	mask-position: center;
-	-webkit-mask-size: contain;
-	mask-size: contain;
-}
-
 #cosmos-banner {
 	.oo-ui-icon-bell,
 	.oo-ui-icon-tray {
@@ -2537,31 +2534,31 @@ table.mw-datatable {
 
 		&::before {
 			position: absolute;
+			background-color: @banner-font-color;
 			content: '';
 			inset: 0;
-			.skin-cosmos-mask-icon();
 		}
 	}
 
 	.oo-ui-icon-bell::before {
-		.cdx-mixin-css-icon-background-image( @cdx-icon-bell-outline, @banner-font-color );
+		.skin-cosmos-mask-icon( @cdx-icon-bell-outline );
 	}
 
 	.oo-ui-icon-tray::before {
-		.cdx-mixin-css-icon-background-image( @cdx-icon-message, @banner-font-color );
+		.skin-cosmos-mask-icon( @cdx-icon-message );
 	}
 }
 
 .mw-ui-icon-bell::before {
-	.cdx-mixin-css-icon-background-image( @cdx-icon-bell-outline, @banner-font-color );
+	background-color: @banner-font-color;
 	background-image: none;
-	.skin-cosmos-mask-icon();
+	.skin-cosmos-mask-icon( @cdx-icon-bell-outline );
 }
 
 .mw-ui-icon-tray::before {
-	.cdx-mixin-css-icon-background-image( @cdx-icon-message, @banner-font-color );
+	background-color: @banner-font-color;
 	background-image: none;
-	.skin-cosmos-mask-icon();
+	.skin-cosmos-mask-icon( @cdx-icon-message );
 }
 
 table.mw-interwikitable.body td.mw-interwikitable-local-yes {
@@ -2707,15 +2704,6 @@ div.thumbinner {
 	transform: rotate( 90deg );
 }
 
-.skin-cosmos-bannerOption-icon,
-.skin-cosmos-bannerOption-dropdownIcon {
-	opacity: @banner-icon-opacity;
-}
-
-.skin-cosmos-header-button .skin-cosmos-icon {
-	opacity: @header-icon-opacity;
-}
-
 .skin-cosmos-colormode-toggle a {
 	display: flex;
 	align-items: center;
@@ -2747,4 +2735,40 @@ div.thumbinner {
 	.skin-cosmos-menu__chevron {
 		transform: rotate( 180deg );
 	}
+}
+
+.skin-cosmos-button-icon {
+	&.skin-cosmos-icon-edit::before {
+		.skin-cosmos-outline-icon( @cdx-icon-edit, @skin-cosmos-outline-thickness );
+	}
+
+	&.skin-cosmos-icon-speechBubble::before {
+		.skin-cosmos-mask-icon( @cdx-icon-speech-bubble );
+	}
+}
+
+.skin-cosmos-header-button .skin-cosmos-icon-moon::before {
+	.skin-cosmos-mask-icon( @cdx-icon-moon );
+}
+
+.skin-cosmos-header-button .skin-cosmos-icon-bright::before {
+	.skin-cosmos-mask-icon( @cdx-icon-bright );
+}
+
+#cosmos-notification-icons {
+	gap: 10px;
+}
+
+#cosmos-notification-icons #pt-notifications-notice {
+	padding-left: 14px;
+}
+
+.skin-cosmos-bannerOption-dropdownIcon {
+	margin-left: 0;
+	color: @banner-font-color;
+}
+
+.skin-cosmos-bannerOption-dropdownIcon .skin-cosmos-icon {
+	width: 12px;
+	height: 12px;
 }

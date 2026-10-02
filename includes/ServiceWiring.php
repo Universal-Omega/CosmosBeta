@@ -65,7 +65,11 @@ return [
 			$services->getContentLanguage(),
 			$services->getUrlUtils(),
 			$services->getTitleFactory(),
-			$services->get( 'ExtensionRegistry' )
+			$services->get( 'ExtensionRegistry' ),
+			new ServiceOptions(
+				CosmosNavigation::CONSTRUCTOR_OPTIONS,
+				$services->get( 'CosmosBetaOptions' )
+			)
 		);
 	},
 

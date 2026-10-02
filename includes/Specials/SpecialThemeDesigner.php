@@ -17,9 +17,14 @@ use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use Throwable;
+use function array_diff;
+use function array_values;
+use function in_array;
 use function is_array;
 use function json_decode;
 use function json_encode;
+use function preg_replace;
+use function strip_tags;
 use function trim;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
@@ -116,7 +121,7 @@ class SpecialThemeDesigner extends SpecialPage {
 			$decoded = $this->applyConfigurationRules( $decoded );
 
 			$this->store->save(
-				new ThemeSettings( $decoded ),
+				new ThemeSettings( $decoded, 0 ),
 				$this->getUser(),
 				trim( $request->getText( 'wpComment' ) )
 			);
@@ -171,7 +176,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		$history = [];
-		foreach ( $this->store->getHistory() as $row ) {
+		foreach ( $this->store->getHistory( 30 ) as $row ) {
 			$history[] = [
 				'id' => $row['id'],
 				'user' => $row['user'],
