@@ -6,19 +6,24 @@
 		span = document.getElementsByClassName( 'close' )[ 0 ],
 		$top = 0;
 
-	btn.onclick = function () {
-		modal.style.display = 'flex';
-	};
+	if ( modal && btn ) {
+		btn.onclick = function ( event ) {
+			event.preventDefault();
+			modal.style.display = 'flex';
+		};
 
-	span.onclick = function () {
-		modal.style.display = 'none';
-	};
-
-	window.onclick = function ( event ) {
-		if ( event.target === modal ) {
-			modal.style.display = 'none';
+		if ( span ) {
+			span.onclick = function () {
+				modal.style.display = 'none';
+			};
 		}
-	};
+
+		window.onclick = function ( event ) {
+			if ( event.target === modal ) {
+				modal.style.display = 'none';
+			}
+		};
+	}
 
 	$( '.create-page-dialog__wrapper #create-page-dialog__title' ).on( 'keyup', () => {
 		let empty = false;
