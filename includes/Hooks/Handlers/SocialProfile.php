@@ -21,6 +21,7 @@ use function date;
 use function in_array;
 use function strtotime;
 use function ucfirst;
+use const NS_USER;
 
 class SocialProfile {
 
