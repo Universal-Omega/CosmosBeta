@@ -11,7 +11,6 @@ use MediaWiki\Config\ConfigFactory;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\Language;
 use MediaWiki\Languages\LanguageNameUtils;
-use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinMustache;
@@ -38,21 +37,12 @@ class SkinCosmosBeta extends SkinMustache {
 
 	public const array CONSTRUCTOR_OPTIONS = [
 		ConfigNames::EnablePortableInfoboxEuropaTheme,
-		ConfigNames::EnableWantedPages,
-		ConfigNames::FetchWantedPagesFromCache,
 		ConfigNames::RailSidebarPortlets,
 		ConfigNames::SocialProfileAllowBio,
 		ConfigNames::SocialProfileModernTabs,
 		ConfigNames::SocialProfileRoundAvatar,
 		ConfigNames::SocialProfileShowEditCount,
 		ConfigNames::SocialProfileShowGroupTags,
-		ConfigNames::UseSocialProfileAvatar,
-		ConfigNames::UseUPv2Avatar,
-		ConfigNames::WantedPagesFetchedNamespaces,
-		ConfigNames::WantedPagesMaxTitlesCount,
-		MainConfigNames::EnableUploads,
-		MainConfigNames::Script,
-		MainConfigNames::UploadNavigationUrl,
 	];
 
 	public static function factory(
@@ -65,7 +55,6 @@ class SkinCosmosBeta extends SkinMustache {
 		Language $contentLanguage,
 		ExtensionRegistry $extensionRegistry,
 		LanguageNameUtils $languageNameUtils,
-		Config $mainConfig,
 		PermissionManager $permissionManager,
 		SpecialPageFactory $specialPageFactory,
 		TitleFactory $titleFactory,
@@ -73,15 +62,14 @@ class SkinCosmosBeta extends SkinMustache {
 		?CookieWarningDecisions $cookieWarningDecisions,
 		array $options,
 	): self {
+		$cosmosOptions = $configFactory->makeConfig( 'CosmosBeta' );
+
 		return new self(
 			$altModules,
 			$cosmosConfig,
 			$navigation,
-			new ServiceOptions(
-				self::CONSTRUCTOR_OPTIONS,
-				$configFactory->makeConfig( 'CosmosBeta' ),
-				$mainConfig
-			),
+			new ServiceOptions( self::CONSTRUCTOR_OPTIONS, $cosmosOptions ),
+			$cosmosOptions,
 			$railBuilder,
 			$wordmarkLookup,
 			$contentLanguage,
@@ -101,6 +89,7 @@ class SkinCosmosBeta extends SkinMustache {
 		public readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosNavigation $navigation,
 		private readonly ServiceOptions $serviceOptions,
+		private readonly Config $cosmosOptions,
 		private readonly CosmosRailBuilder $railBuilder,
 		private readonly CosmosWordmarkLookup $wordmarkLookup,
 		private readonly Language $contentLanguage,
@@ -127,16 +116,10 @@ class SkinCosmosBeta extends SkinMustache {
 		$context = $this->getContext();
 		$mainPage = $data['link-mainpage'];
 
-		$banner = new BannerComponent(
-			$context,
-			(bool)$this->serviceOptions->get( ConfigNames::UseSocialProfileAvatar ),
-			(bool)$this->serviceOptions->get( ConfigNames::UseUPv2Avatar ),
-			$this->extensionRegistry
-		);
+		$banner = new BannerComponent( $context, $this->cosmosOptions, $this->extensionRegistry );
 		$header = new WikiHeaderComponent(
 			$context,
-			(bool)$this->serviceOptions->get( MainConfigNames::EnableUploads ),
-			(string)$this->serviceOptions->get( MainConfigNames::UploadNavigationUrl ),
+			$this->getConfig(),
 			$this->permissionManager,
 			$this->extensionRegistry,
 			$this->wordmarkLookup,
@@ -150,11 +133,7 @@ class SkinCosmosBeta extends SkinMustache {
 		);
 		$dialog = new CreatePageDialogComponent(
 			$context,
-			(string)$this->serviceOptions->get( MainConfigNames::Script ),
-			(bool)$this->serviceOptions->get( ConfigNames::EnableWantedPages ),
-			(bool)$this->serviceOptions->get( ConfigNames::FetchWantedPagesFromCache ),
-			(array)$this->serviceOptions->get( ConfigNames::WantedPagesFetchedNamespaces ),
-			(int)$this->serviceOptions->get( ConfigNames::WantedPagesMaxTitlesCount ),
+			$this->cosmosOptions,
 			$this->specialPageFactory,
 			$this->titleFactory
 		);
