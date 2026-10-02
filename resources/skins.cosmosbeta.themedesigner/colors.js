@@ -233,6 +233,7 @@
 		parse: parse,
 		normalize: normalize,
 		toHex: toHex,
+		toCanonical: toCanonical,
 		isDark: isDark,
 		readableOn: readableOn,
 		contentTextOn: contentTextOn,
