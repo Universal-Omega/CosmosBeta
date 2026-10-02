@@ -102,7 +102,7 @@
 	],
 	"SpecialPages": {
 		"CosmosBetaThemeDesigner": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Special\\SpecialThemeDesigner",
+			"class": "MediaWiki\\Skins\\CosmosBeta\\Specials\\SpecialThemeDesigner",
 			"services": [
 				"CosmosBetaConfig",
 				"CosmosBetaThemeStore",
