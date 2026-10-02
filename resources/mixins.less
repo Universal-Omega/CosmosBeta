@@ -1,11 +1,30 @@
 @import 'mediawiki.skin.variables.less';
 
-// Draws a Codex icon as an outline by stroking its paths instead of filling them
-.skin-cosmos-outline-icon( @icon, @stroke-width: 1.5 ) {
+.skin-cosmos-mask-layout() {
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+}
+
+// Uses a Codex icon as a mask, so the icon takes the background color of the element
+.skin-cosmos-mask-icon( @icon ) {
+	@mask-paths: extract( @icon, 1 );
+	@mask-url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">@{mask-paths}</svg>';
+
+	-webkit-mask-image: url( @mask-url );
+	mask-image: url( @mask-url );
+	.skin-cosmos-mask-layout();
+}
+
+// Same as above, but only the outline of the Codex icon is kept
+.skin-cosmos-outline-icon( @icon, @thickness ) {
 	@outline-paths: extract( @icon, 1 );
-	@outline-color: escape( #000 );
-	@outline-url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="@{outline-color}" stroke-width="@{stroke-width}" stroke-linejoin="round">@{outline-paths}</svg>';
+	@outline-url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><defs><filter id="o" x="0" y="0" width="1" height="1"><feMorphology in="SourceAlpha" operator="erode" radius="@{thickness}" result="e"/><feComposite in="SourceAlpha" in2="e" operator="out"/></filter></defs><g filter="url(%23o)">@{outline-paths}</g></svg>';
 
 	-webkit-mask-image: url( @outline-url );
 	mask-image: url( @outline-url );
+	.skin-cosmos-mask-layout();
 }
