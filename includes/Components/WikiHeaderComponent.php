@@ -89,7 +89,7 @@ class WikiHeaderComponent {
 			'admin-title' => ucwords( $this->context->msg( 'adminlinks' )->text() ),
 			'has-more' => $hasMore,
 			'has-colormode' => $hasColorMode,
-			'colormode-icon' => $mode === 'dark' ? 'bright' : 'moon',
+			'colormode-icon' => $mode === 'dark' ? 'lightbulb' : 'moon',
 			'colormode-text' => $this->context->msg( "cosmosbeta-colormode-switch-$mode" )->text(),
 			'colormode-url' => $user->isRegistered() ?
 				SpecialPage::getTitleFor( 'Preferences' )->getLocalURL() . '#mw-prefsection-rendering' :
