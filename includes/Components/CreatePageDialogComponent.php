@@ -72,7 +72,7 @@ class CreatePageDialogComponent {
 				break;
 			}
 
-			if ( !$row->title || !in_array( $row->namespace, $namespaces ) ) {
+			if ( !$row->title || !in_array( (int)$row->namespace, $namespaces, true ) ) {
 				continue;
 			}
 
