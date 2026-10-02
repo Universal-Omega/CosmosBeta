@@ -52,6 +52,8 @@ class ConfigNames {
 
 	public const string RailDisabledPages = 'CosmosBetaRailDisabledPages';
 
+	public const string RailSidebarPortlets = 'CosmosBetaRailSidebarPortlets';
+
 	public const string SearchDescriptionSource = 'CosmosBetaSearchDescriptionSource';
 
 	public const string SearchHost = 'CosmosBetaSearchHost';
