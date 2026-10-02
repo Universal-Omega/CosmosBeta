@@ -156,3 +156,38 @@
 		}
 	}
 }
+
+.skin-cosmos-backdrop() when ( @backdrop-blur-enabled = 1 ) {
+	@supports ( backdrop-filter: blur( 1px ) ) or ( -webkit-backdrop-filter: blur( 1px ) ) {
+		#cosmos-banner,
+		#cosmos-footer,
+		#cosmos-toolbar,
+		#mw-content,
+		#catlinks {
+			-webkit-backdrop-filter: blur( @backdrop-blur );
+			backdrop-filter: blur( @backdrop-blur );
+		}
+	}
+
+	@supports not ( ( backdrop-filter: blur( 1px ) ) or ( -webkit-backdrop-filter: blur( 1px ) ) ) {
+		#cosmos-banner {
+			background-color: @banner-background-color-fallback;
+		}
+
+		#cosmos-footer {
+			background-color: @footer-background-color-fallback;
+		}
+
+		#cosmos-toolbar {
+			background-color: @toolbar-background-color-fallback;
+			background-image: none;
+		}
+
+		#mw-content,
+		#catlinks {
+			background-color: @content-opacity-level-fallback;
+		}
+	}
+}
+
+.skin-cosmos-backdrop();
