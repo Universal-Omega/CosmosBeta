@@ -27,7 +27,7 @@ use const NS_USER;
 
 class SocialProfile {
 
-	public const array CONSTRUCTOR_OPTIONS = [
+	private const array CONSTRUCTOR_OPTIONS = [
 		ConfigNames::SocialProfileAllowBio,
 		ConfigNames::SocialProfileFollowBioRedirects,
 		ConfigNames::SocialProfileNumberofGroupTags,
@@ -37,11 +37,11 @@ class SocialProfile {
 	];
 
 	public function __construct(
+		private readonly ServiceOptions $options,
 		private readonly TemplateParser $templateParser,
 		private readonly TitleFactory $titleFactory,
 		private readonly UserGroupManager $userGroupManager,
 		private readonly WikiPageFactory $wikiPageFactory,
-		private readonly ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
@@ -54,14 +54,14 @@ class SocialProfile {
 		WikiPageFactory $wikiPageFactory
 	): self {
 		return new self(
-			$templateParser,
-			$titleFactory,
-			$userGroupManager,
-			$wikiPageFactory,
 			new ServiceOptions(
 				self::CONSTRUCTOR_OPTIONS,
 				$cosmosOptions
 			),
+			$templateParser,
+			$titleFactory,
+			$userGroupManager,
+			$wikiPageFactory,
 		);
 	}
 
