@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta\Components;
 
-use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skins\CosmosBeta\ConfigNames;
@@ -14,11 +14,17 @@ use function class_exists;
 
 class BannerComponent {
 
+	public const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::UseSocialProfileAvatar,
+		ConfigNames::UseUPv2Avatar,
+	];
+
 	public function __construct(
 		private readonly IContextSource $context,
-		private readonly Config $config,
+		private readonly ServiceOptions $options,
 		private readonly ExtensionRegistry $extensionRegistry,
 	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	public function getTemplateData( array $portlets ): array {
@@ -44,13 +50,13 @@ class BannerComponent {
 	}
 
 	private function getAvatar( int $userId ): ?string {
-		if ( class_exists( wAvatar::class ) && $this->config->get( ConfigNames::UseSocialProfileAvatar ) ) {
+		if ( class_exists( wAvatar::class ) && $this->options->get( ConfigNames::UseSocialProfileAvatar ) ) {
 			return ( new wAvatar( $userId, 'm' ) )->getAvatarURL();
 		}
 
 		if (
 			$this->extensionRegistry->isLoaded( 'UserProfileV2' ) &&
-			$this->config->get( ConfigNames::UseUPv2Avatar )
+			$this->options->get( ConfigNames::UseUPv2Avatar )
 		) {
 			// @phan-suppress-next-line PhanUndeclaredClassMethod Optional extension
 			return ( new UserProfileV2Avatar( $userId ) )->getAvatarUrl( [ 'raw' => false ] );
