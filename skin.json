@@ -350,6 +350,30 @@
 			},
 			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
 		},
+		"skins.cosmosbeta.icons": {
+			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
+			"selectorWithoutVariant": ".skin-cosmos-icon-{name}::before",
+			"useDataURI": false,
+			"defaultColor": "#000",
+			"useMaskImage": true,
+			"variants": {},
+			"icons": [
+				"articleAdd",
+				"close",
+				"edit",
+				"ellipsis",
+				"expand",
+				"eye",
+				"globe",
+				"next",
+				"recentChanges",
+				"search",
+				"settings",
+				"speechBubble",
+				"undo",
+				"userAvatarOutline"
+			]
+		},
 		"skins.cosmosbeta.themedesigner": {
 			"scripts": [
 				"resources/skins.cosmosbeta.themedesigner/colors.js",
@@ -460,30 +484,6 @@
 				"cosmosbeta-themedesigner-toolbar-hidden-help",
 				"cosmosbeta-themedesigner-footer-hidden-help",
 				"cosmosbeta-themedesigner-footer-icons-locked"
-			]
-		},
-		"skins.cosmosbeta.icons": {
-			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
-			"selectorWithoutVariant": ".skin-cosmos-icon-{name}::before",
-			"useDataURI": false,
-			"defaultColor": "#000",
-			"useMaskImage": true,
-			"variants": {},
-			"icons": [
-				"articleAdd",
-				"close",
-				"edit",
-				"ellipsis",
-				"expand",
-				"eye",
-				"globe",
-				"next",
-				"recentChanges",
-				"search",
-				"settings",
-				"speechBubble",
-				"undo",
-				"userAvatarOutline"
 			]
 		}
 	},
