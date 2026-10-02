@@ -81,7 +81,7 @@ class SkinCosmosBeta extends SkinMustache {
 		TitleFactory $titleFactory,
 		UserOptionsManager $userOptionsManager,
 		?CookieWarningDecisions $cookieWarningDecisions,
-		array $options,
+		array $options
 	): self {
 		return new self(
 			$altModules,
