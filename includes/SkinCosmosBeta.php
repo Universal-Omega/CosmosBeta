@@ -22,8 +22,14 @@ use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\Options\UserOptionsManager;
 use UserProfilePage;
+use function array_map;
+use function array_merge;
 use function class_exists;
 use function hash;
+use function in_array;
+use function preg_replace;
+use function strtoupper;
+use function trim;
 
 class SkinCosmosBeta extends SkinMustache {
 
@@ -79,6 +85,8 @@ class SkinCosmosBeta extends SkinMustache {
 		);
 		$chrome = new ChromeComponent( $context, $this->cosmosConfig, $this->extensionRegistry );
 
+		$this->railBuilder->setSidebarModules( $this->getRailSidebarModules( $sidebar ) );
+
 		$toolsInRail = $this->shouldPutToolsInRail();
 		$this->railBuilder->setToolsModule( $toolsInRail, $toolsInRail ? $chrome->getToolItems( $sidebar ) : [] );
 
@@ -114,7 +122,10 @@ class SkinCosmosBeta extends SkinMustache {
 
 		$this->railBuilder->setToolsModule( $this->shouldPutToolsInRail() );
 
-		if ( !$this->railBuilder->isHidden() && $this->railBuilder->hasModules() ) {
+		if (
+			!$this->railBuilder->isHidden() &&
+			( $this->railBuilder->hasModules() || (array)$this->cosmosOptions->get( ConfigNames::RailSidebarPortlets ) !== [] )
+		) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.rail';
 		}
 
@@ -144,6 +155,40 @@ class SkinCosmosBeta extends SkinMustache {
 		if ( $this->cosmosConfig->getRenderMode() !== $this->cosmosConfig->getDefaultMode() ) {
 			foreach ( $modules['styles']['skin'] ?? [] as $index => $name ) {
 				$modules['styles']['skin'][$index] = $this->altModules->getTwinName( $name ) ?? $name;
+			}
+		}
+
+		return $modules;
+	}
+
+	/**
+	 * Sidebar sections such as the dynamic user sidebar are moved out of the top navigation into the rail.
+	 */
+	private function getRailSidebarModules( array $sidebar ): array {
+		$names = array_map( strtoupper( ... ), (array)$this->cosmosOptions->get( ConfigNames::RailSidebarPortlets ) );
+		$portlets = array_merge( [ $sidebar['data-portlets-first'] ?? null ], $sidebar['array-portlets-rest'] ?? [] );
+		$modules = [];
+
+		foreach ( $portlets as $portlet ) {
+			if ( !$portlet ) {
+				continue;
+			}
+
+			$id = strtoupper( (string)preg_replace( '/^p-/i', '', (string)( $portlet['id'] ?? '' ) ) );
+			$label = strtoupper( trim( (string)( $portlet['label'] ?? '' ) ) );
+
+			if ( !in_array( $id, $names, true ) && !in_array( $label, $names, true ) ) {
+				continue;
+			}
+
+			$items = [];
+
+			foreach ( $portlet['array-items'] ?? [] as $item ) {
+				$items[] = [ 'html-item' => $item['html-item'] ?? '' ];
+			}
+
+			if ( $items ) {
+				$modules[] = [ 'label' => (string)( $portlet['label'] ?? '' ), 'items' => $items ];
 			}
 		}
 
