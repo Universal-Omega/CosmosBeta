@@ -105,7 +105,10 @@
 			"class": "MediaWiki\\Skins\\CosmosBeta\\Special\\SpecialThemeDesigner",
 			"services": [
 				"CosmosBetaConfig",
-				"CosmosBetaThemeStore"
+				"CosmosBetaThemeStore",
+				"ExtensionRegistry",
+				"SkinFactory",
+				"TitleFactory"
 			]
 		}
 	},
@@ -368,7 +371,7 @@
 				"search",
 				"settings",
 				"speechBubbles",
-				"userAvatar"
+				"userAvatarOutline"
 			]
 		},
 		"skins.cosmosbeta.themedesigner": {
@@ -476,7 +479,11 @@
 				"cosmosbeta-themedesigner-preview-rail",
 				"cosmosbeta-themedesigner-preview-toolbar",
 				"cosmosbeta-themedesigner-preview-footer",
-				"cosmosbeta-themedesigner-preview-wordmark"
+				"cosmosbeta-themedesigner-preview-wordmark",
+				"cosmosbeta-themedesigner-protected",
+				"cosmosbeta-themedesigner-toolbar-hidden-help",
+				"cosmosbeta-themedesigner-footer-hidden-help",
+				"cosmosbeta-themedesigner-footer-icons-locked"
 			]
 		}
 	},
@@ -495,105 +502,93 @@
 		}
 	},
 	"config": {
-		"CosmosBetaBannerBackgroundColor": {
-			"value": "#c0c0c0",
-			"description": "Changes the background color of the personal navigation"
-		},
-		"CosmosBetaWikiHeaderBackgroundColor": {
-			"value": "#c0c0c0",
-			"description": "Changes the background color of the wiki navigation"
-		},
-		"CosmosBetaMainBackgroundColor": {
-			"value": "#1A1A1A",
-			"description": "Adds a background color to the page body (behind the content area)"
-		},
-		"CosmosBetaContentBackgroundColor": {
-			"value": "#ffffff",
-			"description": "Changes the background color of the wiki article area"
-		},
-		"CosmosBetaButtonBackgroundColor": {
-			"value": "#c0c0c0",
-			"description": "Changes the background color of the page action buttons for Cosmos"
-		},
-		"CosmosBetaToolbarBackgroundColor": {
-			"value": "#000000",
-			"description": "Changes the background color of the toolbar"
-		},
-		"CosmosBetaFooterBackgroundColor": {
-			"value": "#c0c0c0",
-			"description": "Changes the background color of the footer"
-		},
-		"CosmosBetaLinkColor": {
-			"value": "#0645ad",
-			"description": "Changes the color of links in the cosmos wiki article area"
-		},
-		"CosmosBetaContentOpacityLevel": {
-			"value": 100,
-			"description": "Set the content area background opacity in percentage (without the percent symbol)"
-		},
-		"CosmosBetaWordmark": {
-			"value": false,
-			"description": "Adds a wordmark to the wiki navigation"
-		},
-		"CosmosBetaWikiHeaderBackgroundImage": {
-			"value": false,
-			"description": "Adds a background image to the wiki navigation"
+		"CosmosBetaAllowFooterIconHiding": {
+			"value": true,
+			"description": "Whether the theme designer may hide the footer icons."
 		},
 		"CosmosBetaBackgroundImage": {
 			"value": false,
 			"description": "Adds a background image to the page body (behind the content area)"
 		},
-		"CosmosBetaBackgroundImageSize": {
-			"value": "cover",
-			"description": "Sets the background image size for the body background if set"
-		},
-		"CosmosBetaContentWidth": {
-			"value": "default",
-			"description": "Sets the main content area width. Can be 'default', 'large', or 'full'."
+		"CosmosBetaBackgroundImageFixed": {
+			"value": true,
+			"description": "If true the background image will be set to position: fixed"
 		},
 		"CosmosBetaBackgroundImageRepeat": {
 			"value": false,
 			"description": "If true the background image will be set to 'repeat' otherwise, if false, it will be set to 'no-repeat'"
 		},
-		"CosmosBetaBackgroundImageFixed": {
+		"CosmosBetaBackgroundImageSize": {
+			"value": "cover",
+			"description": "Sets the background image size for the body background if set"
+		},
+		"CosmosBetaBannerBackgroundColor": {
+			"value": "#c0c0c0",
+			"description": "Changes the background color of the personal navigation"
+		},
+		"CosmosBetaButtonBackgroundColor": {
+			"value": "#c0c0c0",
+			"description": "Changes the background color of the page action buttons for Cosmos"
+		},
+		"CosmosBetaContentBackgroundColor": {
+			"value": "#ffffff",
+			"description": "Changes the background color of the wiki article area"
+		},
+		"CosmosBetaContentOpacityLevel": {
+			"value": 100,
+			"description": "Set the content area background opacity in percentage (without the percent symbol)"
+		},
+		"CosmosBetaContentWidth": {
+			"value": "default",
+			"description": "Sets the main content area width. Can be 'default', 'large', or 'full'."
+		},
+		"CosmosBetaEnablePortableInfoboxEuropaTheme": {
 			"value": true,
-			"description": "If true the background image will be set to position: fixed"
-		},
-		"CosmosBetaSearchHost": {
-			"value": ""
-		},
-		"CosmosBetaSearchOptions": {
-			"value": {
-				"showThumbnail": true,
-				"showDescription": true
-			}
-		},
-		"CosmosBetaSearchDescriptionSource": {
-			"value": "textextracts"
-		},
-		"CosmosBetaMaxSearchResults": {
-			"value": 10
-		},
-		"CosmosBetaSearchUseActionAPI": {
-			"value": false
+			"description": "Enables the Europa theme from Fandom's portable infobox extension on the ported extension."
 		},
 		"CosmosBetaEnableWantedPages": {
 			"value": true,
 			"description": "Whether or not to enable the WantedPages feature of the create page dialogue."
 		},
+		"CosmosBetaEnabledRailModules": {
+			"value": {
+				"recentchanges": false,
+				"interface": [
+					{
+						"cosmosbeta-custom-rail-module": "normal",
+						"cosmosbeta-custom-sticky-rail-module": "sticky"
+					}
+				]
+			},
+			"description": "Sets which rail modules will be enabled on Cosmos, and whether they are 'sticky' or 'normal'"
+		},
 		"CosmosBetaFetchWantedPagesFromCache": {
 			"value": false,
 			"description": "Whether or not to fetch the wanted pages shown within the create page dialogue from cache. If enabled you will need to run php updateSpecialPages.php --only=WantedPages in order to update the wanted pages. It is recommended to set this to true on large wikis."
 		},
-		"CosmosBetaWantedPagesMaxTitlesCount": {
-			"value": 6,
-			"description": "Set to the max number of wanted pages to display in the create page dialogue, if wanted pages are enabled."
+		"CosmosBetaFooterBackgroundColor": {
+			"value": "#c0c0c0",
+			"description": "Changes the background color of the footer"
 		},
-		"CosmosBetaWantedPagesFetchedNamespaces": {
+		"CosmosBetaFooterProtectedLinks": {
 			"value": [
-				0
+				"about",
+				"copyright",
+				"disclaimers",
+				"privacy"
 			],
-			"description": "Set to an array of namespaces to fetch wanted pages from, if wanted pages are enabled for the create page dialogue."
+			"description": "Names of footer links that the theme designer is not allowed to hide."
+		},
+		"CosmosBetaLinkColor": {
+			"value": "#0645ad",
+			"description": "Changes the color of links in the cosmos wiki article area"
+		},
+		"CosmosBetaMainBackgroundColor": {
+			"value": "#1A1A1A",
+			"description": "Adds a background color to the page body (behind the content area)"
+		},
+		"CosmosBetaMaxSearchResults": {
+			"value": 10
 		},
 		"CosmosBetaRailDisabledNamespaces": {
 			"value": [
@@ -609,33 +604,20 @@
 			],
 			"description": "List of pages to disable the rail in."
 		},
-		"CosmosBetaEnabledRailModules": {
+		"CosmosBetaSearchDescriptionSource": {
+			"value": "textextracts"
+		},
+		"CosmosBetaSearchHost": {
+			"value": ""
+		},
+		"CosmosBetaSearchOptions": {
 			"value": {
-				"recentchanges": false,
-				"interface": [
-					{
-						"cosmosbeta-custom-rail-module": "normal",
-						"cosmosbeta-custom-sticky-rail-module": "sticky"
-					}
-				]
-			},
-			"description": "Sets which rail modules will be enabled on Cosmos, and whether they are 'sticky' or 'normal'"
+				"showThumbnail": true,
+				"showDescription": true
+			}
 		},
-		"CosmosBetaEnablePortableInfoboxEuropaTheme": {
-			"value": true,
-			"description": "Enables the Europa theme from Fandom's portable infobox extension on the ported extension."
-		},
-		"CosmosBetaSocialProfileModernTabs": {
-			"value": true,
-			"description": "Enables a modern version of the tabs on SocialProfile profile pages"
-		},
-		"CosmosBetaSocialProfileRoundAvatar": {
-			"value": true,
-			"description": "Makes the avatar round on SocialProfile profile pages"
-		},
-		"CosmosBetaSocialProfileShowEditCount": {
-			"value": true,
-			"description": "Show's the edit count and registration date for the user on SocialProfile profile pages, underneath their username"
+		"CosmosBetaSearchUseActionAPI": {
+			"value": false
 		},
 		"CosmosBetaSocialProfileAllowBio": {
 			"value": true,
@@ -644,6 +626,22 @@
 		"CosmosBetaSocialProfileFollowBioRedirects": {
 			"value": false,
 			"description": "Whether or not to follow redirects from Special:MyPage/bio and display the redirect target as bio instead (experimental)"
+		},
+		"CosmosBetaSocialProfileModernTabs": {
+			"value": true,
+			"description": "Enables a modern version of the tabs on SocialProfile profile pages"
+		},
+		"CosmosBetaSocialProfileNumberofGroupTags": {
+			"value": 2,
+			"description": "Set the max number of group tags to show on a user's SocialProfile page if they have them"
+		},
+		"CosmosBetaSocialProfileRoundAvatar": {
+			"value": true,
+			"description": "Makes the avatar round on SocialProfile profile pages"
+		},
+		"CosmosBetaSocialProfileShowEditCount": {
+			"value": true,
+			"description": "Show's the edit count and registration date for the user on SocialProfile profile pages, underneath their username"
 		},
 		"CosmosBetaSocialProfileShowGroupTags": {
 			"value": true,
@@ -658,9 +656,9 @@
 			],
 			"description": "Array of usergroups to show on SocialProfile pages if the user has them"
 		},
-		"CosmosBetaSocialProfileNumberofGroupTags": {
-			"value": 2,
-			"description": "Set the max number of group tags to show on a user's SocialProfile page if they have them"
+		"CosmosBetaToolbarBackgroundColor": {
+			"value": "#000000",
+			"description": "Changes the background color of the toolbar"
 		},
 		"CosmosBetaUseSocialProfileAvatar": {
 			"value": true,
@@ -669,6 +667,28 @@
 		"CosmosBetaUseUPv2Avatar": {
 			"value": true,
 			"description": "Use UserProfileV2 avatar as avatar next to username in top banner"
+		},
+		"CosmosBetaWantedPagesFetchedNamespaces": {
+			"value": [
+				0
+			],
+			"description": "Set to an array of namespaces to fetch wanted pages from, if wanted pages are enabled for the create page dialogue."
+		},
+		"CosmosBetaWantedPagesMaxTitlesCount": {
+			"value": 6,
+			"description": "Set to the max number of wanted pages to display in the create page dialogue, if wanted pages are enabled."
+		},
+		"CosmosBetaWikiHeaderBackgroundColor": {
+			"value": "#c0c0c0",
+			"description": "Changes the background color of the wiki navigation"
+		},
+		"CosmosBetaWikiHeaderBackgroundImage": {
+			"value": false,
+			"description": "Adds a background image to the wiki navigation"
+		},
+		"CosmosBetaWordmark": {
+			"value": false,
+			"description": "Adds a wordmark to the wiki navigation"
 		}
 	},
 	"HookHandlers": {
