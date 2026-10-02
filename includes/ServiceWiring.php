@@ -8,13 +8,14 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Skins\CosmosBeta\ConfigNames;
 use MediaWiki\Skins\CosmosBeta\CosmosBackgroundLookup;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
 use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
 use MediaWiki\Skins\CosmosBeta\CosmosRailBuilder;
 use MediaWiki\Skins\CosmosBeta\CosmosWordmarkLookup;
 use MediaWiki\Skins\CosmosBeta\Hooks\CosmosHookRunner;
+use MediaWiki\Skins\CosmosBeta\Hooks\Handlers\SocialProfile;
+use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
 use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
 use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
@@ -27,13 +28,10 @@ return [
 	},
 
 	'CosmosBetaBackgroundLookup' => static function ( MediaWikiServices $services ): CosmosBackgroundLookup {
-		$config = $services->get( 'CosmosBetaConfig' );
-
 		return new CosmosBackgroundLookup(
 			$services->getTitleFactory(),
 			$services->getRepoGroup(),
-			$config->getBackgroundImage(),
-			$config->getWikiHeaderBackgroundImage()
+			$services->get( 'CosmosBetaConfig' )
 		);
 	},
 
@@ -67,7 +65,10 @@ return [
 			$services->getUrlUtils(),
 			$services->getTitleFactory(),
 			$services->get( 'ExtensionRegistry' ),
-			(array)$services->get( 'CosmosBetaOptions' )->get( ConfigNames::RailSidebarPortlets )
+			new ServiceOptions(
+				CosmosNavigation::CONSTRUCTOR_OPTIONS,
+				$services->get( 'CosmosBetaOptions' )
+			)
 		);
 	},
 
@@ -101,6 +102,21 @@ return [
 		return $parser;
 	},
 
+	'CosmosBetaSkinOptions' => static function ( MediaWikiServices $services ): ServiceOptions {
+		return new ServiceOptions(
+			SkinCosmosBeta::CONSTRUCTOR_OPTIONS,
+			$services->get( 'CosmosBetaOptions' ),
+			$services->getMainConfig()
+		);
+	},
+
+	'CosmosBetaSocialProfileOptions' => static function ( MediaWikiServices $services ): ServiceOptions {
+		return new ServiceOptions(
+			SocialProfile::CONSTRUCTOR_OPTIONS,
+			$services->get( 'CosmosBetaOptions' )
+		);
+	},
+
 	'CosmosBetaThemeStore' => static function ( MediaWikiServices $services ): ThemeStore {
 		return new ThemeStore(
 			$services->getConnectionProvider(),
@@ -114,7 +130,7 @@ return [
 		return new CosmosWordmarkLookup(
 			$services->getTitleFactory(),
 			$services->getRepoGroup(),
-			$services->get( 'CosmosBetaConfig' )->getWordmark()
+			$services->get( 'CosmosBetaConfig' )
 		);
 	},
 ];
