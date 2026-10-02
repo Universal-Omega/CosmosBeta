@@ -19,7 +19,7 @@
 			"factory": "MediaWiki\\Skins\\CosmosBeta\\SkinCosmosBeta::factory",
 			"services": [
 				"CosmosBetaAltModules",
-				"ConfigFactory",
+				"CosmosBetaOptions",
 				"CosmosBetaConfig",
 				"CosmosBetaNavigation",
 				"CosmosBetaRailBuilder",
@@ -811,7 +811,7 @@
 		"socialprofile": {
 			"factory": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
-				"ConfigFactory",
+				"CosmosBetaOptions",
 				"CosmosBetaTemplateParser",
 				"TitleFactory",
 				"UserGroupManager",
