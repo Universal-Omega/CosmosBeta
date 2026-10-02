@@ -9,9 +9,6 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
 use MediaWiki\SpecialPage\SpecialPage;
 use function in_array;
-use function preg_match;
-use function preg_replace;
-use function str_ends_with;
 
 class ChromeComponent {
 
@@ -26,30 +23,24 @@ class ChromeComponent {
 		$settings = $this->config->getFooterSettings();
 
 		return [
-			'array-info' => $this->filterLinks( $footer['data-info']['array-items'] ?? [], $settings['hiddenLinks'] ),
-			'array-places' => $this->filterLinks( $footer['data-places']['array-items'] ?? [], $settings['hiddenLinks'] ),
+			'array-info' => $this->getLinks( $footer['data-info']['array-items'] ?? [], $settings['hiddenLinks'] ),
+			'array-places' => $this->getLinks( $footer['data-places']['array-items'] ?? [], $settings['hiddenLinks'] ),
 			'array-icons' => $settings['showIcons'] ? $this->getIcons( $footer['data-icons']['array-items'] ?? [] ) : [],
 		];
 	}
 
 	public function getToolbarData( array $sidebar ): ?array {
 		$settings = $this->config->getToolbarSettings();
-		$portlet = PortletReader::findPortlet( $sidebar, 'p-tb' );
 
 		if ( !$settings['enabled'] ) {
 			return null;
 		}
 
 		$items = [];
+		$portlet = PortletReader::findPortlet( $sidebar, 'p-tb' );
+
 		foreach ( $portlet['array-items'] ?? [] as $item ) {
-			$id = $item['attrs']['id'] ?? '';
-			$hidden = false;
-
-			foreach ( $settings['hiddenItems'] as $name ) {
-				$hidden = $hidden || $id === "t-$name";
-			}
-
-			if ( !$hidden ) {
+			if ( !in_array( (string)( $item['name'] ?? '' ), $settings['hiddenItems'], true ) ) {
 				$items[] = [ 'html-item' => $item['html-item'] ];
 			}
 		}
@@ -75,42 +66,31 @@ class ChromeComponent {
 		];
 	}
 
-	private function getIcons( array $items ): array {
-		$icons = [];
-
-		foreach ( $items as $item ) {
-			$id = (string)( $item['attrs']['id'] ?? '' );
-
-			if ( preg_match( '/^<li[^>]*>(.*)<\/li>\s*$/s', $item['html-item'] ?? '', $matches ) ) {
-				$icons[] = [
-					'name' => preg_replace( '/^footer-|ico$/', '', $id ),
-					'html' => $matches[1],
-				];
-			}
-		}
-
-		return $icons;
-	}
-
-	private function filterLinks( array $items, array $hidden ): array {
+	private function getLinks( array $items, array $hidden ): array {
 		$links = [];
 
 		foreach ( $items as $item ) {
-			$id = (string)( $item['attrs']['id'] ?? '' );
-			$skip = false;
-
-			foreach ( $hidden as $name ) {
-				$skip = $skip || str_ends_with( $id, "-$name" );
-			}
-
-			if ( !$skip && preg_match( '/^<li[^>]*>(.*)<\/li>\s*$/s', $item['html-item'] ?? '', $matches ) ) {
+			if ( !in_array( (string)( $item['name'] ?? '' ), $hidden, true ) ) {
 				$links[] = [
-					'id' => $id,
-					'html' => preg_replace( '/\s+$/', '', $matches[1] ),
+					'id' => $item['id'] ?? null,
+					'html' => $item['html'] ?? '',
 				];
 			}
 		}
 
 		return $links;
+	}
+
+	private function getIcons( array $items ): array {
+		$icons = [];
+
+		foreach ( $items as $item ) {
+			$icons[] = [
+				'name' => $item['name'] ?? '',
+				'html' => $item['html'] ?? '',
+			];
+		}
+
+		return $icons;
 	}
 }
