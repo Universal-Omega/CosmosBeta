@@ -2,7 +2,7 @@
 	<cdx-typeahead-search
 		:id="id"
 		ref="searchForm"
-		class="cosmos-typeahead-search"
+		class="skin-cosmos-typeahead-search cosmos-typeahead-search"
 		:class="rootClasses"
 		:search-results-label="$i18n( 'searchresults' ).text()"
 		:accesskey="searchAccessKey"
@@ -135,7 +135,9 @@ module.exports = exports = defineComponent( {
 	computed: {
 		rootClasses() {
 			return {
+				'skin-cosmos-search-box-disable-transitions': this.disableTransitions,
 				'cosmos-search-box-disable-transitions': this.disableTransitions,
+				'skin-cosmos-typeahead-search--active': this.isFocused,
 				'cosmos-typeahead-search--active': this.isFocused
 			};
 		}
