@@ -53,7 +53,8 @@
 						"user-menu"
 					],
 					"styles": [
-						"skins.cosmosbeta.styles"
+						"skins.cosmosbeta.styles",
+						"skins.cosmosbeta.icons"
 					],
 					"scripts": [
 						"skins.cosmosbeta.searchLoader",
@@ -126,9 +127,6 @@
 			},
 			"styles": {
 				"resources/skins.cosmosbeta.styles/common.less": {
-					"media": "screen"
-				},
-				"resources/skins.cosmosbeta.styles/icons.less": {
 					"media": "screen"
 				},
 				"resources/skins.cosmosbeta.styles/desktop.less": {
@@ -462,6 +460,30 @@
 				"cosmosbeta-themedesigner-toolbar-hidden-help",
 				"cosmosbeta-themedesigner-footer-hidden-help",
 				"cosmosbeta-themedesigner-footer-icons-locked"
+			]
+		},
+		"skins.cosmosbeta.icons": {
+			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
+			"selectorWithoutVariant": ".skin-cosmos-icon-{name}::before",
+			"useDataURI": false,
+			"defaultColor": "#000",
+			"useMaskImage": true,
+			"variants": {},
+			"icons": [
+				"articleAdd",
+				"close",
+				"edit",
+				"ellipsis",
+				"expand",
+				"eye",
+				"globe",
+				"next",
+				"recentChanges",
+				"search",
+				"settings",
+				"speechBubble",
+				"undo",
+				"userAvatarOutline"
 			]
 		}
 	},
