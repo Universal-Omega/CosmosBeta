@@ -149,6 +149,10 @@ class CosmosConfig {
 		return (int)$this->getTheme()->getSection( 'layout' )['headerIconOpacity'];
 	}
 
+	public function getBackdropBlur(): int {
+		return (int)$this->getTheme()->getSection( 'layout' )['backdropBlur'];
+	}
+
 	public function getFooterOpacity(): int {
 		return (int)$this->getTheme()->getSection( 'footer' )['opacity'];
 	}
