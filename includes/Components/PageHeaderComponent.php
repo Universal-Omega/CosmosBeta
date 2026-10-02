@@ -10,11 +10,11 @@ use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Title\TitleFactory;
 use function array_slice;
 use function count;
-use function explode;
 use function implode;
-use function in_array;
+use function str_contains;
 use function str_starts_with;
-use function stripos;
+use const CONTENT_MODEL_WIKITEXT;
+use const NS_CATEGORY;
 
 class PageHeaderComponent {
 
@@ -164,6 +164,8 @@ class PageHeaderComponent {
 				case 'talk':
 					$talk = $item + [ 'icon' => 'speechBubbles' ];
 					break;
+				case 'view':
+					break;
 				default:
 					if ( $key === 'addsection' ) {
 						$item['text'] = $this->context->msg( 'cosmosbeta-action-addsection' )->text();
@@ -285,6 +287,6 @@ class PageHeaderComponent {
 	}
 
 	private function hasClass( string $classes, string $class ): bool {
-		return in_array( $class, explode( ' ', $classes ), true ) || stripos( $classes, $class ) !== false;
+		return str_contains( $classes, $class );
 	}
 }
