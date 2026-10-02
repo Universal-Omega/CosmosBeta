@@ -567,16 +567,6 @@ module.exports = exports = defineComponent( {
 				}
 			},
 			{
-				key: 'banner',
-				max: 100,
-				unit: '%',
-				label: 'layout-banner-icon-opacity',
-				get: () => state.layout.bannerIconOpacity,
-				set: ( value ) => {
-					state.layout.bannerIconOpacity = value;
-				}
-			},
-			{
 				key: 'header',
 				max: 100,
 				unit: '%',
