@@ -160,5 +160,9 @@
 	"cosmosbeta-pref-colormode-light": "Light",
 	"cosmosbeta-pref-colormode-dark": "Dark",
 	"cosmos.css": "/* All CSS here will be loaded for users of the Cosmos skin */",
-	"cosmos.js": "/* All JavaScript here will be loaded for users of the Cosmos skin */"
+	"cosmos.js": "/* All JavaScript here will be loaded for users of the Cosmos skin */",
+	"cosmosbeta-themedesigner-protected": "The configuration of this wiki does not allow hiding this link.",
+	"cosmosbeta-themedesigner-toolbar-hidden-help": "These are the page tools that exist on this wiki.",
+	"cosmosbeta-themedesigner-footer-hidden-help": "These are the footer links that exist on this wiki.",
+	"cosmosbeta-themedesigner-footer-icons-locked": "The configuration of this wiki does not allow hiding the footer icons."
 }
