@@ -21,7 +21,7 @@ use function preg_match;
 use function round;
 use function rtrim;
 use function sprintf;
-use function stripos;
+use function str_starts_with;
 use function strlen;
 use function substr;
 use function trim;
@@ -338,7 +338,7 @@ class ThemeSettings {
 			return '';
 		}
 
-		if ( stripos( $value, 'file:' ) === 0 ) {
+		if ( str_starts_with( strtolower( $value ), 'file:' ) ) {
 			$value = trim( substr( $value, 5 ) );
 		}
 
