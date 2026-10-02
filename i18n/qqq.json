@@ -167,5 +167,9 @@
 	"cosmosbeta-pref-colormode-light": "Option of the color mode preference.\n{{Identical|Light}}",
 	"cosmosbeta-pref-colormode-dark": "Option of the color mode preference.\n{{Identical|Dark}}",
 	"cosmos.css": "{{optional}}\n{{related/css}}",
-	"cosmos.js": "{{optional}}\n{{related/js}}"
+	"cosmos.js": "{{optional}}\n{{related/js}}",
+	"cosmosbeta-themedesigner-protected": "Tooltip of a footer link checkbox that cannot be changed because the wiki configuration protects the link.",
+	"cosmosbeta-themedesigner-toolbar-hidden-help": "Help text under the list of page tools that can be hidden.",
+	"cosmosbeta-themedesigner-footer-hidden-help": "Help text under the list of footer links that can be hidden.",
+	"cosmosbeta-themedesigner-footer-icons-locked": "Tooltip of the footer icons checkbox when the wiki configuration does not allow hiding the icons."
 }
