@@ -1,0 +1,10 @@
+<div class="skin-cosmos-profile-heading hgroup">
+	<h1 itemprop="name">{{name}}</h1>
+	{{#array-tags}}<span class="skin-cosmos-profile-tag tag {{class}}">{{text}}</span>{{/array-tags}}
+</div>
+{{#data-editcount}}
+<div class="skin-cosmos-profile-contributions skin-cosmos-profile-tally contributions-details tally">
+	<a href="{{url}}"><em>{{count}}</em><span>{{label}}<br>{{registration}}</span></a>
+</div>
+{{/data-editcount}}
+{{#bio}}<p class="skin-cosmos-profile-bio bio">{{.}}</p>{{/bio}}
