@@ -39,16 +39,16 @@
 				<cdx-tab name="colors" :label="msg( 'tab-colors' )">
 					<div class="skin-cosmos-td-modes">
 						<span>{{ msg( 'editing' ) }}</span>
-						<button
+						<cdx-button
 							v-for="mode in modes"
 							:key="mode"
 							type="button"
-							class="skin-cosmos-td-chip"
-							:class="{ 'is-active': editing === mode }"
+							:action="editing === mode ? 'progressive' : 'default'"
+							:weight="editing === mode ? 'primary' : 'normal'"
 							@click="editing = mode"
 						>
 							{{ msg( 'mode-' + mode ) }}
-						</button>
+						</cdx-button>
 					</div>
 					<p>{{ msg( 'colors-intro' ) }}</p>
 
@@ -580,10 +580,10 @@ module.exports = exports = defineComponent( {
 				key: 'header',
 				max: 100,
 				unit: '%',
-				label: 'layout-header-icon-opacity',
-				get: () => state.layout.headerIconOpacity,
+				label: 'layout-header-button-opacity',
+				get: () => state.layout.headerButtonOpacity,
 				set: ( value ) => {
-					state.layout.headerIconOpacity = value;
+					state.layout.headerButtonOpacity = value;
 				}
 			},
 			{
