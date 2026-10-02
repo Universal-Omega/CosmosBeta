@@ -21,6 +21,8 @@ use Wikimedia\Rdbms\SelectQueryBuilder;
 use function htmlspecialchars;
 use function implode;
 use function in_array;
+use const NS_SPECIAL;
+use const NS_USER;
 
 class CosmosRailBuilder {
 
