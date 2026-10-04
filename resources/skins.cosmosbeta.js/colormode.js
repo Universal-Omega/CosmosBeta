@@ -44,6 +44,7 @@
 			label = mw.msg( 'cosmosbeta-colormode-switch-' + mode );
 
 		$item.attr( { title: label, 'aria-label': label } );
+		root.className = root.className.replace( /skin-theme-clientpref-\w+/, 'skin-theme-clientpref-' + ( mode === 'dark' ? 'night' : 'day' ) );
 		$item.find( '.skin-cosmos-icon' )
 			.removeClass( 'skin-cosmos-icon-moon skin-cosmos-icon-bright' )
 			.addClass( mode === 'dark' ? 'skin-cosmos-icon-bright' : 'skin-cosmos-icon-moon' );
@@ -90,7 +91,7 @@
 
 	function switchForUser( mode ) {
 		// With the auto default every choice has to be stored, or the browser setting wins again
-		const value = !config.auto && mode === config.default ? '' : mode;
+		const value = !config.autoDefault && mode === config.default ? '' : mode;
 
 		new mw.Api().saveOption( config.option, value ).then( () => {
 			window.location.reload();
