@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 
 use MediaWiki\Html\Html;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Preferences\Hook\GetPreferencesHook;
 use MediaWiki\ResourceLoader\Hook\ResourceLoaderRegisterModulesHook;
@@ -16,6 +17,7 @@ use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
 use function array_merge;
 use function array_unique;
+use function wfAppendQuery;
 
 class ColorMode implements
 	BeforePageDisplayHook,
@@ -62,14 +64,17 @@ class ColorMode implements
 		$mode = $this->config->getRenderMode();
 		$out->addHtmlClasses( "skin-cosmos-colormode-$mode" );
 
-		if ( !$this->config->isColorModeToggleEnabled() ) {
+		$auto = $this->config->isAutoColorMode() && !$this->config->hasColorModePreference();
+		$toggle = $this->config->isColorModeToggleEnabled();
+
+		if ( !$toggle && !$auto ) {
 			return;
 		}
 
 		$registered = $out->getUser()->isRegistered();
 		$altModules = [];
 
-		if ( !$registered ) {
+		if ( $auto || !$registered ) {
 			$styles = $out->getModuleStyles();
 			foreach ( $skin->getDefaultModules()['styles'] as $group ) {
 				$styles = array_merge( $styles, $group );
@@ -77,29 +82,54 @@ class ColorMode implements
 
 			foreach ( array_unique( $styles ) as $name ) {
 				$twin = $this->altModules->getTwinName( $name );
-
 				if ( $twin !== null ) {
 					$altModules[] = $twin;
 				}
 			}
+		}
 
+		$headItems = '';
+		$script = '';
+
+		if ( $auto && $altModules !== [] ) {
+			// The dark styles only apply when the browser asks for a dark color scheme
+			$url = wfAppendQuery( $out->getConfig()->get( MainConfigNames::LoadScript ), [
+				'lang' => $out->getLanguage()->getCode(),
+				'modules' => ResourceLoader::makePackedModulesString( $altModules ),
+				'only' => 'styles',
+				'skin' => $skin->getSkinName(),
+			] );
+			$headItems .= Html::element( 'link', [
+				'id' => 'skin-cosmos-auto-dark',
+				'rel' => 'stylesheet',
+				'media' => '(prefers-color-scheme: dark)',
+				'href' => $url,
+			] );
+			$out->addHtmlClasses( 'skin-cosmos-colormode-auto' );
+		}
+
+		if ( !$registered && $toggle ) {
 			$script = '(function(){try{var m=localStorage.getItem("skin-cosmos-colormode");' .
 				'var d=document.documentElement;' .
-				'if((m==="light"||m==="dark")&&d.className.indexOf("skin-cosmos-colormode-"+m)===-1){' .
+				'if(m==="light"||m==="dark"){var l=document.getElementById("skin-cosmos-auto-dark");' .
+				'if(l){l.parentNode.removeChild(l)}' .
+				'if(d.className.indexOf("skin-cosmos-colormode-"+m)===-1){' .
 				'd.className+=" skin-cosmos-colormode-pending";' .
-				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode-pending","")},2500)}' .
+				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode-pending","")},2500)}}' .
 				'}catch(e){}}());';
+			$headItems .= Html::inlineStyle( 'html.skin-cosmos-colormode-pending body{opacity:0}' ) .
+				Html::inlineScript( $script, $out->getCSP()->getNonce() );
+		}
 
-			$out->addHeadItem(
-				'skin-cosmos-colormode',
-				Html::inlineStyle( 'html.skin-cosmos-colormode-pending body{opacity:0}' ) .
-				Html::inlineScript( $script, $out->getCSP()->getNonce() )
-			);
+		if ( $headItems !== '' ) {
+			$out->addHeadItem( 'skin-cosmos-colormode', $headItems );
 		}
 
 		$out->addJsConfigVars( 'wgCosmosBetaColorMode', [
 			'render' => $mode,
 			'default' => $this->config->getDefaultMode(),
+			'auto' => $auto,
+			'toggle' => $toggle,
 			'registered' => $registered,
 			'altModules' => $altModules,
 			'option' => ColorModeResolver::OPTION,
