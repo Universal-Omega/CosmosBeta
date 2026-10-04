@@ -171,7 +171,6 @@ class SkinCosmosBeta extends SkinMustache {
 			'is-cosmos-closable-notice' => $hasNotice && !$dismissable && !$noticeClosed,
 			'is-cosmos-empty-notice' => !$hasNotice,
 			'cosmos-notice-hash' => $hasNotice ? hash( 'crc32b', $siteNotice ) : null,
-			'data-cosmos-toc' => $this->getTocData( $data['data-toc'] ?? [] ),
 			'msg-cosmosbeta-tagline' => $this->msg( 'cosmosbeta-tagline' )->escaped(),
 		];
 	}
@@ -256,22 +255,6 @@ class SkinCosmosBeta extends SkinMustache {
 		}
 
 		return $modules;
-	}
-
-	private function getTocData( array $toc ): ?array {
-		if ( ( $toc['array-sections'] ?? [] ) === [] ) {
-			return null;
-		}
-
-		// Remembers whether the contents were collapsed
-		$this->getOutput()->addModules( 'mediawiki.toc' );
-
-		return [
-			'msg-toc' => $this->msg( 'toc' )->text(),
-			'html-lang' => $this->getLanguage()->getHtmlCode(),
-			'html-dir' => $this->getLanguage()->getDir(),
-			'array-sections' => $toc['array-sections'],
-		];
 	}
 
 	private function shouldPutToolsInRail(): bool {
