@@ -148,6 +148,8 @@ class SkinCosmosBeta extends SkinMustache {
 			array_merge( [ $sidebar['data-portlets-first'] ?? [] ], $sidebar['array-portlets-rest'] ?? [] )
 		);
 		$siteNotice = $data['html-site-notice'] ?? null;
+		// Core wraps the site notice in its container even when nothing is in it
+		$hasNotice = $siteNotice !== null && $siteNotice !== '<div id="siteNotice"></div>';
 		$search = $this->getSearchData( $data['data-search-box'] ?? [] );
 		$dismissable = $this->extensionRegistry->isLoaded( 'DismissableSiteNotice' );
 		$noticeClosed = $this->getRequest()->getCookie( 'CosmosSiteNoticeState' ) === 'closed';
@@ -165,9 +167,11 @@ class SkinCosmosBeta extends SkinMustache {
 			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar, $toolsInRail ),
 			'html-cosmos-rail' => $this->railBuilder->buildRail(),
 			'html-cosmos-cookiewarning' => $this->getCookieWarning(),
-			'is-cosmos-dismissable-notice' => $siteNotice !== null && $dismissable,
-			'is-cosmos-closable-notice' => $siteNotice !== null && !$dismissable && !$noticeClosed,
-			'cosmos-notice-hash' => $siteNotice !== null ? hash( 'crc32b', $siteNotice ) : null,
+			'is-cosmos-dismissable-notice' => $hasNotice && $dismissable,
+			'is-cosmos-closable-notice' => $hasNotice && !$dismissable && !$noticeClosed,
+			'is-cosmos-empty-notice' => !$hasNotice,
+			'cosmos-notice-hash' => $hasNotice ? hash( 'crc32b', $siteNotice ) : null,
+			'data-cosmos-toc' => $this->getTocData( $data['data-toc'] ?? [] ),
 			'msg-cosmosbeta-tagline' => $this->msg( 'cosmosbeta-tagline' )->escaped(),
 		];
 	}
@@ -252,6 +256,17 @@ class SkinCosmosBeta extends SkinMustache {
 		}
 
 		return $modules;
+	}
+
+	private function getTocData( array $toc ): ?array {
+		if ( ( $toc['array-sections'] ?? [] ) === [] ) {
+			return null;
+		}
+
+		return [
+			'msg-toc' => $this->msg( 'toc' )->text(),
+			'array-sections' => $toc['array-sections'],
+		];
 	}
 
 	private function shouldPutToolsInRail(): bool {
