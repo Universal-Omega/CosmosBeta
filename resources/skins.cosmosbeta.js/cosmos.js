@@ -62,6 +62,23 @@
 
 		$( '.skin-cosmos-dropdown' ).removeClass( 'skin-cosmos-is-open' );
 		$dropdown.toggleClass( 'skin-cosmos-is-open', willOpen );
+
+		// Lists that would run past the edge of the screen are moved back inside it
+		const list = $dropdown.children( '.skin-cosmos-dropdown-list' )[ 0 ];
+
+		if ( list ) {
+			list.style.transform = '';
+
+			if ( willOpen ) {
+				const rect = list.getBoundingClientRect(),
+					margin = 8,
+					shift = Math.max( margin - rect.left, 0 ) - Math.max( rect.right - ( window.innerWidth - margin ), 0 );
+
+				if ( shift !== 0 ) {
+					list.style.transform = 'translateX( ' + shift + 'px )';
+				}
+			}
+		}
 	} );
 
 	if ( window.matchMedia( '(hover: none)' ).matches ) {
