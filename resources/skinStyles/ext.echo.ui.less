@@ -1,0 +1,34 @@
+.mw-echo-ui-notificationItemWidget {
+	border-color: var( --skin-cosmos-border-color );
+	background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 7%, var( --skin-cosmos-content-background ) );
+	color: var( --skin-cosmos-font-color );
+
+	&-unread {
+		background-color: var( --skin-cosmos-content-background );
+	}
+
+	&:hover,
+	&-unread:hover {
+		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 12%, var( --skin-cosmos-content-background ) );
+	}
+
+	&-content-message-header,
+	&-content-message-header * {
+		color: var( --skin-cosmos-font-color );
+	}
+
+	&-content-message-body,
+	&-content-message-body *,
+	&-content-message-timestamp,
+	&-content-message-links,
+	&-content-message-links * {
+		color: var( --skin-cosmos-muted-color );
+		opacity: 1;
+	}
+}
+
+.mw-echo-ui-notificationsListWidget,
+.mw-echo-ui-notificationBadgeButtonPopupWidget-popup .oo-ui-popupWidget-body {
+	background-color: transparent;
+	color: var( --skin-cosmos-font-color );
+}
