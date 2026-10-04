@@ -7,25 +7,21 @@
 		return;
 	}
 
-	const STORAGE_KEY = 'skin-cosmos-colormode';
 	const root = document.documentElement;
 
+	// For visitors core applies the choice from its client preferences cookie to the html classes
 	function getStoredMode() {
-		try {
-			const mode = window.localStorage.getItem( STORAGE_KEY );
+		const match = root.className.match( /skin-theme-clientpref-(day|night|os)/ );
 
-			return mode === 'light' || mode === 'dark' ? mode : null;
-		} catch ( e ) {
+		if ( !match || match[ 1 ] === 'os' ) {
 			return null;
 		}
+
+		return match[ 1 ] === 'night' ? 'dark' : 'light';
 	}
 
 	function storeMode( mode ) {
-		try {
-			window.localStorage.setItem( STORAGE_KEY, mode );
-		} catch ( e ) {
-			// Storage can be unavailable. The switch still works for this page view.
-		}
+		mw.user.clientPrefs.set( 'skin-theme', mode === 'dark' ? 'night' : 'day' );
 	}
 
 	function getCurrentMode() {
