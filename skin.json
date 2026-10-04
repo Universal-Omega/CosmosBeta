@@ -401,6 +401,7 @@
 				"cosmosbeta-themedesigner-color-toolbar-help",
 				"cosmosbeta-themedesigner-colors-intro",
 				"cosmosbeta-themedesigner-comment",
+				"cosmosbeta-themedesigner-darkmode-auto-help",
 				"cosmosbeta-themedesigner-darkmode-builtin",
 				"cosmosbeta-themedesigner-darkmode-default",
 				"cosmosbeta-themedesigner-darkmode-generate",
@@ -438,6 +439,7 @@
 				"cosmosbeta-themedesigner-layout-width-default",
 				"cosmosbeta-themedesigner-layout-width-full",
 				"cosmosbeta-themedesigner-layout-width-large",
+				"cosmosbeta-themedesigner-mode-auto",
 				"cosmosbeta-themedesigner-mode-dark",
 				"cosmosbeta-themedesigner-mode-light",
 				"cosmosbeta-themedesigner-no",
@@ -576,7 +578,13 @@
 			"+ext.echo.styles.badge": "resources/skinStyles/ext.echo.styles.badge.less",
 			"+ext.visualEditor.core": "resources/skinStyles/ext.visualEditor.less",
 			"+ext.CodeMirror.visualEditor.init": "resources/skinStyles/ext.CodeMirror.visualEditor.less",
-			"+ext.dummyfandoommainpagetags.styles": "resources/skinStyles/ext.dummyfandoommainpagetags.less"
+			"+ext.dummyfandoommainpagetags.styles": "resources/skinStyles/ext.dummyfandoommainpagetags.less",
+			"+ext.uls.interface": "resources/skinStyles/ext.uls.interface.less",
+			"+ext.echo.styles.alert": "resources/skinStyles/ext.echo.styles.alert.less",
+			"+mediawiki.action.edit.styles": "resources/skinStyles/mediawiki.action.edit.styles.less",
+			"+mediawiki.diff.styles": "resources/skinStyles/mediawiki.diff.styles.less",
+			"+ext.wikiEditor": "resources/skinStyles/ext.wikiEditor.less",
+			"+ext.CodeMirror.init": "resources/skinStyles/ext.CodeMirror.init.less"
 		}
 	},
 	"config": {
