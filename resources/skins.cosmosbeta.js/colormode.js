@@ -66,7 +66,7 @@
 				} );
 
 			link.rel = 'stylesheet';
-			link.href = mw.config.get( 'wgLoadScript' ) + '?' + params.toString();
+			link.href = mw.config.get( 'wgScriptPath' ) + '/load.php?' + params.toString();
 			link.onload = resolve;
 			link.onerror = reject;
 			document.head.appendChild( link );
@@ -89,7 +89,8 @@
 	}
 
 	function switchForUser( mode ) {
-		const value = mode === config.default ? '' : mode;
+		// With the auto default every choice has to be stored, or the browser setting wins again
+		const value = !config.auto && mode === config.default ? '' : mode;
 
 		new mw.Api().saveOption( config.option, value ).then( () => {
 			window.location.reload();
@@ -109,14 +110,18 @@
 			}
 		} );
 
-		if ( !config.registered ) {
-			const stored = getStoredMode();
+		const stored = config.registered ? null : getStoredMode();
 
-			if ( stored && stored !== config.render ) {
-				switchForVisitor( stored );
-			} else {
-				root.classList.remove( 'skin-cosmos-colormode-pending' );
-			}
+		if ( stored && stored !== config.render ) {
+			switchForVisitor( stored );
+		} else if ( config.auto && !stored ) {
+			// Nothing was chosen yet, so the button follows what the browser asks for
+			const query = window.matchMedia( '(prefers-color-scheme: dark)' );
+
+			applyMode( query.matches ? 'dark' : 'light' );
+			query.addEventListener( 'change', ( event ) => applyMode( event.matches ? 'dark' : 'light' ) );
+		} else {
+			root.classList.remove( 'skin-cosmos-colormode-pending' );
 		}
 	} );
 }( mediaWiki, jQuery ) );
