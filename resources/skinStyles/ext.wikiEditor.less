@@ -1,0 +1,45 @@
+#mw-content .wikiEditor-ui-toolbar,
+#mw-content .wikiEditor-ui-toolbar .tabs,
+#mw-content .wikiEditor-ui-toolbar .section-main {
+	height: auto;
+}
+
+#mw-content .wikiEditor-ui-toolbar {
+	position: initial;
+}
+
+.wikiEditor-ui-toolbar {
+	border-color: var( --skin-cosmos-border-color );
+	background-color: var( --skin-cosmos-content-background );
+	color: var( --skin-cosmos-font-color );
+
+	.tabs,
+	.section,
+	.group,
+	.booklet,
+	.page {
+		background-color: transparent;
+		color: var( --skin-cosmos-font-color );
+	}
+
+	.oo-ui-iconElement-icon,
+	.oo-ui-indicatorElement-indicator,
+	.tool .oo-ui-icon-element {
+		filter: invert( var( --skin-cosmos-invert ) );
+	}
+
+	.oo-ui-buttonElement-button,
+	.oo-ui-labelElement-label {
+		color: var( --skin-cosmos-font-color );
+	}
+}
+
+body .wikiEditor-ui-toolbar .cm-mw-toggle-wikieditor.oo-ui-toggleWidget-on .oo-ui-labelElement-label {
+	color: var( --skin-cosmos-link-color );
+}
+
+// The arrows in front of the tab names are drawn as images, so they are inverted on dark themes
+body .wikiEditor-ui-toolbar .tabs .tab a::before,
+body .wikiEditor-ui-toolbar .tabs .tab a::after {
+	filter: invert( var( --skin-cosmos-invert ) );
+}
