@@ -4,7 +4,7 @@
 
 :root {
 	--skin-cosmos-font-color: @font-color;
-	--skin-cosmos-muted-color: fade( @font-color, 70% );
+	--skin-cosmos-muted-color: fade( @font-color, 82% );
 	--skin-cosmos-content-background: @content-background-color;
 	--skin-cosmos-link-color: @link-color;
 	--skin-cosmos-border-color: @border-color;
@@ -2145,7 +2145,15 @@ body h6 {
 
 #cosmos-toolbar [class*='oo-ui-icon-'],
 #cosmos-toolbar .oo-ui-iconElement-icon,
-#cosmos-toolbar .mw-ui-icon::before {
+#cosmos-toolbar .mw-ui-icon::before,
+#cosmos-toolbar img,
+#cosmos-toolbar svg,
+#cosmos-toolbar li::before,
+#cosmos-toolbar li::after,
+#cosmos-toolbar a::before,
+#cosmos-toolbar a::after,
+#cosmos-toolbar span::before,
+#cosmos-toolbar span::after {
 	filter: invert( @toolbar-icon-invert );
 }
 
