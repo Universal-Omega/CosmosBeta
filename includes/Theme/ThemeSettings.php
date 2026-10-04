@@ -39,7 +39,9 @@ class ThemeSettings {
 
 	public const string MODE_LIGHT = 'light';
 	public const string MODE_DARK = 'dark';
+	public const string MODE_AUTO = 'auto';
 	public const array MODES = [ self::MODE_LIGHT, self::MODE_DARK ];
+	public const array DEFAULT_MODES = [ self::MODE_LIGHT, self::MODE_DARK, self::MODE_AUTO ];
 
 	public const array COLOR_SLOTS = [
 		'banner',
@@ -190,7 +192,7 @@ class ThemeSettings {
 
 		$mode = $raw['colorMode'] ?? [];
 		if ( is_array( $mode ) ) {
-			if ( in_array( $mode['default'] ?? null, self::MODES, true ) ) {
+			if ( in_array( $mode['default'] ?? null, self::DEFAULT_MODES, true ) ) {
 				$data['colorMode']['default'] = $mode['default'];
 			}
 			$data['colorMode']['toggle'] = self::toBool( $mode['toggle'] ?? null, false );
@@ -408,8 +410,17 @@ class ThemeSettings {
 		return $this->revisionId;
 	}
 
+	/**
+	 * Auto renders the light colors and lets the browser switch to the dark ones.
+	 */
 	public function getDefaultMode(): string {
-		return $this->data['colorMode']['default'];
+		$mode = $this->data['colorMode']['default'];
+
+		return $mode === self::MODE_AUTO ? self::MODE_LIGHT : $mode;
+	}
+
+	public function isAutoMode(): bool {
+		return $this->data['colorMode']['default'] === self::MODE_AUTO;
 	}
 
 	public function isToggleEnabled(): bool {
