@@ -64,6 +64,14 @@ class CosmosConfig {
 		return $this->getTheme()->getDefaultMode();
 	}
 
+	public function isAutoColorMode(): bool {
+		return $this->getTheme()->isAutoMode();
+	}
+
+	public function hasColorModePreference(): bool {
+		return $this->colorModeResolver->hasPreference( RequestContext::getMain()->getUser() );
+	}
+
 	public function getAltMode(): string {
 		return ColorModeResolver::getOpposite( $this->getDefaultMode() );
 	}
