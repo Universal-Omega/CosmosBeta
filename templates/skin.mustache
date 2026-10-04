@@ -15,6 +15,7 @@
 							{{#html-subtitle}}<div id="cosmos-pageContent-subtitle">{{{.}}}</div>{{/html-subtitle}}
 							{{#html-undelete-link}}<div id="cosmos-pageContent-undelete">{{{.}}}</div>{{/html-undelete-link}}
 							{{> SiteNotice}}
+							{{#data-cosmos-toc}}{{> Toc}}{{/data-cosmos-toc}}
 							{{{html-body-content}}}
 							{{#html-categories}}<span id="cosmos-content-categories">{{{.}}}</span>{{/html-categories}}
 							{{#html-after-content}}<span id="cosmos-content-additionalContent">{{{.}}}</span>{{/html-after-content}}
