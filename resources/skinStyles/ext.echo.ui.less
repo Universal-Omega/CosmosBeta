@@ -1,34 +1,47 @@
-.mw-echo-ui-notificationItemWidget {
-	border-color: var( --skin-cosmos-border-color );
-	background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 7%, var( --skin-cosmos-content-background ) );
-	color: var( --skin-cosmos-font-color );
+html.skin-cosmos-colormode-dark body {
+	.mw-echo-ui-notificationItemWidget {
+		border-color: var( --skin-cosmos-border-color );
+		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 7%, var( --skin-cosmos-content-background ) );
+		color: var( --skin-cosmos-font-color );
 
-	&-unread {
-		background-color: var( --skin-cosmos-content-background );
+		&-unread {
+			background-color: var( --skin-cosmos-content-background );
+		}
+
+		&:hover,
+		&-unread:hover {
+			background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 14%, var( --skin-cosmos-content-background ) );
+		}
+
+		&-content-message-header,
+		&-content-message-header * {
+			color: var( --skin-cosmos-font-color );
+		}
+
+		&-content-message-body,
+		&-content-message-body *,
+		&-content-message-timestamp,
+		&-content-actions-timestamp {
+			color: var( --skin-cosmos-muted-color );
+			opacity: 1;
+		}
+
+		&-content-actions .oo-ui-buttonElement-button,
+		&-content-actions .oo-ui-labelElement-label,
+		&-content-actions .oo-ui-iconElement-icon {
+			color: var( --skin-cosmos-muted-color );
+		}
+
+		&-content-actions .oo-ui-buttonOptionWidget:hover .oo-ui-labelElement-label,
+		&-content-actions .oo-ui-buttonOptionWidget.oo-ui-optionWidget-highlighted .oo-ui-labelElement-label {
+			color: var( --skin-cosmos-font-color );
+		}
 	}
 
-	&:hover,
-	&-unread:hover {
-		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 12%, var( --skin-cosmos-content-background ) );
-	}
-
-	&-content-message-header,
-	&-content-message-header * {
+	.mw-echo-ui-notificationsListWidget,
+	.mw-echo-ui-notificationsWidget,
+	.mw-echo-ui-placeholderItemWidget {
+		background-color: transparent;
 		color: var( --skin-cosmos-font-color );
 	}
-
-	&-content-message-body,
-	&-content-message-body *,
-	&-content-message-timestamp,
-	&-content-message-links,
-	&-content-message-links * {
-		color: var( --skin-cosmos-muted-color );
-		opacity: 1;
-	}
-}
-
-.mw-echo-ui-notificationsListWidget,
-.mw-echo-ui-notificationBadgeButtonPopupWidget-popup .oo-ui-popupWidget-body {
-	background-color: transparent;
-	color: var( --skin-cosmos-font-color );
 }
