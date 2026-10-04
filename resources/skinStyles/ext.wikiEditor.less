@@ -38,8 +38,25 @@ body .wikiEditor-ui-toolbar .cm-mw-toggle-wikieditor.oo-ui-toggleWidget-on .oo-u
 	color: var( --skin-cosmos-link-color );
 }
 
-// The arrows in front of the tab names are drawn as images, so they are inverted on dark themes
 body .wikiEditor-ui-toolbar .tabs .tab a::before,
 body .wikiEditor-ui-toolbar .tabs .tab a::after {
 	filter: invert( var( --skin-cosmos-invert ) );
+}
+
+.ext-WikiEditor-ResizingDragBar {
+	border-top: 1px solid var( --skin-cosmos-border-color );
+	background-color: var( --skin-cosmos-content-background );
+
+	> span {
+		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 45%, var( --skin-cosmos-content-background ) );
+	}
+}
+
+body .wikiEditor-ui-toolbar .oo-ui-tool.oo-ui-widget-enabled:hover > .oo-ui-tool-link,
+body .wikiEditor-ui-toolbar .oo-ui-tool.oo-ui-widget-enabled:hover > .oo-ui-buttonElement-button,
+body .wikiEditor-ui-toolbar .oo-ui-tool.oo-ui-tool-active > .oo-ui-tool-link,
+body .wikiEditor-ui-toolbar .oo-ui-toggleWidget-on,
+body .wikiEditor-ui-toolbar .oo-ui-toggleWidget-on > .oo-ui-buttonElement-button {
+	background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 24%, var( --skin-cosmos-content-background ) );
+	color: var( --skin-cosmos-font-color );
 }
