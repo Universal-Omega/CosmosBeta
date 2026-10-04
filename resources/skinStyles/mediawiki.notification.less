@@ -1,0 +1,51 @@
+html.skin-theme-clientpref-night .mw-notification {
+	border-color: var( --skin-cosmos-border-color );
+	background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 18%, var( --skin-cosmos-content-background ) );
+	color: var( --skin-cosmos-font-color );
+
+	a {
+		color: var( --skin-cosmos-link-color );
+	}
+
+	&.mw-notification-type-success {
+		border-color: #14866d;
+		background-color: color-mix( in srgb, #14866d 26%, var( --skin-cosmos-content-background ) );
+	}
+
+	&.mw-notification-type-warn {
+		border-color: #ab7f2a;
+		background-color: color-mix( in srgb, #ab7f2a 26%, var( --skin-cosmos-content-background ) );
+	}
+
+	&.mw-notification-type-error {
+		border-color: #d73333;
+		background-color: color-mix( in srgb, #d73333 26%, var( --skin-cosmos-content-background ) );
+	}
+}
+
+@media screen and ( prefers-color-scheme: dark ) {
+	html.skin-theme-clientpref-os .mw-notification {
+		border-color: var( --skin-cosmos-border-color );
+		background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 18%, var( --skin-cosmos-content-background ) );
+		color: var( --skin-cosmos-font-color );
+
+		a {
+			color: var( --skin-cosmos-link-color );
+		}
+
+		&.mw-notification-type-success {
+			border-color: #14866d;
+			background-color: color-mix( in srgb, #14866d 26%, var( --skin-cosmos-content-background ) );
+		}
+
+		&.mw-notification-type-warn {
+			border-color: #ab7f2a;
+			background-color: color-mix( in srgb, #ab7f2a 26%, var( --skin-cosmos-content-background ) );
+		}
+
+		&.mw-notification-type-error {
+			border-color: #d73333;
+			background-color: color-mix( in srgb, #d73333 26%, var( --skin-cosmos-content-background ) );
+		}
+	}
+}
