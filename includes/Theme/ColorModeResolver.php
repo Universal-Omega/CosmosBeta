@@ -30,8 +30,18 @@ class ColorModeResolver {
 		}
 
 		$preference = $this->userOptionsLookup->getOption( $user, self::OPTION, '' );
-
 		return in_array( $preference, ThemeSettings::MODES, true ) ? $preference : $default;
+	}
+
+	/**
+	 * Whether a registered user picked light or dark themselves.
+	 */
+	public function hasPreference( ?UserIdentity $user ): bool {
+		if ( !$this->store->getCurrent()->isToggleEnabled() || $user === null || !$user->isRegistered() ) {
+			return false;
+		}
+
+		return in_array( $this->userOptionsLookup->getOption( $user, self::OPTION, '' ), ThemeSettings::MODES, true );
 	}
 
 	public static function getOpposite( string $mode ): string {
