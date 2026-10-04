@@ -38,6 +38,7 @@
 					"responsive": true,
 					"toc": false,
 					"wrapSiteNotice": true,
+					"clientPrefEnabled": true,
 					"bodyClasses": [
 						"skin-cosmos-search-vue"
 					],
@@ -156,7 +157,8 @@
 			],
 			"dependencies": [
 				"mediawiki.api",
-				"mediawiki.cookie"
+				"mediawiki.cookie",
+				"mediawiki.user"
 			],
 			"messages": [
 				"cosmosbeta-colormode-switch-light",
@@ -591,7 +593,10 @@
 			"+mediawiki.special.changeslist.legend": "resources/skinStyles/mediawiki.special.changeslist.legend.less",
 			"+mediawiki.htmlform.ooui.styles": "resources/skinStyles/mediawiki.htmlform.ooui.styles.less",
 			"+mediawiki.rcfilters.filters.base.styles": "resources/skinStyles/mediawiki.rcfilters.filters.base.styles.less",
-			"+ext.uls.languagesettings": "resources/skinStyles/ext.uls.languagesettings.less"
+			"+ext.uls.languagesettings": "resources/skinStyles/ext.uls.languagesettings.less",
+			"+ext.discussionTools.init.styles": "resources/skinStyles/ext.discussionTools.init.styles.less",
+			"+ext.echo.ui": "resources/skinStyles/ext.echo.ui.less",
+			"+mediawiki.notification": "resources/skinStyles/mediawiki.notification.less"
 		}
 	},
 	"config": {
