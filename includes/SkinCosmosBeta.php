@@ -263,8 +263,13 @@ class SkinCosmosBeta extends SkinMustache {
 			return null;
 		}
 
+		// Remembers whether the contents were collapsed
+		$this->getOutput()->addModules( 'mediawiki.toc' );
+
 		return [
 			'msg-toc' => $this->msg( 'toc' )->text(),
+			'html-lang' => $this->getLanguage()->getHtmlCode(),
+			'html-dir' => $this->getLanguage()->getDir(),
 			'array-sections' => $toc['array-sections'],
 		];
 	}
