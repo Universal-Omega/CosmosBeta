@@ -16,3 +16,155 @@ body > .oo-ui-windowManager,
 .oo-ui-window-head .oo-ui-labelElement-label {
 	color: var( --skin-cosmos-font-color );
 }
+
+body .oo-ui-tabOptionWidget {
+	color: var( --skin-cosmos-font-color );
+}
+
+body .oo-ui-tabSelectWidget-framed .oo-ui-tabOptionWidget.oo-ui-widget-enabled:hover {
+	background-color: rgba( 255, 255, 255, 0.8 );
+}
+
+.oo-ui-buttonElement-framed.oo-ui-widget-disabled > .oo-ui-buttonElement-button {
+	border-color: #c8ccd1;
+	background-color: #c8ccd1;
+	color: #666;
+}
+
+body .oo-ui-buttonElement-framed:not( .oo-ui-flaggedElement-primary ):not( .oo-ui-buttonElement-active ) > .oo-ui-buttonElement-button {
+	color: var( --skin-cosmos-font-color );
+}
+
+.oo-ui-buttonElement-framed {
+	&:not( .oo-ui-flaggedElement-primary ) {
+		&:not( .oo-ui-buttonElement-active ) {
+			>.oo-ui-buttonElement-button {
+				color: #e6e6e6;
+			}
+		}
+	}
+}
+
+.oo-ui-window-head {
+	label {
+		color: var( --skin-cosmos-font-color );
+	}
+}
+
+.oo-ui-messageDialog-text {
+	label {
+		color: var( --skin-cosmos-font-color );
+	}
+}
+
+.oo-ui-processDialog-content {
+	.oo-ui-window-body {
+		background: var( --skin-cosmos-content-background );
+		color: var( --skin-cosmos-font-color );
+	}
+}
+
+.oo-ui-labelElement,
+.oo-ui-labelWidget.oo-ui-inline-help {
+	color: var( --skin-cosmos-font-color );
+}
+
+body .oo-ui-tabSelectWidget-framed {
+	border: 0;
+	background: var( --skin-cosmos-tabs-background );
+	color: var( --skin-cosmos-font-color );
+}
+
+.oo-ui-toolbar {
+	* {
+		color: var( --skin-cosmos-font-color );
+	}
+}
+
+.oo-ui-fieldLayout-header {
+	color: var( --skin-cosmos-font-color );
+}
+
+.oo-ui-buttonElement-framed.oo-ui-widget-enabled {
+	>.oo-ui-buttonElement-button {
+		color: var( --skin-cosmos-font-color );
+	}
+}
+
+.oo-ui-buttonElement-frameless.oo-ui-widget-enabled {
+	>.oo-ui-buttonElement-button {
+		&:hover {
+			background-color: initial;
+		}
+	}
+}
+
+.oo-ui-window-body {
+	background: #000;
+}
+
+.oo-ui-buttonElement-framed.oo-ui-widget-enabled.oo-ui-flaggedElement-primary.oo-ui-flaggedElement-progressive > .oo-ui-buttonElement-button {
+	color: #fff;
+}
+
+// OOUI has no dark theme of its own, so the parts people read and press follow the colors of the skin
+.oo-ui-buttonElement-framed.oo-ui-widget-enabled > .oo-ui-buttonElement-button,
+.oo-ui-buttonElement-framed.oo-ui-widget-enabled > .oo-ui-buttonElement-button > .oo-ui-labelElement-label {
+	color: var( --skin-cosmos-font-color );
+}
+
+.oo-ui-buttonElement-framed.oo-ui-flaggedElement-primary.oo-ui-widget-enabled > .oo-ui-buttonElement-button > .oo-ui-labelElement-label,
+.oo-ui-buttonElement-framed.oo-ui-flaggedElement-primary.oo-ui-widget-enabled > .oo-ui-buttonElement-button {
+	color: #fff;
+}
+
+.oo-ui-menuSelectWidget,
+.oo-ui-popupWidget-popup,
+.oo-ui-selectWidget-depressed {
+	border-color: var( --skin-cosmos-border-color );
+	background-color: var( --skin-cosmos-content-background );
+	color: var( --skin-cosmos-font-color );
+}
+
+.oo-ui-optionWidget,
+.oo-ui-optionWidget .oo-ui-labelElement-label {
+	color: var( --skin-cosmos-font-color );
+}
+
+.oo-ui-optionWidget.oo-ui-optionWidget-highlighted,
+.oo-ui-optionWidget.oo-ui-optionWidget-selected,
+.oo-ui-selectWidget-depressed .oo-ui-optionWidget.oo-ui-optionWidget-selected {
+	background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 28%, var( --skin-cosmos-content-background ) );
+	color: var( --skin-cosmos-font-color );
+}
+
+.oo-ui-dropdownWidget-handle,
+.oo-ui-inputWidget .oo-ui-inputWidget-input,
+.oo-ui-textInputWidget .oo-ui-inputWidget-input {
+	border-color: var( --skin-cosmos-border-color );
+	background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 5%, var( --skin-cosmos-content-background ) );
+	color: var( --skin-cosmos-font-color );
+}
+
+.oo-ui-iconElement-icon:not( [ class*='oo-ui-image-' ] ):not( .oo-ui-checkboxInputWidget-checkIcon ),
+.oo-ui-indicatorElement-indicator:not( [ class*='oo-ui-image-' ] ) {
+	filter: invert( var( --skin-cosmos-invert ) );
+}
+
+.oo-ui-buttonElement-framed.oo-ui-flaggedElement-primary .oo-ui-iconElement-icon,
+.oo-ui-messageWidget .oo-ui-iconElement-icon {
+	filter: none;
+}
+
+.oo-ui-messageWidget {
+	color: #202122;
+
+	.oo-ui-labelElement-label,
+	a {
+		color: #202122;
+	}
+
+	a {
+		text-decoration: underline;
+	}
+}
