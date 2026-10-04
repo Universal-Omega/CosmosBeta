@@ -198,7 +198,7 @@ class PageHeaderComponent {
 					'text' => $this->context->msg( 'cosmosbeta-action-cancel' )->text(),
 					'href' => $talkUrl ?? $talk['href'],
 				] + $talk : null;
-				$secondary = $view ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
+				$secondary = $view && !$isEditing ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
 			} else {
 				$primary = $view ? [
 					'icon' => 'close',
