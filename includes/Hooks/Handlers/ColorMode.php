@@ -65,6 +65,11 @@ class ColorMode implements
 		$out->addHtmlClasses( "skin-cosmos-colormode-$mode" );
 
 		$auto = $this->config->isAutoColorMode() && !$this->config->hasColorModePreference();
+
+		// Core and extensions style their dark mode through these classes, so they follow the skin
+		$out->addHtmlClasses( $auto ? 'skin-theme-clientpref-os' : ( $mode === ThemeSettings::MODE_DARK ?
+			'skin-theme-clientpref-night' :
+			'skin-theme-clientpref-day' ) );
 		$toggle = $this->config->isColorModeToggleEnabled();
 
 		if ( !$toggle && !$auto ) {
@@ -113,6 +118,7 @@ class ColorMode implements
 				'var d=document.documentElement;' .
 				'if(m==="light"||m==="dark"){var l=document.getElementById("skin-cosmos-auto-dark");' .
 				'if(l){l.parentNode.removeChild(l)}' .
+				'd.className=d.className.replace(/skin-theme-clientpref-\\w+/,"skin-theme-clientpref-"+(m==="dark"?"night":"day"));' .
 				'if(d.className.indexOf("skin-cosmos-colormode-"+m)===-1){' .
 				'd.className+=" skin-cosmos-colormode-pending";' .
 				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode-pending","")},2500)}}' .
@@ -129,6 +135,7 @@ class ColorMode implements
 			'render' => $mode,
 			'default' => $this->config->getDefaultMode(),
 			'auto' => $auto,
+			'autoDefault' => $this->config->isAutoColorMode(),
 			'toggle' => $toggle,
 			'registered' => $registered,
 			'altModules' => $altModules,
