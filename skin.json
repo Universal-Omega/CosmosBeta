@@ -36,6 +36,8 @@
 				{
 					"name": "cosmosbeta",
 					"responsive": true,
+					"toc": false,
+					"wrapSiteNotice": true,
 					"bodyClasses": [
 						"skin-cosmos-search-vue"
 					],
@@ -584,7 +586,12 @@
 			"+mediawiki.action.edit.styles": "resources/skinStyles/mediawiki.action.edit.styles.less",
 			"+mediawiki.diff.styles": "resources/skinStyles/mediawiki.diff.styles.less",
 			"+ext.wikiEditor": "resources/skinStyles/ext.wikiEditor.less",
-			"+ext.CodeMirror.init": "resources/skinStyles/ext.CodeMirror.init.less"
+			"+ext.CodeMirror.init": "resources/skinStyles/ext.CodeMirror.init.less",
+			"+mediawiki.special.preferences.styles.ooui": "resources/skinStyles/mediawiki.special.preferences.styles.ooui.less",
+			"+mediawiki.special.changeslist.legend": "resources/skinStyles/mediawiki.special.changeslist.legend.less",
+			"+mediawiki.htmlform.ooui.styles": "resources/skinStyles/mediawiki.htmlform.ooui.styles.less",
+			"+mediawiki.rcfilters.filters.base.styles": "resources/skinStyles/mediawiki.rcfilters.filters.base.styles.less",
+			"+ext.uls.languagesettings": "resources/skinStyles/ext.uls.languagesettings.less"
 		}
 	},
 	"config": {
