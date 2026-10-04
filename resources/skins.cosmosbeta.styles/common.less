@@ -9,6 +9,7 @@
 	--skin-cosmos-link-color: @link-color;
 	--skin-cosmos-border-color: @border-color;
 	--skin-cosmos-invert: @theme-invert;
+	--skin-cosmos-toolbar-invert: @toolbar-icon-invert;
 	--skin-cosmos-alt-font-color: @alt-font-color;
 	--skin-cosmos-button-background: @button-background-color;
 	--skin-cosmos-button-font-color: @button-font-color;
@@ -886,7 +887,7 @@ body > .suggestions {
 
 .skin-cosmos-header-button.skin-cosmos-is-text {
 	border: 0;
-	color: #5f7a7b;
+	color: @link-color;
 }
 
 a.skin-cosmos-header-button {
@@ -1109,7 +1110,7 @@ button.skin-cosmos-header-button {
 	height: 40px;
 	justify-content: flex-end;
 	padding: 5px 0 8px;
-	border-top: 1px solid #e6e6e6;
+	border-top: 1px solid @border-color;
 }
 
 .skin-cosmos-header__local-navigation {
@@ -1158,8 +1159,9 @@ button.skin-cosmos-header-button {
 	box-sizing: border-box;
 	padding: 0 0 2px;
 	border: 0;
-	border-bottom: 1px solid #c5ced9;
-	color: #39424d;
+	border-bottom: 1px solid @border-color;
+	background-color: transparent;
+	color: @font-color;
 	font-size: 16px;
 	line-height: 1em;
 	resize: none;
@@ -1595,9 +1597,10 @@ body #mw-teleport-target {
 	min-width: 280px;
 	max-width: 640px;
 	padding: 20px;
-	border: 1px solid #888;
+	border: 1px solid @border-color;
 	margin: auto;
-	background-color: #fefefe;
+	background-color: @content-background-color;
+	color: @font-color;
 }
 
 .skin-cosmos-icon--tiny {
@@ -2143,6 +2146,9 @@ body h6 {
 
 @toolbar-background-color1: mix(@toolbar-background-color2, @toolbar-background-color-mix, 25%);
 
+.skin-cosmos-invert-icon,
+.skin-cosmos-invert-before::before,
+.skin-cosmos-invert-after::after,
 #cosmos-toolbar [class*='oo-ui-icon-'],
 #cosmos-toolbar .oo-ui-iconElement-icon,
 #cosmos-toolbar .mw-ui-icon::before,
@@ -2189,7 +2195,6 @@ body h6 {
 	float: none;
 }
 
-.mw-special-ManageWiki #cosmos-toolbar,
 .mw-special-Preferences #cosmos-toolbar {
 	display: none;
 }
@@ -2251,7 +2256,7 @@ body h6 {
 	padding: 0 0 15px 0;
 }
 
-body:not( .mw-special-ManageWiki ):not( .mw-special-Preferences ) #cosmos-pageBody-content {
+body:not( .mw-special-Preferences ) #cosmos-pageBody-content {
 	overflow: auto hidden;
 }
 
