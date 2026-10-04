@@ -74,7 +74,7 @@
 	"cosmosbeta-themedesigner-colors-intro": "Use the picker or type any CSS color. Leave a field empty to use the default for this wiki.",
 	"cosmosbeta-themedesigner-comment": "What did you change? (optional)",
 	"cosmosbeta-themedesigner-darkmode-auto-help": "Automatic shows the light colors, and switches to the dark colors for visitors whose browser or device asks for a dark color scheme. Their own choice with the switch always wins.",
-	"cosmosbeta-themedesigner-darkmode-builtin": "The switch appears in the user menu. Logged in users keep their choice in their preferences. Visitors keep it in their browser.",
+	"cosmosbeta-themedesigner-darkmode-builtin": "The switch is a button in the wiki header. Logged in users keep their choice in their preferences. Visitors keep it in their browser.",
 	"cosmosbeta-themedesigner-darkmode-default": "Mode people see first",
 	"cosmosbeta-themedesigner-darkmode-generate": "Make dark colors from the light ones",
 	"cosmosbeta-themedesigner-darkmode-generated": "Dark colors made. Check them under Colors, then publish.",
