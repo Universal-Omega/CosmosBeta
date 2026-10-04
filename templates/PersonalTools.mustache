@@ -10,6 +10,9 @@
 		</div>
 	</div>
 	<div class="body skin-cosmos-personalTools-list cosmos-personalTools-list skin-cosmos-dropdown-list cosmos-dropdown-list">
-		<ul>{{{html-personal-items}}}</ul>
+		<ul>
+			{{#data-talk-alert}}<li class="skin-cosmos-personalTools-talkAlert"><a href="{{href}}">{{text}}</a></li>{{/data-talk-alert}}
+			{{{html-personal-items}}}
+		</ul>
 	</div>
 </div>
