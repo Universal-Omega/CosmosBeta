@@ -114,15 +114,16 @@ class ColorMode implements
 		}
 
 		if ( !$registered && $toggle ) {
-			$script = '(function(){try{var m=localStorage.getItem("skin-cosmos-colormode");' .
-				'var d=document.documentElement;' .
-				'if(m==="light"||m==="dark"){var l=document.getElementById("skin-cosmos-auto-dark");' .
+			$rendered = $mode === ThemeSettings::MODE_DARK ? 'night' : 'day';
+			$script = '(function(){var d=document.documentElement,' .
+				'm=d.className.match(/skin-theme-clientpref-(day|night|os)/);' .
+				'if(!m||m[1]==="os"){return}' .
+				'var l=document.getElementById("skin-cosmos-auto-dark");' .
 				'if(l){l.parentNode.removeChild(l)}' .
-				'd.className=d.className.replace(/skin-theme-clientpref-\\w+/,"skin-theme-clientpref-"+(m==="dark"?"night":"day"));' .
-				'if(d.className.indexOf("skin-cosmos-colormode-"+m)===-1){' .
+				'if(m[1]!=="' . $rendered . '"){' .
 				'd.className+=" skin-cosmos-colormode-pending";' .
-				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode-pending","")},2500)}}' .
-				'}catch(e){}}());';
+				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode-pending","")},2500)}' .
+				'}());';
 			$headItems .= Html::inlineStyle( 'html.skin-cosmos-colormode-pending body{opacity:0}' ) .
 				Html::inlineScript( $script, $out->getCSP()->getNonce() );
 		}
