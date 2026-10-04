@@ -1,10 +1,18 @@
-.skin-cosmos .oo-ui-windowManager-modal > .oo-ui-dialog,
-.skin-cosmos .ve-ui-overlay-global {
-	z-index: 101;
+.skin-cosmosbeta .oo-ui-windowManager-modal > .oo-ui-dialog,
+.skin-cosmosbeta .ve-ui-overlay-global {
+	z-index: 100001;
 }
 
 body > .oo-ui-windowManager,
 .oo-ui-defaultOverlay {
-	z-index: 101;
+	z-index: 100001;
 	font-size: 0.95em;
+}
+
+.oo-ui-window-content,
+.oo-ui-messageDialog-text,
+.oo-ui-messageDialog-message,
+.oo-ui-processDialog-title,
+.oo-ui-window-head .oo-ui-labelElement-label {
+	color: var( --skin-cosmos-font-color );
 }
