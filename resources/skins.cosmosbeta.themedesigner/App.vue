@@ -326,6 +326,9 @@
 						<template #label>
 							{{ msg( 'darkmode-default' ) }}
 						</template>
+						<template #help-text>
+							{{ msg( 'darkmode-auto-help' ) }}
+						</template>
 						<cdx-select
 							v-model:selected="state.colorMode.default"
 							:menu-items="modeItems"
@@ -498,7 +501,7 @@ module.exports = exports = defineComponent( {
 	setup( props ) {
 		const state = reactive( clone( props.designer.settings ) ),
 			activeTab = ref( 'themes' ),
-			editing = ref( state.colorMode.default ),
+			editing = ref( state.colorMode.default === 'dark' ? 'dark' : 'light' ),
 			rawColors = reactive( {} ),
 			colorErrors = reactive( {} );
 
@@ -527,7 +530,7 @@ module.exports = exports = defineComponent( {
 				[ 'normal', msg( 'rail-recentchanges-normal' ) ],
 				[ 'sticky', msg( 'rail-recentchanges-sticky' ) ]
 			] ),
-			modeItems = items( MODES.map( ( mode ) => [ mode, msg( 'mode-' + mode ) ] ) );
+			modeItems = items( [ ...MODES, 'auto' ].map( ( mode ) => [ mode, msg( 'mode-' + mode ) ] ) );
 
 		const triModel = ( key ) => computed( {
 			get: () => state.images[ key ] === null ? '' : String( state.images[ key ] ),
