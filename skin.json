@@ -36,7 +36,6 @@
 				{
 					"name": "cosmosbeta",
 					"responsive": true,
-					"toc": false,
 					"wrapSiteNotice": true,
 					"clientPrefEnabled": true,
 					"bodyClasses": [
@@ -596,7 +595,9 @@
 			"+ext.uls.languagesettings": "resources/skinStyles/ext.uls.languagesettings.less",
 			"+ext.discussionTools.init.styles": "resources/skinStyles/ext.discussionTools.init.styles.less",
 			"+ext.echo.ui": "resources/skinStyles/ext.echo.ui.less",
-			"+mediawiki.notification": "resources/skinStyles/mediawiki.notification.less"
+			"+mediawiki.notification": "resources/skinStyles/mediawiki.notification.less",
+			"+ext.translate.tag.languages": "resources/skinStyles/ext.translate.tag.languages.less",
+			"+ext.managewiki.oouiform.styles": "resources/skinStyles/ext.managewiki.oouiform.styles.less"
 		}
 	},
 	"config": {
