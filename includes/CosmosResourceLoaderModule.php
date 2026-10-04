@@ -199,6 +199,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 					'#404040' :
 					'#000',
 			'toolbar-font-color' => LessUtil::isThemeDark( 'toolbar-background-color', $settings ) ? '#fff' : '#000',
+			'toolbar-icon-invert' => LessUtil::isThemeDark( 'toolbar-background-color', $settings ) ? 1 : 0,
 		];
 	}
 
@@ -207,6 +208,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 		return [
 			'font-color' => $isContentBackgroundColorDark ? '#D5D4D4' : '#000',
+			'theme-invert' => $isContentBackgroundColorDark ? 1 : 0,
 			'border-color' => $isContentBackgroundColorDark ? '#333333' : '#CCCCCC',
 			'alt-font-color' => $isContentBackgroundColorDark ? '#fff' : '#000',
 			'code-background-color' => $isContentBackgroundColorDark ? '#c5c6c6' : '#3a3939',
