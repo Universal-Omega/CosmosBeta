@@ -34,7 +34,6 @@ class CosmosBackgroundLookup {
 
 	public function getBackgroundFile( string $background ): ?File {
 		$title = $this->titleFactory->makeTitle( NS_FILE, $background );
-
 		return $this->repoGroup->findFile( $title ) ?: null;
 	}
 
@@ -45,7 +44,6 @@ class CosmosBackgroundLookup {
 
 		if ( !$this->isBackgroundUrl( $background ) ) {
 			$file = $this->getBackgroundFile( $background );
-
 			if ( $file && $file->exists() ) {
 				return $file->getUrl();
 			}
