@@ -40,7 +40,29 @@ class BannerComponent {
 			'html-avatar' => $this->getAvatar( $user->getId() ),
 			'html-notifications' => $registered ? ( $portlets['data-notifications']['html-items'] ?? null ) : null,
 			'html-personal-items' => $items,
+			'data-talk-alert' => $registered ? $this->getTalkAlert( $portlets ) : null,
 		];
+	}
+
+	private function getTalkAlert( array $portlets ): ?array {
+		foreach ( $portlets['data-notifications']['array-items'] ?? [] as $item ) {
+			if ( ( $item['name'] ?? '' ) !== 'talk-alert' ) {
+				continue;
+			}
+
+			$link = $item['array-links'][0] ?? [];
+			$href = '';
+
+			foreach ( $link['array-attributes'] ?? [] as $attribute ) {
+				if ( $attribute['key'] === 'href' ) {
+					$href = (string)$attribute['value'];
+				}
+			}
+
+			return $href === '' ? null : [ 'href' => $href, 'text' => (string)( $link['text'] ?? '' ) ];
+		}
+
+		return null;
 	}
 
 	private function getAvatar( int $userId ): ?string {
