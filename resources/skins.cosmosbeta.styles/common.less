@@ -2,6 +2,64 @@
 
 @skin-cosmos-font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 
+:root {
+	--skin-cosmos-font-color: @font-color;
+	--skin-cosmos-muted-color: fade( @font-color, 70% );
+	--skin-cosmos-content-background: @content-background-color;
+	--skin-cosmos-link-color: @link-color;
+	--skin-cosmos-border-color: @border-color;
+	--skin-cosmos-invert: @theme-invert;
+	--skin-cosmos-alt-font-color: @alt-font-color;
+	--skin-cosmos-button-background: @button-background-color;
+	--skin-cosmos-button-font-color: @button-font-color;
+	--skin-cosmos-banner-font-color: @banner-font-color;
+}
+
+// Codex and core read their colors from these custom properties, so dark themes redefine them
+.skin-cosmos-dark-tokens() when ( @theme-invert = 1 ) {
+	:root {
+		--filter-invert-icon: invert( 1 );
+		--color-base: @font-color;
+		--color-base--hover: @alt-font-color;
+		--color-emphasized: @alt-font-color;
+		--color-subtle: fade( @font-color, 70% );
+		--color-placeholder: fade( @font-color, 50% );
+		--color-disabled: fade( @font-color, 40% );
+		--color-disabled-emphasized: fade( @font-color, 55% );
+		--color-progressive: @link-color;
+		--color-progressive--hover: lighten( @link-color, 8% );
+		--color-progressive--active: lighten( @link-color, 14% );
+		--background-color-base: @content-background-color;
+		--background-color-neutral: mix( #fff, @content-background-color, 8% );
+		--background-color-neutral-subtle: mix( #fff, @content-background-color, 4% );
+		--background-color-interactive: mix( #fff, @content-background-color, 10% );
+		--background-color-interactive-subtle: mix( #fff, @content-background-color, 5% );
+		--background-color-interactive-subtle--hover: mix( #fff, @content-background-color, 9% );
+		--background-color-interactive-subtle--active: mix( #fff, @content-background-color, 13% );
+		--background-color-disabled: mix( #fff, @content-background-color, 14% );
+		--background-color-disabled-subtle: mix( #fff, @content-background-color, 6% );
+		--border-color-base: lighten( @border-color, 22% );
+		--border-color-subtle: @border-color;
+		--border-color-muted: @border-color;
+		--border-color-interactive: lighten( @border-color, 22% );
+		--border-color-disabled: @border-color;
+	}
+}
+
+.skin-cosmos-dark-tokens();
+
+// Core and extensions mark elements and images that need inverting on dark backgrounds with these classes
+.skin-invert:not( a ),
+.skin-invert-image img {
+	filter: invert( var( --skin-cosmos-invert ) ) hue-rotate( calc( var( --skin-cosmos-invert ) * 180deg ) );
+}
+
+.skin-invert .mw-no-invert,
+.skin-invert-image .mw-no-invert,
+.mw-no-invert {
+	filter: none;
+}
+
 :where( body.skin-cosmosbeta ) {
 	font-family: @skin-cosmos-font-family;
 }
@@ -259,10 +317,6 @@ body > #mw-content-container {
 	margin: 0 4px 0 2px;
 }
 
-#cosmos-notifications-list {
-	min-width: 350px;
-}
-
 #cosmos-messages-list {
 	min-width: 350px;
 }
@@ -365,10 +419,6 @@ body > #mw-content-container {
 	}
 }
 
-body .uls-menu {
-	z-index: 1001;
-}
-
 .skin-cosmos-button-text {
 	margin: auto;
 	text-decoration: none;
@@ -437,28 +487,6 @@ body .uls-menu {
 .skin-cosmos-footerIcons-listItem {
 	display: inline-block;
 	margin: 0 0 15px 15px;
-}
-
-.skin-cosmos-notifications-numNotifs {
-	position: absolute;
-	top: 5px;
-	left: 5px;
-	display: flex;
-	min-width: 13px;
-	height: 13px;
-	place-content: center center;
-	padding: 3px;
-	background-color: #f00;
-	border-radius: 9px;
-	color: @banner-font-color;
-	font-size: 8pt;
-	font-weight: bolder;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
 }
 
 #cosmos-banner {
@@ -1537,7 +1565,7 @@ button.skin-cosmos-header-button {
 
 .skin-cosmos-modal {
 	position: fixed;
-	z-index: 4;
+	z-index: 100000;
 	top: 0;
 	left: 0;
 	display: none;
@@ -1545,6 +1573,11 @@ button.skin-cosmos-header-button {
 	width: 100%;
 	height: 100%;
 	background-color: rgba( 0, 0, 0, 0.8 );
+}
+
+// Core mounts dialogs, popups and notifications for OOUI and Codex here, and it has to sit above the fixed banner
+body #mw-teleport-target {
+	z-index: 100001;
 }
 
 .skin-cosmos-modal-content {
@@ -1646,7 +1679,7 @@ button.skin-cosmos-header-button {
 	}
 }
 
-.skin-cosmos .mw-dismissable-notice {
+.skin-cosmosbeta .mw-dismissable-notice {
 	z-index: 100;
 	width: auto;
 	border: 0;
@@ -1672,21 +1705,15 @@ button.skin-cosmos-header-button {
 	color: #222;
 }
 
-.editOptions {
-	border-width: 0 1px 1px;
-	background-color: transparent;
-	color: #000;
-}
-
 .oo-ui-window-head {
 	label {
-		color: #000;
+		color: @font-color;
 	}
 }
 
 .oo-ui-messageDialog-text {
 	label {
-		color: #000;
+		color: @font-color;
 	}
 }
 
@@ -1812,7 +1839,7 @@ body .oo-ui-tabSelectWidget-framed {
 	}
 }
 
-.skin-cosmos .toc {
+.skin-cosmosbeta .toc {
 	display: table;
 	padding: 0;
 	border: 1px solid @border-color;
@@ -2063,18 +2090,6 @@ body {
 	background-color: @footer-background-color;
 }
 
-.editOptions {
-	p {
-		color: #000;
-	}
-
-	.oo-ui-fieldLayout-body {
-		.oo-ui-labelElement-label {
-			color: #000;
-		}
-	}
-}
-
 .oo-ui-buttonElement-framed.oo-ui-widget-enabled {
 	>.oo-ui-buttonElement-button {
 		color: #000;
@@ -2197,6 +2212,7 @@ body .wikitable > * > tr > td {
 	color: @font-color;
 }
 
+body .mw-heading,
 body h1,
 body h2,
 body h3,
@@ -2207,6 +2223,12 @@ body h6 {
 }
 
 @toolbar-background-color1: mix(@toolbar-background-color2, @toolbar-background-color-mix, 25%);
+
+#cosmos-toolbar [class*='oo-ui-icon-'],
+#cosmos-toolbar .oo-ui-iconElement-icon,
+#cosmos-toolbar .mw-ui-icon::before {
+	filter: invert( @toolbar-icon-invert );
+}
 
 #cosmos-toolbar {
 	box-sizing: border-box;
@@ -2324,32 +2346,6 @@ body:not( .mw-special-ManageWiki ):not( .mw-special-Preferences ) #cosmos-pageBo
 	margin-bottom: 11px;
 }
 
-.diff-context {
-	border-color: #a3a3a3;
-	background-color: transparent;
-	color: @alt-font-color;
-}
-
-.diff-addedline {
-	border-color: #01af3c;
-	background-color: #636262;
-
-	.diffchange {
-		background-color: #01af3c;
-		color: #0e191a;
-	}
-}
-
-.diff-deletedline {
-	border-color: #ef6881;
-	background-color: #636262;
-
-	.diffchange {
-		background-color: #ef6881;
-		color: #fff;
-	}
-}
-
 .skin-cosmos-header-button .skin-cosmos-icon-articleAdd {
 	margin-right: 5px;
 }
@@ -2360,16 +2356,6 @@ body:not( .mw-special-ManageWiki ):not( .mw-special-Preferences ) #cosmos-pageBo
 
 .skin-cosmos-mobile-navigation {
 	display: none;
-}
-
-#mw-content .wikiEditor-ui-toolbar,
-#mw-content .wikiEditor-ui-toolbar .tabs,
-#mw-content .wikiEditor-ui-toolbar .section-main {
-	height: auto;
-}
-
-#mw-content .wikiEditor-ui-toolbar {
-	position: initial;
 }
 
 body .mw-notification {
@@ -2398,16 +2384,6 @@ body .postedit-container {
 	width: 20em;
 	padding: 1em;
 	line-height: 1.35;
-}
-
-#p-personal #pt-uls .uls-trigger {
-	display: block;
-	padding-left: 11px;
-	background-image: none;
-}
-
-#p-personal #pt-uls .uls-trigger::before {
-	display: none;
 }
 
 table.mw-datatable {
@@ -2525,47 +2501,6 @@ table.mw-datatable {
 	position: initial;
 }
 
-#cosmos-banner {
-	#pt-notifications-alert .mw-echo-notifications-badge,
-	#pt-notifications-notice .mw-echo-notifications-badge {
-		top: 0;
-		width: 28px;
-		height: 28px;
-		opacity: 1;
-	}
-
-	.oo-ui-icon-bell,
-	.oo-ui-icon-tray {
-		position: relative;
-		background-image: none;
-	}
-
-	.oo-ui-icon-bell::before,
-	.oo-ui-icon-tray::before {
-		position: absolute;
-		content: '';
-		inset: 0;
-		-webkit-mask-position: center;
-		mask-position: center;
-		-webkit-mask-repeat: no-repeat;
-		mask-repeat: no-repeat;
-		-webkit-mask-size: contain;
-		mask-size: contain;
-	}
-
-	.oo-ui-icon-bell::before {
-		.cdx-mixin-css-icon-background-image( @cdx-icon-bell-outline, @banner-font-color );
-	}
-
-	.oo-ui-icon-tray::before {
-		.cdx-mixin-css-icon-background-image( @cdx-icon-info, @banner-font-color );
-	}
-
-	#pt-talk-alert a {
-		color: #202122;
-	}
-}
-
 table.mw-interwikitable.body td.mw-interwikitable-local-yes {
 	background: @content-background-color;
 }
@@ -2618,7 +2553,7 @@ div.thumbinner {
 	color: @header-font-color;
 }
 
-.skin-cosmos .jsbc-breadcrumbs {
+.skin-cosmosbeta .jsbc-breadcrumbs {
 	top: 0;
 }
 
@@ -2675,6 +2610,34 @@ div.thumbinner {
 .skin-cosmos-dropdown-icon .skin-cosmos-icon {
 	width: 14px;
 	height: 14px;
+}
+
+.skin-cosmos-personalTools-talkAlert {
+	display: none;
+}
+
+@media ( max-width: 850px ) {
+	#cosmos-banner #pt-talk-alert {
+		display: none;
+	}
+
+	.skin-cosmos-personalTools-list .skin-cosmos-personalTools-talkAlert {
+		display: block;
+		padding: 0;
+		// The list has padding at the top, so the notice reaches the top edge of the menu
+		margin: -7px 0 6px;
+
+		> a:only-child {
+			display: block;
+			padding: 12px 18px;
+			margin: 0;
+			background-color: #fc3;
+			border-radius: 4px 4px 0 0;
+			color: #202122;
+			font-weight: bold;
+			line-height: 1.3;
+		}
+	}
 }
 
 .skin-cosmos-personalTools-list {
@@ -2735,41 +2698,6 @@ div.thumbinner {
 
 	.skin-cosmos-menu__chevron {
 		transform: rotate( 180deg );
-	}
-}
-
-#cosmos-notification-icons {
-	display: flex;
-	height: 100%;
-	place-items: center center;
-	padding: 5px 18px 5px 2px;
-	gap: 22px;
-	list-style: none;
-}
-
-@media ( max-width: 850px ) {
-	#cosmos-notification-icons {
-		padding-right: 14px;
-		gap: 18px;
-	}
-}
-
-// On narrow screens the new messages notice shrinks to a dot, so the icons stay on the screen
-@media ( max-width: 700px ) {
-	#cosmos-banner #pt-talk-alert {
-		width: 12px;
-		height: 12px;
-		padding: 0;
-		margin: 0;
-		overflow: hidden;
-		border-radius: 50%;
-
-		a {
-			display: block;
-			width: 100%;
-			height: 100%;
-			font-size: 0;
-		}
 	}
 }
 
