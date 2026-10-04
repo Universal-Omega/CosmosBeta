@@ -13,19 +13,18 @@
 	--skin-cosmos-button-background: @button-background-color;
 	--skin-cosmos-button-font-color: @button-font-color;
 	--skin-cosmos-banner-font-color: @banner-font-color;
+	--skin-cosmos-tabs-background: @tabs-background-color;
 }
 
-// Codex and core read their colors from these custom properties, so dark themes redefine them
+@import 'mediawiki.skin.codex-design-tokens/theme-wikimedia-ui-mixin-dark.less';
+
 .skin-cosmos-dark-tokens() when ( @theme-invert = 1 ) {
 	:root {
-		--filter-invert-icon: invert( 1 );
+		.cdx-mode-dark();
+		color-scheme: dark;
 		--color-base: @font-color;
 		--color-base--hover: @alt-font-color;
 		--color-emphasized: @alt-font-color;
-		--color-subtle: fade( @font-color, 70% );
-		--color-placeholder: fade( @font-color, 50% );
-		--color-disabled: fade( @font-color, 40% );
-		--color-disabled-emphasized: fade( @font-color, 55% );
 		--color-progressive: @link-color;
 		--color-progressive--hover: lighten( @link-color, 8% );
 		--color-progressive--active: lighten( @link-color, 14% );
@@ -36,17 +35,54 @@
 		--background-color-interactive-subtle: mix( #fff, @content-background-color, 5% );
 		--background-color-interactive-subtle--hover: mix( #fff, @content-background-color, 9% );
 		--background-color-interactive-subtle--active: mix( #fff, @content-background-color, 13% );
-		--background-color-disabled: mix( #fff, @content-background-color, 14% );
-		--background-color-disabled-subtle: mix( #fff, @content-background-color, 6% );
 		--border-color-base: lighten( @border-color, 22% );
-		--border-color-subtle: @border-color;
-		--border-color-muted: @border-color;
 		--border-color-interactive: lighten( @border-color, 22% );
-		--border-color-disabled: @border-color;
 	}
 }
 
 .skin-cosmos-dark-tokens();
+
+// Boxes on the wiki that carry their own light background keep readable text on a dark theme
+.skin-cosmos-light-boxes() when ( @theme-invert = 1 ) {
+	.mw-parser-output {
+		[ style*='background:#f' ],
+		[ style*='background: #f' ],
+		[ style*='background-color:#f' ],
+		[ style*='background-color: #f' ],
+		[ style*='background:#e' ],
+		[ style*='background: #e' ],
+		[ style*='background-color:#e' ],
+		[ style*='background-color: #e' ],
+		[ style*='background:white' ],
+		[ style*='background: white' ],
+		[ style*='background-color:white' ],
+		[ style*='background-color: white' ],
+		[ style*='background:#ddd' ],
+		[ style*='background-color:#ddd' ] {
+			color: #202122;
+
+			a:not( .new ) {
+				color: #36c;
+			}
+
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				color: #202122;
+			}
+		}
+	}
+}
+
+.skin-cosmos-light-boxes();
+
+// Logos in the footer are drawn for light backgrounds
+body .skin-cosmos-footerIcons-listItem a.cdx-button {
+	background-color: #f8f9fa;
+}
 
 // Core and extensions mark elements and images that need inverting on dark backgrounds with these classes
 .skin-invert:not( a ),
@@ -79,32 +115,6 @@ body {
 
 #cosmos-footer {
 	margin-bottom: 150px;
-}
-
-.mw-prefs-buttons {
-	background: @content-background-color;
-}
-
-.mw-changeslist-legend {
-	background-color: #fff;
-}
-
-body .oo-ui-tabOptionWidget {
-	color: @font-color;
-}
-
-body .oo-ui-tabSelectWidget-framed .oo-ui-tabOptionWidget.oo-ui-widget-enabled:hover {
-	background-color: rgba( 255, 255, 255, 0.8 );
-}
-
-.oo-ui-buttonElement-framed.oo-ui-widget-disabled > .oo-ui-buttonElement-button {
-	border-color: #c8ccd1;
-	background-color: #c8ccd1;
-	color: #666;
-}
-
-body .oo-ui-buttonElement-framed:not( .oo-ui-flaggedElement-primary ):not( .oo-ui-buttonElement-active ) > .oo-ui-buttonElement-button {
-	color: #000;
 }
 
 #mw-indicator-mw-helplink a {
@@ -1647,38 +1657,6 @@ body #mw-teleport-target {
 	color: @font-color;
 }
 
-.mw-htmlform-ooui {
-	.mw-htmlform-matrix {
-		tbody {
-			tr {
-				&:hover {
-					td {
-						background-color: transparent;
-						color: @font-color;
-					}
-				}
-
-				&:nth-child( even ) {
-					td {
-						background-color: transparent;
-						color: @font-color;
-					}
-				}
-			}
-		}
-	}
-}
-
-.oo-ui-buttonElement-framed {
-	&:not( .oo-ui-flaggedElement-primary ) {
-		&:not( .oo-ui-buttonElement-active ) {
-			>.oo-ui-buttonElement-button {
-				color: #e6e6e6;
-			}
-		}
-	}
-}
-
 .skin-cosmosbeta .mw-dismissable-notice {
 	z-index: 100;
 	width: auto;
@@ -1703,38 +1681,6 @@ body #mw-teleport-target {
 
 #centralNotice * {
 	color: #222;
-}
-
-.oo-ui-window-head {
-	label {
-		color: @font-color;
-	}
-}
-
-.oo-ui-messageDialog-text {
-	label {
-		color: @font-color;
-	}
-}
-
-.oo-ui-processDialog-content {
-	.oo-ui-window-body {
-		background: @content-background-color;
-		color: @font-color;
-	}
-}
-
-.oo-ui-labelElement,
-.oo-ui-labelWidget.oo-ui-inline-help {
-	color: @font-color;
-}
-
-.mw-rcfilters-ui-filterTagMultiselectWidget-views-select-widget.oo-ui-widget {
-	background: #fff;
-}
-
-.mw-changeslist-legend {
-	color: #000;
 }
 
 .skin-cosmos-modal-close {
@@ -1821,12 +1767,6 @@ body code {
 	padding: 10px;
 	border-top: solid 1px @border-color;
 	margin: 0;
-}
-
-body .oo-ui-tabSelectWidget-framed {
-	border: 0;
-	background: @tabs-background-color;
-	color: @font-color;
 }
 
 #contentSub {
@@ -1992,12 +1932,6 @@ body {
 	}
 }
 
-.oo-ui-toolbar {
-	* {
-		color: #000;
-	}
-}
-
 #catlinks {
 	padding: 10px;
 	padding-top: 1em;
@@ -2007,10 +1941,6 @@ body {
 	clear: both;
 	color: @font-color;
 	line-height: 1.8em;
-}
-
-.oo-ui-fieldLayout-header {
-	color: @font-color;
 }
 
 #cosmos-footer-footerContent {
@@ -2088,12 +2018,6 @@ body {
 	border: 0;
 	margin: 0;
 	background-color: @footer-background-color;
-}
-
-.oo-ui-buttonElement-framed.oo-ui-widget-enabled {
-	>.oo-ui-buttonElement-button {
-		color: #000;
-	}
 }
 
 #cosmos-page-header {
@@ -2177,11 +2101,6 @@ body {
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-between;
-}
-
-.skin-cosmos-pageAligned .mw-mmv-filepage-buttons .mw-mmv-view-expanded,
-.skin-cosmos-pageAligned .mw-mmv-filepage-buttons .mw-mmv-view-config {
-	line-height: 1.5em;
 }
 
 #catlinks {
@@ -2307,14 +2226,6 @@ body h6 {
 	}
 }
 
-.oo-ui-buttonElement-frameless.oo-ui-widget-enabled {
-	>.oo-ui-buttonElement-button {
-		&:hover {
-			background-color: initial;
-		}
-	}
-}
-
 #cosmos-content-siteNotice {
 	min-height: 36px;
 	padding: 15px 15px 15px 15px;
@@ -2411,15 +2322,6 @@ table.mw-datatable {
 	color: @font-color;
 }
 
-.client-js.ve-activated:not( .ve-loading ) .ve-init-mw-desktopArticleTarget-uneditableContent {
-	opacity: 1;
-	pointer-events: auto;
-	-webkit-user-select: auto;
-	-moz-user-select: auto;
-	-ms-user-select: auto;
-	user-select: auto;
-}
-
 #cosmos-dashboard-icon-circle,
 #cosmos-dashboard-icon-path,
 .skin-cosmos-dashboard-icon-line {
@@ -2449,64 +2351,8 @@ table.mw-datatable {
 	display: none;
 }
 
-.ve-activated #cosmos-pageBody-content {
-	width: 100%;
-}
-
-.oo-ui-window-body {
-	background: #000;
-}
-
-.ve-activated .ve-ui-mwNoticesPopupTool-item .warningbox {
-	padding: 0.5em 1em;
-	border: 1px solid;
-	margin-bottom: 1em;
-	background: none;
-}
-
-.ve-ui-toolbar-saveButton span {
-	color: #fff;
-}
-
-.ve-ui-mwNoticesPopupTool-item .warningbox {
-	padding: 0.5em 1em;
-	border: 1px solid;
-	margin-bottom: 1em;
-	background: none;
-}
-
-.ve-active .oo-ui-barToolGroup-tools.oo-ui-toolGroup-disabled-tools .oo-ui-tool.oo-ui-flaggedElement-primary > .oo-ui-tool-link {
-	background-color: #808080;
-}
-
-.ve-ui-mwSaveDialog .oo-ui-window-frame {
-	width: 60%;
-	height: 60%;
-}
-
-.ve-init-mw-tempWikitextEditorWidget {
-	background: transparent;
-}
-
-.ve-activated .oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-active > .oo-ui-window-frame {
-	max-width: 60%;
-	max-height: 60%;
-}
-
-.ve-activated .ve-ui-mwSaveDialog-savePanel .oo-ui-fieldLayout-header {
-	color: #000;
-}
-
-.ve-ui-toolbar:not( .ve-ui-toolbar-floating ) .oo-ui-toolbar-bar {
-	position: initial;
-}
-
 table.mw-interwikitable.body td.mw-interwikitable-local-yes {
 	background: @content-background-color;
-}
-
-.oo-ui-buttonElement-framed.oo-ui-widget-enabled.oo-ui-flaggedElement-primary.oo-ui-flaggedElement-progressive > .oo-ui-buttonElement-button {
-	color: #fff;
 }
 
 .skin-cosmos-header {
@@ -2537,16 +2383,6 @@ div.thumbinner {
 		border-left: 1px solid @border-color;
 		color: #3a3a3a;
 	}
-}
-
-.language-settings-dialog {
-	top: 30% !important;
-	left: 50% !important;
-	overflow: auto;
-	width: auto;
-	min-width: unset !important;
-	max-width: 99%;
-	transform: translate( -50%, -50% );
 }
 
 #mw-content .navigation-preview .skin-cosmos-nav .skin-cosmos-nav__label a {
