@@ -256,18 +256,19 @@ class PageHeaderComponent {
 			"skin-cosmos-button skin-cosmos-button-$variant skin-cosmos-button-action",
 			"cosmos-button cosmos-button-$variant cosmos-button-action",
 		];
-		$id = $item['id'] ?? '';
+		$sourceId = $item['id'] ?? '';
+		$id = ( $item['icon'] ?? '' ) === 'close' ? 'cosmos-actions-cancel' : $sourceId;
 
-		if ( str_starts_with( $id, 'ca-nstab-' ) ) {
+		if ( str_starts_with( $sourceId, 'ca-nstab-' ) ) {
 			$classes[] = 'skin-cosmos-actions-view cosmos-actions-view';
-		} elseif ( $id === 'ca-talk' ) {
+		} elseif ( $sourceId === 'ca-talk' ) {
 			$classes[] = 'skin-cosmos-actions-talk cosmos-actions-talk';
 		} else {
 			$classes[] = 'skin-cosmos-actions-edit cosmos-actions-edit';
 		}
 
 		return [
-			'id' => $item['id'] ?? null,
+			'id' => $id !== '' ? $id : null,
 			'class' => implode( ' ', $classes ),
 			'href' => $item['href'] ?? null,
 			'title' => $item['title'] ?? '',
