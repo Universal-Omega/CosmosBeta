@@ -155,6 +155,10 @@ class CosmosConfig {
 		return (int)$this->getTheme()->getSection( 'layout' )['backdropBlur'];
 	}
 
+	public function hasSlimButtons(): bool {
+		return (bool)$this->getTheme()->getSection( 'layout' )['slimButtons'];
+	}
+
 	public function getFooterOpacity(): int {
 		return (int)$this->getTheme()->getSection( 'footer' )['opacity'];
 	}
