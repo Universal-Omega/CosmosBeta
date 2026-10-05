@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta;
 
-use LogicException;
-use MediaWiki\MediaWikiServices;
 use function array_slice;
 use function count;
 use function ctype_xdigit;
@@ -28,14 +26,22 @@ use function trim;
 use const PREG_SPLIT_NO_EMPTY;
 
 class LessUtil {
-	private static array $cosmosSettings = [];
+
+	// Luminance where black and white text have the same contrast.
+	private const float LUMINANCE_THRESHOLD = 0.179;
+
+	/** @var array<string, array> */
+	private array $cosmosSettings = [];
+
+	public function __construct(
+		private readonly CosmosConfig $cosmosConfig,
+	) {
+	}
 
 	/** Gets the theme colors of a color mode in the form the stylesheets use them */
-	public static function getCosmosSettings( string $mode ): array {
-		$themeSettings = MediaWikiServices::getInstance()->get( 'CosmosBetaConfig' );
-
-		if ( empty( static::$cosmosSettings[$mode] ) ) {
-			$settings = [
+	public function getCosmosSettings( string $mode ): array {
+		if ( !isset( $this->cosmosSettings[$mode] ) ) {
+			$slots = [
 				'banner-background-color' => 'banner',
 				'header-background-color' => 'header',
 				'content-background-color' => 'content',
@@ -45,90 +51,41 @@ class LessUtil {
 				'link-color' => 'link',
 			];
 
-			foreach ( $settings as $name => $slot ) {
-				static::$cosmosSettings[$mode][$name] = trim(
-					self::sanitizeColor( $themeSettings->getColor( $slot, $mode ) )
+			foreach ( $slots as $name => $slot ) {
+				$this->cosmosSettings[$mode][$name] = self::sanitizeColor(
+					$this->cosmosConfig->getColor( $slot, $mode )
 				);
 			}
 		}
 
-		return static::$cosmosSettings[$mode];
+		return $this->cosmosSettings[$mode];
 	}
 
 	public static function sanitizeColor( string $color ): string {
 		$color = trim( strtolower( $color ) );
-
 		return $color;
 	}
 
+	/** Whether white text reads better than black text on the given background setting */
 	public static function isThemeDark( string $background, array $cosmosSettings ): bool {
-		$backgroundColor = $cosmosSettings[$background];
-
-		$parsed = self::parseColor( $backgroundColor );
+		$parsed = self::parseColor( $cosmosSettings[$background] );
 		if ( $parsed === null || (float)$parsed['a'] === 0.0 ) {
 			return true;
 		}
 
-		// convert RGB to HSL
-		[ $hue, $saturation, $lightness ] = self::rgb2hsl( $backgroundColor );
-
-		$isDark = ( $lightness < 0.5 );
-
-		return $isDark;
+		return self::getLuminance( $parsed['r'], $parsed['g'], $parsed['b'] ) < self::LUMINANCE_THRESHOLD;
 	}
 
-	private static function rgb2hsl( string $rgbhex ): array {
-		$parsed = self::parseColor( $rgbhex ) ?? [ 'r' => 0, 'g' => 0, 'b' => 0 ];
-		$rgb = [ $parsed['r'], $parsed['g'], $parsed['b'] ];
+	/** Relative luminance as defined by WCAG, 0 for black and 1 for white */
+	private static function getLuminance( int $red, int $green, int $blue ): float {
+		$channels = [];
 
-		$clrR = (float)( !empty( $rgb[0] ) ? ( $rgb[0] / 255 ) : 0 );
-		$clrG = (float)( !empty( $rgb[1] ) ? ( $rgb[1] / 255 ) : 0 );
-		$clrB = (float)( !empty( $rgb[2] ) ? ( $rgb[2] / 255 ) : 0 );
-
-		$clrMin = min( $clrR, $clrG, $clrB );
-		$clrMax = max( $clrR, $clrG, $clrB );
-		$deltaMax = $clrMax - $clrMin;
-
-		$L = ( $clrMax + $clrMin ) / 2;
-
-		if ( $deltaMax === 0.0 ) {
-			$H = 0;
-			$S = 0;
-		} else {
-			if ( $L < 0.5 ) {
-				$S = $deltaMax / ( $clrMax + $clrMin );
-			} else {
-				$S = $deltaMax / ( 2 - $clrMax - $clrMin );
-			}
-
-			$deltaR = ( ( ( $clrMax - $clrR ) / 6 ) + ( $deltaMax / 2 ) ) / $deltaMax;
-			$deltaG = ( ( ( $clrMax - $clrG ) / 6 ) + ( $deltaMax / 2 ) ) / $deltaMax;
-			$deltaB = ( ( ( $clrMax - $clrB ) / 6 ) + ( $deltaMax / 2 ) ) / $deltaMax;
-
-			if ( $clrR === $clrMax ) {
-				$H = $deltaB - $deltaG;
-			} elseif ( $clrG === $clrMax ) {
-				$H = ( 1 / 3 ) + $deltaR - $deltaB;
-			} elseif ( $clrB === $clrMax ) {
-				$H = ( 2 / 3 ) + $deltaG - $deltaR;
-			} else {
-				throw new LogicException( 'Unreachable' );
-			}
-
-			if ( $H < 0 ) {
-				$H += 1;
-			}
-
-			if ( $H > 1 ) {
-				$H -= 1;
-			}
+		foreach ( [ $red, $green, $blue ] as $value ) {
+			$value /= 255;
+			$channels[] = $value <= 0.03928 ? $value / 12.92 : ( ( $value + 0.055 ) / 1.055 ) ** 2.4;
 		}
 
-		return [
-			$H,
-			$S,
-			$L,
-		];
+		return 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];
 	}
 
 	public static function colorNameToHex( string $colorName ): string {
@@ -284,7 +241,6 @@ class LessUtil {
 		];
 
 		$key = strtolower( trim( $colorName ) );
-
 		return $colors[$key] ?? $colorName;
 	}
 
@@ -296,7 +252,6 @@ class LessUtil {
 	 */
 	public static function parseColor( string $color ): ?array {
 		$color = strtolower( trim( $color ) );
-
 		if ( $color === 'transparent' ) {
 			return [ 'r' => 0, 'g' => 0, 'b' => 0, 'a' => 0.0 ];
 		}
@@ -307,7 +262,6 @@ class LessUtil {
 
 		if ( $color !== '' && $color[0] === '#' ) {
 			$hex = substr( $color, 1 );
-
 			if ( !ctype_xdigit( $hex ) || !in_array( strlen( $hex ), [ 3, 4, 6, 8 ], true ) ) {
 				return null;
 			}
