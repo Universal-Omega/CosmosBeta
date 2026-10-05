@@ -97,6 +97,21 @@ class CosmosNavigation {
 				continue;
 			}
 
+			$target = null;
+
+			foreach ( $tree as $index => $node ) {
+				if ( strtoupper( $node['text'] ) === strtoupper( $label ) ) {
+					$target = $index;
+					break;
+				}
+			}
+
+			$texts = [];
+
+			foreach ( $target !== null ? $tree[$target]['array-children'] : [] as $child ) {
+				$texts[strtoupper( trim( (string)$child['text'] ) )] = true;
+			}
+
 			$children = [];
 
 			foreach ( $portlet['array-items'] ?? [] as $item ) {
@@ -109,12 +124,15 @@ class CosmosNavigation {
 					}
 				}
 
-				if ( $href === '' || isset( $known[$href] ) ) {
+				$text = (string)( $link['text'] ?? '' );
+				$textKey = strtoupper( trim( $text ) );
+
+				if ( $href === '' || isset( $known[$href] ) || isset( $texts[$textKey] ) ) {
 					continue;
 				}
 
 				$known[$href] = true;
-				$text = (string)( $link['text'] ?? '' );
+				$texts[$textKey] = true;
 				$children[] = [
 					'id' => Sanitizer::escapeIdForAttribute( $text ),
 					'text' => $text,
@@ -131,18 +149,10 @@ class CosmosNavigation {
 				continue;
 			}
 
-			$matched = false;
-
-			foreach ( $tree as $index => $node ) {
-				if ( strtoupper( $node['text'] ) === strtoupper( $label ) ) {
-					$tree[$index]['array-children'] = array_merge( $node['array-children'], $children );
-					$tree[$index]['has-children'] = true;
-					$matched = true;
-					break;
-				}
-			}
-
-			if ( !$matched ) {
+			if ( $target !== null ) {
+				$tree[$target]['array-children'] = array_merge( $tree[$target]['array-children'], $children );
+				$tree[$target]['has-children'] = true;
+			} else {
 				$tree[] = [
 					'id' => Sanitizer::escapeIdForAttribute( $label ),
 					'text' => $label,
