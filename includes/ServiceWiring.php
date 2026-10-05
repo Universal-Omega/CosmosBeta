@@ -8,6 +8,9 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdminDashboardStats;
+use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdvancedSectionBuilder;
+use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardControlRegistry;
 use MediaWiki\Skins\CosmosBeta\CosmosBackgroundLookup;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
 use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
@@ -21,6 +24,30 @@ use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
 // @codeCoverageIgnoreStart
 
 return [
+	'CosmosBetaAdminDashboardControls' => static function ( MediaWikiServices $services ): DashboardControlRegistry {
+		return new DashboardControlRegistry(
+			$services->get( 'ExtensionRegistry' ),
+			$services->getPermissionManager(),
+			new ServiceOptions(
+				DashboardControlRegistry::CONSTRUCTOR_OPTIONS,
+				$services->getMainConfig()
+			),
+			$services->getSpecialPageFactory(),
+			$services->getTitleFactory()
+		);
+	},
+
+	'CosmosBetaAdminDashboardStats' => static function ( MediaWikiServices $services ): AdminDashboardStats {
+		return new AdminDashboardStats(
+			$services->getMainWANObjectCache(),
+			$services->getConnectionProvider()
+		);
+	},
+
+	'CosmosBetaAdvancedSectionBuilder' => static function ( MediaWikiServices $services ): AdvancedSectionBuilder {
+		return new AdvancedSectionBuilder( $services->getSpecialPageFactory() );
+	},
+
 	'CosmosBetaAltModules' => static function ( MediaWikiServices $services ): AltModules {
 		return new AltModules( $services->get( 'ExtensionRegistry' ) );
 	},
