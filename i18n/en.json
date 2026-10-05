@@ -107,6 +107,8 @@
 	"cosmosbeta-themedesigner-layout-backdrop-blur-help": "Blurs what is behind the banner, content area, footer and page tools when their colors are see through. Browsers that cannot blur get a more opaque background instead.",
 	"cosmosbeta-themedesigner-layout-header-button-opacity": "Wiki header button background opacity",
 	"cosmosbeta-themedesigner-layout-opacity": "Content area opacity",
+	"cosmosbeta-themedesigner-layout-slim-buttons": "Slim page buttons",
+	"cosmosbeta-themedesigner-layout-slim-buttons-help": "Makes the edit, cancel and other buttons above the page title shorter and more compact.",
 	"cosmosbeta-themedesigner-layout-width": "Content width",
 	"cosmosbeta-themedesigner-layout-width-default": "Default",
 	"cosmosbeta-themedesigner-layout-width-full": "Full width",
