@@ -1,13 +1,13 @@
-@fandom-radius: 8px;
-@fandom-gap: 20px;
-@fandom-rail-width: 336px;
-@fandom-banner-height: 55px;
-@fandom-shadow: 0 1px 2px rgba( 0, 0, 0, 0.12 ), 0 2px 8px rgba( 0, 0, 0, 0.08 );
+@fandom-banner-height: 46px;
+@fandom-rail-width: 66px;
+@fandom-side-rail-width: 336px;
+@fandom-gap: 16px;
+@fandom-card-padding: 26px;
+@fandom-radius: 4px;
 
 .skin-cosmos-fandom-card() {
 	border-radius: @fandom-radius;
 	background-color: @content-opacity-level;
-	box-shadow: @fandom-shadow;
 
 	& when ( @backdrop-blur-enabled = 1 ) {
 		-webkit-backdrop-filter: blur( @backdrop-blur );
@@ -15,35 +15,112 @@
 	}
 }
 
+.skin-cosmos-fandom-subcard() {
+	border-radius: @fandom-radius;
+	background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 8%, var( --skin-cosmos-content-background ) );
+}
+
+.skin-cosmos-fandom-only {
+	display: none;
+}
+
 body.skin-cosmos-style-fandomdesktop {
 	font-family: Rubik, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
+	.skin-cosmos-fandom-hidden {
+		display: none;
+	}
+
+	.skin-cosmos-fandom-only {
+		display: inline-flex;
+	}
+
 	#mw-content {
-		border-radius: @fandom-radius;
+		min-height: 0;
+		padding: 0;
+		background: transparent;
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
 	}
 
-	.mw-body h1.firstHeading {
-		font-size: 2.5rem;
-		letter-spacing: -0.01em;
-		line-height: 1.2;
+	#content {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax( 0, 1fr );
+		margin-top: @fandom-gap;
+		row-gap: @fandom-gap;
+
+		&::before {
+			z-index: 0;
+			grid-column: 1;
+			grid-row: 2 / 4;
+			content: '';
+			.skin-cosmos-fandom-card();
+		}
 	}
 
-	.skin-cosmos-button,
-	.skin-cosmos-button.skin-cosmos-button-single {
-		border-radius: 999px;
+	#top {
+		position: absolute;
 	}
 
-	.skin-cosmos-actions-edit:not( .skin-cosmos-button-single ) {
-		border-radius: 999px 0 0 999px;
+	#cosmos-page-header {
+		position: relative;
+		z-index: 1;
+		grid-column: 1;
+		grid-row: 2;
+		min-width: 0;
+		padding: @fandom-card-padding @fandom-card-padding 0;
 	}
 
-	#cosmos-actionsList-button {
-		border-radius: 0 999px 999px 0;
+	.skin-cosmos-articleContainer {
+		display: contents;
 	}
 
-	#cosmos-actions-cancel {
-		padding-right: 26px;
-		padding-left: 26px;
+	#cosmos-pageBody-content {
+		position: relative;
+		z-index: 1;
+		grid-column: 1;
+		grid-row: 3;
+		width: auto;
+		min-width: 0;
+		padding: 0 @fandom-card-padding @fandom-card-padding;
+	}
+
+	.skin-cosmos-page-tools {
+		position: relative;
+		z-index: 1;
+		grid-column: 1;
+		grid-row: 4;
+		padding: 20px @fandom-card-padding;
+		.skin-cosmos-fandom-subcard();
+	}
+
+	.skin-cosmos-rail {
+		display: block;
+		grid-column: 1;
+		grid-row: 5;
+		width: auto;
+		padding: 0;
+		border: 0;
+		-webkit-column-count: 1;
+		column-count: 1;
+	}
+
+	.skin-cosmos-rail-inner {
+		display: grid;
+		gap: @fandom-gap;
+		grid-template-columns: repeat( auto-fit, minmax( 18rem, 1fr ) );
+	}
+
+	.skin-cosmos-rail .skin-cosmos-rail-module,
+	.skin-cosmos-rail .rail-module {
+		position: static;
+		display: block;
+		width: auto;
+		box-sizing: border-box;
+		padding: 20px @fandom-card-padding;
+		margin: 0;
+		.skin-cosmos-fandom-subcard();
 	}
 
 	.skin-cosmos-rail .skin-cosmos-rail-module h2,
@@ -51,146 +128,316 @@ body.skin-cosmos-style-fandomdesktop {
 		padding: 0;
 		border: 0;
 		margin: 0 0 12px;
-		font-size: 1rem;
+		font-size: 14px;
 		font-weight: bold;
-		letter-spacing: 0.02em;
 	}
-}
 
-@media only screen and ( min-width: 1024px ) {
-	body.skin-cosmos-style-fandomdesktop {
-		#mw-content {
-			padding: @fandom-gap 0 0;
-			background-color: transparent;
-			-webkit-backdrop-filter: none;
-			backdrop-filter: none;
-		}
+	.mw-body h1.firstHeading {
+		font-size: 30px;
+		font-weight: 400;
+		line-height: 1.25;
+		opacity: 1;
+	}
 
-		#content {
-			position: relative;
-			display: grid;
-			grid-template-columns: minmax( 0, 1fr ) @fandom-rail-width;
-			grid-template-rows: auto auto 1fr;
-			column-gap: @fandom-gap;
-			isolation: isolate;
+	#firstHeading {
+		padding: 4px 0;
+	}
 
-			&::before {
-				z-index: -1;
-				grid-column: 1;
-				grid-row: 1 / 3;
-				content: '';
-				.skin-cosmos-fandom-card();
+	#cosmos-header-articleHeader {
+		flex-wrap: nowrap;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	#firstHeading {
+		flex: 1 1 0;
+		min-width: 0;
+	}
+
+	.skin-cosmos-categories__label {
+		margin-right: 4px;
+	}
+
+	#cosmos-articleHeader-actions {
+		flex: none;
+		flex-wrap: nowrap;
+		padding: 0;
+
+		.skin-cosmos-button {
+			height: auto;
+			padding: 8px 10px;
+			border: 0;
+			margin: 0 0 0 2px;
+			background: transparent;
+			border-radius: @fandom-radius;
+			color: @link-color;
+			filter: none;
+			font-size: 12px;
+			letter-spacing: 0.04em;
+			stroke: none;
+			text-transform: uppercase;
+			transition: background-color 150ms ease;
+
+			&:hover {
+				background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 12%, transparent );
+				filter: none;
+				opacity: 1;
 			}
 		}
 
-		#top {
-			position: absolute;
+		.skin-cosmos-button-icon {
+			width: 16px;
+			height: 16px;
+			margin: 0 5px 0 0;
 		}
 
-		#cosmos-page-header {
-			grid-column: 1;
-			grid-row: 1;
-			min-width: 0;
-			padding: 24px 40px 0;
+		#cosmos-actionsList-button {
+			padding: 8px 4px;
 		}
 
-		.skin-cosmos-articleContainer {
-			display: contents;
+		.skin-cosmos-dropdown-icon .skin-cosmos-icon {
+			width: 20px;
+			height: 20px;
+		}
+	}
+
+	#cosmos-content-categories {
+		display: block;
+		margin: 0;
+	}
+
+	#catlinks {
+		display: block;
+		padding: 16px 0 0;
+		border: 0;
+		border-top: 1px solid @border-color;
+		margin: 28px 0 0;
+		background: transparent;
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+		font-size: 13px;
+	}
+
+	#catlinks ul {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 0;
+		margin: 8px 0 0;
+		gap: 4px 16px;
+		list-style: none;
+
+		li {
+			margin: 0;
+		}
+	}
+
+	#skin-cosmos-license {
+		padding-top: 16px;
+		margin-top: 16px;
+		border-top: 1px solid @border-color;
+		color: var( --skin-cosmos-muted-color );
+		font-size: 12px;
+	}
+
+	#footer-info-copyright {
+		display: none;
+	}
+
+	.skin-cosmos-page-tools__title {
+		padding: 0;
+		border: 0;
+		margin: 0 0 14px;
+		font-size: 14px;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+
+	.skin-cosmos-page-tools__list {
+		display: grid;
+		padding: 0;
+		margin: 0;
+		column-gap: 32px;
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+		list-style: none;
+		row-gap: 10px;
+
+		li {
+			margin: 0;
+			font-size: 13px;
+		}
+	}
+
+	.skin-cosmos-header {
+		background-color: transparent;
+	}
+
+	.skin-cosmos-header__sitename a {
+		font-size: 15px;
+		font-weight: bold;
+	}
+
+	.skin-cosmos-header__local-navigation .skin-cosmos-nav__label {
+		font-size: 11px;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+}
+
+@media only screen and ( min-width: 851px ) {
+	body.skin-cosmos-style-fandomdesktop {
+		#cosmos-banner {
+			height: @fandom-banner-height;
 		}
 
-		#cosmos-pageBody-content {
-			grid-column: 1;
-			grid-row: 2;
+		#cosmos-banner-content {
+			display: grid;
+			align-items: center;
+			margin: 0 16px;
+			grid-template-columns: minmax( 0, 1fr ) minmax( 16rem, 26rem ) minmax( 0, 1fr );
+		}
+
+		.skin-cosmos-mobile-navigation {
+			display: none;
+		}
+
+		#p-search {
 			width: auto;
-			min-width: 0;
-			padding: 0 40px 30px;
-		}
-
-		.skin-cosmos-rail {
-			display: block;
 			grid-column: 2;
-			grid-row: 1 / 4;
-			width: auto;
-			padding: 0;
-			border: 0;
+			margin: 0;
 		}
 
-		.skin-cosmos-rail .skin-cosmos-rail-module,
-		.skin-cosmos-rail .rail-module {
-			box-sizing: border-box;
-			padding: 20px;
-			margin: 0 0 @fandom-gap;
-			.skin-cosmos-fandom-card();
+		#searchform input {
+			height: 32px;
+			border-radius: 6px;
+		}
+
+		#cosmos-banner-userOptions {
+			grid-column: 3;
+			justify-self: end;
+		}
+
+		> #mw-content-container {
+			padding-top: @fandom-banner-height;
+			padding-left: @fandom-rail-width;
 		}
 	}
-}
 
-@media only screen and ( max-width: 1023px ) {
-	body.skin-cosmos-style-fandomdesktop .skin-cosmos-rail .skin-cosmos-rail-module {
-		.skin-cosmos-fandom-card();
-	}
-}
+	body.skin-cosmos-style-fandomdesktop {
+		.skin-cosmos-fandomrail {
+			position: fixed;
+			z-index: 900;
+			top: @fandom-banner-height;
+			bottom: 0;
+			left: 0;
+			display: flex;
+			width: @fandom-rail-width;
+			flex-direction: column;
+			justify-content: space-between;
+			background-color: @banner-background-color;
+			color: @banner-font-color;
+		}
 
-.skin-cosmos-sticky-header {
-	position: fixed;
-	z-index: 999;
-	top: @fandom-banner-height;
-	right: 0;
-	left: 0;
-	border-bottom: 1px solid var( --skin-cosmos-border-color );
-	background-color: var( --skin-cosmos-content-background );
-	box-shadow: @fandom-shadow;
-	color: var( --skin-cosmos-font-color );
-	transform: translateY( -150% );
-	transition: transform 200ms ease;
-	visibility: hidden;
+		.skin-cosmos-fandomrail__list {
+			padding: 8px 0;
+			margin: 0;
+			list-style: none;
+		}
 
-	&--visible {
-		transform: none;
-		visibility: visible;
-	}
-}
+		.skin-cosmos-fandomrail__item {
+			position: relative;
+			margin: 0;
+		}
 
-.skin-cosmos-sticky-header__inner {
-	display: flex;
-	max-width: 115em;
-	box-sizing: border-box;
-	align-items: center;
-	justify-content: space-between;
-	padding: 8px 1em;
-	margin: auto;
-	gap: 16px;
-}
+		.skin-cosmos-fandomrail__link {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 12px 4px 10px;
+			color: @banner-font-color;
+			font-size: 10px;
+			gap: 6px;
+			line-height: 1.1;
+			text-align: center;
 
-.skin-cosmos-sticky-header__title {
-	overflow: hidden;
-	min-width: 0;
-	font-size: 1.125rem;
-	font-weight: bold;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
+			.skin-cosmos-icon {
+				width: 24px;
+				height: 24px;
+			}
 
-.skin-cosmos-sticky-header__actions {
-	display: flex;
-	flex: none;
-	flex-wrap: nowrap;
-	align-items: center;
+			&:hover,
+			&:focus-visible {
+				background-color: rgba( 255, 255, 255, 0.12 );
+				color: @banner-font-color;
+			}
+		}
 
-	.skin-cosmos-button {
-		height: 24px;
-		margin: 0 0 0 5px;
+		.skin-cosmos-fandomrail__flyout {
+			position: absolute;
+			z-index: 1;
+			top: 0;
+			left: 100%;
+			display: none;
+			min-width: 14rem;
+			padding: 8px 0;
+			border: 1px solid var( --skin-cosmos-border-color );
+			margin: 0;
+			background-color: var( --skin-cosmos-content-background );
+			border-radius: 0 @fandom-radius @fandom-radius 0;
+			box-shadow: 0 2px 8px rgba( 0, 0, 0, 0.3 );
+			list-style: none;
+
+			a {
+				display: block;
+				padding: 8px 16px;
+				color: var( --skin-cosmos-font-color );
+				font-size: 13px;
+				white-space: nowrap;
+
+				&:hover {
+					background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 10%, transparent );
+				}
+			}
+		}
+
+		.skin-cosmos-fandomrail__list--bottom .skin-cosmos-fandomrail__flyout {
+			top: auto;
+			bottom: 0;
+		}
+
+		.skin-cosmos-fandomrail__item--menu:hover > .skin-cosmos-fandomrail__flyout,
+		.skin-cosmos-fandomrail__item--menu:focus-within > .skin-cosmos-fandomrail__flyout {
+			display: block;
+		}
 	}
 }
 
 @media only screen and ( max-width: 850px ) {
-	.skin-cosmos-sticky-header {
+	.skin-cosmos-fandomrail {
 		display: none;
 	}
 }
 
+@media only screen and ( min-width: 1200px ) {
+	body.skin-cosmos-style-fandomdesktop {
+		#content {
+			column-gap: @fandom-gap;
+			grid-template-columns: minmax( 0, 1fr ) @fandom-side-rail-width;
+		}
+
+		.skin-cosmos-rail {
+			grid-column: 2;
+			grid-row: 2 / 5;
+		}
+
+		.skin-cosmos-rail-inner {
+			grid-template-columns: minmax( 0, 1fr );
+		}
+	}
+}
+
 @media print {
-	.skin-cosmos-sticky-header {
+	.skin-cosmos-fandomrail,
+	.skin-cosmos-page-tools {
 		display: none;
 	}
 }
