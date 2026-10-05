@@ -54,6 +54,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		parent::__construct( 'CosmosBetaThemeDesigner' );
 	}
 
+	/** @inheritDoc */
 	public function getRestriction(): string {
 		return 'cosmosbeta-themedesigner';
 	}
