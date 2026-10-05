@@ -27,8 +27,11 @@ use const PREG_SPLIT_NO_EMPTY;
 
 class LessUtil {
 
-	// Luminance where black and white text have the same contrast.
+	// Content switches to light text at the point where both colors read the same.
 	private const float LUMINANCE_THRESHOLD = 0.179;
+
+	// Chrome like the header and banner prefers light text a bit longer.
+	public const float CHROME_THRESHOLD = 0.3;
 
 	/** @var array<string, array> */
 	private array $cosmosSettings = [];
@@ -67,13 +70,17 @@ class LessUtil {
 	}
 
 	/** Whether white text reads better than black text on the given background setting */
-	public static function isThemeDark( string $background, array $cosmosSettings ): bool {
+	public static function isThemeDark(
+		string $background,
+		array $cosmosSettings,
+		float $threshold = self::LUMINANCE_THRESHOLD
+	): bool {
 		$parsed = self::parseColor( $cosmosSettings[$background] );
 		if ( $parsed === null || (float)$parsed['a'] === 0.0 ) {
 			return true;
 		}
 
-		return self::getLuminance( $parsed['r'], $parsed['g'], $parsed['b'] ) < self::LUMINANCE_THRESHOLD;
+		return self::getLuminance( $parsed['r'], $parsed['g'], $parsed['b'] ) < $threshold;
 	}
 
 	/** Relative luminance as defined by WCAG, 0 for black and 1 for white */
