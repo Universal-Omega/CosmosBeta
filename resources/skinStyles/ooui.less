@@ -131,9 +131,8 @@ body .oo-ui-tabSelectWidget-framed {
 	color: var( --skin-cosmos-font-color );
 }
 
-.oo-ui-optionWidget.oo-ui-optionWidget-highlighted,
-.oo-ui-optionWidget.oo-ui-optionWidget-selected,
-.oo-ui-selectWidget-depressed .oo-ui-optionWidget.oo-ui-optionWidget-selected {
+.oo-ui-menuSelectWidget .oo-ui-optionWidget.oo-ui-optionWidget-highlighted,
+.oo-ui-menuSelectWidget .oo-ui-optionWidget.oo-ui-optionWidget-selected {
 	background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 28%, var( --skin-cosmos-content-background ) );
 	color: var( --skin-cosmos-font-color );
 }
@@ -166,5 +165,53 @@ body .oo-ui-tabSelectWidget-framed {
 
 	a {
 		text-decoration: underline;
+	}
+}
+
+.oo-ui-radioSelectWidget .oo-ui-radioOptionWidget.oo-ui-optionWidget-selected,
+.oo-ui-radioSelectWidget .oo-ui-radioOptionWidget.oo-ui-optionWidget-highlighted {
+	background-color: transparent;
+}
+
+html.skin-cosmos-colormode-dark body {
+	.oo-ui-tabSelectWidget {
+		border-color: var( --skin-cosmos-border-color );
+		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 7%, var( --skin-cosmos-content-background ) );
+	}
+
+	.oo-ui-tabSelectWidget .oo-ui-tabOptionWidget {
+		background-color: transparent;
+		color: var( --skin-cosmos-muted-color );
+	}
+
+	.oo-ui-tabSelectWidget .oo-ui-tabOptionWidget:hover {
+		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 10%, var( --skin-cosmos-content-background ) );
+		color: var( --skin-cosmos-font-color );
+	}
+
+	.oo-ui-tabSelectWidget .oo-ui-tabOptionWidget.oo-ui-optionWidget-selected {
+		border-bottom-color: var( --skin-cosmos-link-color );
+		background-color: var( --skin-cosmos-content-background );
+		color: var( --skin-cosmos-font-color );
+		box-shadow: inset 0 3px 0 var( --skin-cosmos-link-color );
+	}
+
+	.oo-ui-tagMultiselectWidget-handle {
+		border-color: var( --skin-cosmos-border-color );
+		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 6%, var( --skin-cosmos-content-background ) );
+		color: var( --skin-cosmos-font-color );
+	}
+
+	.oo-ui-buttonElement-framed.oo-ui-widget-disabled > .oo-ui-buttonElement-button,
+	.oo-ui-buttonElement-framed.oo-ui-widget-disabled > .oo-ui-buttonElement-button > .oo-ui-labelElement-label {
+		border-color: var( --skin-cosmos-border-color );
+		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 10%, var( --skin-cosmos-content-background ) );
+		color: var( --skin-cosmos-muted-color );
+	}
+
+	.oo-ui-fieldsetLayout .oo-ui-labelElement-label,
+	.oo-ui-fieldLayout-header .oo-ui-labelElement-label,
+	.oo-ui-fieldLayout-help {
+		color: var( --skin-cosmos-font-color );
 	}
 }
