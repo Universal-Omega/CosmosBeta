@@ -40,6 +40,7 @@ class BannerComponent {
 			'html-avatar' => $this->getAvatar( $user->getId() ),
 			'html-notifications' => $registered ? ( $portlets['data-notifications']['html-items'] ?? null ) : null,
 			'html-personal-items' => $items,
+			'html-temp-banner' => $user->isTemp() ? ( $portlets['data-user-page']['html-after-portal'] ?? '' ) : '',
 			'data-talk-alert' => $registered ? $this->getTalkAlert( $portlets ) : null,
 		];
 	}
