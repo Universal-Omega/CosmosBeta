@@ -188,6 +188,10 @@ class SkinCosmosBeta extends SkinMustache {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.rail';
 		}
 
+		if ( $this->cosmosConfig->getFooterSettings()['showIcons'] ) {
+			$modules['styles']['skin'][] = 'skins.cosmosbeta.footer.codex';
+		}
+
 		if ( $this->extensionRegistry->isLoaded( 'PortableInfobox' ) ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.portableinfobox';
 			$modules['styles']['skin'][] = $this->serviceOptions->get( ConfigNames::EnablePortableInfoboxEuropaTheme ) ?
