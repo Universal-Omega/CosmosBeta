@@ -185,20 +185,21 @@ class PageHeaderComponent {
 			}
 		}
 
+		$isEditPage = $isEditing || in_array( $this->context->getActionName(), [ 'edit', 'submit' ], true );
 		$isTalkPage = $title->isTalkPage();
 		$talkUrl = $title->getTalkPageIfDefined()?->getLinkURL();
 		$pageUrl = $title->getLinkURL();
 		$backToPage = $view ? $this->context->msg( 'cosmosbeta-action-backtopage', $view['text'] )->text() : '';
 		$primary = $secondary = null;
 
-		if ( $isEditing || $isSpecialAction ) {
+		if ( $isEditPage || $isSpecialAction ) {
 			if ( $isTalkPage ) {
 				$primary = $talk ? [
 					'icon' => 'close',
 					'text' => $this->context->msg( 'cosmosbeta-action-cancel' )->text(),
 					'href' => $talkUrl ?? $talk['href'],
 				] + $talk : null;
-				$secondary = $view && !$isEditing ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
+				$secondary = $view ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
 			} else {
 				$primary = $view ? [
 					'icon' => 'close',
@@ -208,7 +209,10 @@ class PageHeaderComponent {
 				$secondary = $talk ? [ 'icon' => 'speechBubble' ] + $talk : null;
 			}
 
-			if ( !$isEditing && $edit ) {
+			if ( $isEditPage ) {
+				$secondary = null;
+				$dropdown = [];
+			} elseif ( $edit ) {
 				$dropdown = [ 'edit' => $edit ] + $dropdown;
 			}
 		} elseif ( $isHistory || $isViewSource ) {
@@ -238,15 +242,15 @@ class PageHeaderComponent {
 		}
 
 		return [
-			'data-primary' => $this->toButton( $primary, 'primary' ),
-			'data-secondary' => $this->toButton( $secondary, 'secondary' ),
+			'data-primary' => $this->toButton( $primary, 'primary', $dropdown === [] ),
+			'data-secondary' => $this->toButton( $secondary, 'secondary', false ),
 			'has-dropdown' => $dropdown !== [],
 			'array-dropdown-items' => $this->toDropdown( $dropdown ),
 			'is-view' => $view !== null,
 		];
 	}
 
-	private function toButton( ?array $item, string $variant ): ?array {
+	private function toButton( ?array $item, string $variant, bool $single ): ?array {
 		if ( !$item ) {
 			return null;
 		}
@@ -256,6 +260,10 @@ class PageHeaderComponent {
 			"skin-cosmos-button skin-cosmos-button-$variant skin-cosmos-button-action",
 			"cosmos-button cosmos-button-$variant cosmos-button-action",
 		];
+
+		if ( $single && $variant === 'primary' ) {
+			$classes[] = 'skin-cosmos-button-single';
+		}
 		$sourceId = $item['id'] ?? '';
 		$id = ( $item['icon'] ?? '' ) === 'close' ? 'cosmos-actions-cancel' : $sourceId;
 
