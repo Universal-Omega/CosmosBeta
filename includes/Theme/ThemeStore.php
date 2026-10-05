@@ -28,11 +28,13 @@ use const TS_MW;
 class ThemeStore {
 
 	private const string TABLE = 'cosmosbeta_theme';
-	private const int CACHE_VERSION = 1;
+	private const int CACHE_VERSION = 2;
 	private const int MAX_REVISIONS = 100;
 	private const int MAX_COMMENT_BYTES = 767;
 
 	private ?ThemeSettings $current = null;
+
+	private string $currentTimestamp = '';
 
 	public function __construct(
 		private readonly IConnectionProvider $dbProvider,
@@ -55,7 +57,7 @@ class ThemeStore {
 					$setOpts += Database::getCacheSetOptions( $dbr );
 
 					try {
-						$row = $this->fetchLatest( $dbr, [ 'cth_id', 'cth_data' ] );
+						$row = $this->fetchLatest( $dbr, [ 'cth_id', 'cth_data', 'cth_timestamp' ] );
 					} catch ( DBError $e ) {
 						// Table is missing until update.php has run. Fall back to defaults and retry soon.
 						$this->logger->error( 'Unable to read Cosmos theme: {message}', [
@@ -63,12 +65,13 @@ class ThemeStore {
 						] );
 						$ttl = 30;
 
-						return [ 'id' => 0, 'json' => '' ];
+						return [ 'id' => 0, 'json' => '', 'ts' => '' ];
 					}
 
 					return [
 						'id' => $row ? (int)$row->cth_id : 0,
 						'json' => $row ? (string)$row->cth_data : '',
+						'ts' => $row ? (string)wfTimestamp( TS_MW, $row->cth_timestamp ) : '',
 					];
 				},
 				[
@@ -79,12 +82,19 @@ class ThemeStore {
 				]
 			);
 
+			$this->currentTimestamp = (string)( $value['ts'] ?? '' );
 			$this->current = $value['json'] === '' ?
 				new ThemeSettings( [], 0 ) :
 				ThemeSettings::newFromJson( $value['json'], $value['id'] );
 		}
 
 		return $this->current;
+	}
+
+	/** @return string MW timestamp of the live theme, empty if none was ever saved */
+	public function getCurrentTimestamp(): string {
+		$this->getCurrent();
+		return $this->currentTimestamp;
 	}
 
 	public function getRevision( int $id ): ?ThemeSettings {
@@ -178,6 +188,7 @@ class ThemeStore {
 		$this->cache->touchCheckKey( $this->getCheckKey() );
 		$this->cache->delete( $this->getCacheKey() );
 		$this->current = null;
+		$this->currentTimestamp = '';
 	}
 
 	/** @param string[] $fields */
