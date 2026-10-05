@@ -2,20 +2,22 @@
 
 ( function ( $, mw ) {
 	let modal = document.getElementById( 'createPageModal' ),
-		btn = document.getElementById( 'createpage' ),
+		triggers = document.querySelectorAll( '#createpage, [data-skin-cosmos-create-page]' ),
 		span = document.getElementsByClassName( 'skin-cosmos-modal-close' )[ 0 ],
 		$top = 0;
 
-	if ( modal && btn ) {
+	if ( modal && triggers.length ) {
 		const closeModal = function () {
 			modal.style.display = 'none';
 		};
 
-		btn.onclick = function ( event ) {
-			event.preventDefault();
-			modal.style.display = 'flex';
-			$( '#create-page-dialog__title' ).trigger( 'focus' );
-		};
+		triggers.forEach( ( trigger ) => {
+			trigger.onclick = function ( event ) {
+				event.preventDefault();
+				modal.style.display = 'flex';
+				$( '#create-page-dialog__title' ).trigger( 'focus' );
+			};
+		} );
 
 		if ( span ) {
 			span.onclick = closeModal;
