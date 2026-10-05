@@ -626,10 +626,14 @@ body > .suggestions {
 }
 
 .skin-cosmos-associatedTabs {
-	margin: 8px 0 0;
+	margin: 6px 0 14px;
 	overflow-x: auto;
 	border-bottom: 1px solid var( --skin-cosmos-border-color );
-	scrollbar-width: thin;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
 
 	ul {
 		display: flex;
