@@ -31,6 +31,8 @@
 	function applyMode( mode ) {
 		root.classList.remove( 'skin-cosmos-colormode-light', 'skin-cosmos-colormode-dark', 'skin-cosmos-colormode-pending' );
 		root.classList.add( 'skin-cosmos-colormode-' + mode );
+		root.style.backgroundColor = config.bodyColors[ mode ];
+		root.style.colorScheme = mode === 'dark' ? 'dark' : 'light';
 
 		document.body.classList.toggle( 'theme-dark', mode === 'dark' );
 		document.body.classList.toggle( 'theme-light', mode !== 'dark' );
