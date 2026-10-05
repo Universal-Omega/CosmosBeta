@@ -11,6 +11,7 @@ use MediaWiki\Title\TitleFactory;
 use function array_slice;
 use function count;
 use function implode;
+use function reset;
 use function str_contains;
 use function str_starts_with;
 use const CONTENT_MODEL_WIKITEXT;
@@ -268,6 +269,11 @@ class PageHeaderComponent {
 		} else {
 			$primary = $edit;
 			$secondary = $view ? $talk : null;
+		}
+
+		if ( $primary === null && count( $dropdown ) === 1 ) {
+			$primary = reset( $dropdown );
+			$dropdown = [];
 		}
 
 		return [
