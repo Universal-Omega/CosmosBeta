@@ -284,8 +284,6 @@ body > #mw-content-container {
 }
 
 #p-search {
-	--color-placeholder: fade( @banner-font-color, 70% );
-
 	.skin-cosmos-search-button,
 	.cdx-text-input__start-icon,
 	.cdx-typeahead-search__search-footer__icon {
@@ -320,6 +318,11 @@ body > #mw-content-container {
 
 	input[ type='search' ] {
 		box-sizing: content-box;
+	}
+
+	input::placeholder {
+		color: fade( @banner-font-color, 70% );
+		opacity: 1;
 	}
 }
 
@@ -2737,8 +2740,4 @@ div.thumbinner {
 
 .skin-cosmos-button-icon.skin-cosmos-icon-edit::before {
 	.cdx-mixin-css-icon-background-image( @cdx-icon-highlight, currentcolor );
-}
-
-.skin-cosmos-upv2-profile #firstHeading {
-	display: none;
 }
