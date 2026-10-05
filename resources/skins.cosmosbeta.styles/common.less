@@ -45,9 +45,11 @@
 	--background-color-neutral-subtle: mix( @tint, @content-background-color, 4% );
 	--background-color-interactive: mix( @tint, @content-background-color, 10% );
 	--background-color-interactive-subtle: mix( @tint, @content-background-color, 5% );
-	--background-color-interactive-subtle--hover: mix( @tint, @content-background-color, 9% );
 	--background-color-interactive-subtle--active: mix( @tint, @content-background-color, 13% );
 	--background-color-progressive-subtle: mix( @link-color, @content-background-color, 16% );
+	--background-color-progressive-subtle--hover: mix( @link-color, @content-background-color, 24% );
+	--background-color-progressive-subtle--active: mix( @link-color, @content-background-color, 32% );
+	--background-color-interactive-subtle--hover: mix( @tint, @content-background-color, 9% );
 	--background-color-quiet--hover: fade( @tint, 8% );
 	--background-color-quiet--active: fade( @tint, 14% );
 	--border-color-base: mix( @font-color, @content-background-color, 40% );
@@ -109,7 +111,14 @@
 
 // Logos in the footer are drawn for light backgrounds
 body .skin-cosmos-footerIcons-listItem a.cdx-button {
+	box-sizing: border-box;
+	align-items: center;
+	justify-content: center;
+	padding: 5px 15px;
+	border: 1px solid #a2a9b1;
+	border-radius: 2px;
 	background-color: #f8f9fa;
+	color: #202122;
 }
 
 // Core and extensions mark elements and images that need inverting on dark backgrounds with these classes
@@ -124,11 +133,15 @@ body .skin-cosmos-footerIcons-listItem a.cdx-button {
 	filter: none;
 }
 
-:where( body.skin-cosmosbeta ) {
-	font-family: @skin-cosmos-font-family;
+:root {
+	--skin-cosmos-font-family: @skin-cosmos-font-family;
 }
 
-:where( body.skin-cosmosbeta ) :where( button, input, select, textarea, h1, h2, h3, h4, h5, h6, dt ) {
+:where( body.skin-cosmosbeta ) {
+	font-family: var( --skin-cosmos-font-family );
+}
+
+:where( button, input, select, textarea ) {
 	font-family: inherit;
 }
 
@@ -625,6 +638,24 @@ body > .suggestions {
 	}
 }
 
+.skin-cosmos-pill-buttons #cosmos-articleHeader-actions {
+	.skin-cosmos-button {
+		border-radius: 999px;
+	}
+
+	.skin-cosmos-actions-edit:not( .skin-cosmos-button-single ) {
+		border-radius: 999px 0 0 999px;
+	}
+
+	#cosmos-actionsList-button {
+		border-radius: 0 999px 999px 0;
+	}
+
+	.skin-cosmos-dropdown-only #cosmos-actionsList-button {
+		border-radius: 999px;
+	}
+}
+
 .skin-cosmos-associatedTabs {
 	margin: 0 0 20px;
 	overflow-x: auto;
@@ -746,6 +777,17 @@ body > .suggestions {
 #cosmos-actionsList-button {
 	border-radius: 0 4px 4px 0;
 	cursor: auto;
+}
+
+.skin-cosmos-dropdown-only {
+	&#cosmos-actions-actionsList {
+		margin-left: 0;
+	}
+
+	#cosmos-actionsList-button {
+		border-radius: 4px;
+		cursor: pointer;
+	}
 }
 
 #cosmos-actionsList-dropdownIcon {
@@ -1870,6 +1912,29 @@ body code {
 	font-weight: normal;
 }
 
+#mw-content .mw-heading {
+	overflow: hidden;
+	padding-bottom: 4px;
+	margin-bottom: 0.6em;
+
+	&.mw-heading1,
+	&.mw-heading2 {
+		border-bottom: solid 1px @border-color;
+	}
+
+	> h1,
+	> h2,
+	> h3,
+	> h4,
+	> h5,
+	> h6 {
+		padding: 0;
+		border: 0;
+		margin-block: 0;
+		overflow: visible;
+	}
+}
+
 #mw-content .toctitle h2 {
 	border-bottom: 0;
 	font-size: 14px;
@@ -2671,4 +2736,14 @@ div.thumbinner {
 
 .skin-cosmos-button-icon.skin-cosmos-icon-edit::before {
 	.cdx-mixin-css-icon-background-image( @cdx-icon-highlight, currentcolor );
+}
+
+.skin-cosmos-upv2-profile #firstHeading {
+	display: none;
+}
+
+.mw-temp-user-banner-tooltip {
+	display: inline-flex;
+	align-items: center;
+	margin-left: 4px;
 }
