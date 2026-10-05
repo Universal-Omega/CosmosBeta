@@ -1,50 +1,9 @@
-html.skin-cosmos-colormode-dark body {
-	.mw-echo-ui-notificationItemWidget {
-		border-color: var( --skin-cosmos-border-color );
-		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 7%, var( --skin-cosmos-content-background ) );
-		color: var( --skin-cosmos-font-color );
+// Echo hard codes these hover fills instead of using a token
+.mw-echo-ui-notificationItemWidget:hover,
+.mw-echo-ui-notificationItemWidget-unread:hover {
+	background-color: var( --background-color-interactive-subtle--hover );
+}
 
-		&-unread {
-			background-color: var( --skin-cosmos-content-background );
-		}
-
-		&:hover,
-		&-unread:hover {
-			background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 14%, var( --skin-cosmos-content-background ) );
-		}
-
-		&-content-message-header,
-		&-content-message-header * {
-			color: var( --skin-cosmos-font-color );
-		}
-
-		&-content-message-body,
-		&-content-message-body *,
-		&-content-message-timestamp,
-		&-content-actions-timestamp {
-			color: var( --skin-cosmos-muted-color );
-			opacity: 1;
-		}
-
-		&-content-actions .oo-ui-buttonElement-button,
-		&-content-actions .oo-ui-labelElement-label {
-			color: var( --skin-cosmos-link-color );
-		}
-
-		&-content-actions .oo-ui-iconElement-icon {
-			filter: invert( 1 );
-		}
-
-		&-content-actions .oo-ui-buttonOptionWidget:hover .oo-ui-labelElement-label,
-		&-content-actions .oo-ui-buttonOptionWidget.oo-ui-optionWidget-highlighted .oo-ui-labelElement-label {
-			color: var( --skin-cosmos-font-color );
-		}
-	}
-
-	.mw-echo-ui-notificationsListWidget,
-	.mw-echo-ui-notificationsWidget,
-	.mw-echo-ui-placeholderItemWidget {
-		background-color: transparent;
-		color: var( --skin-cosmos-font-color );
-	}
+.mw-echo-ui-actionMenuPopupWidget-menu:hover {
+	background-color: var( --background-color-interactive );
 }
