@@ -39,8 +39,8 @@ class Output implements
 			) ? 'theme-dark' : 'theme-light',
 		];
 
-		if ( $user->isTemp() ) {
-			$classes[] = 'user-temp';
+		if ( $skin->cosmosConfig->hasHeaderBorder() ) {
+			$classes[] = 'skin-cosmos-header-border';
 		}
 
 		$buttonStyle = $skin->cosmosConfig->getButtonStyle();
