@@ -183,6 +183,8 @@
 	"cosmosbeta-themedesigner-layout-button-style-pill": "Rounded",
 	"cosmosbeta-themedesigner-layout-button-style-slim": "Slim",
 	"cosmosbeta-themedesigner-layout-button-style-text": "Text only",
+	"cosmosbeta-themedesigner-layout-header-border": "Line under the page title",
+	"cosmosbeta-themedesigner-layout-header-border-help": "Draws a thin line below the page title and the page buttons, separating them from the content.",
 	"cosmosbeta-themedesigner-layout-header-button-opacity": "Wiki header button background opacity",
 	"cosmosbeta-themedesigner-layout-opacity": "Content area opacity",
 	"cosmosbeta-themedesigner-layout-width": "Content width",
