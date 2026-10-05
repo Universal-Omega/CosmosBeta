@@ -41,7 +41,7 @@ class WikiHeaderComponent {
 			'counter-label' => $this->context->msg( 'cosmosbeta-counter-label' )->numParams( $articles )->escaped(),
 		];
 
-		return $canRead ? $data + $this->getButtons( $user->isAnon() ) : $data;
+		return $canRead ? $data + $this->getButtons( !$user->isNamed() ) : $data;
 	}
 
 	private function getButtons( bool $isAnon ): array {
@@ -94,7 +94,7 @@ class WikiHeaderComponent {
 			'has-colormode' => $hasColorMode,
 			'colormode-icon' => $mode === 'dark' ? 'bright' : 'moon',
 			'colormode-text' => $this->context->msg( "cosmosbeta-colormode-switch-$mode" )->text(),
-			'colormode-url' => $user->isRegistered() ?
+			'colormode-url' => $user->isNamed() ?
 				SpecialPage::getTitleFor( 'Preferences' )->getLocalURL() . '#mw-prefsection-rendering' :
 				'#',
 			'has-more-image' => $canUpload,
