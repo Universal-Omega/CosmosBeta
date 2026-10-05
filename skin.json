@@ -874,15 +874,10 @@
 			"factory": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
 				"CosmosBetaOptions",
-				"CosmosBetaProfileBioLookup",
 				"CosmosBetaTemplateParser",
-				"UserGroupManager"
-			]
-		},
-		"userprofilev2": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\UserProfileV2",
-			"services": [
-				"CosmosBetaProfileBioLookup"
+				"TitleFactory",
+				"UserGroupManager",
+				"WikiPageFactory"
 			]
 		}
 	},
@@ -934,9 +929,6 @@
 		},
 		"UserProfileGetProfileTitle": {
 			"handler": "socialprofile"
-		},
-		"UserProfileV2OnProfileAfterMasthead": {
-			"handler": "userprofilev2"
 		}
 	},
 	"manifest_version": 2,
