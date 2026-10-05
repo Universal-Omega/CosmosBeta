@@ -392,6 +392,15 @@ body > #mw-content-container {
 		border: 2px solid @banner-font-color;
 		border-radius: 16px;
 	}
+
+	// The built in avatar is a dark outline, so it follows the banner text color.
+	> img[ src*='/default.png' ] {
+		padding: 4px;
+		box-sizing: border-box;
+		background-color: fade( @banner-font-color, 15% );
+		filter: invert( @banner-icon-invert );
+		object-fit: contain;
+	}
 }
 
 .skin-cosmos-userButton-label {
@@ -2740,4 +2749,8 @@ div.thumbinner {
 
 .skin-cosmos-button-icon.skin-cosmos-icon-edit::before {
 	.cdx-mixin-css-icon-background-image( @cdx-icon-highlight, currentcolor );
+}
+
+body:has( .profile-masthead ) #firstHeading {
+	display: none;
 }
