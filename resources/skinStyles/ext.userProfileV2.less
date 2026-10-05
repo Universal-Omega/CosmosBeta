@@ -138,57 +138,93 @@
 
 @media screen and ( max-width: 536px ) {
 	.profile-identitybox {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 12px;
+		display: grid;
+		align-items: start;
+		gap: 10px 14px;
+		grid-template-columns: auto minmax( 0, 1fr );
+	}
+
+	// The wrapper steps aside so the stats, links and bio can use the full width.
+	.profile-information {
+		display: contents;
 	}
 
 	.profile-avatar {
-		width: 96px;
-		height: 96px;
+		width: 84px;
+		height: 84px;
+		grid-row: 1;
 	}
 
 	.profile-avatar-image {
-		width: 92px;
-		height: 92px;
+		width: 80px;
+		height: 80px;
 
 		&[ src*='/default.png' ] {
 			padding: 10px;
 		}
 	}
 
-	.profile-avatar-edit-button {
-		width: 26px;
-		height: 26px;
+	.profile-avatar-edit-action {
+		right: 0;
+		bottom: 0;
 	}
 
-	.profile-information {
-		width: 100%;
+	.profile-avatar-edit-button {
+		width: 24px;
+		height: 24px;
+
+		svg {
+			width: 14px;
+			height: 14px;
+		}
 	}
 
 	.profile-header {
 		flex-direction: column;
 		align-items: flex-start;
-		gap: 10px;
+		align-self: center;
+		gap: 8px;
+		grid-column: 2;
+		grid-row: 1;
 	}
 
 	.profile-header-attributes {
 		width: 100%;
 		flex: none;
-		gap: 6px 8px;
+		gap: 4px 6px;
 
 		> h1 {
 			width: 100%;
-			font-size: 26px;
-			line-height: 32px;
+			font-size: 24px;
+			line-height: 30px;
+		}
+
+		> h2 {
+			font-size: 14px;
 		}
 	}
 
-	.profile-header-actions {
-		order: 3;
+	.profile-user-group {
+		padding: 2px 6px;
+		font-size: 11px;
+	}
+
+	.profile-header-actions .mw-ui-button {
+		padding: 5px 14px;
+		font-size: 12px;
+	}
+
+	.profile-header-statistics,
+	.profile-externalLinks,
+	.profile-header-about {
+		grid-column: 1 / -1;
 	}
 
 	.profile-header-statistics {
-		margin-top: 10px !important;
+		margin: 0 !important;
+	}
+
+	.profile-header-about {
+		margin-top: 0;
 	}
 }
