@@ -82,7 +82,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		$out->addWikiMsg( 'cosmosbeta-themedesigner-text' );
-		$out->addModules( 'skins.cosmosbeta.themedesigner' );
+		$out->addModules( [ 'skins.cosmosbeta.themedesigner' ] );
 		$out->addJsConfigVars( 'wgCosmosBetaThemeDesigner', $this->getClientData() );
 		$out->addHTML( $this->buildForm() );
 	}
@@ -267,7 +267,12 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		foreach ( $protected as $name ) {
-			$links[$name] ??= [ 'name' => $name, 'label' => $name, 'group' => 'places', 'protected' => true ];
+			$links[$name] ??= [
+				'name' => $name,
+				'label' => $name,
+				'group' => 'places',
+				'protected' => true,
+			];
 		}
 
 		return [
