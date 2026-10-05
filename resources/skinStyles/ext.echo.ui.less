@@ -27,9 +27,12 @@ html.skin-cosmos-colormode-dark body {
 		}
 
 		&-content-actions .oo-ui-buttonElement-button,
-		&-content-actions .oo-ui-labelElement-label,
+		&-content-actions .oo-ui-labelElement-label {
+			color: var( --skin-cosmos-link-color );
+		}
+
 		&-content-actions .oo-ui-iconElement-icon {
-			color: var( --skin-cosmos-muted-color );
+			filter: invert( 1 );
 		}
 
 		&-content-actions .oo-ui-buttonOptionWidget:hover .oo-ui-labelElement-label,
