@@ -1,0 +1,6 @@
+<section id="skin-cosmos-page-tools" class="skin-cosmos-page-tools">
+	<h2 class="skin-cosmos-page-tools__title">{{msg-title}}</h2>
+	<ul class="skin-cosmos-page-tools__list">
+		{{#array-items}}{{#html-item}}{{{.}}}{{/html-item}}{{#redirect-url}}<li id="t-createredirect"><a href="{{.}}">{{redirect-text}}</a></li>{{/redirect-url}}{{/array-items}}
+	</ul>
+</section>
