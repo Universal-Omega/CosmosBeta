@@ -692,12 +692,29 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-dropdown-icon-alt {
+.skin-cosmos-dropdown-icon-alt,
+#cosmos-actionsList-dropdownIcon .skin-cosmos-dropdown-icon-alt {
 	display: none;
 }
 
 .skin-cosmos-text-buttons #cosmos-articleHeader-actions {
-	gap: 4px 10px;
+	gap: 4px 0;
+
+	> a {
+		display: flex;
+	}
+
+	#cosmos-actions-actionsList {
+		order: 1;
+	}
+
+	> a ~ a,
+	> a ~ .skin-cosmos-dropdown,
+	> .skin-cosmos-dropdown:has( ~ a ) {
+		padding-left: 10px;
+		border-left: 1px solid fade( @link-color, 40% );
+		margin-left: 10px;
+	}
 
 	.skin-cosmos-button {
 		box-sizing: border-box;
