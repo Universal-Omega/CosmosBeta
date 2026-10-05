@@ -174,6 +174,17 @@
 							:disabled="!designer.canEdit"
 						></cdx-select>
 					</cdx-field>
+					<cdx-field>
+						<cdx-toggle-switch
+							v-model="state.layout.headerBorder"
+							:disabled="!designer.canEdit"
+						>
+							{{ msg( 'layout-header-border' ) }}
+						</cdx-toggle-switch>
+						<template #help-text>
+							{{ msg( 'layout-header-border-help' ) }}
+						</template>
+					</cdx-field>
 					<cdx-field v-for="range in layoutRanges" :key="range.key">
 						<template #label>
 							{{ msg( range.label ) }}
