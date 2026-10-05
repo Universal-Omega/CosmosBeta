@@ -166,6 +166,7 @@ class ThemeSettings {
 				'contentOpacity' => null,
 				'headerButtonOpacity' => 20,
 				'backdropBlur' => 0,
+				'slimButtons' => false,
 			],
 			'toolbar' => [
 				'enabled' => true,
@@ -246,6 +247,7 @@ class ThemeSettings {
 			$data['layout']['backdropBlur'] = is_numeric( $layout['backdropBlur'] ?? null ) ?
 				max( 0, min( 40, (int)round( (float)$layout['backdropBlur'] ) ) ) :
 				0;
+			$data['layout']['slimButtons'] = self::toBool( $layout['slimButtons'] ?? null, false );
 		}
 
 		$toolbar = $raw['toolbar'] ?? [];
