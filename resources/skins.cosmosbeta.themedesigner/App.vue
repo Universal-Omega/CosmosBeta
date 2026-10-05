@@ -159,6 +159,17 @@
 							:disabled="!designer.canEdit"
 						></cdx-select>
 					</cdx-field>
+					<cdx-field>
+						<cdx-toggle-switch
+							v-model="state.layout.slimButtons"
+							:disabled="!designer.canEdit"
+						>
+							{{ msg( 'layout-slim-buttons' ) }}
+						</cdx-toggle-switch>
+						<template #help-text>
+							{{ msg( 'layout-slim-buttons-help' ) }}
+						</template>
+					</cdx-field>
 					<cdx-field v-for="range in layoutRanges" :key="range.key">
 						<template #label>
 							{{ msg( range.label ) }}
