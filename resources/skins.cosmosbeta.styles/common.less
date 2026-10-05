@@ -402,6 +402,8 @@ body > #mw-content-container {
 		height: 34px;
 		align-self: center;
 		flex: none;
+		overflow: hidden;
+		border-radius: 50%;
 
 		&::after {
 			position: absolute;
@@ -421,6 +423,8 @@ body > #mw-content-container {
 			border-radius: 50%;
 			filter: invert( @banner-icon-invert );
 			object-fit: cover;
+			// The artwork leaves about a fifth of the image empty, so it is enlarged to touch the ring.
+			transform: scale( 1.3 );
 		}
 	}
 }
