@@ -25,6 +25,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		private readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosBackgroundLookup $backgroundLookup,
 		private readonly CosmosWordmarkLookup $wordmarkLookup,
+		private readonly LessUtil $lessUtil,
 	) {
 		parent::__construct( $options );
 		$this->isAlt = ( $options['variant'] ?? '' ) === 'alt';
@@ -37,7 +38,8 @@ class CosmosResourceLoaderModule extends SkinModule {
 			$options,
 			$services->get( 'CosmosBetaConfig' ),
 			$services->get( 'CosmosBetaBackgroundLookup' ),
-			$services->get( 'CosmosBetaWordmarkLookup' )
+			$services->get( 'CosmosBetaWordmarkLookup' ),
+			$services->get( 'CosmosBetaLessUtil' )
 		);
 	}
 
@@ -65,7 +67,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars = parent::getLessVars( $context );
 
 		$mode = $this->isAlt ? $this->cosmosConfig->getAltMode() : $this->cosmosConfig->getDefaultMode();
-		$settings = LessUtil::getCosmosSettings( $mode );
+		$settings = $this->lessUtil->getCosmosSettings( $mode );
 
 		$mainBackground = $this->backgroundLookup->getMainBackgroundUrl();
 		$wikiHeaderBackground = $this->backgroundLookup->getWikiHeaderBackgroundUrl();
