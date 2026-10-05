@@ -142,4 +142,53 @@
 		align-items: flex-start;
 		gap: 12px;
 	}
+
+	.profile-avatar {
+		width: 96px;
+		height: 96px;
+	}
+
+	.profile-avatar-image {
+		width: 92px;
+		height: 92px;
+
+		&[ src*='/default.png' ] {
+			padding: 10px;
+		}
+	}
+
+	.profile-avatar-edit-button {
+		width: 26px;
+		height: 26px;
+	}
+
+	.profile-information {
+		width: 100%;
+	}
+
+	.profile-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+	}
+
+	.profile-header-attributes {
+		width: 100%;
+		flex: none;
+		gap: 6px 8px;
+
+		> h1 {
+			width: 100%;
+			font-size: 26px;
+			line-height: 32px;
+		}
+	}
+
+	.profile-header-actions {
+		order: 3;
+	}
+
+	.profile-header-statistics {
+		margin-top: 10px !important;
+	}
 }
