@@ -71,12 +71,19 @@ class ColorMode implements
 			'skin-theme-clientpref-night' :
 			'skin-theme-clientpref-day' ) );
 		$toggle = $this->config->isColorModeToggleEnabled();
+		$bodyColors = $this->getBodyColors();
+
+		$out->addHeadItem( 'skin-cosmos-canvas', Html::inlineStyle(
+			$this->getCanvasRule( $bodyColors[$mode], $mode ) .
+			( $auto ? '@media (prefers-color-scheme:dark){' .
+				$this->getCanvasRule( $bodyColors[ThemeSettings::MODE_DARK], ThemeSettings::MODE_DARK ) . '}' : '' )
+		) );
 
 		if ( !$toggle && !$auto ) {
 			return;
 		}
 
-		$registered = $out->getUser()->isRegistered();
+		$registered = $out->getUser()->isNamed();
 		$altModules = [];
 
 		if ( $auto || !$registered ) {
@@ -115,12 +122,15 @@ class ColorMode implements
 
 		if ( !$registered && $toggle ) {
 			$rendered = $mode === ThemeSettings::MODE_DARK ? 'night' : 'day';
+			$other = ColorModeResolver::getOpposite( $mode );
 			$script = '(function(){var d=document.documentElement,' .
 				'm=d.className.match(/skin-theme-clientpref-(day|night|os)/);' .
 				'if(!m||m[1]==="os"){return}' .
 				'var l=document.getElementById("skin-cosmos-auto-dark");' .
 				'if(l){l.parentNode.removeChild(l)}' .
 				'if(m[1]!=="' . $rendered . '"){' .
+				'd.style.backgroundColor=' . json_encode( $bodyColors[$other] ) . ';' .
+				'd.style.colorScheme="' . ( $other === ThemeSettings::MODE_DARK ? 'dark' : 'light' ) . '";' .
 				'd.className+=" skin-cosmos-colormode-pending";' .
 				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode-pending","")},2500)}' .
 				'}());';
@@ -141,6 +151,22 @@ class ColorMode implements
 			'registered' => $registered,
 			'altModules' => $altModules,
 			'option' => ColorModeResolver::OPTION,
+			'bodyColors' => $bodyColors,
 		] );
+	}
+
+	/** @return array<string,string> Page background of each mode, safe to print into CSS */
+	private function getBodyColors(): array {
+		$colors = [];
+
+		foreach ( ThemeSettings::MODES as $name ) {
+			$colors[$name] = ThemeSettings::normalizeColor( $this->config->getColor( 'body', $name ) ) ?? 'transparent';
+		}
+
+		return $colors;
+	}
+
+	private function getCanvasRule( string $color, string $mode ): string {
+		return "html{background-color:$color;" . ( $mode === ThemeSettings::MODE_DARK ? 'color-scheme:dark;' : '' ) . '}';
 	}
 }
