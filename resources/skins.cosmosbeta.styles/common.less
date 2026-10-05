@@ -582,6 +582,11 @@ body > .suggestions {
 	fill: none;
 }
 
+#cosmos-actions-cancel {
+	padding-right: 26px;
+	padding-left: 26px;
+}
+
 #cosmos-articleHeader-actions {
 	z-index: 10000;
 	display: flex;
@@ -617,6 +622,47 @@ body > .suggestions {
 
 	#cosmos-actionsList-button {
 		padding: 0 8px;
+	}
+}
+
+.skin-cosmos-associatedTabs {
+	margin: 8px 0 0;
+	overflow-x: auto;
+	border-bottom: 1px solid var( --skin-cosmos-border-color );
+	scrollbar-width: thin;
+
+	ul {
+		display: flex;
+		padding: 0;
+		margin: 0 0 -1px;
+		list-style: none;
+	}
+
+	li {
+		flex: none;
+		margin: 0;
+	}
+
+	a {
+		display: block;
+		padding: 8px 16px;
+		border: 1px solid transparent;
+		border-bottom: 0;
+		border-radius: 4px 4px 0 0;
+		color: var( --skin-cosmos-muted-color );
+		font-weight: bold;
+		white-space: nowrap;
+
+		&:hover {
+			background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 8%, transparent );
+			color: var( --skin-cosmos-font-color );
+		}
+	}
+
+	.skin-cosmos-associatedTabs-selected a {
+		border-color: var( --skin-cosmos-border-color );
+		background-color: var( --skin-cosmos-content-background );
+		color: var( --skin-cosmos-font-color );
 	}
 }
 
