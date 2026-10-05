@@ -127,7 +127,7 @@ class LessUtil {
 		return [
 			$H,
 			$S,
-			$L
+			$L,
 		];
 	}
 
@@ -280,7 +280,7 @@ class LessUtil {
 			'white' => '#ffffff',
 			'whitesmoke' => '#f5f5f5',
 			'yellow' => '#ffff00',
-			'yellowgreen' => '#9acd32'
+			'yellowgreen' => '#9acd32',
 		];
 
 		$key = strtolower( trim( $colorName ) );
@@ -372,13 +372,13 @@ class LessUtil {
 			$rgb = [
 				'r' => hexdec( substr( $hex, 0, 2 ) ),
 				'g' => hexdec( substr( $hex, 2, 2 ) ),
-				'b' => hexdec( substr( $hex, 4, 2 ) )
+				'b' => hexdec( substr( $hex, 4, 2 ) ),
 			];
 		} elseif ( $length === 3 ) {
 			$rgb = [
 				'r' => hexdec( str_repeat( substr( $hex, 0, 1 ), 2 ) ),
 				'g' => hexdec( str_repeat( substr( $hex, 1, 1 ), 2 ) ),
-				'b' => hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) )
+				'b' => hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) ),
 			];
 		} else {
 			$rgb = [ 'r' => 0, 'g' => 0, 'b' => 0 ];
