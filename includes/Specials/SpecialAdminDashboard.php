@@ -31,9 +31,10 @@ class SpecialAdminDashboard extends SpecialPage {
 		parent::__construct( 'AdminDashboard' );
 	}
 
-	/* public function getRestriction(): string {
+	/** @inheritDoc */
+	public function getRestriction(): string {
 		return 'cosmosbeta-admindashboard';
-	} */
+	}
 
 	/** @inheritDoc */
 	protected function getGroupName(): string {
@@ -56,7 +57,6 @@ class SpecialAdminDashboard extends SpecialPage {
 	/** @inheritDoc */
 	public function getShortDescription( string $path = '' ): string {
 		$tab = DashboardTab::fromSubPage( $path );
-
 		return $tab ? $this->msg( $tab->getMessageKey() )->text() : '';
 	}
 
@@ -144,7 +144,6 @@ class SpecialAdminDashboard extends SpecialPage {
 		) ) );
 
 		$groups = [];
-
 		foreach ( $this->advancedSectionBuilder->build( $this->getContext(), $excluded ) as $group => $pages ) {
 			$message = $this->msg( "specialpages-group-$group" );
 
