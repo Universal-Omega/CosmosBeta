@@ -174,35 +174,4 @@
 			mw.config.set( 'wgVisualEditorConfig', visualEditorConfig );
 		}
 	} );
-
-	$( () => {
-		const toolbar = document.getElementById( 'cosmos-toolbar' );
-
-		if ( !toolbar || getComputedStyle( document.documentElement ).getPropertyValue( '--skin-cosmos-toolbar-invert' ).trim() !== '1' ) {
-			return;
-		}
-
-		const hasImage = ( style ) => ( style.backgroundImage && style.backgroundImage !== 'none' ) ||
-			( style.maskImage && style.maskImage !== 'none' ) ||
-			( style.webkitMaskImage && style.webkitMaskImage !== 'none' );
-
-		const markIcons = () => {
-			toolbar.querySelectorAll( '*' ).forEach( ( element ) => {
-				if ( !element.textContent.trim() && hasImage( getComputedStyle( element ) ) ) {
-					element.classList.add( 'skin-cosmos-invert-icon' );
-				}
-
-				for ( const pseudo of [ 'before', 'after' ] ) {
-					const style = getComputedStyle( element, '::' + pseudo );
-
-					if ( style.content !== 'none' && style.content !== 'normal' && hasImage( style ) ) {
-						element.classList.add( 'skin-cosmos-invert-' + pseudo );
-					}
-				}
-			} );
-		};
-
-		markIcons();
-		new MutationObserver( markIcons ).observe( toolbar, { childList: true, subtree: true } );
-	} );
 }( jQuery, mediaWiki ) );
