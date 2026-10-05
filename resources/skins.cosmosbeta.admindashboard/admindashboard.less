@@ -1,0 +1,235 @@
+@import 'mediawiki.skin.variables.less';
+
+@admindashboard-icon-size: @spacing-150;
+@admindashboard-control-min-width: 15rem;
+@admindashboard-stats-width: 19rem;
+
+.skin-cosmos-admindashboard-icon( @id, @icon ) {
+	.skin-cosmos-admindashboard__icon--@{id} {
+		.cdx-mixin-css-icon( @icon, currentcolor, @admindashboard-icon-size, false, center, middle );
+	}
+}
+
+.skin-cosmos-admindashboard {
+	container-type: inline-size;
+	margin-top: @spacing-100;
+}
+
+.skin-cosmos-admindashboard__layout {
+	display: grid;
+	gap: @spacing-200;
+	grid-template-columns: minmax( 0, 1fr );
+
+	@container ( min-width: 48rem ) {
+		grid-template-columns: minmax( 0, 1fr ) @admindashboard-stats-width;
+		align-items: start;
+	}
+}
+
+.skin-cosmos-admindashboard__main {
+	display: grid;
+	gap: @spacing-200;
+	min-width: 0;
+}
+
+.skin-cosmos-admindashboard__heading {
+	margin: 0 0 @spacing-75;
+	color: @color-emphasized;
+	font-family: inherit;
+	font-size: @font-size-large;
+	font-weight: @font-weight-bold;
+	line-height: @line-height-small;
+}
+
+.skin-cosmos-admindashboard__controls {
+	display: grid;
+	gap: @spacing-75;
+	grid-template-columns: repeat( auto-fill, minmax( @admindashboard-control-min-width, 1fr ) );
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.skin-cosmos-admindashboard__control {
+	display: flex;
+	margin: 0;
+}
+
+.skin-cosmos-admindashboard__link {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	padding: @spacing-75;
+	border: @border-subtle;
+	border-radius: @border-radius-base;
+	background-color: @background-color-base;
+	color: @color-base;
+	gap: @spacing-75;
+	text-decoration: none;
+	transition-duration: @transition-duration-medium;
+	transition-property: background-color, border-color, box-shadow;
+	transition-timing-function: @transition-timing-function-system;
+
+	&:hover,
+	&:focus-visible {
+		border-color: @border-color-interactive;
+		background-color: @background-color-interactive-subtle--hover;
+		color: @color-base;
+		text-decoration: none;
+	}
+
+	&:focus-visible {
+		border-color: @border-color-progressive--focus;
+		box-shadow: @box-shadow-inset-small @box-shadow-color-progressive--focus;
+		outline: @outline-base--focus;
+	}
+
+	&:active {
+		background-color: @background-color-interactive-subtle--active;
+	}
+}
+
+.skin-cosmos-admindashboard__badge {
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	padding: @spacing-50;
+	border-radius: @border-radius-pill;
+	background-color: @background-color-progressive-subtle;
+	color: @color-progressive;
+}
+
+.skin-cosmos-admindashboard__icon {
+	display: block;
+}
+
+.skin-cosmos-admindashboard__text {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: @spacing-12;
+}
+
+.skin-cosmos-admindashboard__label {
+	color: @color-emphasized;
+	font-weight: @font-weight-bold;
+	line-height: @line-height-small;
+	overflow-wrap: anywhere;
+}
+
+.skin-cosmos-admindashboard__description {
+	color: @color-subtle;
+	font-size: @font-size-small;
+	line-height: @line-height-x-small;
+}
+
+.skin-cosmos-admindashboard__pages {
+	padding: 0;
+	margin: 0;
+	column-gap: @spacing-200;
+	column-width: @admindashboard-control-min-width;
+	list-style: none;
+}
+
+.skin-cosmos-admindashboard__page {
+	break-inside: avoid;
+	margin: 0;
+
+	a {
+		display: block;
+		padding-block: @spacing-25;
+	}
+}
+
+.skin-cosmos-admindashboard__page--restricted a {
+	font-style: italic;
+}
+
+.skin-cosmos-admindashboard__stats {
+	display: grid;
+	gap: @spacing-100;
+	grid-template-columns: minmax( 0, 1fr );
+	min-width: 0;
+	padding: @spacing-100;
+	border: @border-subtle;
+	border-radius: @border-radius-base;
+	background-color: @background-color-interactive-subtle;
+
+	.skin-cosmos-admindashboard__heading {
+		margin: 0;
+	}
+}
+
+.skin-cosmos-admindashboard__totals {
+	display: grid;
+	gap: @spacing-50;
+	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	margin: 0;
+}
+
+.skin-cosmos-admindashboard__total {
+	padding: @spacing-50 @spacing-75;
+	border-radius: @border-radius-base;
+	background-color: @background-color-base;
+
+	dt {
+		margin: 0;
+		color: @color-subtle;
+		font-size: @font-size-small;
+	}
+
+	dd {
+		margin: 0;
+		color: @color-emphasized;
+		font-size: @font-size-x-large;
+		font-weight: @font-weight-bold;
+		line-height: @line-height-small;
+	}
+}
+
+.skin-cosmos-admindashboard__activity {
+	margin: 0;
+
+	.cdx-table__table-wrapper {
+		overflow-x: auto;
+	}
+
+	.cdx-table__table {
+		font-size: @font-size-small;
+	}
+
+	th,
+	td {
+		padding-inline: @spacing-50;
+		white-space: nowrap;
+	}
+
+	tfoot th,
+	tfoot td {
+		font-weight: @font-weight-bold;
+	}
+}
+
+.skin-cosmos-admindashboard-icon( themedesigner, @cdx-icon-palette );
+.skin-cosmos-admindashboard-icon( recentchanges, @cdx-icon-recent-changes );
+.skin-cosmos-admindashboard-icon( navigation, @cdx-icon-menu );
+.skin-cosmos-admindashboard-icon( tagline, @cdx-icon-edit );
+.skin-cosmos-admindashboard-icon( css, @cdx-icon-layout );
+.skin-cosmos-admindashboard-icon( js, @cdx-icon-code );
+.skin-cosmos-admindashboard-icon( managewiki, @cdx-icon-settings );
+.skin-cosmos-admindashboard-icon( analytics, @cdx-icon-chart );
+.skin-cosmos-admindashboard-icon( listusers, @cdx-icon-user-group );
+.skin-cosmos-admindashboard-icon( userrights, @cdx-icon-user-rights );
+.skin-cosmos-admindashboard-icon( block, @cdx-icon-block );
+.skin-cosmos-admindashboard-icon( sitenotice, @cdx-icon-speech-bubbles );
+.skin-cosmos-admindashboard-icon( help, @cdx-icon-help );
+.skin-cosmos-admindashboard-icon( categories, @cdx-icon-tag );
+.skin-cosmos-admindashboard-icon( addpage, @cdx-icon-article-add );
+.skin-cosmos-admindashboard-icon( upload, @cdx-icon-upload );
+.skin-cosmos-admindashboard-icon( multipleupload, @cdx-icon-image-add );
+.skin-cosmos-admindashboard-icon( video, @cdx-icon-play );
+.skin-cosmos-admindashboard-icon( blog, @cdx-icon-article );
+.skin-cosmos-admindashboard-icon( allpages, @cdx-icon-book );
+.skin-cosmos-admindashboard-icon( newpages, @cdx-icon-articles );
+.skin-cosmos-admindashboard-icon( listfiles, @cdx-icon-image-gallery );
