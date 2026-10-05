@@ -27,6 +27,7 @@ class PageHeaderComponent {
 		private readonly TitleFactory $titleFactory,
 		private readonly LanguageNameUtils $languageNameUtils,
 		private readonly Language $contentLanguage,
+		private readonly bool $isFandomStyle = false,
 	) {
 	}
 
@@ -170,7 +171,7 @@ class PageHeaderComponent {
 		$items = PortletReader::getItems( $portlets, [ 'data-associated-pages', 'data-views', 'data-actions' ] );
 		$title = $this->context->getTitle();
 
-		$edit = $talk = $view = null;
+		$edit = $talk = $view = $watch = null;
 		$dropdown = [];
 		$isEditing = $isViewSource = $isHistory = $isSpecialAction = false;
 
@@ -194,6 +195,15 @@ class PageHeaderComponent {
 					$talk = $item + [ 'icon' => 'speechBubble' ];
 					break;
 				case 'view':
+					break;
+				case 'watch':
+				case 'unwatch':
+					if ( $this->isFandomStyle ) {
+						$watch = $item + [ 'icon' => 'bookmark' ];
+						break;
+					}
+
+					$dropdown[$key] = $item;
 					break;
 				default:
 					if ( $key === 'addsection' ) {
@@ -271,6 +281,7 @@ class PageHeaderComponent {
 		}
 
 		return [
+			'data-save' => $this->toButton( $watch, 'secondary', false ),
 			'data-primary' => $this->toButton( $primary, 'primary', $dropdown === [] ),
 			'data-secondary' => $this->toButton( $secondary, 'secondary', false ),
 			'has-dropdown' => $dropdown !== [],
