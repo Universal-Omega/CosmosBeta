@@ -160,6 +160,30 @@
 						></cdx-select>
 					</cdx-field>
 					<cdx-field>
+						<template #label>
+							{{ msg( 'layout-style' ) }}
+						</template>
+						<template #help-text>
+							{{ msg( 'layout-style-help' ) }}
+						</template>
+						<cdx-select
+							v-model:selected="state.layout.style"
+							:menu-items="styleItems"
+							:disabled="!designer.canEdit"
+						></cdx-select>
+					</cdx-field>
+					<cdx-field>
+						<cdx-toggle-switch
+							v-model="state.layout.userStyle"
+							:disabled="!designer.canEdit"
+						>
+							{{ msg( 'layout-user-style' ) }}
+						</cdx-toggle-switch>
+						<template #help-text>
+							{{ msg( 'layout-user-style-help' ) }}
+						</template>
+					</cdx-field>
+					<cdx-field>
 						<cdx-toggle-switch
 							v-model="state.layout.slimButtons"
 							:disabled="!designer.canEdit"
@@ -524,6 +548,10 @@ module.exports = exports = defineComponent( {
 
 		const sizeItems = items( [ [ '', inherit ], [ 'auto', 'auto' ], [ 'contain', 'contain' ], [ 'cover', 'cover' ] ] ),
 			triStateItems = items( [ [ '', inherit ], [ 'true', msg( 'yes' ) ], [ 'false', msg( 'no' ) ] ] ),
+			styleItems = items( [
+				[ 'cosmos', msg( 'layout-style-cosmos' ) ],
+				[ 'fandomdesktop', msg( 'layout-style-fandomdesktop' ) ]
+			] ),
 			widthItems = items( [
 				[ '', inherit ],
 				[ 'default', msg( 'layout-width-default' ) ],
@@ -772,6 +800,7 @@ module.exports = exports = defineComponent( {
 			imageFields,
 			sizeItems,
 			triStateItems,
+			styleItems,
 			widthItems,
 			toolbarStyleItems,
 			recentChangesItems,
