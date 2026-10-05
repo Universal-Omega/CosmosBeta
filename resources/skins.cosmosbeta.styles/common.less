@@ -10,6 +10,7 @@
 	--skin-cosmos-border-color: @border-color;
 	--skin-cosmos-invert: @theme-invert;
 	--skin-cosmos-toolbar-invert: @toolbar-icon-invert;
+	--skin-cosmos-toolbar-font-color: @toolbar-font-color;
 	--skin-cosmos-alt-font-color: @alt-font-color;
 	--skin-cosmos-button-background: @button-background-color;
 	--skin-cosmos-button-font-color: @button-font-color;
@@ -613,6 +614,10 @@ body > .suggestions {
 
 .skin-cosmos-actions-edit {
 	border-radius: 4px 0 0 4px;
+}
+
+.skin-cosmos-button.skin-cosmos-button-single {
+	border-radius: 4px;
 }
 
 #firstHeading {
@@ -1772,8 +1777,18 @@ body code {
 	margin: 0;
 }
 
-#contentSub {
-	color: @font-color;
+#contentSub,
+#contentSub2,
+#mw-content-subtitle,
+.mw-content-subtitle {
+	color: var( --skin-cosmos-muted-color );
+}
+
+#contentSub :not( a ),
+#contentSub2 :not( a ),
+#mw-content-subtitle :not( a ),
+.mw-content-subtitle :not( a ) {
+	color: inherit;
 }
 
 #searchInput {
@@ -2146,9 +2161,6 @@ body h6 {
 
 @toolbar-background-color1: mix(@toolbar-background-color2, @toolbar-background-color-mix, 25%);
 
-.skin-cosmos-invert-icon,
-.skin-cosmos-invert-before::before,
-.skin-cosmos-invert-after::after,
 #cosmos-toolbar [class*='oo-ui-icon-'],
 #cosmos-toolbar .oo-ui-iconElement-icon,
 #cosmos-toolbar .mw-ui-icon::before,
