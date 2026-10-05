@@ -1,0 +1,48 @@
+<aside class="skin-cosmos-admindashboard__stats" aria-labelledby="skin-cosmos-admindashboard-stats-heading">
+	<h2 class="skin-cosmos-admindashboard__heading" id="skin-cosmos-admindashboard-stats-heading">{{msg-stats-title}}</h2>
+	<dl class="skin-cosmos-admindashboard__totals">
+		{{#array-totals}}
+		<div class="skin-cosmos-admindashboard__total">
+			<dt>{{label}}</dt>
+			<dd>{{value}}</dd>
+		</div>
+		{{/array-totals}}
+	</dl>
+	{{#has-days}}
+	<div class="cdx-table skin-cosmos-admindashboard__activity">
+		<div class="cdx-table__header">
+			<div class="cdx-table__header__caption">{{msg-activity-title}}</div>
+		</div>
+		<div class="cdx-table__table-wrapper">
+			<table class="cdx-table__table">
+				<thead>
+					<tr>
+						<th scope="col">{{msg-date}}</th>
+						<th scope="col" class="cdx-table__table__cell--align-number">{{msg-edits}}</th>
+						<th scope="col" class="cdx-table__table__cell--align-number">{{msg-pages}}</th>
+						<th scope="col" class="cdx-table__table__cell--align-number">{{msg-uploads}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#array-days}}
+					<tr>
+						<th scope="row">{{date}}</th>
+						<td class="cdx-table__table__cell--align-number">{{edits}}</td>
+						<td class="cdx-table__table__cell--align-number">{{pages}}</td>
+						<td class="cdx-table__table__cell--align-number">{{uploads}}</td>
+					</tr>
+					{{/array-days}}
+				</tbody>
+				<tfoot>
+					<tr>
+						<th scope="row">{{msg-week}}</th>
+						<td class="cdx-table__table__cell--align-number">{{week-edits}}</td>
+						<td class="cdx-table__table__cell--align-number">{{week-pages}}</td>
+						<td class="cdx-table__table__cell--align-number">{{week-uploads}}</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	{{/has-days}}
+</aside>
