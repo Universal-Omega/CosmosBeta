@@ -78,6 +78,7 @@ class ThemeSettings {
 
 	public const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
 	public const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
+	public const array BUTTON_STYLES = [ 'default', 'slim', 'pill' ];
 	public const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
 	public const array RAIL_RECENT_CHANGES = [ 'off', 'normal', 'sticky' ];
 
@@ -166,7 +167,7 @@ class ThemeSettings {
 				'contentOpacity' => null,
 				'headerButtonOpacity' => 20,
 				'backdropBlur' => 0,
-				'slimButtons' => false,
+				'buttonStyle' => 'default',
 			],
 			'toolbar' => [
 				'enabled' => true,
@@ -247,7 +248,12 @@ class ThemeSettings {
 			$data['layout']['backdropBlur'] = is_numeric( $layout['backdropBlur'] ?? null ) ?
 				max( 0, min( 40, (int)round( (float)$layout['backdropBlur'] ) ) ) :
 				0;
-			$data['layout']['slimButtons'] = self::toBool( $layout['slimButtons'] ?? null, false );
+
+			if ( in_array( $layout['buttonStyle'] ?? null, self::BUTTON_STYLES, true ) ) {
+				$data['layout']['buttonStyle'] = $layout['buttonStyle'];
+			} elseif ( self::toBool( $layout['slimButtons'] ?? null, false ) ) {
+				$data['layout']['buttonStyle'] = 'slim';
+			}
 		}
 
 		$toolbar = $raw['toolbar'] ?? [];
