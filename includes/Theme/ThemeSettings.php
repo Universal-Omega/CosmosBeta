@@ -78,6 +78,9 @@ class ThemeSettings {
 
 	public const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
 	public const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
+	public const string STYLE_COSMOS = 'cosmos';
+	public const string STYLE_FANDOMDESKTOP = 'fandomdesktop';
+	public const array LAYOUT_STYLES = [ self::STYLE_COSMOS, self::STYLE_FANDOMDESKTOP ];
 	public const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
 	public const array RAIL_RECENT_CHANGES = [ 'off', 'normal', 'sticky' ];
 
@@ -167,6 +170,8 @@ class ThemeSettings {
 				'headerButtonOpacity' => 20,
 				'backdropBlur' => 0,
 				'slimButtons' => false,
+				'style' => self::STYLE_COSMOS,
+				'userStyle' => false,
 			],
 			'toolbar' => [
 				'enabled' => true,
@@ -248,6 +253,11 @@ class ThemeSettings {
 				max( 0, min( 40, (int)round( (float)$layout['backdropBlur'] ) ) ) :
 				0;
 			$data['layout']['slimButtons'] = self::toBool( $layout['slimButtons'] ?? null, false );
+			$data['layout']['userStyle'] = self::toBool( $layout['userStyle'] ?? null, false );
+
+			if ( in_array( $layout['style'] ?? null, self::LAYOUT_STYLES, true ) ) {
+				$data['layout']['style'] = $layout['style'];
+			}
 		}
 
 		$toolbar = $raw['toolbar'] ?? [];
