@@ -27,7 +27,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 		private readonly CosmosWordmarkLookup $wordmarkLookup,
 	) {
 		parent::__construct( $options );
-
 		$this->isAlt = ( $options['variant'] ?? '' ) === 'alt';
 	}
 
