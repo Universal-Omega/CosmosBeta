@@ -29,10 +29,31 @@ body #firstHeading {
 
 	&[ src*='/default.png' ] {
 		padding: 14px;
+		margin: 2px;
 		box-sizing: border-box;
+		border: 0;
+		background: none;
 		filter: invert( var( --skin-cosmos-invert ) );
 		object-fit: contain;
-		opacity: 0.45;
+		opacity: 0.5;
+	}
+}
+
+.theme-dark .profile-avatar-image[ src*='/default.png' ] {
+	opacity: 0.85;
+}
+
+.profile-avatar:has( > .profile-avatar-image[ src*='/default.png' ] ) {
+	isolation: isolate;
+
+	&::before {
+		position: absolute;
+		z-index: -1;
+		border: 2px solid color-mix( in srgb, var( --skin-cosmos-font-color ) 30%, transparent );
+		background-color: var( --skin-cosmos-tabs-background );
+		border-radius: @userprofile-avatar-border-radius;
+		content: '';
+		inset: 0;
 	}
 }
 
