@@ -170,3 +170,40 @@ div.thumb {
 		display: inline-flex;
 	}
 }
+
+.skin-cosmos-navigation-preview {
+	margin: 1em 0;
+	border: 1px solid var( --skin-cosmos-border-color );
+	background-color: var( --skin-cosmos-content-background );
+	border-radius: 4px;
+
+	.skin-cosmos-header__local-navigation {
+		display: block;
+		height: auto;
+		padding: 0;
+	}
+
+	.skin-cosmos-nav {
+		position: static !important;
+		display: block;
+		max-height: none;
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	.skin-cosmos-nav__item .skin-cosmos-nav__label {
+		border-bottom-color: var( --skin-cosmos-border-color );
+	}
+
+
+	.skin-cosmos-menu__content a {
+		color: var( --skin-cosmos-link-color );
+	}
+}
+
+#mw-content .skin-cosmos-navigation-preview .skin-cosmos-nav__label,
+#mw-content .skin-cosmos-navigation-preview .skin-cosmos-nav__label a,
+#mw-content .skin-cosmos-navigation-preview .skin-cosmos-nav__label span {
+	color: var( --skin-cosmos-font-color );
+}
