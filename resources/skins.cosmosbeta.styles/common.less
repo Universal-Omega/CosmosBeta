@@ -398,6 +398,10 @@ body > #mw-content-container {
 	&:has( > img[ src*='/default.png' ] ) {
 		position: relative;
 		display: flex;
+		width: 34px;
+		height: 34px;
+		align-self: center;
+		flex: none;
 
 		&::after {
 			position: absolute;
@@ -2767,8 +2771,4 @@ div.thumbinner {
 
 .skin-cosmos-button-icon.skin-cosmos-icon-edit::before {
 	.cdx-mixin-css-icon-background-image( @cdx-icon-highlight, currentcolor );
-}
-
-body:has( .profile-masthead ) #firstHeading {
-	display: none;
 }
