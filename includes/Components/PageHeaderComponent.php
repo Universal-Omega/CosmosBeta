@@ -274,6 +274,7 @@ class PageHeaderComponent {
 			'data-primary' => $this->toButton( $primary, 'primary', $dropdown === [] ),
 			'data-secondary' => $this->toButton( $secondary, 'secondary', false ),
 			'has-dropdown' => $dropdown !== [],
+			'is-dropdown-only' => $primary === null && $dropdown !== [],
 			'array-dropdown-items' => $this->toDropdown( $dropdown ),
 			'is-view' => $view !== null,
 		];
