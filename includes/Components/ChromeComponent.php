@@ -29,6 +29,16 @@ class ChromeComponent {
 		];
 	}
 
+	public function getCopyrightHtml( array $footer ): ?string {
+		foreach ( $footer['data-info']['array-items'] ?? [] as $item ) {
+			if ( ( $item['name'] ?? '' ) === 'copyright' && ( $item['html'] ?? '' ) !== '' ) {
+				return $item['html'];
+			}
+		}
+
+		return null;
+	}
+
 	public function getToolItems( array $sidebar ): array {
 		$settings = $this->config->getToolbarSettings();
 		$items = [];
