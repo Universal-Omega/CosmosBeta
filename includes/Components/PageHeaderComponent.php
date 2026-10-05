@@ -20,6 +20,8 @@ class PageHeaderComponent {
 
 	private const int VISIBLE_CATEGORIES = 3;
 
+	private const string ASSOCIATED_PREFIX = 'special-specialAssociatedNavigationLinks-link-';
+
 	public function __construct(
 		private readonly IContextSource $context,
 		private readonly TitleFactory $titleFactory,
@@ -33,7 +35,30 @@ class PageHeaderComponent {
 			'data-categories' => $this->getCategories(),
 			'data-interlang' => $this->getInterlang( $portlets ),
 			'data-actions' => $this->getActions( $portlets ),
+			'data-associated-tabs' => $this->getAssociatedTabs( $portlets ),
 		];
+	}
+
+	private function getAssociatedTabs( array $portlets ): ?array {
+		$tabs = [];
+
+		foreach ( PortletReader::getItems( $portlets, [ 'data-associated-pages' ] ) as $key => $item ) {
+			if ( !str_starts_with( $key, self::ASSOCIATED_PREFIX ) || $item['href'] === null ) {
+				continue;
+			}
+
+			$tabs[] = [
+				'id' => $item['id'],
+				'text' => $item['text'],
+				'href' => $item['href'],
+				'is-selected' => $this->hasClass( $item['class'], 'selected' ),
+			];
+		}
+
+		return $tabs ? [
+			'msg-label' => $this->context->msg( 'cosmosbeta-associated-tabs-label' )->text(),
+			'array-items' => $tabs,
+		] : null;
 	}
 
 	private function getCategories(): ?array {
@@ -150,6 +175,10 @@ class PageHeaderComponent {
 		$isEditing = $isViewSource = $isHistory = $isSpecialAction = false;
 
 		foreach ( $items as $key => $item ) {
+			if ( str_starts_with( $key, self::ASSOCIATED_PREFIX ) ) {
+				continue;
+			}
+
 			$selected = $this->hasClass( $item['class'], 'selected' );
 
 			switch ( $key ) {
