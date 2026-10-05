@@ -248,7 +248,6 @@ class SkinCosmosBeta extends SkinMustache {
 
 	private function shouldPutToolsInRail(): bool {
 		$settings = $this->cosmosConfig->getToolbarSettings();
-
 		return $settings['enabled'] && $settings['style'] === 'rail' && !$this->railBuilder->isHidden();
 	}
 
