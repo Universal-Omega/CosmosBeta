@@ -11,6 +11,7 @@ use MediaWiki\ResourceLoader\Context;
 use MediaWiki\Skin\Hook\SkinPageReadyConfigHook;
 use MediaWiki\Skins\CosmosBeta\LessUtil;
 use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
 use function implode;
 
 class Output implements
@@ -32,6 +33,10 @@ class Output implements
 				LessUtil::getCosmosSettings( $skin->cosmosConfig->getRenderMode() )
 			) ? 'theme-dark' : 'theme-light',
 		];
+
+		if ( $skin->cosmosConfig->getLayoutStyle() === ThemeSettings::STYLE_FANDOMDESKTOP ) {
+			$classes[] = 'skin-cosmos-style-fandomdesktop';
+		}
 
 		if ( $skin->cosmosConfig->hasSlimButtons() ) {
 			$classes[] = 'skin-cosmos-slim-buttons';
