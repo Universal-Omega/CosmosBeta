@@ -1,0 +1,43 @@
+.profile-header-attributes > h1,
+.profile-header-attributes > h2 {
+	padding: 0;
+	border: 0;
+	color: var( --skin-cosmos-alt-font-color );
+	font-size: 30px;
+	font-weight: bold;
+	line-height: 38px;
+}
+
+.profile-user-group {
+	padding: 3px 8px;
+	border-radius: 3px;
+	background-color: var( --skin-cosmos-button-background );
+	color: var( --skin-cosmos-button-font-color );
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 1.5;
+}
+
+.profile-header-statistics {
+	color: var( --skin-cosmos-font-color );
+	font-size: 14px;
+}
+
+.profile-externalLinks svg,
+.profile-avatar-edit-action svg {
+	filter: invert( var( --skin-cosmos-invert ) );
+}
+
+.skin-cosmos-profile-bio {
+	margin: 12px 0;
+	color: var( --skin-cosmos-alt-font-color );
+	font-size: 16px;
+	line-height: 1.5;
+	word-break: break-word;
+}
+
+@media screen and ( max-width: 536px ) {
+	.profile-identitybox {
+		flex-direction: column;
+	}
+}
