@@ -155,7 +155,10 @@
 				"resources/skins.cosmosbeta.styles/print.less": {
 					"media": "print"
 				},
-				"resources/skins.cosmosbeta.styles/responsive.less": {}
+				"resources/skins.cosmosbeta.styles/responsive.less": {},
+				"resources/skins.cosmosbeta.styles/fandomdesktop.less": {
+					"media": "screen"
+				}
 			},
 			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
 		},
@@ -163,7 +166,8 @@
 			"scripts": [
 				"resources/skins.cosmosbeta.js/cosmos.js",
 				"resources/skins.cosmosbeta.js/mobile.js",
-				"resources/skins.cosmosbeta.js/colormode.js"
+				"resources/skins.cosmosbeta.js/colormode.js",
+				"resources/skins.cosmosbeta.js/fandomdesktop.js"
 			],
 			"dependencies": [
 				"mediawiki.api",
@@ -451,6 +455,12 @@
 				"cosmosbeta-themedesigner-layout-opacity",
 				"cosmosbeta-themedesigner-layout-slim-buttons",
 				"cosmosbeta-themedesigner-layout-slim-buttons-help",
+				"cosmosbeta-themedesigner-layout-style",
+				"cosmosbeta-themedesigner-layout-style-cosmos",
+				"cosmosbeta-themedesigner-layout-style-fandomdesktop",
+				"cosmosbeta-themedesigner-layout-style-help",
+				"cosmosbeta-themedesigner-layout-user-style",
+				"cosmosbeta-themedesigner-layout-user-style-help",
 				"cosmosbeta-themedesigner-layout-width",
 				"cosmosbeta-themedesigner-layout-width-default",
 				"cosmosbeta-themedesigner-layout-width-full",
@@ -821,6 +831,12 @@
 		"installer": {
 			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\Installer"
 		},
+		"layoutstyle": {
+			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\LayoutStyle",
+			"services": [
+				"CosmosBetaConfig"
+			]
+		},
 		"navigation": {
 			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\Navigation",
 			"services": [
@@ -865,9 +881,14 @@
 		"GetDoubleUnderscoreIDs": {
 			"handler": "parser"
 		},
-		"GetPreferences": {
-			"handler": "colormode"
-		},
+		"GetPreferences": [
+			{
+				"handler": "colormode"
+			},
+			{
+				"handler": "layoutstyle"
+			}
+		],
 		"LoadExtensionSchemaUpdates": {
 			"handler": "installer"
 		},
