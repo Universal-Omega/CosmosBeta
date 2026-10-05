@@ -189,6 +189,7 @@
 	"cosmosbeta-themedesigner-layout-button-style-help": "Help text below the page button style dropdown.",
 	"cosmosbeta-themedesigner-layout-button-style-pill": "Option of the page button style dropdown for fully rounded buttons.",
 	"cosmosbeta-themedesigner-layout-button-style-slim": "Option of the page button style dropdown for shorter, more compact buttons.",
+	"cosmosbeta-themedesigner-layout-button-style-text": "Option of the page button style dropdown for buttons drawn as small uppercase text with an icon and no background.",
 	"cosmosbeta-themedesigner-layout-header-button-opacity": "Label of a slider on Special:CosmosBetaThemeDesigner. It sets how solid the background behind the wiki header buttons is.",
 	"cosmosbeta-themedesigner-layout-opacity": "Text used on Special:ThemeDesigner.",
 	"cosmosbeta-themedesigner-layout-width": "Text used on Special:ThemeDesigner.",
