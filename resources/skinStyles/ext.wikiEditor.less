@@ -9,178 +9,124 @@
 }
 
 .wikiEditor-ui-toolbar {
-	border-color: var( --skin-cosmos-border-color );
-	background-color: var( --skin-cosmos-content-background );
-	color: var( --skin-cosmos-font-color );
-
-	.tabs,
-	.section,
-	.group,
-	.booklet,
-	.page {
-		background-color: transparent;
-		color: var( --skin-cosmos-font-color );
-	}
-
-	.oo-ui-iconElement-icon,
-	.oo-ui-indicatorElement-indicator,
-	.tool .oo-ui-icon-element {
+	.tool,
+	.tabs .tab a::before,
+	.tool-select .label::after {
 		filter: invert( var( --skin-cosmos-invert ) );
 	}
 
-	.oo-ui-buttonElement-button,
-	.oo-ui-labelElement-label {
-		color: var( --skin-cosmos-font-color );
+	.tool-select .options .option:hover,
+	.booklet > .index > :hover {
+		background-color: var( --background-color-interactive );
+	}
+
+	.tool-button:hover,
+	.tool.oo-ui-buttonElement-frameless.oo-ui-iconElement > .oo-ui-buttonElement-button:hover {
+		background-color: var( --background-color-quiet--hover );
+	}
+
+	.tool-button.tool-active {
+		background-color: var( --background-color-progressive-subtle );
+	}
+
+	.booklet > .index > .current {
+		background-color: var( --background-color-interactive );
+		color: var( --color-emphasized );
+	}
+
+	.booklet > .index .wikiEditor-character-highlighted {
+		background-color: var( --background-color-progressive-subtle );
 	}
 }
 
-body .wikiEditor-ui-toolbar .cm-mw-toggle-wikieditor.oo-ui-toggleWidget-on .oo-ui-labelElement-label {
-	color: var( --skin-cosmos-link-color );
+.ext-WikiEditor-ResizingDragBar > span {
+	background-color: var( --border-color-base );
 }
 
-body .wikiEditor-ui-toolbar .tabs .tab a::before,
-body .wikiEditor-ui-toolbar .tabs .tab a::after {
-	filter: invert( var( --skin-cosmos-invert ) );
+.wikiEditor-ui-toolbar .section .dialog-section,
+.wikiEditor-ui-toolbar .section-advanced .group-codemirror {
+	border-color: var( --border-color-muted );
 }
 
-.ext-WikiEditor-ResizingDragBar {
-	border-top: 1px solid var( --skin-cosmos-border-color );
-	background-color: var( --skin-cosmos-content-background );
-
-	> span {
-		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 45%, var( --skin-cosmos-content-background ) );
-	}
-}
-
-body .wikiEditor-ui-toolbar .oo-ui-tool.oo-ui-widget-enabled:hover > .oo-ui-tool-link,
-body .wikiEditor-ui-toolbar .oo-ui-tool.oo-ui-widget-enabled:hover > .oo-ui-buttonElement-button,
-body .wikiEditor-ui-toolbar .oo-ui-tool.oo-ui-tool-active > .oo-ui-tool-link,
-body .wikiEditor-ui-toolbar .oo-ui-toggleWidget-on,
-body .wikiEditor-ui-toolbar .oo-ui-toggleWidget-on > .oo-ui-buttonElement-button {
-	background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 24%, var( --skin-cosmos-content-background ) );
-	color: var( --skin-cosmos-font-color );
-}
-
-html body .wikiEditor-ui-toolbar {
-	.oo-ui-tool > .oo-ui-tool-link,
-	.oo-ui-tool > .oo-ui-buttonElement-button,
-	.oo-ui-toggleWidget > .oo-ui-buttonElement-button,
-	.oo-ui-buttonElement-frameless > .oo-ui-buttonElement-button {
-		background-color: transparent;
-		box-shadow: none;
-		color: var( --skin-cosmos-font-color );
-	}
-
-	.oo-ui-tool.oo-ui-widget-enabled > .oo-ui-tool-link:hover,
-	.oo-ui-tool.oo-ui-widget-enabled > .oo-ui-tool-link:focus,
-	.oo-ui-tool.oo-ui-widget-enabled > .oo-ui-tool-link:active,
-	.oo-ui-buttonElement-frameless.oo-ui-widget-enabled > .oo-ui-buttonElement-button:hover,
-	.oo-ui-buttonElement-frameless.oo-ui-widget-enabled > .oo-ui-buttonElement-button:focus,
-	.oo-ui-buttonElement-frameless.oo-ui-widget-enabled > .oo-ui-buttonElement-button:active,
-	.oo-ui-buttonElement-pressed > .oo-ui-buttonElement-button {
-		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 14%, var( --skin-cosmos-content-background ) );
-		color: var( --skin-cosmos-font-color );
-	}
-
-	.oo-ui-toggleWidget.oo-ui-buttonElement-active,
-	.oo-ui-toggleWidget.oo-ui-toggleWidget-on {
-		background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 24%, var( --skin-cosmos-content-background ) );
-	}
-
-	.oo-ui-toggleWidget.oo-ui-toggleWidget-off,
-	.oo-ui-toggleWidget:not( .oo-ui-buttonElement-active ):not( .oo-ui-toggleWidget-on ) {
-		background-color: transparent;
-	}
-
-	.oo-ui-iconElement-icon[ class*='oo-ui-icon-cm-' ] {
-		background-color: var( --skin-cosmos-font-color );
-		filter: none;
-	}
-
-	.oo-ui-toggleWidget.oo-ui-buttonElement-active .oo-ui-iconElement-icon[ class*='oo-ui-icon-cm-' ],
-	.oo-ui-toggleWidget.oo-ui-toggleWidget-on .oo-ui-iconElement-icon[ class*='oo-ui-icon-cm-' ] {
-		background-color: var( --skin-cosmos-link-color );
-	}
+body .ui-dialog .ui-tabs-panel,
+body .ui-dialog .wikiEditor-toolbar-dialog-fieldset-header {
+	border-top-color: var( --border-color-subtle ) !important;
 }
 
 body .ui-dialog {
 	max-width: calc( 100vw - 16px );
 	box-sizing: border-box;
+	border-color: var( --border-color-base );
+	background: var( --background-color-base );
+	color: var( --color-base );
 	font-size: 14px;
 
 	.ui-dialog-content {
 		padding: 12px 16px;
+		background: transparent;
+		color: inherit;
 	}
 
 	.ui-dialog-titlebar {
 		padding: 8px 12px;
+		border-color: var( --border-color-subtle );
+		background: var( --background-color-neutral );
+		color: var( --color-emphasized );
+		text-shadow: none;
 	}
 
 	.ui-dialog-buttonpane {
 		padding: 8px 12px;
+		border-color: var( --border-color-subtle );
+		background: var( --background-color-base );
+	}
+
+	.ui-dialog-title,
+	label,
+	legend,
+	p {
+		color: var( --color-base );
 	}
 
 	label {
 		display: inline-block;
 		margin: 6px 0 2px;
 	}
+
+	input[ type='text' ],
+	input[ type='search' ],
+	textarea,
+	select {
+		border: 1px solid var( --border-color-base );
+		background-color: var( --background-color-interactive-subtle );
+		color: var( --color-base );
+	}
+
+	.ui-dialog-buttonpane button,
+	.ui-button {
+		border: 1px solid var( --border-color-base );
+		background: var( --background-color-interactive );
+		color: var( --color-base );
+		text-shadow: none;
+
+		&:hover,
+		&:focus {
+			background: var( --background-color-interactive-subtle--hover );
+		}
+	}
+
+	.ui-dialog-titlebar-close {
+		color: var( --color-base );
+
+		.ui-icon {
+			filter: invert( var( --skin-cosmos-invert ) );
+		}
+	}
 }
 
-html.skin-cosmos-colormode-dark body {
-	.ui-dialog,
-	.ui-dialog .ui-dialog-content,
-	.ui-dialog .ui-dialog-buttonpane {
-		border-color: var( --skin-cosmos-border-color );
-		background: var( --skin-cosmos-content-background );
-		color: var( --skin-cosmos-font-color );
-	}
-
-	.ui-dialog .ui-dialog-titlebar {
-		border-color: var( --skin-cosmos-border-color );
-		background: color-mix( in srgb, var( --skin-cosmos-font-color ) 12%, var( --skin-cosmos-content-background ) );
-		color: var( --skin-cosmos-font-color );
-		text-shadow: none;
-	}
-
-	.ui-dialog .ui-dialog-title,
-	.ui-dialog label,
-	.ui-dialog legend,
-	.ui-dialog p {
-		color: var( --skin-cosmos-font-color );
-	}
-
-	.ui-dialog input[ type='text' ],
-	.ui-dialog input[ type='search' ],
-	.ui-dialog textarea,
-	.ui-dialog select {
-		border: 1px solid var( --skin-cosmos-border-color );
-		background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 6%, var( --skin-cosmos-content-background ) );
-		color: var( --skin-cosmos-font-color );
-	}
-
-	.ui-dialog .ui-dialog-buttonpane button,
-	.ui-dialog .ui-button {
-		border: 1px solid var( --skin-cosmos-border-color );
-		background: color-mix( in srgb, var( --skin-cosmos-font-color ) 10%, var( --skin-cosmos-content-background ) );
-		color: var( --skin-cosmos-font-color );
-		text-shadow: none;
-	}
-
-	.ui-dialog .ui-dialog-buttonpane button:hover,
-	.ui-dialog .ui-dialog-buttonpane button:focus,
-	.ui-dialog .ui-button:hover,
-	.ui-dialog .ui-button:focus {
-		background: color-mix( in srgb, var( --skin-cosmos-font-color ) 18%, var( --skin-cosmos-content-background ) );
-	}
-
-	.ui-dialog .ui-dialog-titlebar-close {
-		color: var( --skin-cosmos-font-color );
-	}
-
-	.ui-widget-overlay {
-		background: #000;
-		opacity: 0.6;
-	}
+.ui-widget-overlay {
+	background: #000;
+	opacity: 0.6;
 }
 
 @media screen and ( max-width: 600px ) {
@@ -188,21 +134,17 @@ html.skin-cosmos-colormode-dark body {
 		right: 8px !important;
 		left: 8px !important;
 		width: auto !important;
-	}
 
-	body .ui-dialog .ui-dialog-content {
-		width: auto !important;
-		box-sizing: border-box;
-	}
+		.ui-dialog-content {
+			width: auto !important;
+			box-sizing: border-box;
+		}
 
-	body .ui-dialog input[ type='text' ],
-	body .ui-dialog input[ type='search' ],
-	body .ui-dialog textarea {
-		max-width: 100%;
-		box-sizing: border-box;
+		input[ type='text' ],
+		input[ type='search' ],
+		textarea {
+			max-width: 100%;
+			box-sizing: border-box;
+		}
 	}
-}
-
-html.skin-cosmos-colormode-dark body .ui-dialog .ui-dialog-titlebar-close .ui-icon {
-	filter: invert( 1 );
 }
