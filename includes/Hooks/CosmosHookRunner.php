@@ -16,6 +16,10 @@ class CosmosHookRunner implements CosmosRailBuilderHook {
 
 	/** @inheritDoc */
 	public function onCosmosRailBuilder( array &$modules, Skin $skin ): void {
-		$this->container->run( 'CosmosBetaRailBuilder', [ &$modules, $skin ] );
+		$this->container->run(
+			'CosmosBetaRailBuilder',
+			[ &$modules, $skin ],
+			[ 'abortable' => false ]
+		);
 	}
 }
