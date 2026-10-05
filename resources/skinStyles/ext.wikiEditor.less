@@ -104,6 +104,8 @@ html body .wikiEditor-ui-toolbar {
 }
 
 body .ui-dialog {
+	max-width: calc( 100vw - 16px );
+	box-sizing: border-box;
 	font-size: 14px;
 
 	.ui-dialog-content {
@@ -179,4 +181,28 @@ html.skin-cosmos-colormode-dark body {
 		background: #000;
 		opacity: 0.6;
 	}
+}
+
+@media screen and ( max-width: 600px ) {
+	body .ui-dialog {
+		right: 8px !important;
+		left: 8px !important;
+		width: auto !important;
+	}
+
+	body .ui-dialog .ui-dialog-content {
+		width: auto !important;
+		box-sizing: border-box;
+	}
+
+	body .ui-dialog input[ type='text' ],
+	body .ui-dialog input[ type='search' ],
+	body .ui-dialog textarea {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+}
+
+html.skin-cosmos-colormode-dark body .ui-dialog .ui-dialog-titlebar-close .ui-icon {
+	filter: invert( 1 );
 }
