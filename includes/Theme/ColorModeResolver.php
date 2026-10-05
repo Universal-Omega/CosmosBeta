@@ -19,13 +19,13 @@ class ColorModeResolver {
 	}
 
 	/**
-	 * Anonymous users always get the wiki default so cached pages stay identical for everyone.
+	 * Anonymous and temporary users always get the wiki default so cached pages stay identical for everyone.
 	 */
 	public function getRenderMode( ?UserIdentity $user ): string {
 		$theme = $this->store->getCurrent();
 		$default = $theme->getDefaultMode();
 
-		if ( !$theme->isToggleEnabled() || $user === null || !$user->isRegistered() ) {
+		if ( !$theme->isToggleEnabled() || $user === null || !$user->isNamed() ) {
 			return $default;
 		}
 
@@ -37,7 +37,7 @@ class ColorModeResolver {
 	 * Whether a registered user picked light or dark themselves.
 	 */
 	public function hasPreference( ?UserIdentity $user ): bool {
-		if ( !$this->store->getCurrent()->isToggleEnabled() || $user === null || !$user->isRegistered() ) {
+		if ( !$this->store->getCurrent()->isToggleEnabled() || $user === null || !$user->isNamed() ) {
 			return false;
 		}
 
