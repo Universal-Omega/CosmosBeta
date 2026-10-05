@@ -16,10 +16,12 @@ use MediaWiki\Skin\SkinMustache;
 use MediaWiki\Skins\CosmosBeta\Components\BannerComponent;
 use MediaWiki\Skins\CosmosBeta\Components\ChromeComponent;
 use MediaWiki\Skins\CosmosBeta\Components\CreatePageDialogComponent;
+use MediaWiki\Skins\CosmosBeta\Components\FandomRailComponent;
 use MediaWiki\Skins\CosmosBeta\Components\PageHeaderComponent;
 use MediaWiki\Skins\CosmosBeta\Components\WikiHeaderComponent;
 use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
 use MediaWiki\SpecialPage\SpecialPageFactory;
+use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\Options\UserOptionsManager;
 use UserProfilePage;
@@ -115,6 +117,7 @@ class SkinCosmosBeta extends SkinMustache {
 		$context = $this->getContext();
 		$mainPage = $data['link-mainpage'];
 
+		$isFandom = $this->isFandomStyle();
 		$banner = new BannerComponent( $context, $this->cosmosOptions, $this->extensionRegistry );
 		$header = new WikiHeaderComponent(
 			$context,
@@ -128,7 +131,8 @@ class SkinCosmosBeta extends SkinMustache {
 			$context,
 			$this->titleFactory,
 			$this->languageNameUtils,
-			$this->contentLanguage
+			$this->contentLanguage,
+			$isFandom
 		);
 		$dialog = new CreatePageDialogComponent(
 			$context,
@@ -154,6 +158,8 @@ class SkinCosmosBeta extends SkinMustache {
 		$dismissable = $this->extensionRegistry->isLoaded( 'DismissableSiteNotice' );
 		$noticeClosed = $this->getRequest()->getCookie( 'CosmosSiteNoticeState' ) === 'closed';
 
+		$toolbar = $chrome->getToolbarData( $sidebar, $toolsInRail );
+
 		return [ 'data-search-box' => $search ] + $data + [
 			'data-cosmos-navigation' => $tree,
 			'data-cosmos-banner' => $banner->getTemplateData( $portlets ),
@@ -164,7 +170,14 @@ class SkinCosmosBeta extends SkinMustache {
 			],
 			'data-cosmos-dialog' => $dialog->getTemplateData(),
 			'data-cosmos-footer' => $chrome->getFooterData( $data['data-footer'] ?? [] ),
-			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar, $toolsInRail ),
+			'data-cosmos-toolbar' => $isFandom ? null : $toolbar,
+			'data-cosmos-page-tools' => $isFandom && $toolbar ?
+				$toolbar + [ 'msg-title' => $this->msg( 'cosmosbeta-fandomrail-pagetools' )->text() ] :
+				null,
+			'data-cosmos-fandom-rail' => $isFandom ?
+				( new FandomRailComponent( $context, $this->permissionManager ) )->getTemplateData( $mainPage, $tree ) :
+				null,
+			'html-fandom-license' => $isFandom ? $chrome->getCopyrightHtml( $data['data-footer'] ?? [] ) : null,
 			'html-cosmos-rail' => $this->railBuilder->buildRail(),
 			'html-cosmos-cookiewarning' => $this->getCookieWarning(),
 			'is-cosmos-dismissable-notice' => $hasNotice && $dismissable,
@@ -246,7 +259,15 @@ class SkinCosmosBeta extends SkinMustache {
 		return $modules;
 	}
 
+	private function isFandomStyle(): bool {
+		return $this->cosmosConfig->getLayoutStyle() === ThemeSettings::STYLE_FANDOMDESKTOP;
+	}
+
 	private function shouldPutToolsInRail(): bool {
+		if ( $this->isFandomStyle() ) {
+			return false;
+		}
+
 		$settings = $this->cosmosConfig->getToolbarSettings();
 
 		return $settings['enabled'] && $settings['style'] === 'rail' && !$this->railBuilder->isHidden();
