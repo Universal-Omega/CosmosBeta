@@ -1,0 +1,11 @@
+<li class="skin-cosmos-fandomrail__item{{#has-children}} skin-cosmos-fandomrail__item--menu{{/has-children}}" id="{{id}}">
+	<a class="skin-cosmos-fandomrail__link" href="{{url}}">
+		<span class="skin-cosmos-icon skin-cosmos-icon-{{icon}}" aria-hidden="true"></span>
+		<span class="skin-cosmos-fandomrail__label">{{label}}</span>
+	</a>
+	{{#has-children}}
+	<ul class="skin-cosmos-fandomrail__flyout">
+		{{#array-children}}<li><a href="{{href}}">{{text}}</a></li>{{/array-children}}
+	</ul>
+	{{/has-children}}
+</li>
