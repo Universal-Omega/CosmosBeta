@@ -195,17 +195,6 @@ class SkinCosmosBeta extends SkinMustache {
 				'skins.cosmosbeta.portableinfobox.default';
 		}
 
-		if (
-			LessUtil::isThemeDark(
-				'content-background-color',
-				LessUtil::getCosmosSettings( $this->cosmosConfig->getRenderMode() )
-			) &&
-			$this->extensionRegistry->isLoaded( 'CodeMirror' ) &&
-			$this->extensionRegistry->isLoaded( 'VisualEditor' )
-		) {
-			$modules['styles']['skin'][] = 'skins.cosmosbeta.codemirror';
-		}
-
 		if ( $this->extensionRegistry->isLoaded( 'CodeEditor' ) ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.codeeditor';
 		}
