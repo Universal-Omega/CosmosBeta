@@ -93,10 +93,12 @@
 	},
 	"GroupPermissions": {
 		"sysop": {
-			"cosmosbeta-themedesigner": true
+			"cosmosbeta-themedesigner": true,
+			"cosmosbeta-admindashboard": true
 		}
 	},
 	"AvailableRights": [
+		"cosmosbeta-admindashboard",
 		"cosmosbeta-themedesigner"
 	],
 	"SpecialPages": {
@@ -109,6 +111,15 @@
 				"SkinFactory",
 				"CosmosBetaTemplateParser",
 				"TitleFactory"
+			]
+		},
+		"AdminDashboard": {
+			"class": "MediaWiki\\Skins\\CosmosBeta\\Specials\\SpecialAdminDashboard",
+			"services": [
+				"CosmosBetaAdminDashboardStats",
+				"CosmosBetaAdvancedSectionBuilder",
+				"CosmosBetaAdminDashboardControls",
+				"CosmosBetaTemplateParser"
 			]
 		}
 	},
@@ -226,6 +237,18 @@
 		},
 		"skins.cosmosbeta.rail": {
 			"styles": "resources/skins.cosmosbeta.rail/rail.less"
+		},
+		"skins.cosmosbeta.admindashboard.codex": {
+			"class": "MediaWiki\\ResourceLoader\\CodexModule",
+			"codexStyleOnly": true,
+			"codexComponents": [
+				"CdxTable"
+			]
+		},
+		"skins.cosmosbeta.admindashboard": {
+			"styles": [
+				"resources/skins.cosmosbeta.admindashboard/admindashboard.less"
+			]
 		},
 		"skins.cosmosbeta.portableinfobox": {
 			"features": {
