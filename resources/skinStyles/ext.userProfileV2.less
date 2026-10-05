@@ -26,7 +26,6 @@ body #firstHeading {
 	background-color: var( --skin-cosmos-tabs-background );
 	object-fit: cover;
 
-	// The built in avatar is a dark outline, so it is lightened to sit quietly on any theme.
 	&[ src*='/default.png' ] {
 		padding: 14px;
 		box-sizing: border-box;
@@ -148,7 +147,6 @@ body #firstHeading {
 		grid-template-columns: auto minmax( 0, 1fr ) auto;
 	}
 
-	// The wrapper steps aside so the stats, links and bio can use the full width.
 	.profile-information {
 		display: contents;
 	}
@@ -192,7 +190,7 @@ body #firstHeading {
 		flex: none;
 		align-self: center;
 		gap: 4px 6px;
-		grid-column: 2 / -1;
+		grid-column: 2;
 		grid-row: 1;
 
 		> h1 {
@@ -212,9 +210,9 @@ body #firstHeading {
 	}
 
 	.profile-header-actions {
-		align-self: center;
+		align-self: end;
 		grid-column: 3;
-		grid-row: 2;
+		grid-row: 1;
 	}
 
 	.profile-header-actions .mw-ui-button {
@@ -230,7 +228,7 @@ body #firstHeading {
 	.profile-header-statistics {
 		align-self: center;
 		margin: 0 !important;
-		grid-column: 1 / 3;
+		grid-column: 1 / -1;
 		grid-row: 2;
 	}
 
