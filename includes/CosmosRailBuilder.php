@@ -127,7 +127,7 @@ class CosmosRailBuilder {
 			return true;
 		}
 
-		if ( $railSettings['hideForAnons'] && !$this->context->getUser()->isRegistered() ) {
+		if ( $railSettings['hideForAnons'] && !$this->context->getUser()->isNamed() ) {
 			return true;
 		}
 
