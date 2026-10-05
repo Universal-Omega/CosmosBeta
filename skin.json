@@ -327,18 +327,6 @@
 			},
 			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
 		},
-		"skins.cosmosbeta.codemirror": {
-			"features": {
-				"content-body": false,
-				"toc": false
-			},
-			"styles": {
-				"resources/extensions/CodeMirror.visualEditor/darkTheme.less": {
-					"media": "screen"
-				}
-			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
-		},
 		"skins.cosmosbeta.codeeditor": {
 			"features": {
 				"content-body": false,
@@ -574,31 +562,28 @@
 		"localBasePath": "",
 		"remoteSkinPath": "CosmosBeta"
 	},
+	"SkinLessImportPaths": {
+		"cosmosbeta": "resources/mediawiki.less"
+	},
 	"ResourceModuleSkinStyles": {
 		"cosmosbeta": {
 			"+mediawiki.action.view.filepage": "resources/skinStyles/mediawiki.action.view.filepage.less",
 			"+oojs-ui-core.styles": "resources/skinStyles/ooui.less",
 			"+ext.echo.styles.badge": "resources/skinStyles/ext.echo.styles.badge.less",
 			"+ext.visualEditor.core": "resources/skinStyles/ext.visualEditor.less",
-			"+ext.CodeMirror.visualEditor.init": "resources/skinStyles/ext.CodeMirror.visualEditor.less",
 			"+ext.dummyfandoommainpagetags.styles": "resources/skinStyles/ext.dummyfandoommainpagetags.less",
 			"+ext.uls.interface": "resources/skinStyles/ext.uls.interface.less",
 			"+ext.echo.styles.alert": "resources/skinStyles/ext.echo.styles.alert.less",
-			"+mediawiki.action.edit.styles": "resources/skinStyles/mediawiki.action.edit.styles.less",
-			"+mediawiki.diff.styles": "resources/skinStyles/mediawiki.diff.styles.less",
 			"+ext.wikiEditor": "resources/skinStyles/ext.wikiEditor.less",
-			"+ext.CodeMirror.init": "resources/skinStyles/ext.CodeMirror.init.less",
-			"+mediawiki.special.preferences.styles.ooui": "resources/skinStyles/mediawiki.special.preferences.styles.ooui.less",
 			"+mediawiki.special.changeslist.legend": "resources/skinStyles/mediawiki.special.changeslist.legend.less",
-			"+mediawiki.htmlform.ooui.styles": "resources/skinStyles/mediawiki.htmlform.ooui.styles.less",
 			"+mediawiki.rcfilters.filters.base.styles": "resources/skinStyles/mediawiki.rcfilters.filters.base.styles.less",
 			"+ext.uls.languagesettings": "resources/skinStyles/ext.uls.languagesettings.less",
-			"+ext.discussionTools.init.styles": "resources/skinStyles/ext.discussionTools.init.styles.less",
 			"+ext.echo.ui": "resources/skinStyles/ext.echo.ui.less",
-			"+mediawiki.notification": "resources/skinStyles/mediawiki.notification.less",
 			"+ext.translate.tag.languages": "resources/skinStyles/ext.translate.tag.languages.less",
 			"+ext.managewiki.oouiform.styles": "resources/skinStyles/ext.managewiki.oouiform.styles.less",
-			"+ext.parsermigration.reportbug.init": "resources/skinStyles/ext.parsermigration.reportbug.init.less"
+			"+ext.parsermigration.reportbug.init": "resources/skinStyles/ext.parsermigration.reportbug.init.less",
+			"+mediawiki.helplink": "resources/skinStyles/mediawiki.helplink.less",
+			"+mediawiki.pager.styles": "resources/skinStyles/mediawiki.pager.styles.less"
 		}
 	},
 	"config": {
