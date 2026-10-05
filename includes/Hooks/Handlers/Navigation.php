@@ -11,6 +11,7 @@ use MediaWiki\Hook\BeforeInitializeHook;
 use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Language\Hook\MessageCacheReplaceHook;
+use MediaWiki\Language\RawMessage;
 use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
 use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
 use MediaWiki\Title\Title;
@@ -74,31 +75,23 @@ class Navigation implements
 	}
 
 	private function buildPreview( IContextSource $context, bool $isConflict, string $pageText ): string {
-		$out = $context->getOutput();
-
-		$conflict = $isConflict ?
-			Html::warningBox( $context->msg( 'previewconflict' )->escaped(), 'mw-previewconflict' ) :
-			'';
-
 		$note = $context->msg( 'previewnote' )->plain() .
 			' <span class="mw-continue-editing">' .
 			'[[#editform|' .
 			$context->getLanguage()->getArrow() . ' ' .
 			$context->msg( 'continue-editing' )->text() . ']]</span>';
 
-		$tree = $this->navigation->buildTree( $context, $this->navigation->extract( $pageText ) );
-
-		$menu = $this->templateParser->processTemplate( 'Navigation', [ 'data-cosmos-navigation' => $tree ] );
-
-		return Html::rawElement( 'div', [ 'class' => 'previewnote' ],
-			Html::rawElement( 'h2', [ 'id' => 'mw-previewheader' ], $context->msg( 'preview' )->escaped() ) .
-			Html::warningBox( $out->parseAsInterface( $note ) ) . $conflict
-		) . Html::rawElement( 'header', [ 'class' => 'skin-cosmos-header cosmos-header' ],
-			Html::rawElement(
-				'nav',
-				[ 'class' => 'skin-cosmos-header__local-navigation cosmos-header__local-navigation skin-cosmos-navigation-preview navigation-preview' ],
-				$menu
-			)
+		$lines = $this->navigation->extract(
+			( new RawMessage( $pageText ) )->setContext( $context )->inContentLanguage()->text()
 		);
+
+		return $this->templateParser->processTemplate( 'NavigationPreview', [
+			'preview' => $context->msg( 'preview' )->text(),
+			'note' => Html::warningBox( $context->getOutput()->parseAsInterface( $note ) ),
+			'conflict' => $isConflict ?
+				Html::warningBox( $context->msg( 'previewconflict' )->escaped(), 'mw-previewconflict' ) :
+				'',
+			'data-cosmos-navigation' => $this->navigation->buildTree( $context, $lines ),
+		] );
 	}
 }
