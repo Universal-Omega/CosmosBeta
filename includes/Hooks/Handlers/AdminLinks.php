@@ -8,10 +8,12 @@ use ALItem;
 use ALRow;
 use ALSection;
 use ALTree;
+use AdminLinksHook;
 use function wfMessage;
 
-class AdminLinks {
+class AdminLinks implements AdminLinksHook {
 
+	/** @inheritDoc */
 	public function onAdminLinks( ALTree &$adminLinksTree ): void {
 		$section = new ALSection( wfMessage( 'skinname-cosmosbeta' )->text() );
 		$row = new ALRow( 'cosmosbeta' );
