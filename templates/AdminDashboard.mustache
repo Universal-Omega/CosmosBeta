@@ -1,0 +1,39 @@
+<div class="skin-cosmos-admindashboard" id="skin-cosmos-admindashboard">
+	<div class="skin-cosmos-admindashboard__layout">
+		<div class="skin-cosmos-admindashboard__main">
+			{{#is-general}}
+			{{#array-sections}}
+			<section class="skin-cosmos-admindashboard__section" aria-labelledby="skin-cosmos-admindashboard-section-{{id}}">
+				<h2 class="skin-cosmos-admindashboard__heading" id="skin-cosmos-admindashboard-section-{{id}}">{{title}}</h2>
+				<ul class="skin-cosmos-admindashboard__controls">
+					{{#array-controls}}
+					<li class="skin-cosmos-admindashboard__control">
+						<a class="skin-cosmos-admindashboard__link" href="{{url}}"{{#is-dialog}} data-skin-cosmos-create-page{{/is-dialog}}{{#is-external}} rel="noopener nofollow"{{/is-external}}>
+							<span class="skin-cosmos-admindashboard__badge" aria-hidden="true"><span class="skin-cosmos-admindashboard__icon skin-cosmos-admindashboard__icon--{{id}}"></span></span>
+							<span class="skin-cosmos-admindashboard__text">
+								<span class="skin-cosmos-admindashboard__label">{{label}}</span>
+								<span class="skin-cosmos-admindashboard__description">{{description}}</span>
+							</span>
+						</a>
+					</li>
+					{{/array-controls}}
+				</ul>
+			</section>
+			{{/array-sections}}
+			{{/is-general}}
+			{{#is-advanced}}
+			{{#array-groups}}
+			<section class="skin-cosmos-admindashboard__section" aria-labelledby="skin-cosmos-admindashboard-group-{{id}}">
+				<h2 class="skin-cosmos-admindashboard__heading" id="skin-cosmos-admindashboard-group-{{id}}">{{title}}</h2>
+				<ul class="skin-cosmos-admindashboard__pages">
+					{{#array-links}}
+					<li class="skin-cosmos-admindashboard__page{{#is-restricted}} skin-cosmos-admindashboard__page--restricted{{/is-restricted}}"><a href="{{url}}">{{text}}</a></li>
+					{{/array-links}}
+				</ul>
+			</section>
+			{{/array-groups}}
+			{{/is-advanced}}
+		</div>
+		{{#data-stats}}{{> AdminDashboardStats}}{{/data-stats}}
+	</div>
+</div>
