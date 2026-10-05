@@ -393,13 +393,31 @@ body > #mw-content-container {
 		border-radius: 16px;
 	}
 
-	// The built in avatar is a dark outline, so it follows the banner text color.
-	> img[ src*='/default.png' ] {
-		padding: 4px;
-		box-sizing: border-box;
-		background-color: fade( @banner-font-color, 15% );
-		filter: invert( @banner-icon-invert );
-		object-fit: contain;
+	// The built in avatar is a dark outline, so it follows the banner text color. The ring is drawn
+	// separately because the filter would invert a border too.
+	&:has( > img[ src*='/default.png' ] ) {
+		position: relative;
+		display: flex;
+
+		&::after {
+			position: absolute;
+			border: 2px solid @banner-font-color;
+			border-radius: 50%;
+			content: '';
+			inset: 0;
+			pointer-events: none;
+		}
+
+		> img {
+			width: 34px;
+			height: 34px;
+			padding: 0;
+			border: 0;
+			background-color: fade( @banner-font-color, 15% );
+			border-radius: 50%;
+			filter: invert( @banner-icon-invert );
+			object-fit: cover;
+		}
 	}
 }
 
