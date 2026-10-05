@@ -33,6 +33,10 @@ class Output implements
 			) ? 'theme-dark' : 'theme-light',
 		];
 
+		if ( $skin->cosmosConfig->hasSlimButtons() ) {
+			$classes[] = 'skin-cosmos-slim-buttons';
+		}
+
 		if ( $out->getTitle()->isMainPage() ) {
 			$classes[] = 'mainpage';
 		}
