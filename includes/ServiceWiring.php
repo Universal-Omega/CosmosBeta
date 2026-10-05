@@ -19,6 +19,7 @@ use MediaWiki\Skins\CosmosBeta\CosmosWordmarkLookup;
 use MediaWiki\Skins\CosmosBeta\Hooks\CosmosHookRunner;
 use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
 use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
+use MediaWiki\Skins\CosmosBeta\Theme\LayoutStyleResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
 
 // @codeCoverageIgnoreStart
@@ -78,12 +79,20 @@ return [
 				$services->getMainConfig()
 			),
 			$services->get( 'CosmosBetaThemeStore' ),
-			$services->get( 'CosmosBetaColorModeResolver' )
+			$services->get( 'CosmosBetaColorModeResolver' ),
+			$services->get( 'CosmosBetaLayoutStyleResolver' )
 		);
 	},
 
 	'CosmosBetaHookRunner' => static function ( MediaWikiServices $services ): CosmosHookRunner {
 		return new CosmosHookRunner( $services->getHookContainer() );
+	},
+
+	'CosmosBetaLayoutStyleResolver' => static function ( MediaWikiServices $services ): LayoutStyleResolver {
+		return new LayoutStyleResolver(
+			$services->get( 'CosmosBetaThemeStore' ),
+			$services->getUserOptionsLookup()
+		);
 	},
 
 	'CosmosBetaNavigation' => static function ( MediaWikiServices $services ): CosmosNavigation {
