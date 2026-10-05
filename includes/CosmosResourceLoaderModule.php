@@ -213,7 +213,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 			'alt-font-color' => $isContentBackgroundColorDark ? '#fff' : '#000',
 			'code-background-color' => $isContentBackgroundColorDark ? '#c5c6c6' : '#3a3939',
 			'rail-header-bottom-border' => $isContentBackgroundColorDark ? '#0a0a0a' : '#eaecf0',
-			'tabs-background-color' => $isContentBackgroundColorDark ? 'transparent' : '#eaecf0',
+			'tabs-background-color' => $isContentBackgroundColorDark ? 'rgba(213, 212, 212, 0.07)' : '#eaecf0',
 			'infobox-background-mix' => $isContentBackgroundColorDark ? '85%' : '90%',
 			'toc-background-color' => $isContentBackgroundColorDark ? 'transparent' : '#f8f9fa',
 		];
