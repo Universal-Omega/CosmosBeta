@@ -626,7 +626,7 @@ body > .suggestions {
 }
 
 .skin-cosmos-associatedTabs {
-	margin: 6px 0 14px;
+	margin: 0 0 20px;
 	overflow-x: auto;
 	border-bottom: 1px solid var( --skin-cosmos-border-color );
 	scrollbar-width: none;
@@ -2141,6 +2141,10 @@ body {
 
 #cosmos-page-header {
 	padding: 20px 0 10px 0;
+
+	&:has( > .skin-cosmos-associatedTabs ) {
+		padding-top: 12px;
+	}
 }
 
 .skin-cosmos-categories {
