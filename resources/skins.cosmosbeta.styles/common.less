@@ -393,8 +393,6 @@ body > #mw-content-container {
 		border-radius: 16px;
 	}
 
-	// The built in avatar is a dark outline, so it follows the banner text color. The ring is drawn
-	// separately because the filter would invert a border too.
 	&:has( > img[ src*='/default.png' ] ) {
 		position: relative;
 		display: flex;
@@ -423,7 +421,6 @@ body > #mw-content-container {
 			border-radius: 50%;
 			filter: invert( @banner-icon-invert );
 			object-fit: cover;
-			// The artwork leaves about a fifth of the image empty, so it is enlarged to touch the ring.
 			transform: scale( 1.3 );
 		}
 	}
