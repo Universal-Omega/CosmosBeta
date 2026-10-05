@@ -7,6 +7,7 @@ namespace MediaWiki\Skins\CosmosBeta\Specials;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinFactory;
 use MediaWiki\Skins\CosmosBeta\Components\PortletReader;
@@ -18,6 +19,8 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use Throwable;
 use function array_diff;
+use function array_intersect;
+use function array_map;
 use function array_values;
 use function in_array;
 use function is_array;
@@ -25,12 +28,16 @@ use function json_decode;
 use function json_encode;
 use function preg_replace;
 use function strip_tags;
+use function strtolower;
 use function trim;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
+use const NS_MAIN;
 
 class SpecialThemeDesigner extends SpecialPage {
+
+	private const array IMAGE_EXTENSIONS = [ 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg' ];
 
 	private const array FALLBACK_TOOLBAR_ITEMS = [
 		'whatlinkshere',
@@ -66,6 +73,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	/** @inheritDoc */
 	public function execute( $subPage ): void {
+		$this->checkPermissions();
 		$this->setHeaders();
 		$this->addHelpLink( 'Skin:Cosmos' );
 
@@ -91,6 +99,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		$out = $this->getOutput();
 		$request = $this->getRequest();
 
+		$this->checkPermissions();
 		$this->checkReadOnly();
 
 		if ( !$this->getContext()->getCsrfTokenSet()->matchTokenField( 'wpEditToken' ) ) {
@@ -187,7 +196,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		return [
-			'canEdit' => true,
+			'canEdit' => $this->userCanExecute( $this->getUser() ),
 			'settings' => $current->toArray(),
 			'defaults' => ThemeSettings::getDefaults(),
 			'revisionId' => $current->getRevisionId(),
@@ -200,7 +209,35 @@ class SpecialThemeDesigner extends SpecialPage {
 				'contentOpacity' => $this->config->getContentOpacityLevel(),
 			],
 			'canHideFooterIcons' => $this->config->canHideFooterIcons(),
+			'upload' => $this->getUploadData(),
+			'namespaces' => $this->getNamespaceOptions(),
 		] + $this->getChromeOptions();
+	}
+
+	private function getUploadData(): array {
+		$extensions = array_values( array_intersect(
+			array_map( 'strtolower', (array)$this->getConfig()->get( MainConfigNames::FileExtensions ) ),
+			self::IMAGE_EXTENSIONS
+		) );
+
+		return [
+			'enabled' => (bool)$this->getConfig()->get( MainConfigNames::EnableUploads ) &&
+				$this->getAuthority()->isAllowed( 'upload' ),
+			'extensions' => $extensions,
+		];
+	}
+
+	private function getNamespaceOptions(): array {
+		$options = [];
+
+		foreach ( $this->getLanguage()->getFormattedNamespaces() as $id => $name ) {
+			$options[] = [
+				'value' => (int)$id,
+				'label' => $id === NS_MAIN ? $this->msg( 'blanknamespace' )->text() : (string)$name,
+			];
+		}
+
+		return $options;
 	}
 
 	/**
