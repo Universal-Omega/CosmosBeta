@@ -20,29 +20,55 @@
 
 @import 'mediawiki.skin.codex-design-tokens/theme-wikimedia-ui-mixin-dark.less';
 
-.skin-cosmos-dark-tokens() when ( @theme-invert = 1 ) {
-	:root {
-		.cdx-mode-dark();
-		color-scheme: dark;
-		--color-base: @font-color;
-		--color-base--hover: @alt-font-color;
-		--color-emphasized: @alt-font-color;
-		--color-progressive: @link-color;
-		--color-progressive--hover: lighten( @link-color, 8% );
-		--color-progressive--active: lighten( @link-color, 14% );
-		--background-color-base: @content-background-color;
-		--background-color-neutral: mix( #fff, @content-background-color, 8% );
-		--background-color-neutral-subtle: mix( #fff, @content-background-color, 4% );
-		--background-color-interactive: mix( #fff, @content-background-color, 10% );
-		--background-color-interactive-subtle: mix( #fff, @content-background-color, 5% );
-		--background-color-interactive-subtle--hover: mix( #fff, @content-background-color, 9% );
-		--background-color-interactive-subtle--active: mix( #fff, @content-background-color, 13% );
-		--border-color-base: lighten( @border-color, 22% );
-		--border-color-interactive: lighten( @border-color, 22% );
-	}
+.skin-cosmos-dark-base() when ( @theme-invert = 1 ) {
+	.cdx-mode-dark();
+	color-scheme: dark;
 }
 
-.skin-cosmos-dark-tokens();
+.skin-cosmos-token-colors( @tint, @hover-link, @active-link ) {
+	--color-base: @font-color;
+	--color-base--hover: @alt-font-color;
+	--color-emphasized: @alt-font-color;
+	--color-subtle: fade( @font-color, 82% );
+	--color-placeholder: fade( @font-color, 60% );
+	--color-disabled: fade( @font-color, 50% );
+	--color-progressive: @link-color;
+	--color-progressive--hover: @hover-link;
+	--color-progressive--active: @active-link;
+	--color-progressive--focus: @link-color;
+	--color-inverted: @content-background-color;
+	--background-color-progressive: @link-color;
+	--background-color-progressive--hover: @hover-link;
+	--background-color-progressive--active: @active-link;
+	--background-color-base: @content-background-color;
+	--background-color-neutral: mix( @tint, @content-background-color, 8% );
+	--background-color-neutral-subtle: mix( @tint, @content-background-color, 4% );
+	--background-color-interactive: mix( @tint, @content-background-color, 10% );
+	--background-color-interactive-subtle: mix( @tint, @content-background-color, 5% );
+	--background-color-interactive-subtle--hover: mix( @tint, @content-background-color, 9% );
+	--background-color-interactive-subtle--active: mix( @tint, @content-background-color, 13% );
+	--background-color-progressive-subtle: mix( @link-color, @content-background-color, 16% );
+	--background-color-quiet--hover: fade( @tint, 8% );
+	--background-color-quiet--active: fade( @tint, 14% );
+	--border-color-base: mix( @font-color, @content-background-color, 40% );
+	--border-color-interactive: mix( @font-color, @content-background-color, 40% );
+	--border-color-subtle: mix( @font-color, @content-background-color, 22% );
+	--border-color-muted: mix( @font-color, @content-background-color, 15% );
+	--border-color-progressive: @link-color;
+	--border-color-progressive--focus: @link-color;
+}
+
+:root {
+	.skin-cosmos-dark-base();
+
+	& when ( @theme-invert = 1 ) {
+		.skin-cosmos-token-colors( #fff, lighten( @link-color, 8% ), lighten( @link-color, 14% ) );
+	}
+
+	& when not ( @theme-invert = 1 ) {
+		.skin-cosmos-token-colors( #000, darken( @link-color, 8% ), darken( @link-color, 14% ) );
+	}
+}
 
 // Boxes on the wiki that carry their own light background keep readable text on a dark theme
 .skin-cosmos-light-boxes() when ( @theme-invert = 1 ) {
@@ -117,11 +143,6 @@ body {
 
 #cosmos-footer {
 	margin-bottom: 150px;
-}
-
-#mw-indicator-mw-helplink a {
-	padding-left: 0;
-	background-image: none;
 }
 
 body a,
@@ -569,8 +590,27 @@ body > .suggestions {
 	padding: 5px 0;
 
 	.skin-cosmos-button {
-		height: 24px;
+		box-sizing: border-box;
+		height: 32px;
+		justify-content: center;
+		padding: 0 14px;
 		margin-right: 5px;
+		gap: 6px;
+		line-height: 1;
+
+		.skin-cosmos-button-icon {
+			width: 16px;
+			height: 16px;
+			margin: 0;
+		}
+
+		.skin-cosmos-button-text {
+			margin: 0;
+		}
+	}
+
+	#cosmos-actionsList-button {
+		padding: 0 8px;
 	}
 }
 
@@ -622,14 +662,23 @@ body > .suggestions {
 
 #firstHeading {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	padding: 10px 0;
+	column-gap: 15px;
+
+	#cosmos-title-text {
+		min-width: 0;
+		overflow-wrap: anywhere;
+	}
 
 	.mw-indicators {
 		display: flex;
+		flex: none;
+		flex-wrap: wrap;
 		align-items: center;
-		padding: 10px 0;
-		margin-left: 15px;
+		padding: 0;
+		gap: 4px 12px;
 		font-size: 15px;
 	}
 }
@@ -1850,10 +1899,6 @@ body {
 	#mw-content {
 		color: @font-color;
 	}
-
-	.mw-changeslist-line {
-		color: @font-color;
-	}
 }
 
 body #mw-content-text {
@@ -2141,14 +2186,6 @@ body {
 	overflow-wrap: break-word;
 }
 
-body .wikitable > tr > th,
-body .wikitable > tr > td,
-body .wikitable > * > tr > th,
-body .wikitable > * > tr > td {
-	background-color: @content-background-color;
-	color: @font-color;
-}
-
 body .mw-heading,
 body h1,
 body h2,
@@ -2320,10 +2357,6 @@ body .postedit-container {
 	width: 20em;
 	padding: 1em;
 	line-height: 1.35;
-}
-
-table.mw-datatable {
-	color: #000;
 }
 
 .skin-cosmos-dropdown-list #ca-wikilove a {
