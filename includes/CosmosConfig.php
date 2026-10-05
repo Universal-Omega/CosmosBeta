@@ -8,6 +8,7 @@ use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
+use MediaWiki\Skins\CosmosBeta\Theme\LayoutStyleResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
 use function array_diff;
@@ -52,6 +53,7 @@ class CosmosConfig {
 		private readonly ServiceOptions $options,
 		private readonly ThemeStore $themeStore,
 		private readonly ColorModeResolver $colorModeResolver,
+		private readonly LayoutStyleResolver $layoutStyleResolver,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
@@ -153,6 +155,14 @@ class CosmosConfig {
 
 	public function getBackdropBlur(): int {
 		return (int)$this->getTheme()->getSection( 'layout' )['backdropBlur'];
+	}
+
+	public function getLayoutStyle(): string {
+		return $this->layoutStyleResolver->getStyle( RequestContext::getMain()->getUser() );
+	}
+
+	public function isLayoutStyleChoiceEnabled(): bool {
+		return $this->layoutStyleResolver->isChoiceEnabled();
 	}
 
 	public function hasSlimButtons(): bool {
