@@ -18,7 +18,6 @@ use MediaWiki\Skins\CosmosBeta\CosmosRailBuilder;
 use MediaWiki\Skins\CosmosBeta\CosmosWordmarkLookup;
 use MediaWiki\Skins\CosmosBeta\Hooks\CosmosHookRunner;
 use MediaWiki\Skins\CosmosBeta\LessUtil;
-use MediaWiki\Skins\CosmosBeta\ProfileBioLookup;
 use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
 use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
@@ -108,17 +107,6 @@ return [
 
 	'CosmosBetaOptions' => static function ( MediaWikiServices $services ): Config {
 		return $services->getConfigFactory()->makeConfig( 'CosmosBeta' );
-	},
-
-	'CosmosBetaProfileBioLookup' => static function ( MediaWikiServices $services ): ProfileBioLookup {
-		return new ProfileBioLookup(
-			new ServiceOptions(
-				ProfileBioLookup::CONSTRUCTOR_OPTIONS,
-				$services->get( 'CosmosBetaOptions' )
-			),
-			$services->getTitleFactory(),
-			$services->getWikiPageFactory()
-		);
 	},
 
 	'CosmosBetaRailBuilder' => static function ( MediaWikiServices $services ): CosmosRailBuilder {
