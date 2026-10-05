@@ -28,8 +28,12 @@ class SpecialAdminDashboard extends SpecialPage {
 		private readonly DashboardControlRegistry $controlRegistry,
 		private readonly TemplateParser $templateParser,
 	) {
-		parent::__construct( 'AdminDashboard', 'cosmosbeta-admindashboard' );
+		parent::__construct( 'AdminDashboard' );
 	}
+
+	/* public function getRestriction(): string {
+		return 'cosmosbeta-admindashboard';
+	} */
 
 	/** @inheritDoc */
 	protected function getGroupName(): string {
@@ -141,7 +145,7 @@ class SpecialAdminDashboard extends SpecialPage {
 
 		$groups = [];
 
-		foreach ( $this->advancedSectionBuilder->build( $this, $excluded ) as $group => $pages ) {
+		foreach ( $this->advancedSectionBuilder->build( $this->getContext(), $excluded ) as $group => $pages ) {
 			$message = $this->msg( "specialpages-group-$group" );
 
 			$groups[] = [
