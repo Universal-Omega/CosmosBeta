@@ -53,6 +53,7 @@ class WikiHeaderComponent {
 		$canUpload = $can( 'upload' ) && $this->config->get( MainConfigNames::EnableUploads );
 		$canAddVideo = $can( 'addvideo' ) && $this->extensionRegistry->isLoaded( 'Video' );
 		$canViewAdminLinks = $can( 'adminlinks' );
+		$canViewDashboard = $can( 'cosmosbeta-admindashboard' );
 
 		$recentChanges = $this->context->msg( 'recentchanges' );
 		$addNewPage = $this->context->msg( 'cosmosbeta-add-new-page-text' );
@@ -84,9 +85,11 @@ class WikiHeaderComponent {
 			'recentchanges-text' => $onlyRead ? $recentChanges->text() : null,
 			'recentchanges-url' => $recentChangesUrl,
 			'recentchanges-title' => ucwords( $recentChanges->text() ),
-			'has-admin' => $canViewAdminLinks && $this->extensionRegistry->isLoaded( 'Admin Links' ),
-			'admin-url' => SpecialPage::getTitleFor( 'AdminLinks' )->getFullURL(),
-			'admin-title' => ucwords( $this->context->msg( 'adminlinks' )->text() ),
+			'has-admin' => $canViewDashboard || ( $canViewAdminLinks && $this->extensionRegistry->isLoaded( 'Admin Links' ) ),
+			'admin-url' => SpecialPage::getTitleFor( $canViewDashboard ? 'AdminDashboard' : 'AdminLinks' )->getFullURL(),
+			'admin-title' => $canViewDashboard ?
+				$this->context->msg( 'cosmosbeta-admindashboard' )->text() :
+				ucwords( $this->context->msg( 'adminlinks' )->text() ),
 			'has-more' => $hasMore,
 			'has-colormode' => $hasColorMode,
 			'colormode-icon' => $mode === 'dark' ? 'bright' : 'moon',
