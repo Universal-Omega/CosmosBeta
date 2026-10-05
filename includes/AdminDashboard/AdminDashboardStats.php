@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta\AdminDashboard;
 
+use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\SiteStats\SiteStats;
 use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IConnectionProvider;
@@ -12,9 +13,6 @@ use function array_fill_keys;
 use function array_map;
 use function gmdate;
 use function range;
-use const RC_EDIT;
-use const RC_LOG;
-use const RC_NEW;
 
 final readonly class AdminDashboardStats {
 
@@ -58,13 +56,13 @@ final readonly class AdminDashboardStats {
 		$day = $dbr->buildSubString( 'rc_timestamp', 1, 8 );
 
 		$res = $dbr->newSelectQueryBuilder()
-			->select( [ 'day' => $day, 'rc_type', 'rc_log_type', 'total' => 'COUNT(*)' ] )
+			->select( [ 'day' => $day, 'rc_source', 'rc_log_type', 'total' => 'COUNT(*)' ] )
 			->from( 'recentchanges' )
 			->where( [
 				$dbr->expr( 'rc_timestamp', '>=', $dbr->timestamp( $days[self::DAYS - 1] . '000000' ) ),
-				$dbr->expr( 'rc_type', '=', [ RC_EDIT, RC_NEW, RC_LOG ] ),
+				$dbr->expr( 'rc_source', '=', [ RecentChange::SRC_EDIT, RecentChange::SRC_NEW, RecentChange::SRC_LOG ] ),
 			] )
-			->groupBy( [ $day, 'rc_type', 'rc_log_type' ] )
+			->groupBy( [ $day, 'rc_source', 'rc_log_type' ] )
 			->caller( __METHOD__ )
 			->fetchResultSet();
 
@@ -76,8 +74,8 @@ final readonly class AdminDashboardStats {
 			}
 
 			match ( true ) {
-				(int)$row->rc_type === RC_EDIT => $activity[$row->day]['edits'] += (int)$row->total,
-				(int)$row->rc_type === RC_NEW => $activity[$row->day]['newPages'] += (int)$row->total,
+				$row->rc_source === RecentChange::SRC_EDIT => $activity[$row->day]['edits'] += (int)$row->total,
+				$row->rc_source === RecentChange::SRC_NEW => $activity[$row->day]['newPages'] += (int)$row->total,
 				$row->rc_log_type === 'upload' => $activity[$row->day]['uploads'] += (int)$row->total,
 				default => null,
 			};
