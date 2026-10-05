@@ -692,6 +692,79 @@ body > .suggestions {
 	}
 }
 
+.skin-cosmos-dropdown-icon-alt {
+	display: none;
+}
+
+.skin-cosmos-text-buttons #cosmos-articleHeader-actions {
+	gap: 4px 10px;
+
+	.skin-cosmos-button {
+		box-sizing: border-box;
+		height: auto;
+		min-height: 0;
+		padding: 4px 6px;
+		border: 0;
+		margin-right: 0;
+		background-color: transparent;
+		border-radius: 3px;
+		color: @link-color;
+		font-size: 11px;
+		letter-spacing: 0.02em;
+		line-height: 1.15;
+		stroke: @link-color;
+
+		&:hover {
+			background-color: fade( @link-color, 12% );
+			filter: none;
+		}
+	}
+
+	.skin-cosmos-button-icon,
+	.skin-cosmos-dropdown-icon .skin-cosmos-icon {
+		width: 16px;
+		min-width: 16px;
+		height: 16px;
+		margin: 0 6px 0 0;
+
+		&::before {
+			background-color: currentcolor;
+		}
+	}
+
+	.skin-cosmos-button-text {
+		max-width: 6em;
+	}
+
+	#cosmos-actions-actionsList {
+		margin-left: 0;
+	}
+
+	#cosmos-actionsList-button {
+		padding: 4px 2px;
+		border-radius: 3px;
+	}
+
+	#cosmos-actionsList-dropdownIcon {
+		color: @link-color;
+		fill: @link-color;
+
+		.skin-cosmos-icon {
+			margin: 0;
+		}
+
+		.skin-cosmos-icon-expand {
+			display: none;
+		}
+
+		.skin-cosmos-dropdown-icon-alt {
+			display: block;
+			width: 18px;
+			height: 18px;
+		}
+	}
+}
+
 .skin-cosmos-associatedTabs {
 	margin: 0 0 20px;
 	overflow-x: auto;
