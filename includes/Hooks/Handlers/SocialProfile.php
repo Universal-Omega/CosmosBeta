@@ -6,13 +6,15 @@ namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Content\TextContent;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\TemplateParser;
+use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Skins\CosmosBeta\ConfigNames;
-use MediaWiki\Skins\CosmosBeta\ProfileBioLookup;
 use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
 use MediaWiki\SpecialPage\SpecialPage;
+use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
 use MediaWiki\User\UserGroupManager;
 use UserProfilePage;
@@ -21,11 +23,13 @@ use function date;
 use function in_array;
 use function strtotime;
 use function ucfirst;
+use const NS_USER;
 
 class SocialProfile {
 
 	private const array CONSTRUCTOR_OPTIONS = [
 		ConfigNames::SocialProfileAllowBio,
+		ConfigNames::SocialProfileFollowBioRedirects,
 		ConfigNames::SocialProfileNumberofGroupTags,
 		ConfigNames::SocialProfileShowEditCount,
 		ConfigNames::SocialProfileShowGroupTags,
@@ -34,27 +38,30 @@ class SocialProfile {
 
 	public function __construct(
 		private readonly ServiceOptions $options,
-		private readonly ProfileBioLookup $bioLookup,
 		private readonly TemplateParser $templateParser,
+		private readonly TitleFactory $titleFactory,
 		private readonly UserGroupManager $userGroupManager,
+		private readonly WikiPageFactory $wikiPageFactory,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
 	public static function factory(
 		Config $cosmosOptions,
-		ProfileBioLookup $bioLookup,
 		TemplateParser $templateParser,
-		UserGroupManager $userGroupManager
+		TitleFactory $titleFactory,
+		UserGroupManager $userGroupManager,
+		WikiPageFactory $wikiPageFactory
 	): self {
 		return new self(
 			new ServiceOptions(
 				self::CONSTRUCTOR_OPTIONS,
 				$cosmosOptions
 			),
-			$bioLookup,
 			$templateParser,
+			$titleFactory,
 			$userGroupManager,
+			$wikiPageFactory,
 		);
 	}
 
@@ -81,7 +88,7 @@ class SocialProfile {
 			'name' => $owner->getName(),
 			'array-tags' => $showTags ? $this->getUserGroupTags( $context, $owner ) : [],
 			'data-editcount' => $showEdits ? $this->getEditCount( $context, $owner ) : null,
-			'bio' => $allowBio ? $this->bioLookup->getBio( $owner ) : null,
+			'bio' => $allowBio ? $this->getUserBio( $owner ) : null,
 		] );
 	}
 
@@ -120,5 +127,26 @@ class SocialProfile {
 		}
 
 		return $tags;
+	}
+
+	private function getUserBio( User $owner ): ?string {
+		$title = $this->titleFactory->newFromText( $owner->getName(), NS_USER )?->getSubpage( 'bio' );
+
+		if ( !$title || !$title->isKnown() ) {
+			return null;
+		}
+
+		$content = $this->wikiPageFactory->newFromTitle( $title )->getContent();
+
+		if (
+			$this->options->get( ConfigNames::SocialProfileFollowBioRedirects ) &&
+			$title->isRedirect() &&
+			$content?->getRedirectTarget()?->isKnown() &&
+			$content->getRedirectTarget()->inNamespace( NS_USER )
+		) {
+			$content = $this->wikiPageFactory->newFromTitle( $content->getRedirectTarget() )->getContent();
+		}
+
+		return $content instanceof TextContent ? $content->getText() : null;
 	}
 }
