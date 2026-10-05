@@ -155,6 +155,10 @@ class CosmosConfig {
 		return (int)$this->getTheme()->getSection( 'layout' )['backdropBlur'];
 	}
 
+	public function hasHeaderBorder(): bool {
+		return (bool)$this->getTheme()->getSection( 'layout' )['headerBorder'];
+	}
+
 	public function getButtonStyle(): string {
 		return (string)$this->getTheme()->getSection( 'layout' )['buttonStyle'];
 	}
