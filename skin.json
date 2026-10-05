@@ -860,7 +860,6 @@
 		"output": {
 			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\Output",
 			"services": [
-				"ExtensionRegistry",
 				"CosmosBetaLessUtil"
 			]
 		},
