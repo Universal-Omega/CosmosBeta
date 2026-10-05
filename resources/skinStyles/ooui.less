@@ -15,8 +15,13 @@ body .oo-ui-tabSelectWidget-framed {
 }
 
 body .oo-ui-tabSelectWidget-framed .oo-ui-tabOptionWidget.oo-ui-widget-enabled {
+	&:not( .oo-ui-optionWidget-selected ) {
+		color: var( --color-subtle );
+	}
+
 	&:hover {
-		background-color: var( --background-color-interactive-subtle--hover );
+		background-color: var( --background-color-interactive );
+		color: var( --color-base );
 	}
 
 	&:active {
@@ -28,14 +33,12 @@ body .oo-ui-tabSelectWidget-framed .oo-ui-tabOptionWidget.oo-ui-widget-enabled {
 	}
 }
 
-// Disabled framed buttons are the one place OOUI uses a fixed fill
 .oo-ui-buttonElement-framed.oo-ui-widget-disabled > .oo-ui-buttonElement-button {
 	border-color: var( --border-color-subtle );
 	background-color: var( --background-color-interactive );
 	color: var( --color-disabled );
 }
 
-// OOUI marks the selected option with a tinted blue, which reads oddly beside the rest of the theme
 .oo-ui-menuSelectWidget .oo-ui-optionWidget {
 	background-color: transparent;
 	color: var( --color-base );
@@ -54,7 +57,6 @@ body .oo-ui-tabSelectWidget-framed .oo-ui-tabOptionWidget.oo-ui-widget-enabled {
 	background-color: transparent;
 }
 
-// Icons and indicators are drawn black by OOUI, so they follow the theme unless they carry a color of their own
 .oo-ui-iconElement-icon:not( [ class*='oo-ui-image-' ] ):not( .oo-ui-checkboxInputWidget-checkIcon ),
 .oo-ui-indicatorElement-indicator:not( [ class*='oo-ui-image-' ] ) {
 	filter: invert( var( --skin-cosmos-invert ) );
