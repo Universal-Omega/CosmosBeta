@@ -4,6 +4,7 @@ body #firstHeading {
 
 .profile-masthead {
 	margin-bottom: 16px;
+	color: var( --skin-cosmos-font-color );
 }
 
 .profile-identitybox {
@@ -99,19 +100,34 @@ body #firstHeading {
 	color: var( --skin-cosmos-button-font-color );
 }
 
-.profile-header-actions .mw-ui-button {
+.profile-header-actions #userProfileV2-edit.mw-ui-button {
 	padding: 8px 16px;
 	border: 1px solid transparent;
 	border-radius: 4px;
 	background-color: var( --skin-cosmos-button-background );
+	box-shadow: none;
 	color: var( --skin-cosmos-button-font-color );
 	cursor: pointer;
 	font-size: 14px;
 	font-weight: bold;
 	text-transform: uppercase;
 
+	&:hover,
+	&:focus,
+	&:active {
+		border-color: transparent;
+		background-color: var( --skin-cosmos-button-background );
+		box-shadow: none;
+		color: var( --skin-cosmos-button-font-color );
+	}
+
 	&:hover {
 		filter: brightness( 110% );
+	}
+
+	&:focus-visible {
+		outline: 2px solid var( --skin-cosmos-button-font-color );
+		outline-offset: 2px;
 	}
 }
 
@@ -215,7 +231,7 @@ body #firstHeading {
 		grid-row: 2;
 	}
 
-	.profile-header-actions .mw-ui-button {
+	.profile-header-actions #userProfileV2-edit.mw-ui-button {
 		padding: 5px 14px;
 		font-size: 12px;
 	}
