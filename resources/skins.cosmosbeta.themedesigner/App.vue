@@ -110,11 +110,13 @@
 						<template #label>
 							{{ msg( 'image-' + key ) }}
 						</template>
-						<cdx-text-input
+						<image-field
 							v-model="state.images[ key ]"
 							:placeholder="msg( 'image-default' )"
 							:disabled="!designer.canEdit"
-						></cdx-text-input>
+							:upload="designer.upload"
+							:messages="imageMessages"
+						></image-field>
 					</cdx-field>
 					<cdx-field>
 						<template #label>
@@ -160,15 +162,17 @@
 						></cdx-select>
 					</cdx-field>
 					<cdx-field>
-						<cdx-toggle-switch
-							v-model="state.layout.slimButtons"
-							:disabled="!designer.canEdit"
-						>
-							{{ msg( 'layout-slim-buttons' ) }}
-						</cdx-toggle-switch>
-						<template #help-text>
-							{{ msg( 'layout-slim-buttons-help' ) }}
+						<template #label>
+							{{ msg( 'layout-button-style' ) }}
 						</template>
+						<template #help-text>
+							{{ msg( 'layout-button-style-help' ) }}
+						</template>
+						<cdx-select
+							v-model:selected="state.layout.buttonStyle"
+							:menu-items="buttonStyleItems"
+							:disabled="!designer.canEdit"
+						></cdx-select>
 					</cdx-field>
 					<cdx-field v-for="range in layoutRanges" :key="range.key">
 						<template #label>
@@ -305,11 +309,19 @@
 						<template #help-text>
 							{{ msg( 'rail-namespaces-help' ) }}
 						</template>
-						<cdx-text-input
-							v-model="namespacesModel"
-							placeholder="-1, 8, 9"
+						<cdx-multiselect-lookup
+							v-model:selected="namespaceSelected"
+							v-model:input-chips="namespaceChips"
+							v-model:input-value="namespaceInput"
+							:menu-items="namespaceItems"
+							:menu-config="{ visibleItemLimit: 8 }"
 							:disabled="!designer.canEdit"
-						></cdx-text-input>
+							:placeholder="msg( 'rail-namespaces-placeholder' )"
+						>
+							<template #no-results>
+								{{ msg( 'rail-no-results' ) }}
+							</template>
+						</cdx-multiselect-lookup>
 					</cdx-field>
 					<cdx-field>
 						<template #label>
@@ -318,11 +330,19 @@
 						<template #help-text>
 							{{ msg( 'rail-pages-help' ) }}
 						</template>
-						<cdx-text-area
-							v-model="pagesModel"
-							rows="3"
+						<cdx-multiselect-lookup
+							v-model:selected="pageSelected"
+							v-model:input-chips="pageChips"
+							v-model:input-value="pageInput"
+							:menu-items="pageItems"
+							:menu-config="{ visibleItemLimit: 8 }"
 							:disabled="!designer.canEdit"
-						></cdx-text-area>
+							:placeholder="msg( 'rail-pages-placeholder' )"
+						>
+							<template #no-results>
+								{{ msg( 'rail-no-results' ) }}
+							</template>
+						</cdx-multiselect-lookup>
 					</cdx-field>
 				</cdx-tab>
 
@@ -441,15 +461,16 @@ const {
 		CdxCheckbox,
 		CdxField,
 		CdxMessage,
+		CdxMultiselectLookup,
 		CdxSelect,
 		CdxTab,
 		CdxTabs,
-		CdxTextArea,
 		CdxTextInput,
 		CdxToggleSwitch
 	} = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
 	{ computed, defineComponent, onMounted, reactive, ref, watch } = require( 'vue' ),
-	colors = require( './colors.js' );
+	colors = require( './colors.js' ),
+	ImageField = require( './ImageField.vue' );
 
 const MODES = [ 'light', 'dark' ];
 
@@ -488,12 +509,13 @@ module.exports = exports = defineComponent( {
 		CdxCheckbox,
 		CdxField,
 		CdxMessage,
+		CdxMultiselectLookup,
 		CdxSelect,
 		CdxTab,
 		CdxTabs,
-		CdxTextArea,
 		CdxTextInput,
-		CdxToggleSwitch
+		CdxToggleSwitch,
+		ImageField
 	},
 	props: {
 		designer: {
@@ -530,6 +552,11 @@ module.exports = exports = defineComponent( {
 				[ 'large', msg( 'layout-width-large' ) ],
 				[ 'full', msg( 'layout-width-full' ) ]
 			] ),
+			buttonStyleItems = items( [
+				[ 'default', msg( 'layout-button-style-default' ) ],
+				[ 'slim', msg( 'layout-button-style-slim' ) ],
+				[ 'pill', msg( 'layout-button-style-pill' ) ]
+			] ),
 			toolbarStyleItems = items( [
 				[ 'floating', msg( 'toolbar-style-floating' ) ],
 				[ 'bar', msg( 'toolbar-style-bar' ) ],
@@ -553,21 +580,106 @@ module.exports = exports = defineComponent( {
 		const repeatModel = triModel( 'backgroundRepeat' ),
 			fixedModel = triModel( 'backgroundFixed' );
 
-		const namespacesModel = computed( {
-			get: () => state.rail.disabledNamespaces === null ? '' : state.rail.disabledNamespaces.join( ', ' ),
-			set: ( value ) => {
-				state.rail.disabledNamespaces = value.trim() === '' ? null :
-					value.split( /[\s,]+/ ).filter( ( part ) => /^-?\d+$/.test( part ) ).map( Number );
-			}
+		const imageMessages = {
+			upload: msg( 'image-upload' ),
+			uploading: msg( 'image-uploading' ),
+			exists: msg( 'image-upload-exists' ),
+			failed: msg( 'image-upload-failed' ),
+			comment: msg( 'image-upload-comment' ),
+			noResults: msg( 'rail-no-results' )
+		};
+
+		const mainPageValue = 'mainpage',
+			namespaceLabels = {};
+
+		props.designer.namespaces.forEach( ( ns ) => {
+			namespaceLabels[ ns.value ] = ns.label;
 		} );
 
-		const pagesModel = computed( {
-			get: () => state.rail.disabledPages === null ? '' : state.rail.disabledPages.join( '\n' ),
-			set: ( value ) => {
-				state.rail.disabledPages = value.trim() === '' ? null :
-					value.split( /\n+/ ).map( ( part ) => part.trim() ).filter( Boolean );
-			}
+		const pageLabel = ( value ) => value === mainPageValue ? msg( 'rail-pages-mainpage' ) : value,
+			sameList = ( a, b ) => JSON.stringify( a ) === JSON.stringify( b );
+
+		const namespaceSelected = ref( ( state.rail.disabledNamespaces || [] ).slice() ),
+			namespaceChips = ref( namespaceSelected.value.map( ( value ) => ( { value, label: namespaceLabels[ value ] || String( value ) } ) ) ),
+			namespaceInput = ref( '' ),
+			pageSelected = ref( ( state.rail.disabledPages || [] ).slice() ),
+			pageChips = ref( pageSelected.value.map( ( value ) => ( { value, label: pageLabel( value ) } ) ) ),
+			pageInput = ref( '' ),
+			pageResults = ref( [] );
+
+		const namespaceItems = computed( () => {
+			const term = String( namespaceInput.value || '' ).trim().toLowerCase();
+
+			return props.designer.namespaces.filter( ( ns ) => term === '' || ns.label.toLowerCase().includes( term ) );
 		} );
+
+		const pageItems = computed( () => {
+			const term = String( pageInput.value || '' ).trim(),
+				list = [ { value: mainPageValue, label: pageLabel( mainPageValue ) } ];
+
+			pageResults.value.forEach( ( title ) => list.push( { value: title, label: title } ) );
+
+			if ( term !== '' && !list.some( ( item ) => item.value === term ) ) {
+				list.push( { value: term, label: term } );
+			}
+
+			return list.filter( ( item ) => term === '' || item.label.toLowerCase().includes( term.toLowerCase() ) );
+		} );
+
+		const mainNamespaces = props.designer.namespaces.map( ( ns ) => ns.value ).filter( ( id ) => id >= 0 );
+		let pageTimer = null,
+			pageRequest = 0;
+
+		watch( pageInput, ( value ) => {
+			const term = String( value || '' ).trim(),
+				id = ++pageRequest;
+
+			clearTimeout( pageTimer );
+
+			if ( term === '' ) {
+				pageResults.value = [];
+				return;
+			}
+
+			pageTimer = setTimeout( () => {
+				new mw.Api().get( {
+					action: 'opensearch',
+					search: term,
+					limit: 10,
+					namespace: mainNamespaces.join( '|' )
+				} ).then( ( data ) => {
+					if ( id === pageRequest ) {
+						pageResults.value = data[ 1 ] || [];
+					}
+				} );
+			}, 250 );
+		} );
+
+		watch( namespaceSelected, ( value ) => {
+			state.rail.disabledNamespaces = value.length ? value.map( Number ) : null;
+		}, { deep: true } );
+
+		watch( pageSelected, ( value ) => {
+			state.rail.disabledPages = value.length ? value.slice() : null;
+		}, { deep: true } );
+
+		watch( () => state.rail.disabledNamespaces, ( value ) => {
+			const list = value || [];
+
+			if ( !sameList( list, namespaceSelected.value ) ) {
+				namespaceSelected.value = list.slice();
+				namespaceChips.value = list.map( ( id ) => ( { value: id, label: namespaceLabels[ id ] || String( id ) } ) );
+			}
+		}, { deep: true } );
+
+		watch( () => state.rail.disabledPages, ( value ) => {
+			const list = value || [];
+
+			if ( !sameList( list, pageSelected.value ) ) {
+				pageSelected.value = list.slice();
+				pageChips.value = list.map( ( title ) => ( { value: title, label: pageLabel( title ) } ) );
+			}
+		}, { deep: true } );
 
 		const layoutRanges = [
 			{
@@ -778,8 +890,16 @@ module.exports = exports = defineComponent( {
 			modeItems,
 			repeatModel,
 			fixedModel,
-			namespacesModel,
-			pagesModel,
+			buttonStyleItems,
+			imageMessages,
+			namespaceSelected,
+			namespaceChips,
+			namespaceInput,
+			namespaceItems,
+			pageSelected,
+			pageChips,
+			pageInput,
+			pageItems,
 			layoutRanges,
 			preview,
 			msg,
