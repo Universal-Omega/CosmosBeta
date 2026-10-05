@@ -597,7 +597,8 @@
 			"+ext.echo.ui": "resources/skinStyles/ext.echo.ui.less",
 			"+mediawiki.notification": "resources/skinStyles/mediawiki.notification.less",
 			"+ext.translate.tag.languages": "resources/skinStyles/ext.translate.tag.languages.less",
-			"+ext.managewiki.oouiform.styles": "resources/skinStyles/ext.managewiki.oouiform.styles.less"
+			"+ext.managewiki.oouiform.styles": "resources/skinStyles/ext.managewiki.oouiform.styles.less",
+			"+ext.parsermigration.reportbug.init": "resources/skinStyles/ext.parsermigration.reportbug.init.less"
 		}
 	},
 	"config": {
