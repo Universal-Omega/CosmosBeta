@@ -166,8 +166,7 @@
 			"scripts": [
 				"resources/skins.cosmosbeta.js/cosmos.js",
 				"resources/skins.cosmosbeta.js/mobile.js",
-				"resources/skins.cosmosbeta.js/colormode.js",
-				"resources/skins.cosmosbeta.js/fandomdesktop.js"
+				"resources/skins.cosmosbeta.js/colormode.js"
 			],
 			"dependencies": [
 				"mediawiki.api",
