@@ -114,6 +114,8 @@
 	"cosmosbeta-themedesigner-layout-backdrop-blur-help": "Help text under the background blur slider on Special:CosmosBetaThemeDesigner.",
 	"cosmosbeta-themedesigner-layout-header-button-opacity": "Label of a slider on Special:CosmosBetaThemeDesigner. It sets how solid the background behind the wiki header buttons is.",
 	"cosmosbeta-themedesigner-layout-opacity": "Text used on Special:ThemeDesigner.",
+	"cosmosbeta-themedesigner-layout-slim-buttons": "Label of a toggle on Special:CosmosBetaThemeDesigner. It makes the page action buttons above the page title shorter.",
+	"cosmosbeta-themedesigner-layout-slim-buttons-help": "Help text under the slim page buttons toggle on Special:CosmosBetaThemeDesigner.",
 	"cosmosbeta-themedesigner-layout-width": "Text used on Special:ThemeDesigner.",
 	"cosmosbeta-themedesigner-layout-width-default": "Text used on Special:ThemeDesigner.",
 	"cosmosbeta-themedesigner-layout-width-full": "Text used on Special:ThemeDesigner.",
