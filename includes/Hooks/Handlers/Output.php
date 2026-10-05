@@ -7,11 +7,13 @@ namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 use MediaWiki\Output\Hook\OutputPageBodyAttributesHook;
 use MediaWiki\Output\Hook\OutputPageParserOutputHook;
 use MediaWiki\Parser\Sanitizer;
+use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\Skin\Hook\SkinPageReadyConfigHook;
 use MediaWiki\Skins\CosmosBeta\LessUtil;
 use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
 use function implode;
+use const NS_USER;
 
 class Output implements
 	OutputPageBodyAttributesHook,
@@ -19,22 +21,44 @@ class Output implements
 	SkinPageReadyConfigHook
 {
 
+	public function __construct(
+		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly LessUtil $lessUtil,
+	) {
+	}
+
 	/** @inheritDoc */
 	public function onOutputPageBodyAttributes( $out, $skin, &$bodyAttrs ): void {
 		if ( !$skin instanceof SkinCosmosBeta ) {
 			return;
 		}
 
+		$user = $skin->getUser();
 		$classes = [
-			$skin->getUser()->isRegistered() ? 'user-logged' : 'user-anon',
+			$user->isNamed() ? 'user-logged' : 'user-anon',
 			LessUtil::isThemeDark(
 				'content-background-color',
-				LessUtil::getCosmosSettings( $skin->cosmosConfig->getRenderMode() )
+				$this->lessUtil->getCosmosSettings( $skin->cosmosConfig->getRenderMode() )
 			) ? 'theme-dark' : 'theme-light',
 		];
 
-		if ( $skin->cosmosConfig->hasSlimButtons() ) {
-			$classes[] = 'skin-cosmos-slim-buttons';
+		if ( $user->isTemp() ) {
+			$classes[] = 'user-temp';
+		}
+
+		$buttonStyle = $skin->cosmosConfig->getButtonStyle();
+		if ( $buttonStyle !== 'default' ) {
+			$classes[] = "skin-cosmos-$buttonStyle-buttons";
+		}
+
+		$title = $out->getTitle();
+		if (
+			$this->extensionRegistry->isLoaded( 'UserProfileV2' ) &&
+			$title->inNamespace( NS_USER ) &&
+			!$title->isSubpage() &&
+			$out->getContext()->getActionName() === 'view'
+		) {
+			$classes[] = 'skin-cosmos-upv2-profile';
 		}
 
 		if ( $out->getTitle()->isMainPage() ) {
