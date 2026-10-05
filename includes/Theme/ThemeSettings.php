@@ -78,7 +78,7 @@ class ThemeSettings {
 
 	public const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
 	public const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
-	public const array BUTTON_STYLES = [ 'default', 'slim', 'pill' ];
+	public const array BUTTON_STYLES = [ 'default', 'slim', 'pill', 'text' ];
 	public const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
 	public const array RAIL_RECENT_CHANGES = [ 'off', 'normal', 'sticky' ];
 
