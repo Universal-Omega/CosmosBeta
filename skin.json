@@ -926,6 +926,7 @@
 		}
 	},
 	"DefaultUserOptions": {
-		"cosmosbeta-colormode": ""
+		"cosmosbeta-colormode": "",
+		"cosmosbeta-style": ""
 	}
 }
