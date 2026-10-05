@@ -4,11 +4,11 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 
+use AdminLinksHook;
 use ALItem;
 use ALRow;
 use ALSection;
 use ALTree;
-use AdminLinksHook;
 use function wfMessage;
 
 class AdminLinks implements AdminLinksHook {
