@@ -555,7 +555,8 @@ module.exports = exports = defineComponent( {
 			buttonStyleItems = items( [
 				[ 'default', msg( 'layout-button-style-default' ) ],
 				[ 'slim', msg( 'layout-button-style-slim' ) ],
-				[ 'pill', msg( 'layout-button-style-pill' ) ]
+				[ 'pill', msg( 'layout-button-style-pill' ) ],
+				[ 'text', msg( 'layout-button-style-text' ) ]
 			] ),
 			toolbarStyleItems = items( [
 				[ 'floating', msg( 'toolbar-style-floating' ) ],
