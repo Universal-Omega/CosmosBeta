@@ -136,8 +136,8 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['footer-background-color'] = "rgba($r, $g, $b, $footerOpacity)";
 		$lessVars['footer-background-color-fallback'] = $this->getFallbackColor( $r, $g, $b, $footerOpacity, $blur );
 
-		$isFooterBackgroundColorDark = LessUtil::isThemeDark( 'footer-background-color', $settings );
-		$lessVars['footer-font-color1'] = $isFooterBackgroundColorDark ? '#999' : '#666';
+		$isFooterBackgroundColorDark = LessUtil::isThemeDark( 'footer-background-color', $settings, LessUtil::CHROME_THRESHOLD );
+		$lessVars['footer-font-color1'] = $isFooterBackgroundColorDark ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.65)';
 		$lessVars['footer-font-color2'] = $isFooterBackgroundColorDark ? '#fff' : '#000';
 
 		$headerBackgroundColor = $this->cosmosConfig->getColor( 'header', $mode );
@@ -154,7 +154,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['header-background-color2'] = "$rightGradient,$leftGradient";
 
 		$lessVars['header-background-solid-color'] = $headerBackgroundColor;
-		$lessVars['header-font-color'] = LessUtil::isThemeDark( 'header-background-color', $settings ) ? '#fff' : '#000';
+		$lessVars['header-font-color'] = LessUtil::isThemeDark( 'header-background-color', $settings, LessUtil::CHROME_THRESHOLD ) ? '#fff' : '#000';
 
 		return array_merge(
 			$lessVars,
@@ -199,8 +199,8 @@ class CosmosResourceLoaderModule extends SkinModule {
 				in_array( strtolower( $toolbarBackgroundColor ), [ '#000', '#000000', 'black' ], true ) ?
 					'#404040' :
 					'#000',
-			'toolbar-font-color' => LessUtil::isThemeDark( 'toolbar-background-color', $settings ) ? '#fff' : '#000',
-			'toolbar-icon-invert' => LessUtil::isThemeDark( 'toolbar-background-color', $settings ) ? 1 : 0,
+			'toolbar-font-color' => LessUtil::isThemeDark( 'toolbar-background-color', $settings, LessUtil::CHROME_THRESHOLD ) ? '#fff' : '#000',
+			'toolbar-icon-invert' => LessUtil::isThemeDark( 'toolbar-background-color', $settings, LessUtil::CHROME_THRESHOLD ) ? 1 : 0,
 		];
 	}
 
@@ -221,7 +221,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 	}
 
 	private function getBannerVars( array $settings ): array {
-		$isBannerBackgroundColorDark = LessUtil::isThemeDark( 'banner-background-color', $settings );
+		$isBannerBackgroundColorDark = LessUtil::isThemeDark( 'banner-background-color', $settings, LessUtil::CHROME_THRESHOLD );
 
 		return [
 			'banner-font-color' =>
@@ -238,7 +238,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 	}
 
 	private function getButtonVars( array $settings ): array {
-		$isButtonBackgroundColorDark = LessUtil::isThemeDark( 'button-background-color', $settings );
+		$isButtonBackgroundColorDark = LessUtil::isThemeDark( 'button-background-color', $settings, LessUtil::CHROME_THRESHOLD );
 
 		return [
 			'notice-close-button-color' => $isButtonBackgroundColorDark ? 'fff' : '111',
