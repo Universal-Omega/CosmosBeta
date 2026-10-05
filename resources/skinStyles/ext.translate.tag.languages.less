@@ -1,5 +1,80 @@
 .mw-pt-languages {
-	border-color: var( --skin-cosmos-border-color );
-	background-color: color-mix( in srgb, var( --skin-cosmos-font-color ) 6%, var( --skin-cosmos-content-background ) );
+	display: flex;
+	width: auto;
+	flex-direction: column;
+	padding: 12px 0;
+	border: 0;
+	background-color: transparent;
 	color: var( --skin-cosmos-font-color );
+	font-size: 0.875em;
+	gap: 8px;
+}
+
+.mw-pt-languages-label {
+	display: block;
+	width: auto;
+	padding: 0;
+	color: var( --skin-cosmos-muted-color );
+	font-weight: 500;
+}
+
+.mw-pt-languages .mw-pt-languages-list {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0;
+	margin: 0;
+	gap: 8px;
+	list-style: none;
+}
+
+.mw-pt-languages-list {
+	li {
+		margin: 0;
+	}
+
+	a.new,
+	.mw-pt-progress {
+		display: flex;
+		padding: 6px 16px;
+		border: 1px solid var( --skin-cosmos-border-color );
+		border-radius: 999px;
+		text-decoration: none;
+	}
+
+	a.new {
+		border-style: dashed;
+	}
+
+	.mw-pt-progress {
+		&:hover {
+			background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 18%, transparent );
+		}
+
+		&.mw-pt-languages-selected {
+			border-color: var( --skin-cosmos-button-background );
+			background-color: var( --skin-cosmos-button-background );
+			color: var( --skin-cosmos-button-font-color );
+			font-weight: normal;
+
+			&::after {
+				outline-color: var( --skin-cosmos-button-font-color );
+			}
+
+			&.mw-pt-progress--low::after {
+				border-color: var( --skin-cosmos-button-font-color );
+			}
+
+			&.mw-pt-progress--med::after {
+				background: conic-gradient( var( --skin-cosmos-button-font-color ) 180deg, transparent 0deg );
+			}
+
+			&.mw-pt-progress--high::after {
+				background: conic-gradient( var( --skin-cosmos-button-font-color ) 252deg, transparent 0deg );
+			}
+
+			&.mw-pt-progress--complete::after {
+				background: var( --skin-cosmos-button-font-color );
+			}
+		}
+	}
 }
