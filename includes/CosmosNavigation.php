@@ -61,7 +61,7 @@ class CosmosNavigation {
 			$this->getCacheKey(),
 			WANObjectCache::TTL_HOUR * 8,
 			$build,
-			[ 'version' => 5 ]
+			[ 'version' => 6 ]
 		);
 	}
 
