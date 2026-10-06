@@ -19,6 +19,8 @@ use function array_keys;
 use function array_map;
 use function array_values;
 use function count;
+use function strrpos;
+use function substr;
 
 class SpecialAdminDashboard extends SpecialPage {
 
@@ -56,7 +58,8 @@ class SpecialAdminDashboard extends SpecialPage {
 
 	/** @inheritDoc */
 	public function getShortDescription( string $path = '' ): string {
-		$tab = DashboardTab::fromSubPage( $path );
+		$slash = strrpos( $path, '/' );
+		$tab = DashboardTab::fromSubPage( $slash === false ? $path : substr( $path, $slash + 1 ) );
 		return $tab ? $this->msg( $tab->getMessageKey() )->text() : '';
 	}
 
