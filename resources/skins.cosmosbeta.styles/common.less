@@ -2037,6 +2037,13 @@ body code {
 	}
 }
 
+.skin-cosmos-plain-links() {
+	a:not( .new ):not( .cdx-button ):not( .mw-ui-button ):not( .oo-ui-buttonElement-button ):not( .oo-ui-tool-link ) {
+		color: @link-color;
+		text-decoration: none;
+	}
+}
+
 #mw-content .toggleSymbol,
 .toctogglelabel {
 	color: @link-color;
@@ -2236,21 +2243,11 @@ h6 {
 		}
 	}
 
-	a {
-		&:not( .new ) {
-			color: @link-color;
-			text-decoration: none;
-		}
-	}
+	.skin-cosmos-plain-links();
 }
 
 body {
-	a {
-		&:not( .new ) {
-			color: @link-color;
-			text-decoration: none;
-		}
-	}
+	.skin-cosmos-plain-links();
 }
 
 #catlinks {
@@ -2342,7 +2339,7 @@ body {
 }
 
 #cosmos-page-header {
-	padding: 20px 0 10px 0;
+	padding: 20px 0 4px 0;
 
 	&:has( > .skin-cosmos-associatedTabs ) {
 		padding-top: 12px;
@@ -2431,7 +2428,7 @@ body {
 .skin-cosmos-header-border #cosmos-header-articleHeader {
 	padding-bottom: 6px;
 	border-bottom: 1.5px solid @border-color;
-	margin-bottom: 14px;
+	margin-bottom: 8px;
 }
 
 #catlinks {
