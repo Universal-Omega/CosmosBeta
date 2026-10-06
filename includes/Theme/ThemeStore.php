@@ -36,9 +36,9 @@ class ThemeStore {
 	private ?ThemeSettings $current = null;
 
 	public function __construct(
+		private readonly ActorNormalization $actorStore,
 		private readonly IConnectionProvider $dbProvider,
 		private readonly WANObjectCache $cache,
-		private readonly ActorNormalization $actorStore,
 		private readonly LoggerInterface $logger,
 	) {
 	}
