@@ -4,8 +4,8 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
-use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Skin\Cosmos\SkinCosmos;
+use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
 
 class PersonalTools implements SkinTemplateNavigation__UniversalHook {
 
