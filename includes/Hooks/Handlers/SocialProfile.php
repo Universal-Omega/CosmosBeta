@@ -12,7 +12,7 @@ use MediaWiki\Html\TemplateParser;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Skins\CosmosBeta\ConfigNames;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Skins\CosmosBeta\SkinCosmos;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
@@ -77,8 +77,7 @@ class SocialProfile {
 		}
 
 		$context = $userProfilePage->getContext();
-
-		if ( !$context->getSkin() instanceof SkinCosmosBeta ) {
+		if ( !$context->getSkin() instanceof SkinCosmos ) {
 			return;
 		}
 
@@ -131,7 +130,6 @@ class SocialProfile {
 
 	private function getUserBio( User $owner ): ?string {
 		$title = $this->titleFactory->newFromText( $owner->getName(), NS_USER )?->getSubpage( 'bio' );
-
 		if ( !$title || !$title->isKnown() ) {
 			return null;
 		}
