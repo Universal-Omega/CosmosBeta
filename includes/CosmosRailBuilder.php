@@ -28,10 +28,10 @@ use const NS_USER;
 class CosmosRailBuilder {
 
 	public const array CONSTRUCTOR_OPTIONS = [
-		MainConfigNames::ContentNamespaces,
 		ConfigNames::EnabledRailModules,
 		ConfigNames::RailDisabledNamespaces,
 		ConfigNames::RailDisabledPages,
+		MainConfigNames::ContentNamespaces,
 	];
 
 	private const int RECENT_CHANGES_LIMIT = 4;
@@ -42,16 +42,16 @@ class CosmosRailBuilder {
 	private bool $toolsInRail = false;
 
 	public function __construct(
+		private readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosHookRunner $hookRunner,
 		private readonly IConnectionProvider $dbProvider,
 		private readonly LinkRenderer $linkRenderer,
-		private readonly IContextSource $context,
-		private readonly ServiceOptions $options,
 		private readonly SpecialPageFactory $specialPageFactory,
+		private readonly TemplateParser $templateParser,
 		private readonly UserFactory $userFactory,
 		private readonly WANObjectCache $cache,
-		private readonly CosmosConfig $cosmosConfig,
-		private readonly TemplateParser $templateParser,
+		private readonly IContextSource $context,
+		private readonly ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
