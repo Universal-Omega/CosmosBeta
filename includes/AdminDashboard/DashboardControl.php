@@ -10,9 +10,9 @@ final readonly class DashboardControl {
 		public string $id,
 		public DashboardSection $section,
 		public string $url,
-		public ?string $specialPage = null,
-		public bool $opensCreateDialog = false,
-		public bool $isExternal = false,
+		public ?string $specialPage,
+		public bool $opensCreateDialog,
+		public bool $isExternal,
 	) {
 	}
 
