@@ -81,7 +81,6 @@ final readonly class DashboardControlRegistry {
 
 	private function special( string $id, DashboardSection $section, string $name, User $user ): ?DashboardControl {
 		$page = $this->specialPageFactory->getPage( $name );
-
 		if ( !$page || !$page->userCanExecute( $user ) ) {
 			return null;
 		}
@@ -91,7 +90,6 @@ final readonly class DashboardControlRegistry {
 
 	private function interfacePage( string $id, DashboardSection $section, string $text, User $user ): ?DashboardControl {
 		$title = $this->titleFactory->makeTitleSafe( NS_MEDIAWIKI, $text );
-
 		if ( !$title || !$this->permissionManager->userCan( 'edit', $user, $title ) ) {
 			return null;
 		}
@@ -101,7 +99,6 @@ final readonly class DashboardControlRegistry {
 
 	private function external( string $id, DashboardSection $section, MessageLocalizer $localizer ): ?DashboardControl {
 		$url = trim( $localizer->msg( "cosmosbeta-admindashboard-control-$id-url" )->inContentLanguage()->plain() );
-
 		if ( !preg_match( '#^https?://#i', $url ) ) {
 			return null;
 		}
