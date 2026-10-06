@@ -49,9 +49,9 @@ class CosmosConfig {
 	];
 
 	public function __construct(
-		private readonly ServiceOptions $options,
-		private readonly ThemeStore $themeStore,
 		private readonly ColorModeResolver $colorModeResolver,
+		private readonly ThemeStore $themeStore,
+		private readonly ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
