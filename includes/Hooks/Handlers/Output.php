@@ -8,9 +8,10 @@ use MediaWiki\Output\Hook\OutputPageBodyAttributesHook;
 use MediaWiki\Output\Hook\OutputPageParserOutputHook;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\ResourceLoader\Context;
-use MediaWiki\Skin\Hook\SkinPageReadyConfigHook;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\LessUtil;
 use MediaWiki\Skin\Cosmos\SkinCosmos;
+use MediaWiki\Skin\Hook\SkinPageReadyConfigHook;
 use function implode;
 
 class Output implements
@@ -20,6 +21,7 @@ class Output implements
 {
 
 	public function __construct(
+		private readonly CosmosConfig $cosmosConfig,
 		private readonly LessUtil $lessUtil,
 	) {
 	}
@@ -35,15 +37,15 @@ class Output implements
 			$user->isNamed() ? 'user-logged' : 'user-anon',
 			LessUtil::isThemeDark(
 				'content-background-color',
-				$this->lessUtil->getCosmosSettings( $skin->cosmosConfig->getRenderMode() )
+				$this->lessUtil->getCosmosSettings( $this->cosmosConfig->getRenderMode() )
 			) ? 'theme-dark' : 'theme-light',
 		];
 
-		if ( $skin->cosmosConfig->hasHeaderBorder() ) {
+		if ( $this->cosmosConfig->hasHeaderBorder() ) {
 			$classes[] = 'skin-cosmos-header-border';
 		}
 
-		$buttonStyle = $skin->cosmosConfig->getButtonStyle();
+		$buttonStyle = $this->cosmosConfig->getButtonStyle();
 		if ( $buttonStyle !== 'default' ) {
 			$classes[] = "skin-cosmos-$buttonStyle-buttons";
 		}
