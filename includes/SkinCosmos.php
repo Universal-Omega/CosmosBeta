@@ -8,7 +8,7 @@ use CookieWarning\Decisions as CookieWarningDecisions;
 use CookieWarning\Hooks as CookieWarningHooks;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
-use MediaWiki\Language\Language;
+use MediaWiki\Language\LanguageCode;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -50,7 +50,7 @@ class SkinCosmos extends SkinMustache {
 		private readonly CosmosNavigation $navigation,
 		private readonly Config $cosmosOptions,
 		private readonly CosmosRailBuilder $railBuilder,
-		private readonly Language $contentLanguage,
+		private readonly LanguageCode $contentLanguageCode,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly LanguageNameUtils $languageNameUtils,
 		private readonly PermissionManager $permissionManager,
@@ -73,7 +73,7 @@ class SkinCosmos extends SkinMustache {
 		CosmosNavigation $navigation,
 		CosmosRailBuilder $railBuilder,
 		WordmarkLookup $wordmarkLookup,
-		Language $contentLanguage,
+		LanguageCode $contentLanguageCode,
 		ExtensionRegistry $extensionRegistry,
 		LanguageNameUtils $languageNameUtils,
 		PermissionManager $permissionManager,
@@ -89,7 +89,7 @@ class SkinCosmos extends SkinMustache {
 			$navigation,
 			$cosmosOptions,
 			$railBuilder,
-			$contentLanguage,
+			$contentLanguageCode,
 			$extensionRegistry,
 			$languageNameUtils,
 			$permissionManager,
@@ -124,17 +124,17 @@ class SkinCosmos extends SkinMustache {
 		$header = new WikiHeaderComponent(
 			$context,
 			$this->getConfig(),
-			$this->permissionManager,
-			$this->extensionRegistry,
 			$this->cosmosConfig,
+			$this->extensionRegistry,
+			$this->permissionManager,
 			$this->wordmarkLookup
 		);
 
 		$pageHeader = new PageHeaderComponent(
 			$context,
-			$this->titleFactory,
+			$this->contentLanguageCode,
 			$this->languageNameUtils,
-			$this->contentLanguage
+			$this->titleFactory
 		);
 
 		$dialog = new CreatePageDialogComponent(
