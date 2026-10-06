@@ -208,17 +208,35 @@ div.thumb {
 	color: var( --skin-cosmos-font-color );
 }
 
-/* Page title and buttons are centered on small screens */
-#cosmos-header-articleHeader {
+/* Page title and buttons are centered once the buttons have a line of their own, the class comes from mobile.js */
+#cosmos-header-articleHeader.skin-cosmos-actions-wrapped {
 	justify-content: center;
-	text-align: center;
+
+	#firstHeading {
+		justify-content: center;
+		text-align: center;
+	}
+
+	#cosmos-articleHeader-actions {
+		justify-content: center;
+	}
 }
 
-#firstHeading {
-	justify-content: center;
-}
+/* Smaller default and rounded buttons, the slim and text styles have their own sizes */
+body:not( .skin-cosmos-slim-buttons ):not( .skin-cosmos-text-buttons ) #cosmos-articleHeader-actions {
+	.skin-cosmos-button {
+		height: 20px;
+		padding: 5px 12px;
+		font-size: 12px;
+	}
 
-#cosmos-articleHeader-actions {
-	width: 100%;
-	justify-content: center;
+	.skin-cosmos-button-icon {
+		width: 16px;
+		height: 16px;
+		margin: 0 4px 0 -2px;
+	}
+
+	#cosmos-actionsList-button {
+		padding: 5px 8px;
+	}
 }
