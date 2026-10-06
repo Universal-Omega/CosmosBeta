@@ -36,6 +36,9 @@
 	--color-progressive--hover: @hover-link;
 	--color-progressive--active: @active-link;
 	--color-progressive--focus: @link-color;
+	--box-shadow-color-progressive-selected: @link-color;
+	--box-shadow-color-progressive-selected--hover: @hover-link;
+	--box-shadow-color-progressive-selected--active: @active-link;
 	--color-inverted: @content-background-color;
 	--background-color-progressive: @link-color;
 	--background-color-progressive--hover: @hover-link;
@@ -115,17 +118,21 @@ body .skin-cosmos-footerIcons-listItem a.cdx-button {
 	align-items: center;
 	justify-content: center;
 	padding: 5px 15px;
-	border: 1px solid #a2a9b1;
+	border: 1px solid @footer-icon-border;
 	border-radius: 2px;
-	background-color: #f8f9fa;
-	color: #202122;
+	background-color: @footer-icon-background;
+	color: @footer-font-color2;
+
+	img {
+		filter: invert( @footer-icon-invert ) hue-rotate( calc( @footer-icon-invert * 180deg ) );
+	}
 
 	&:hover,
 	&:active,
 	&:focus {
-		border-color: #a2a9b1;
-		background-color: #fff;
-		color: #202122;
+		border-color: @footer-icon-border;
+		background-color: @footer-icon-background-hover;
+		color: @footer-font-color2;
 	}
 }
 
@@ -248,6 +255,15 @@ body a:focus {
 				}
 			}
 		}
+	}
+}
+
+.skin-cosmos-dropdown-list a:not( .new ) {
+	color: #39424d;
+
+	&:hover,
+	&:focus {
+		color: #0645ad;
 	}
 }
 
