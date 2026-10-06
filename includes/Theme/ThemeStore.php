@@ -27,14 +27,13 @@ use const TS_MW;
  */
 class ThemeStore {
 
-	private const string TABLE = 'cosmosbeta_theme';
-	private const int CACHE_VERSION = 2;
+	private const int CACHE_VERSION = 1;
 	private const int MAX_REVISIONS = 100;
 	private const int MAX_COMMENT_BYTES = 767;
-
-	private ?ThemeSettings $current = null;
+	private const string TABLE = 'cosmos_theme';
 
 	private string $currentTimestamp = '';
+	private ?ThemeSettings $current = null;
 
 	public function __construct(
 		private readonly IConnectionProvider $dbProvider,
@@ -63,8 +62,8 @@ class ThemeStore {
 						$this->logger->error( 'Unable to read Cosmos theme: {message}', [
 							'message' => $e->getMessage(),
 						] );
-						$ttl = 30;
 
+						$ttl = 30;
 						return [ 'id' => 0, 'json' => '', 'ts' => '' ];
 					}
 
@@ -133,7 +132,11 @@ class ThemeStore {
 	}
 
 	/** @return int Id of the live revision. Unchanged settings do not create a new one. */
-	public function save( ThemeSettings $settings, UserIdentity $user, string $comment ): int {
+	public function save(
+		ThemeSettings $settings,
+		UserIdentity $user,
+		string $comment
+	): int {
 		$dbw = $this->dbProvider->getPrimaryDatabase();
 
 		$json = $settings->toJson();
@@ -166,7 +169,6 @@ class ThemeStore {
 			->execute();
 
 		$this->purgeCache();
-
 		return $id;
 	}
 
@@ -177,7 +179,6 @@ class ThemeStore {
 	 */
 	public function restore( int $id, UserIdentity $user, string $comment ): ?int {
 		$settings = $this->getRevision( $id );
-
 		return $settings ? $this->save( $settings, $user, $comment ) : null;
 	}
 
@@ -203,10 +204,10 @@ class ThemeStore {
 	}
 
 	private function getCacheKey(): string {
-		return $this->cache->makeKey( 'CosmosBeta', 'theme', 'current' );
+		return $this->cache->makeKey( 'Cosmos', 'theme', 'current' );
 	}
 
 	private function getCheckKey(): string {
-		return $this->cache->makeKey( 'CosmosBeta', 'theme', 'check' );
+		return $this->cache->makeKey( 'Cosmos', 'theme', 'check' );
 	}
 }
