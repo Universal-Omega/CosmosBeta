@@ -42,7 +42,6 @@ class PageHeaderComponent {
 
 	private function getAssociatedTabs( array $portlets ): ?array {
 		$tabs = [];
-
 		foreach ( PortletReader::getItems( $portlets, [ 'data-associated-pages' ] ) as $key => $item ) {
 			if ( !str_starts_with( $key, self::ASSOCIATED_PREFIX ) || $item['href'] === null ) {
 				continue;
@@ -116,7 +115,6 @@ class PageHeaderComponent {
 		}
 
 		$data = [];
-
 		if ( $variants ) {
 			$label = $this->context->msg( 'variants' )->text();
 			foreach ( $variants as $variant ) {
@@ -151,7 +149,6 @@ class PageHeaderComponent {
 
 	private function toLinks( array $items ): array {
 		$links = [];
-
 		foreach ( $items as $item ) {
 			$links[] = [
 				'id' => $item['id'],
@@ -323,7 +320,6 @@ class PageHeaderComponent {
 
 	private function toDropdown( array $items ): array {
 		$list = [];
-
 		foreach ( $items as $item ) {
 			$list[] = [ 'html-item' => $item['html-item'] ];
 		}
