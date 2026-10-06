@@ -29,21 +29,21 @@ use MediaWiki\Skin\Cosmos\WordmarkLookup;
 return [
 	'CosmosBetaAdminDashboardControls' => static function ( MediaWikiServices $services ): DashboardControlRegistry {
 		return new DashboardControlRegistry(
-			$services->get( 'ExtensionRegistry' ),
+			$services->getExtensionRegistry(),
 			$services->getPermissionManager(),
+			$services->getSpecialPageFactory(),
+			$services->getTitleFactory(),
 			new ServiceOptions(
 				DashboardControlRegistry::CONSTRUCTOR_OPTIONS,
 				$services->getMainConfig()
-			),
-			$services->getSpecialPageFactory(),
-			$services->getTitleFactory()
+			)
 		);
 	},
 
 	'CosmosBetaAdminDashboardStats' => static function ( MediaWikiServices $services ): AdminDashboardStats {
 		return new AdminDashboardStats(
-			$services->getMainWANObjectCache(),
-			$services->getConnectionProvider()
+			$services->getConnectionProvider(),
+			$services->getMainWANObjectCache()
 		);
 	},
 
@@ -52,7 +52,7 @@ return [
 	},
 
 	'CosmosBetaAltModules' => static function ( MediaWikiServices $services ): AltModules {
-		return new AltModules( $services->get( 'ExtensionRegistry' ) );
+		return new AltModules( $services->getExtensionRegistry() );
 	},
 
 	'CosmosBetaBackgroundLookup' => static function ( MediaWikiServices $services ): BackgroundLookup {
@@ -98,7 +98,7 @@ return [
 			$services->getContentLanguage(),
 			$services->getUrlUtils(),
 			$services->getTitleFactory(),
-			$services->get( 'ExtensionRegistry' ),
+			$services->getExtensionRegistry(),
 			new ServiceOptions(
 				CosmosNavigation::CONSTRUCTOR_OPTIONS,
 				$services->get( 'CosmosBetaOptions' )
