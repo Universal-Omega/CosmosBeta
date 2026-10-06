@@ -35,7 +35,7 @@ return [
 			$services->getTitleFactory(),
 			new ServiceOptions(
 				DashboardControlRegistry::CONSTRUCTOR_OPTIONS,
-				$services->getMainConfig()
+				$services->get( 'CosmosBetaOptions' )
 			)
 		);
 	},
@@ -78,8 +78,7 @@ return [
 			$services->get( 'CosmosBetaThemeStore' ),
 			new ServiceOptions(
 				CosmosConfig::CONSTRUCTOR_OPTIONS,
-				$services->get( 'CosmosBetaOptions' ),
-				$services->getMainConfig()
+				$services->get( 'CosmosBetaOptions' )
 			)
 		);
 	},
@@ -94,11 +93,11 @@ return [
 
 	'CosmosBetaNavigation' => static function ( MediaWikiServices $services ): CosmosNavigation {
 		return new CosmosNavigation(
-			$services->getMainWANObjectCache(),
-			$services->getContentLanguage(),
-			$services->getUrlUtils(),
-			$services->getTitleFactory(),
 			$services->getExtensionRegistry(),
+			$services->getContentLanguageCode(),
+			$services->getTitleFactory(),
+			$services->getUrlUtils(),
+			$services->getMainWANObjectCache(),
 			new ServiceOptions(
 				CosmosNavigation::CONSTRUCTOR_OPTIONS,
 				$services->get( 'CosmosBetaOptions' )
@@ -112,20 +111,19 @@ return [
 
 	'CosmosBetaRailBuilder' => static function ( MediaWikiServices $services ): CosmosRailBuilder {
 		return new CosmosRailBuilder(
+			$services->get( 'CosmosBetaConfig' ),
 			$services->get( 'CosmosBetaHookRunner' ),
 			$services->getConnectionProvider(),
 			$services->getLinkRenderer(),
+			$services->getSpecialPageFactory(),
+			$services->get( 'CosmosBetaTemplateParser' ),
+			$services->getUserFactory(),
+			$services->getMainWANObjectCache(),
 			RequestContext::getMain(),
 			new ServiceOptions(
 				CosmosRailBuilder::CONSTRUCTOR_OPTIONS,
-				$services->get( 'CosmosBetaOptions' ),
-				$services->getMainConfig()
+				$services->get( 'CosmosBetaOptions' )
 			),
-			$services->getSpecialPageFactory(),
-			$services->getUserFactory(),
-			$services->getMainWANObjectCache(),
-			$services->get( 'CosmosBetaConfig' ),
-			$services->get( 'CosmosBetaTemplateParser' )
 		);
 	},
 
@@ -137,9 +135,9 @@ return [
 
 	'CosmosBetaThemeStore' => static function ( MediaWikiServices $services ): ThemeStore {
 		return new ThemeStore(
+			$services->getActorNormalization(),
 			$services->getConnectionProvider(),
 			$services->getMainWANObjectCache(),
-			$services->getActorNormalization(),
 			LoggerFactory::getInstance( 'Cosmos' )
 		);
 	},
