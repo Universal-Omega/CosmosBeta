@@ -2038,7 +2038,7 @@ body code {
 }
 
 .skin-cosmos-plain-links() {
-	a:not( .new ):not( .cdx-button ):not( .mw-ui-button ):not( .oo-ui-buttonElement-button ):not( .oo-ui-tool-link ) {
+	a:not( .new ):where( :not( .cdx-button, .mw-ui-button, .oo-ui-buttonElement-button, .oo-ui-tool-link ) ) {
 		color: @link-color;
 		text-decoration: none;
 	}
