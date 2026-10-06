@@ -46,11 +46,10 @@ class SkinCosmosBeta extends SkinMustache {
 
 	public function __construct(
 		private readonly AltModules $altModules,
-		public readonly CosmosConfig $cosmosConfig,
+		private readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosNavigation $navigation,
 		private readonly Config $cosmosOptions,
 		private readonly CosmosRailBuilder $railBuilder,
-		private readonly CosmosWordmarkLookup $wordmarkLookup,
 		private readonly Language $contentLanguage,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly LanguageNameUtils $languageNameUtils,
@@ -59,6 +58,7 @@ class SkinCosmosBeta extends SkinMustache {
 		private readonly SpecialPageFactory $specialPageFactory,
 		private readonly TitleFactory $titleFactory,
 		private readonly UserOptionsManager $userOptionsManager,
+		private readonly WordmarkLookup $wordmarkLookup,
 		private readonly ?CookieWarningDecisions $cookieWarningDecisions,
 		array $options,
 	) {
@@ -72,7 +72,7 @@ class SkinCosmosBeta extends SkinMustache {
 		CosmosConfig $cosmosConfig,
 		CosmosNavigation $navigation,
 		CosmosRailBuilder $railBuilder,
-		CosmosWordmarkLookup $wordmarkLookup,
+		WordmarkLookup $wordmarkLookup,
 		Language $contentLanguage,
 		ExtensionRegistry $extensionRegistry,
 		LanguageNameUtils $languageNameUtils,
@@ -89,7 +89,6 @@ class SkinCosmosBeta extends SkinMustache {
 			$navigation,
 			$cosmosOptions,
 			$railBuilder,
-			$wordmarkLookup,
 			$contentLanguage,
 			$extensionRegistry,
 			$languageNameUtils,
@@ -101,6 +100,7 @@ class SkinCosmosBeta extends SkinMustache {
 			$specialPageFactory,
 			$titleFactory,
 			$userOptionsManager,
+			$wordmarkLookup,
 			$cookieWarningDecisions,
 			$options
 		);
@@ -115,7 +115,12 @@ class SkinCosmosBeta extends SkinMustache {
 		$context = $this->getContext();
 		$mainPage = $data['link-mainpage'];
 
-		$banner = new BannerComponent( $context, $this->cosmosOptions, $this->extensionRegistry );
+		$banner = new BannerComponent(
+			$context,
+			$this->cosmosOptions,
+			$this->extensionRegistry
+		);
+
 		$header = new WikiHeaderComponent(
 			$context,
 			$this->getConfig(),
@@ -124,20 +129,22 @@ class SkinCosmosBeta extends SkinMustache {
 			$this->wordmarkLookup,
 			$this->cosmosConfig
 		);
+
 		$pageHeader = new PageHeaderComponent(
 			$context,
 			$this->titleFactory,
 			$this->languageNameUtils,
 			$this->contentLanguage
 		);
+
 		$dialog = new CreatePageDialogComponent(
 			$context,
 			$this->cosmosOptions,
 			$this->specialPageFactory,
 			$this->titleFactory
 		);
-		$chrome = new ChromeComponent( $context, $this->cosmosConfig, $this->extensionRegistry );
 
+		$chrome = new ChromeComponent( $context, $this->cosmosConfig, $this->extensionRegistry );
 		$this->railBuilder->setSidebarModules( $this->getRailSidebarModules( $sidebar ) );
 
 		$toolsInRail = $this->shouldPutToolsInRail();
@@ -147,6 +154,7 @@ class SkinCosmosBeta extends SkinMustache {
 			$this->navigation->getTree( $this, $this->getLanguage() ),
 			array_merge( [ $sidebar['data-portlets-first'] ?? [] ], $sidebar['array-portlets-rest'] ?? [] )
 		);
+
 		$siteNotice = $data['html-site-notice'] ?? null;
 		// Core wraps the site notice in its container even when nothing is in it
 		$hasNotice = $siteNotice !== null && $siteNotice !== '<div id="siteNotice"></div>';
@@ -178,7 +186,6 @@ class SkinCosmosBeta extends SkinMustache {
 	/** @inheritDoc */
 	public function getDefaultModules(): array {
 		$modules = parent::getDefaultModules();
-
 		$this->railBuilder->setToolsModule( $this->shouldPutToolsInRail(), [] );
 
 		if (
@@ -257,7 +264,6 @@ class SkinCosmosBeta extends SkinMustache {
 
 	private function getSearchData( array $search ): array {
 		$classes = 'searchButton skin-cosmos-search-button cosmos-search-button';
-
 		return [
 			'html-input' => $this->makeSearchInput( [
 				'id' => 'searchInput',
