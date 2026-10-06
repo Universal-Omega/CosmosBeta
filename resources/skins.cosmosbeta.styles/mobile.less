@@ -208,9 +208,11 @@ div.thumb {
 	color: var( --skin-cosmos-font-color );
 }
 
-/* Page title and buttons are centered once the buttons have a line of their own, the class comes from mobile.js */
-#cosmos-header-articleHeader.skin-cosmos-actions-wrapped {
-	justify-content: center;
+@media ( max-width: 560px ) {
+	#cosmos-header-articleHeader {
+		flex-direction: column;
+		align-items: center;
+	}
 
 	#firstHeading {
 		justify-content: center;
