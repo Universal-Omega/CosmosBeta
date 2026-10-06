@@ -29,8 +29,8 @@ class ResetThemeCache extends Maintenance {
 	public function execute(): void {
 		$this->initServices();
 
-		$this->themeStore->purgeCache();
 		$this->navigation->purge();
+		$this->themeStore->purgeCache();
 
 		$this->output( "Theme and navigation caches cleared.\n" );
 	}
