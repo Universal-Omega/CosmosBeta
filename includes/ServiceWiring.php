@@ -74,13 +74,13 @@ return [
 
 	'CosmosBetaConfig' => static function ( MediaWikiServices $services ): CosmosConfig {
 		return new CosmosConfig(
+			$services->get( 'CosmosBetaColorModeResolver' ),
+			$services->get( 'CosmosBetaThemeStore' ),
 			new ServiceOptions(
 				CosmosConfig::CONSTRUCTOR_OPTIONS,
 				$services->get( 'CosmosBetaOptions' ),
 				$services->getMainConfig()
-			),
-			$services->get( 'CosmosBetaColorModeResolver' ),
-			$services->get( 'CosmosBetaThemeStore' )
+			)
 		);
 	},
 
