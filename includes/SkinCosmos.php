@@ -144,9 +144,13 @@ class SkinCosmos extends SkinMustache {
 			$this->titleFactory
 		);
 
-		$chrome = new ChromeComponent( $context, $this->cosmosConfig, $this->extensionRegistry );
-		$this->railBuilder->setSidebarModules( $this->getRailSidebarModules( $sidebar ) );
+		$chrome = new ChromeComponent(
+			$context,
+			$this->cosmosConfig,
+			$this->extensionRegistry
+		);
 
+		$this->railBuilder->setSidebarModules( $this->getRailSidebarModules( $sidebar ) );
 		$toolsInRail = $this->shouldPutToolsInRail();
 		$this->railBuilder->setToolsModule( $toolsInRail, $toolsInRail ? $chrome->getToolItems( $sidebar ) : [] );
 
@@ -174,7 +178,7 @@ class SkinCosmos extends SkinMustache {
 			'data-cosmos-footer' => $chrome->getFooterData( $data['data-footer'] ?? [] ),
 			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar, $toolsInRail ),
 			'html-cosmos-rail' => $this->railBuilder->buildRail(),
-			'html-cosmos-cookiewarning' => $this->getCookieWarning(),
+			'html-cosmos-cookiewarning' => '',//$this->getCookieWarning(),
 			'is-cosmos-dismissable-notice' => $hasNotice && $dismissable,
 			'is-cosmos-closable-notice' => $hasNotice && !$dismissable && !$noticeClosed,
 			'is-cosmos-empty-notice' => !$hasNotice,
