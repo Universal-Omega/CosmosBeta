@@ -6,6 +6,7 @@ namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\Language;
+use MediaWiki\Language\LanguageCode;
 use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -40,7 +41,7 @@ class CosmosNavigation {
 
 	public function __construct(
 		private readonly ExtensionRegistry $extensionRegistry,
-		private readonly Language $contentLanguage,
+		private readonly LanguageCode $contentLanguageCode,
 		private readonly TitleFactory $titleFactory,
 		private readonly UrlUtils $urlUtils,
 		private readonly WANObjectCache $cache,
@@ -51,7 +52,7 @@ class CosmosNavigation {
 
 	public function getTree( MessageLocalizer $localizer, Language $userLanguage ): array {
 		$build = fn (): array => $this->buildTree( $localizer, $this->getMenuLines( $localizer ) );
-		if ( $userLanguage->getCode() !== $this->contentLanguage->getCode() ) {
+		if ( $userLanguage->getCode() !== $this->contentLanguageCode->toString() ) {
 			return $build();
 		}
 
