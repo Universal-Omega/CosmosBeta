@@ -11,7 +11,7 @@ use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SiteStats\SiteStats;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\CosmosWordmarkLookup;
+use MediaWiki\Skins\CosmosBeta\WordmarkLookup;
 use MediaWiki\SpecialPage\SpecialPage;
 use function ucwords;
 
@@ -22,8 +22,8 @@ class WikiHeaderComponent {
 		private readonly Config $config,
 		private readonly PermissionManager $permissionManager,
 		private readonly ExtensionRegistry $extensionRegistry,
-		private readonly CosmosWordmarkLookup $wordmarkLookup,
 		private readonly CosmosConfig $cosmosConfig,
+		private readonly WordmarkLookup $wordmarkLookup,
 	) {
 	}
 
