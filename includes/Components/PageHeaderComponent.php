@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Language\Language;
+use MediaWiki\Language\LanguageCode;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Title\TitleFactory;
 use function array_slice;
@@ -25,9 +25,9 @@ class PageHeaderComponent {
 
 	public function __construct(
 		private readonly IContextSource $context,
-		private readonly TitleFactory $titleFactory,
+		private readonly LanguageCode $contentLanguageCode,
 		private readonly LanguageNameUtils $languageNameUtils,
-		private readonly Language $contentLanguage,
+		private readonly TitleFactory $titleFactory,
 	) {
 	}
 
@@ -133,9 +133,8 @@ class PageHeaderComponent {
 		if ( $languages ) {
 			$title = $this->context->getTitle();
 			$code = $title->getPageLanguage()->getCode();
-
 			if ( $title->isSpecialPage() || !$title->hasContentModel( CONTENT_MODEL_WIKITEXT ) ) {
-				$code = $this->contentLanguage->getCode();
+				$code = $this->contentLanguageCode->toString();
 			}
 
 			$data['data-languages'] = [
