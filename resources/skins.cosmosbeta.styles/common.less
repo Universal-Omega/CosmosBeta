@@ -119,6 +119,14 @@ body .skin-cosmos-footerIcons-listItem a.cdx-button {
 	border-radius: 2px;
 	background-color: #f8f9fa;
 	color: #202122;
+
+	&:hover,
+	&:active,
+	&:focus {
+		border-color: #a2a9b1;
+		background-color: #fff;
+		color: #202122;
+	}
 }
 
 // Core and extensions mark elements and images that need inverting on dark backgrounds with these classes
@@ -2339,7 +2347,7 @@ body {
 }
 
 #cosmos-page-header {
-	padding: 20px 0 4px 0;
+	padding: 20px 0 0 0;
 
 	&:has( > .skin-cosmos-associatedTabs ) {
 		padding-top: 12px;
@@ -2426,9 +2434,9 @@ body {
 }
 
 .skin-cosmos-header-border #cosmos-header-articleHeader {
-	padding-bottom: 6px;
+	padding-bottom: 4px;
 	border-bottom: 1.5px solid @border-color;
-	margin-bottom: 8px;
+	margin-bottom: 4px;
 }
 
 #catlinks {
