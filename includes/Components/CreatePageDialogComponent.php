@@ -29,7 +29,6 @@ class CreatePageDialogComponent {
 
 	public function getTemplateData(): array {
 		$wantedPagesEnabled = (bool)$this->config->get( ConfigNames::EnableWantedPages );
-
 		$wantedPagesMessage = $wantedPagesEnabled ?
 			$this->context->msg( 'cosmosbeta-createpage-wanted-pages' )->text() :
 			$this->context->msg(
@@ -55,7 +54,6 @@ class CreatePageDialogComponent {
 
 	private function getMostWantedPages(): array {
 		$page = $this->specialPageFactory->getPage( 'Wantedpages' );
-
 		if ( !$page instanceof SpecialWantedPages ) {
 			return [];
 		}
@@ -78,7 +76,6 @@ class CreatePageDialogComponent {
 			}
 
 			$title = $this->titleFactory->newFromText( $row->title, $row->namespace );
-
 			if ( $title && !$title->isKnown() && !preg_match( '/[:\/]+/', $title->getText() ) ) {
 				$pages[] = [
 					'title' => $title->getFullText(),
