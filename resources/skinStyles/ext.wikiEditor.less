@@ -243,3 +243,24 @@ html.skin-cosmos-colormode-dark body {
 html.skin-cosmos-colormode-dark body .ui-dialog .ui-dialog-titlebar-close .ui-icon {
 	filter: invert( 1 );
 }
+
+body .wikiEditor-ui-toolbar .tool-select {
+	background-color: transparent;
+
+	.label::after {
+		filter: brightness( 0 ) invert( var( --skin-cosmos-invert ) );
+	}
+
+	.options {
+		border-color: var( --skin-cosmos-border-color );
+		background-color: var( --skin-cosmos-content-background );
+
+		.option {
+			color: var( --skin-cosmos-font-color );
+
+			&:hover {
+				background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 18%, var( --skin-cosmos-content-background ) );
+			}
+		}
+	}
+}
