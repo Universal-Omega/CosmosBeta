@@ -708,9 +708,20 @@ body > .suggestions {
 	> a ~ a,
 	> a ~ .skin-cosmos-dropdown,
 	> .skin-cosmos-dropdown:has( ~ a ) {
+		position: relative;
 		padding-left: 10px;
-		border-left: 1px solid fade( @link-color, 40% );
 		margin-left: 10px;
+
+		// Short dividers, so they do not stretch the full height of the row.
+		&::before {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			height: 14px;
+			border-left: 1px solid fade( @link-color, 40% );
+			content: '';
+			transform: translateY( -50% );
+		}
 	}
 
 	.skin-cosmos-button {
@@ -762,6 +773,9 @@ body > .suggestions {
 	#cosmos-actionsList-dropdownIcon {
 		color: @link-color;
 		fill: @link-color;
+		// The dots do not flip when the menu opens.
+		transform: none;
+		transition: none;
 
 		.skin-cosmos-icon {
 			margin: 0;
@@ -2416,7 +2430,7 @@ body {
 
 .skin-cosmos-header-border #cosmos-header-articleHeader {
 	padding-bottom: 6px;
-	border-bottom: 2px solid @border-color;
+	border-bottom: 1.5px solid @border-color;
 	margin-bottom: 14px;
 }
 
