@@ -35,9 +35,9 @@ class Output implements
 		$user = $skin->getUser();
 		$classes = [
 			$user->isNamed() ? 'user-logged' : 'user-anon',
-			LessUtil::isThemeDark(
-				'content-background-color',
-				$this->lessUtil->getCosmosSettings( $this->config->getRenderMode() ),
+			$this->lessUtil->isDark(
+				'content',
+				$this->config->getRenderMode(),
 				LessUtil::CONTENT_THRESHOLD
 			) ? 'theme-dark' : 'theme-light',
 		];
