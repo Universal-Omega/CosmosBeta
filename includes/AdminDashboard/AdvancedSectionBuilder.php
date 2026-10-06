@@ -27,7 +27,6 @@ final readonly class AdvancedSectionBuilder {
 	 */
 	public function build( IContextSource $context, array $excluded ): array {
 		$groups = [];
-
 		foreach ( $this->specialPageFactory->getUsablePages( $context->getUser(), $context ) as $name => $page ) {
 			if ( in_array( $name, $excluded, true ) ) {
 				continue;
