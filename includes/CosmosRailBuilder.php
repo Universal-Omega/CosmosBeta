@@ -44,10 +44,10 @@ class CosmosRailBuilder {
 	public function __construct(
 		private readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosHookRunner $hookRunner,
+		private readonly TemplateParser $templateParser,
 		private readonly IConnectionProvider $dbProvider,
 		private readonly LinkRenderer $linkRenderer,
 		private readonly SpecialPageFactory $specialPageFactory,
-		private readonly TemplateParser $templateParser,
 		private readonly UserFactory $userFactory,
 		private readonly WANObjectCache $cache,
 		private readonly IContextSource $context,
