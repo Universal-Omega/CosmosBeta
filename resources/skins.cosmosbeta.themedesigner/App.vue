@@ -23,7 +23,7 @@
 									v-for="slot in swatchSlots"
 									:key="slot"
 									class="skin-cosmos-td-swatch"
-									:style="{ background: preset.colors[ slot ] }"
+									:style="{ backgroundColor: preset.colors[ slot ] }"
 								></span>
 							</span>
 							<span class="skin-cosmos-td-preset-name">
