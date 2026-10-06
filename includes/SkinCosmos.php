@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use CookieWarning\Decisions as CookieWarningDecisions;
 use CookieWarning\Hooks as CookieWarningHooks;
@@ -13,12 +13,12 @@ use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinMustache;
-use MediaWiki\Skins\CosmosBeta\Components\BannerComponent;
-use MediaWiki\Skins\CosmosBeta\Components\ChromeComponent;
-use MediaWiki\Skins\CosmosBeta\Components\CreatePageDialogComponent;
-use MediaWiki\Skins\CosmosBeta\Components\PageHeaderComponent;
-use MediaWiki\Skins\CosmosBeta\Components\WikiHeaderComponent;
-use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
+use MediaWiki\Skin\Cosmos\Components\BannerComponent;
+use MediaWiki\Skin\Cosmos\Components\ChromeComponent;
+use MediaWiki\Skin\Cosmos\Components\CreatePageDialogComponent;
+use MediaWiki\Skin\Cosmos\Components\PageHeaderComponent;
+use MediaWiki\Skin\Cosmos\Components\WikiHeaderComponent;
+use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\Options\UserOptionsManager;

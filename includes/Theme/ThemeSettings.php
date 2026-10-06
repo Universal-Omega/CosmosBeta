@@ -2,9 +2,9 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Theme;
+namespace MediaWiki\Skin\Cosmos\Theme;
 
-use MediaWiki\Skins\CosmosBeta\LessUtil;
+use MediaWiki\Skin\Cosmos\LessUtil;
 use function array_slice;
 use function array_values;
 use function in_array;

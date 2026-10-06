@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use function array_slice;
 use function count;

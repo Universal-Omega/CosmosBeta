@@ -13,7 +13,7 @@
 	"ValidSkinNames": {
 		"cosmosbeta": {
 			"displayname": "CosmosBeta",
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\SkinCosmosBeta::factory",
+			"factory": "MediaWiki\\Skin\\Cosmos\\SkinCosmos::factory",
 			"services": [
 				"CosmosBetaAltModules",
 				"CosmosBetaOptions",
@@ -82,8 +82,8 @@
 		"CosmosBetaMagic": "CosmosBetaMagic.php"
 	},
 	"AutoloadNamespaces": {
-		"MediaWiki\\Skins\\CosmosBeta\\": "includes/",
-		"MediaWiki\\Skins\\CosmosBeta\\Maintenance\\": "maintenance/"
+		"MediaWiki\\Skin\\Cosmos\\": "includes/",
+		"MediaWiki\\Skin\\Cosmos\\Maintenance\\": "maintenance/"
 	},
 	"ServiceWiringFiles": [
 		"includes/ServiceWiring.php"
@@ -103,7 +103,7 @@
 	],
 	"SpecialPages": {
 		"CosmosBetaThemeDesigner": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Specials\\SpecialThemeDesigner",
+			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialThemeDesigner",
 			"services": [
 				"CosmosBetaConfig",
 				"CosmosBetaThemeStore",
@@ -114,7 +114,7 @@
 			]
 		},
 		"AdminDashboard": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Specials\\SpecialAdminDashboard",
+			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialAdminDashboard",
 			"services": [
 				"CosmosBetaAdminDashboardStats",
 				"CosmosBetaAdvancedSectionBuilder",
@@ -157,7 +157,7 @@
 				},
 				"resources/skins.cosmosbeta.styles/responsive.less": {}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.js": {
 			"scripts": [
@@ -180,7 +180,7 @@
 				"resources/skins.cosmosbeta.searchLoader/searchLoader.js",
 				{
 					"name": "resources/skins.cosmosbeta.searchLoader/config.json",
-					"callback": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\ResourceLoaderCallbacks::getCosmosResourceLoaderConfig"
+					"callback": "MediaWiki\\Skin\\Cosmos\\Hooks\\ResourceLoaderCallbacks::getCosmosResourceLoaderConfig"
 				}
 			],
 			"dependencies": [
@@ -225,7 +225,7 @@
 				"resources/skins.cosmosbeta.search/App.vue",
 				{
 					"name": "resources/skins.cosmosbeta.search/config.json",
-					"callback": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\ResourceLoaderCallbacks::getCosmosSearchResourceLoaderConfig"
+					"callback": "MediaWiki\\Skin\\Cosmos\\Hooks\\ResourceLoaderCallbacks::getCosmosSearchResourceLoaderConfig"
 				}
 			],
 			"messages": [
@@ -267,7 +267,7 @@
 					"media": "screen"
 				}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.portableinfobox.default": {
 			"features": {
@@ -275,7 +275,7 @@
 				"toc": false
 			},
 			"styles": "resources/extensions/PortableInfobox/PortableInfoboxDefaultTheme.less",
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.portableinfobox.europa": {
 			"features": {
@@ -283,7 +283,7 @@
 				"toc": false
 			},
 			"styles": "resources/extensions/PortableInfobox/PortableInfoboxEuropaTheme.less",
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.socialprofile": {
 			"features": {
@@ -295,7 +295,7 @@
 					"media": "screen"
 				}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.profiletabs": {
 			"features": {
@@ -307,7 +307,7 @@
 					"media": "screen"
 				}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.profileavatar": {
 			"features": {
@@ -319,7 +319,7 @@
 					"media": "screen"
 				}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.profileeditcount": {
 			"features": {
@@ -331,7 +331,7 @@
 					"media": "screen"
 				}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.profiletags": {
 			"features": {
@@ -343,7 +343,7 @@
 					"media": "screen"
 				}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.profilebio": {
 			"features": {
@@ -355,7 +355,7 @@
 					"media": "screen"
 				}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.codeeditor": {
 			"features": {
@@ -367,7 +367,7 @@
 					"media": "screen"
 				}
 			},
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\CosmosResourceLoaderModule::create"
+			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
 		"skins.cosmosbeta.themedesigner.codex": {
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
@@ -834,26 +834,26 @@
 	},
 	"HookHandlers": {
 		"adminlinks": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\AdminLinks"
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\AdminLinks"
 		},
 		"colormode": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\ColorMode",
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\ColorMode",
 			"services": [
 				"CosmosBetaConfig",
 				"CosmosBetaAltModules"
 			]
 		},
 		"themecache": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\ThemeCache",
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\ThemeCache",
 			"services": [
 				"CosmosBetaThemeStore"
 			]
 		},
 		"installer": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\Installer"
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Installer"
 		},
 		"navigation": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\Navigation",
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Navigation",
 			"services": [
 				"CosmosBetaNavigation",
 				"CosmosBetaTemplateParser",
@@ -861,19 +861,19 @@
 			]
 		},
 		"output": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\Output",
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Output",
 			"services": [
 				"CosmosBetaLessUtil"
 			]
 		},
 		"parser": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\Parser"
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Parser"
 		},
 		"personaltools": {
-			"class": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\PersonalTools"
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\PersonalTools"
 		},
 		"socialprofile": {
-			"factory": "MediaWiki\\Skins\\CosmosBeta\\Hooks\\Handlers\\SocialProfile::factory",
+			"factory": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
 				"CosmosBetaOptions",
 				"CosmosBetaTemplateParser",
@@ -942,6 +942,6 @@
 		}
 	},
 	"DefaultUserOptions": {
-		"cosmosbeta-colormode": ""
+		"cosmos-colormode": ""
 	}
 }

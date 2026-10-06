@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\Language;

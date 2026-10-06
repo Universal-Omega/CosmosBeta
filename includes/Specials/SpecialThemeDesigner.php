@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Specials;
+namespace MediaWiki\Skin\Cosmos\Specials;
 
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Html\Html;
@@ -10,11 +10,11 @@ use MediaWiki\Html\TemplateParser;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinFactory;
-use MediaWiki\Skins\CosmosBeta\Components\PortletReader;
-use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemePresets;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\Components\PortletReader;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\Theme\ThemePresets;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use Throwable;

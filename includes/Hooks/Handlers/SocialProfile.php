@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
@@ -11,8 +11,8 @@ use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Sanitizer;
-use MediaWiki\Skins\CosmosBeta\ConfigNames;
-use MediaWiki\Skins\CosmosBeta\SkinCosmos;
+use MediaWiki\Skin\Cosmos\ConfigNames;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;

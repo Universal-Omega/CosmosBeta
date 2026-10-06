@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\MainConfigNames;
-use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use function array_diff;
 use function array_values;
 

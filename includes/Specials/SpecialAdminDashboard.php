@@ -2,17 +2,17 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Specials;
+namespace MediaWiki\Skin\Cosmos\Specials;
 
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Message\Message;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdminDashboardStats;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdvancedSectionBuilder;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardControl;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardControlRegistry;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardSection;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardStats;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardTab;
+use MediaWiki\Skin\Cosmos\AdminDashboard\AdminDashboardStats;
+use MediaWiki\Skin\Cosmos\AdminDashboard\AdvancedSectionBuilder;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControl;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControlRegistry;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardSection;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardStats;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardTab;
 use MediaWiki\SpecialPage\SpecialPage;
 use function array_filter;
 use function array_keys;

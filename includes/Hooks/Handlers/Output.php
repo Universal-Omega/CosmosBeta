@@ -2,15 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Output\Hook\OutputPageBodyAttributesHook;
 use MediaWiki\Output\Hook\OutputPageParserOutputHook;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\Skin\Hook\SkinPageReadyConfigHook;
-use MediaWiki\Skins\CosmosBeta\LessUtil;
-use MediaWiki\Skins\CosmosBeta\SkinCosmos;
+use MediaWiki\Skin\Cosmos\LessUtil;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 use function implode;
 
 class Output implements

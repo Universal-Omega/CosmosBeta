@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Components;
+namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\MainConfigNames;
 use MediaWiki\SiteStats\SiteStats;
-use MediaWiki\Skins\CosmosBeta\ConfigNames;
+use MediaWiki\Skin\Cosmos\ConfigNames;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Specials\SpecialWantedPages;

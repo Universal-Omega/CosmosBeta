@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\AdminDashboard;
+namespace MediaWiki\Skin\Cosmos\AdminDashboard;
 
 final readonly class DashboardControl {
 

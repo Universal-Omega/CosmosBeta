@@ -2,11 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Components;
+namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Skins\CosmosBeta\CosmosConfig;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\SpecialPage\SpecialPage;
 use function in_array;
 

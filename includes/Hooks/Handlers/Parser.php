@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Hook\GetDoubleUnderscoreIDsHook;
 use MediaWiki\Parser\Hook\ParserFirstCallInitHook;

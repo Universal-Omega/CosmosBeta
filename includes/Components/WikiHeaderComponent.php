@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Components;
+namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
@@ -10,8 +10,8 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SiteStats\SiteStats;
-use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\WordmarkLookup;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\WordmarkLookup;
 use MediaWiki\SpecialPage\SpecialPage;
 use function ucwords;
 

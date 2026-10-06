@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Theme;
+namespace MediaWiki\Skin\Cosmos\Theme;
 
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Skins\CosmosBeta\CosmosResourceLoaderModule;
+use MediaWiki\Skin\Cosmos\CosmosResourceLoaderModule;
 use function str_starts_with;
 
 /**

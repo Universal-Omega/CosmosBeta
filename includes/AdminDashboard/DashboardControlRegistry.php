@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\AdminDashboard;
+namespace MediaWiki\Skin\Cosmos\AdminDashboard;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
+use MediaWiki\Skin\Cosmos\CosmosNavigation;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;

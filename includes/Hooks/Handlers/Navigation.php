@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\IContextSource;
@@ -12,8 +12,8 @@ use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Language\Hook\MessageCacheReplaceHook;
 use MediaWiki\Language\RawMessage;
-use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
-use MediaWiki\Skins\CosmosBeta\SkinCosmos;
+use MediaWiki\Skin\Cosmos\CosmosNavigation;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use function trim;

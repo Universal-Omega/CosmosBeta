@@ -2,13 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Maintenance;
+namespace MediaWiki\Skin\Cosmos\Maintenance;
 
 use MediaWiki\MainConfigNames;
 use MediaWiki\Maintenance\LoggedUpdateMaintenance;
 use MediaWiki\Maintenance\LoggedUpdateOutcome;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use MediaWiki\User\User;
 use function file_get_contents;
 use function is_array;

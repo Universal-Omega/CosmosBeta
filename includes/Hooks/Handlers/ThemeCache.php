@@ -2,11 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Output\Hook\OutputPageCheckLastModifiedHook;
-use MediaWiki\Skins\CosmosBeta\SkinCosmos;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 
 class ThemeCache implements OutputPageCheckLastModifiedHook {
 

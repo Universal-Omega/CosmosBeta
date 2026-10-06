@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Maintenance;
+namespace MediaWiki\Skin\Cosmos\Maintenance;
 
 use MediaWiki\Maintenance\Maintenance;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use MediaWiki\User\User;
 
 class RestoreTheme extends Maintenance {

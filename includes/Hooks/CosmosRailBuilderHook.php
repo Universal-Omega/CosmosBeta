@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks;
+namespace MediaWiki\Skin\Cosmos\Hooks;
 
 use MediaWiki\Skin\Skin;
 

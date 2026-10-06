@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\IContextSource;
@@ -10,7 +10,7 @@ use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\RecentChanges\RecentChange;
-use MediaWiki\Skins\CosmosBeta\Hooks\CosmosHookRunner;
+use MediaWiki\Skin\Cosmos\Hooks\CosmosHookRunner;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserFactory;

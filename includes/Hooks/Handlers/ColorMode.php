@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Html\Html;
 use MediaWiki\MainConfigNames;
@@ -10,11 +10,11 @@ use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Preferences\Hook\GetPreferencesHook;
 use MediaWiki\ResourceLoader\Hook\ResourceLoaderRegisterModulesHook;
 use MediaWiki\ResourceLoader\ResourceLoader;
-use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\SkinCosmos;
-use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
-use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
+use MediaWiki\Skin\Cosmos\Theme\AltModules;
+use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use function array_merge;
 use function array_unique;
 use function wfAppendQuery;

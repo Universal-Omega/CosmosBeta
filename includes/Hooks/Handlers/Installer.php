@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
-use MediaWiki\Skins\CosmosBeta\Maintenance\ImportLegacyTheme;
+use MediaWiki\Skin\Cosmos\Maintenance\ImportLegacyTheme;
 
 class Installer implements LoadExtensionSchemaUpdatesHook {
 

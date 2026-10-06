@@ -2,11 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Maintenance;
+namespace MediaWiki\Skin\Cosmos\Maintenance;
 
 use MediaWiki\Maintenance\Maintenance;
-use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\CosmosNavigation;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 
 class ResetThemeCache extends Maintenance {
 

@@ -8,19 +8,19 @@ use MediaWiki\Context\RequestContext;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdminDashboardStats;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdvancedSectionBuilder;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardControlRegistry;
-use MediaWiki\Skins\CosmosBeta\BackgroundLookup;
-use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
-use MediaWiki\Skins\CosmosBeta\CosmosRailBuilder;
-use MediaWiki\Skins\CosmosBeta\Hooks\CosmosHookRunner;
-use MediaWiki\Skins\CosmosBeta\LessUtil;
-use MediaWiki\Skins\CosmosBeta\WordmarkLookup;
-use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
-use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\AdminDashboard\AdminDashboardStats;
+use MediaWiki\Skin\Cosmos\AdminDashboard\AdvancedSectionBuilder;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControlRegistry;
+use MediaWiki\Skin\Cosmos\BackgroundLookup;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\CosmosNavigation;
+use MediaWiki\Skin\Cosmos\CosmosRailBuilder;
+use MediaWiki\Skin\Cosmos\Hooks\CosmosHookRunner;
+use MediaWiki\Skin\Cosmos\LessUtil;
+use MediaWiki\Skin\Cosmos\WordmarkLookup;
+use MediaWiki\Skin\Cosmos\Theme\AltModules;
+use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 
 // PHPUnit does not understand coverage for this file.
 // It is covered though, see ServiceWiringTest.

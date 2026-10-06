@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
-use MediaWiki\Skins\CosmosBeta\SkinCosmos;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 
 class PersonalTools implements SkinTemplateNavigation__UniversalHook {
 
