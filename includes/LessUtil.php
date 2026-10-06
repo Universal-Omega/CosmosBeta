@@ -45,7 +45,6 @@ class LessUtil {
 	 */
 	public function isDark( string $slot, string $mode, float $threshold ): bool {
 		$visible = $this->getVisibleColor( $slot, $mode );
-
 		return $visible === null || self::isColorDark( $visible['r'], $visible['g'], $visible['b'], $threshold );
 	}
 
@@ -55,7 +54,6 @@ class LessUtil {
 	private function getVisibleColor( string $slot, string $mode ): ?array {
 		$color = self::parseColor( $this->cosmosConfig->getColor( $slot, $mode ) );
 		$alpha = $color === null ? 0.0 : (float)$color['a'] * $this->getOpacity( $slot );
-
 		if ( $color !== null && $alpha >= 1.0 ) {
 			return [ 'r' => $color['r'], 'g' => $color['g'], 'b' => $color['b'] ];
 		}
@@ -92,7 +90,6 @@ class LessUtil {
 	 */
 	public static function blend( array $color, float $alpha, array $backdrop ): array {
 		$alpha = max( 0.0, min( 1.0, $alpha ) );
-
 		return [
 			'r' => (int)round( $color['r'] * $alpha + $backdrop['r'] * ( 1 - $alpha ) ),
 			'g' => (int)round( $color['g'] * $alpha + $backdrop['g'] * ( 1 - $alpha ) ),
@@ -108,7 +105,6 @@ class LessUtil {
 	/** Relative luminance as defined by WCAG, 0 for black and 1 for white */
 	private static function getLuminance( int $red, int $green, int $blue ): float {
 		$channels = [];
-
 		foreach ( [ $red, $green, $blue ] as $value ) {
 			$value /= 255;
 			$channels[] = $value <= 0.03928 ? $value / 12.92 : ( ( $value + 0.055 ) / 1.055 ) ** 2.4;
