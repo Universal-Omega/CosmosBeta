@@ -58,8 +58,8 @@ return [
 	'CosmosBetaBackgroundLookup' => static function ( MediaWikiServices $services ): BackgroundLookup {
 		$config = $services->get( 'CosmosBetaConfig' );
 		return new BackgroundLookup(
-			$services->getTitleFactory(),
 			$services->getRepoGroup(),
+			$services->getTitleFactory(),
 			$config->getBackgroundImage(),
 			$config->getWikiHeaderBackgroundImage()
 		);
@@ -79,8 +79,8 @@ return [
 				$services->get( 'CosmosBetaOptions' ),
 				$services->getMainConfig()
 			),
-			$services->get( 'CosmosBetaThemeStore' ),
-			$services->get( 'CosmosBetaColorModeResolver' )
+			$services->get( 'CosmosBetaColorModeResolver' ),
+			$services->get( 'CosmosBetaThemeStore' )
 		);
 	},
 
@@ -146,8 +146,8 @@ return [
 
 	'CosmosBetaWordmarkLookup' => static function ( MediaWikiServices $services ): WordmarkLookup {
 		return new WordmarkLookup(
-			$services->getTitleFactory(),
 			$services->getRepoGroup(),
+			$services->getTitleFactory(),
 			$services->get( 'CosmosBetaConfig' )->getWordmark()
 		);
 	},
