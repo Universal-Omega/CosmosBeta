@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
 
 use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Skins\CosmosBeta\SkinCosmos;
 
 class PersonalTools implements SkinTemplateNavigation__UniversalHook {
 
@@ -23,7 +23,7 @@ class PersonalTools implements SkinTemplateNavigation__UniversalHook {
 
 	/** @inheritDoc */
 	public function onSkinTemplateNavigation__Universal( $sktemplate, &$links ): void {
-		if ( !$sktemplate instanceof SkinCosmosBeta ) {
+		if ( !$sktemplate instanceof SkinCosmos ) {
 			return;
 		}
 
