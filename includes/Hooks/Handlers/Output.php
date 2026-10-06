@@ -21,7 +21,7 @@ class Output implements
 {
 
 	public function __construct(
-		private readonly CosmosConfig $cosmosConfig,
+		private readonly CosmosConfig $config,
 		private readonly LessUtil $lessUtil,
 	) {
 	}
@@ -37,15 +37,15 @@ class Output implements
 			$user->isNamed() ? 'user-logged' : 'user-anon',
 			LessUtil::isThemeDark(
 				'content-background-color',
-				$this->lessUtil->getCosmosSettings( $this->cosmosConfig->getRenderMode() )
+				$this->lessUtil->getCosmosSettings( $this->config->getRenderMode() )
 			) ? 'theme-dark' : 'theme-light',
 		];
 
-		if ( $this->cosmosConfig->hasHeaderBorder() ) {
+		if ( $this->config->hasHeaderBorder() ) {
 			$classes[] = 'skin-cosmos-header-border';
 		}
 
-		$buttonStyle = $this->cosmosConfig->getButtonStyle();
+		$buttonStyle = $this->config->getButtonStyle();
 		if ( $buttonStyle !== 'default' ) {
 			$classes[] = "skin-cosmos-$buttonStyle-buttons";
 		}
