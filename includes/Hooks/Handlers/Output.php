@@ -10,7 +10,7 @@ use MediaWiki\Parser\Sanitizer;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\Skin\Hook\SkinPageReadyConfigHook;
 use MediaWiki\Skins\CosmosBeta\LessUtil;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Skins\CosmosBeta\SkinCosmos;
 use function implode;
 
 class Output implements
@@ -26,7 +26,7 @@ class Output implements
 
 	/** @inheritDoc */
 	public function onOutputPageBodyAttributes( $out, $skin, &$bodyAttrs ): void {
-		if ( !$skin instanceof SkinCosmosBeta ) {
+		if ( !$skin instanceof SkinCosmos ) {
 			return;
 		}
 
