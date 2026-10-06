@@ -37,7 +37,8 @@ class Output implements
 			$user->isNamed() ? 'user-logged' : 'user-anon',
 			LessUtil::isThemeDark(
 				'content-background-color',
-				$this->lessUtil->getCosmosSettings( $this->config->getRenderMode() )
+				$this->lessUtil->getCosmosSettings( $this->config->getRenderMode() ),
+				LessUtil::CONTENT_THRESHOLD
 			) ? 'theme-dark' : 'theme-light',
 		];
 
