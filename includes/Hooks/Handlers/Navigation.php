@@ -45,7 +45,6 @@ class Navigation implements
 		}
 
 		$pageText = trim( $content->getText() );
-
 		if ( $pageText === '' || $pageText === '-' ) {
 			return true;
 		}
