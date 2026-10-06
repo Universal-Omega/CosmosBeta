@@ -202,7 +202,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 	}
 
 	private function getContentVars( array $settings ): array {
-		$isContentBackgroundColorDark = LessUtil::isThemeDark( 'content-background-color', $settings );
+		$isContentBackgroundColorDark = LessUtil::isThemeDark( 'content-background-color', $settings, LessUtil::CONTENT_THRESHOLD );
 		return [
 			'font-color' => $isContentBackgroundColorDark ? '#D5D4D4' : '#000',
 			'theme-invert' => $isContentBackgroundColorDark ? 1 : 0,
