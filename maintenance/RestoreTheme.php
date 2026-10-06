@@ -27,7 +27,6 @@ class RestoreTheme extends Maintenance {
 
 	public function execute(): void {
 		$this->initServices();
-
 		if ( $this->hasOption( 'list' ) ) {
 			foreach ( $this->themeStore->getHistory( 30 ) as $row ) {
 				$this->output( "{$row['id']}\t{$row['timestamp']}\t{$row['user']}\t{$row['comment']}\n" );
@@ -37,13 +36,11 @@ class RestoreTheme extends Maintenance {
 		}
 
 		$revision = (int)$this->getOption( 'revision', 0 );
-
 		if ( $revision <= 0 ) {
 			$this->fatalError( 'Pass --revision with a revision id, or use --list.' );
 		}
 
-		$user = User::newSystemUser( 'CosmosBeta ThemeDesigner', [ 'steal' => true ] );
-
+		$user = User::newSystemUser( 'Cosmos ThemeDesigner', [ 'steal' => true ] );
 		if ( $this->themeStore->restore( $revision, $user, "Restored revision $revision" ) === null ) {
 			$this->fatalError( "Revision $revision does not exist." );
 		}
