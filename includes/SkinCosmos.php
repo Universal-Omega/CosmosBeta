@@ -126,8 +126,8 @@ class SkinCosmos extends SkinMustache {
 			$this->getConfig(),
 			$this->permissionManager,
 			$this->extensionRegistry,
-			$this->wordmarkLookup,
-			$this->cosmosConfig
+			$this->cosmosConfig,
+			$this->wordmarkLookup
 		);
 
 		$pageHeader = new PageHeaderComponent(
