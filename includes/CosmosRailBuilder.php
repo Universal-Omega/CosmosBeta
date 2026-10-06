@@ -36,13 +36,10 @@ class CosmosRailBuilder {
 
 	private const int RECENT_CHANGES_LIMIT = 4;
 
-	protected array $disabledModules = [];
-
-	private bool $toolsInRail = false;
-
-	private array $toolItems = [];
-
+	private array $disabledModules = [];
 	private array $sidebarModules = [];
+	private array $toolItems = [];
+	private bool $toolsInRail = false;
 
 	public function __construct(
 		private readonly CosmosHookRunner $hookRunner,
@@ -62,7 +59,6 @@ class CosmosRailBuilder {
 	public function setToolsModule( bool $enabled, array $items ): self {
 		$this->toolsInRail = $enabled;
 		$this->toolItems = $items;
-
 		return $this;
 	}
 
@@ -96,7 +92,6 @@ class CosmosRailBuilder {
 
 	public function hasModules(): bool {
 		$this->disableModule( 'recentchanges' );
-
 		$hasRecentChangesModule = ( $this->getEnabledModules()['recentchanges'] ?? false ) &&
 			$this->getRecentChanges() !== [];
 
@@ -104,25 +99,21 @@ class CosmosRailBuilder {
 			$this->getModules() !== [];
 
 		$this->resetDisabledModules();
-
 		return $hasModules;
 	}
 
 	public function disableModule( string $module ): self {
 		$this->disabledModules[] = $module;
-
 		return $this;
 	}
 
 	public function resetDisabledModules(): self {
 		$this->disabledModules = [];
-
 		return $this;
 	}
 
 	public function isHidden(): bool {
 		$railSettings = $this->cosmosConfig->getRailSettings();
-
 		if ( !$railSettings['enabled'] ) {
 			return true;
 		}
@@ -137,7 +128,6 @@ class CosmosRailBuilder {
 			$this->options->get( ConfigNames::RailDisabledPages );
 
 		$title = $this->context->getTitle();
-
 		return $title->inNamespaces( $disabledNamespaces ) ||
 			( $title->isMainPage() && in_array( 'mainpage', $disabledPages, true ) ) ||
 			in_array( $title->getFullText(), $disabledPages, true ) ||
@@ -146,7 +136,6 @@ class CosmosRailBuilder {
 
 	protected function getModules(): array {
 		$modules = [];
-
 		if ( $this->isHidden() ) {
 			return $modules;
 		}
@@ -160,7 +149,6 @@ class CosmosRailBuilder {
 		}
 
 		$this->hookRunner->onCosmosRailBuilder( $modules, $this->context->getSkin() );
-
 		foreach ( $this->sidebarModules as $index => $sidebar ) {
 			$modules["sidebar-$index"] = [
 				'class' => 'sidebar-module',
@@ -183,7 +171,6 @@ class CosmosRailBuilder {
 	protected function getEnabledModules(): array {
 		$modules = $this->options->get( ConfigNames::EnabledRailModules );
 		$recentChanges = $this->cosmosConfig->getRailSettings()['recentChanges'];
-
 		if ( $recentChanges === 'off' ) {
 			$modules['recentchanges'] = false;
 		} elseif ( $recentChanges !== '' ) {
@@ -196,7 +183,6 @@ class CosmosRailBuilder {
 	protected function buildInterfaceModules( array &$modules ): void {
 		$interfaceModules = $this->getEnabledModules()['interface'] ?? [];
 		$interfaceModules = $interfaceModules[0] ?? $interfaceModules;
-
 		foreach ( (array)$interfaceModules as $message => $type ) {
 			if ( $type && !$this->context->msg( $message )->isDisabled() ) {
 				$modules["interface-$message"] = [
@@ -210,7 +196,6 @@ class CosmosRailBuilder {
 
 	protected function buildRecentChangesModule( array &$modules ): void {
 		$moduleType = $this->getEnabledModules()['recentchanges'] ?? false;
-
 		if ( !$moduleType ) {
 			return;
 		}
@@ -248,7 +233,7 @@ class CosmosRailBuilder {
 
 	protected function getRecentChanges(): array {
 		return $this->cache->getWithSetCallback(
-			$this->cache->makeKey( 'CosmosBeta', 'recentchanges', self::RECENT_CHANGES_LIMIT ),
+			$this->cache->makeKey( 'Cosmos', 'recentchanges', self::RECENT_CHANGES_LIMIT ),
 			30,
 			function (): array {
 				$res = $this->dbProvider->getReplicaDatabase()->newSelectQueryBuilder()
@@ -285,7 +270,6 @@ class CosmosRailBuilder {
 	 */
 	private function getModuleClasses( array $classes ): string {
 		$all = [];
-
 		foreach ( $classes as $class ) {
 			$all[] = $class;
 			$all[] = "skin-cosmos-$class";
