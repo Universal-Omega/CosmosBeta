@@ -28,9 +28,9 @@ final readonly class DashboardControlRegistry {
 	public function __construct(
 		private ExtensionRegistry $extensionRegistry,
 		private PermissionManager $permissionManager,
-		private ServiceOptions $options,
 		private SpecialPageFactory $specialPageFactory,
 		private TitleFactory $titleFactory,
+		private ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
