@@ -20,8 +20,8 @@ final readonly class AdminDashboardStats {
 	private const int SECONDS_PER_DAY = 86400;
 
 	public function __construct(
-		private WANObjectCache $cache,
 		private IConnectionProvider $dbProvider,
+		private WANObjectCache $cache,
 	) {
 	}
 
