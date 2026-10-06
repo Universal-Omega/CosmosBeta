@@ -113,10 +113,10 @@ return [
 		return new CosmosRailBuilder(
 			$services->get( 'CosmosBetaConfig' ),
 			$services->get( 'CosmosBetaHookRunner' ),
+			$services->get( 'CosmosBetaTemplateParser' ),
 			$services->getConnectionProvider(),
 			$services->getLinkRenderer(),
 			$services->getSpecialPageFactory(),
-			$services->get( 'CosmosBetaTemplateParser' ),
 			$services->getUserFactory(),
 			$services->getMainWANObjectCache(),
 			RequestContext::getMain(),
