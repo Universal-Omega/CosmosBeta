@@ -40,6 +40,7 @@ class ThemeSettings {
 	public const string MODE_LIGHT = 'light';
 	public const string MODE_DARK = 'dark';
 	public const string MODE_AUTO = 'auto';
+
 	public const array MODES = [ self::MODE_LIGHT, self::MODE_DARK ];
 	public const array DEFAULT_MODES = [ self::MODE_LIGHT, self::MODE_DARK, self::MODE_AUTO ];
 
@@ -95,7 +96,6 @@ class ThemeSettings {
 
 	public static function newFromJson( string $json, int $revisionId ): self {
 		$decoded = json_decode( $json, true );
-
 		return new self( is_array( $decoded ) ? $decoded : [], $revisionId );
 	}
 
@@ -122,7 +122,6 @@ class ThemeSettings {
 		}
 
 		$opacity = (int)( $values['CosmosContentOpacityLevel'] ?? 0 );
-
 		return new self( [
 			'palettes' => [ self::MODE_LIGHT => $light ],
 			'images' => [
@@ -192,12 +191,12 @@ class ThemeSettings {
 
 	public static function normalize( array $raw ): array {
 		$data = self::getDefaults();
-
 		$mode = $raw['colorMode'] ?? [];
 		if ( is_array( $mode ) ) {
 			if ( in_array( $mode['default'] ?? null, self::DEFAULT_MODES, true ) ) {
 				$data['colorMode']['default'] = $mode['default'];
 			}
+
 			$data['colorMode']['toggle'] = self::toBool( $mode['toggle'] ?? null, false );
 		}
 
@@ -261,7 +260,6 @@ class ThemeSettings {
 		$toolbar = $raw['toolbar'] ?? [];
 		if ( is_array( $toolbar ) ) {
 			$data['toolbar']['enabled'] = self::toBool( $toolbar['enabled'] ?? null, true );
-
 			if ( in_array( $toolbar['style'] ?? null, self::TOOLBAR_STYLES, true ) ) {
 				$data['toolbar']['style'] = $toolbar['style'];
 			}
@@ -280,7 +278,6 @@ class ThemeSettings {
 		if ( is_array( $rail ) ) {
 			$data['rail']['enabled'] = self::toBool( $rail['enabled'] ?? null, true );
 			$data['rail']['hideForAnons'] = self::toBool( $rail['hideForAnons'] ?? null, false );
-
 			if ( in_array( $rail['recentChanges'] ?? null, self::RAIL_RECENT_CHANGES, true ) ) {
 				$data['rail']['recentChanges'] = $rail['recentChanges'];
 			}
@@ -292,6 +289,7 @@ class ThemeSettings {
 						$namespaces[(int)$ns] = (int)$ns;
 					}
 				}
+
 				$data['rail']['disabledNamespaces'] = array_values( $namespaces );
 			}
 
@@ -303,6 +301,7 @@ class ThemeSettings {
 						$pages[$page] = $page;
 					}
 				}
+
 				$data['rail']['disabledPages'] = array_values( $pages );
 			}
 		}
@@ -317,7 +316,6 @@ class ThemeSettings {
 	 */
 	public static function normalizeColor( string $color ): ?string {
 		$parsed = LessUtil::parseColor( $color );
-
 		if ( $parsed === null ) {
 			return null;
 		}
@@ -342,13 +340,12 @@ class ThemeSettings {
 	/**
 	 * Accepts a file name or a http(s) URL.
 	 */
-	public static function normalizeImage( $value ): string {
+	public static function normalizeImage( mixed $value ): string {
 		if ( !is_string( $value ) ) {
 			return '';
 		}
 
 		$value = trim( $value );
-
 		if ( $value === '' || strlen( $value ) > 1000 || preg_match( '/[\x00-\x1f<>"\'`{}\\\\]/', $value ) ) {
 			return '';
 		}
@@ -369,7 +366,7 @@ class ThemeSettings {
 	}
 
 	/** @return string[] */
-	private static function normalizeIdList( $value ): array {
+	private static function normalizeIdList( mixed $value ): array {
 		if ( !is_array( $value ) ) {
 			return [];
 		}
@@ -384,7 +381,7 @@ class ThemeSettings {
 		return array_values( $ids );
 	}
 
-	private static function toBool( $value, ?bool $default ): ?bool {
+	private static function toBool( mixed $value, ?bool $default ): ?bool {
 		if ( is_bool( $value ) ) {
 			return $value;
 		}
@@ -400,7 +397,7 @@ class ThemeSettings {
 		return $default;
 	}
 
-	private static function toPercent( $value, ?int $default ): ?int {
+	private static function toPercent( mixed $value, ?int $default ): ?int {
 		if ( !is_numeric( $value ) ) {
 			return $default;
 		}
@@ -425,7 +422,6 @@ class ThemeSettings {
 	 */
 	public function getDefaultMode(): string {
 		$mode = $this->data['colorMode']['default'];
-
 		return $mode === self::MODE_AUTO ? self::MODE_LIGHT : $mode;
 	}
 
