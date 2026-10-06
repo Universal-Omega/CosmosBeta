@@ -17,7 +17,7 @@ class Installer implements LoadExtensionSchemaUpdatesHook {
 		$dir = __DIR__ . '/../../../sql';
 		$type = $updater->getDB()->getType();
 
-		$updater->addExtensionTable( 'cosmosbeta_theme', "$dir/$type/tables-generated.sql" );
+		$updater->addExtensionTable( 'cosmos_theme', "$dir/$type/tables-generated.sql" );
 		$updater->addPostDatabaseUpdateMaintenance( ImportLegacyTheme::class );
 	}
 }
