@@ -173,18 +173,15 @@ class CosmosConfig {
 
 	public function getFooterSettings(): array {
 		$settings = $this->getTheme()->getSection( 'footer' );
-
 		$settings['hiddenLinks'] = array_values(
 			array_diff( $settings['hiddenLinks'], $this->getFooterProtectedLinks() )
 		);
-		$settings['showIcons'] = $settings['showIcons'] || !$this->canHideFooterIcons();
 
+		$settings['showIcons'] = $settings['showIcons'] || !$this->canHideFooterIcons();
 		return $settings;
 	}
 
-	/**
-	 * @return string[]
-	 */
+	/** @return string[] */
 	public function getFooterProtectedLinks(): array {
 		return (array)$this->options->get( ConfigNames::FooterProtectedLinks );
 	}
