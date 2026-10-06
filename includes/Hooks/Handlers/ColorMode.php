@@ -11,7 +11,7 @@ use MediaWiki\Preferences\Hook\GetPreferencesHook;
 use MediaWiki\ResourceLoader\Hook\ResourceLoaderRegisterModulesHook;
 use MediaWiki\ResourceLoader\ResourceLoader;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Skins\CosmosBeta\SkinCosmos;
 use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
 use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
@@ -57,7 +57,7 @@ class ColorMode implements
 
 	/** @inheritDoc */
 	public function onBeforePageDisplay( $out, $skin ): void {
-		if ( !$skin instanceof SkinCosmosBeta ) {
+		if ( !$skin instanceof SkinCosmos ) {
 			return;
 		}
 
@@ -158,7 +158,6 @@ class ColorMode implements
 	/** @return array<string,string> Page background of each mode, safe to print into CSS */
 	private function getBodyColors(): array {
 		$colors = [];
-
 		foreach ( ThemeSettings::MODES as $name ) {
 			$colors[$name] = ThemeSettings::normalizeColor( $this->config->getColor( 'body', $name ) ) ?? 'transparent';
 		}
