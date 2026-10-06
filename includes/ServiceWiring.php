@@ -17,10 +17,10 @@ use MediaWiki\Skin\Cosmos\CosmosNavigation;
 use MediaWiki\Skin\Cosmos\CosmosRailBuilder;
 use MediaWiki\Skin\Cosmos\Hooks\CosmosHookRunner;
 use MediaWiki\Skin\Cosmos\LessUtil;
-use MediaWiki\Skin\Cosmos\WordmarkLookup;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\WordmarkLookup;
 
 // PHPUnit does not understand coverage for this file.
 // It is covered though, see ServiceWiringTest.
