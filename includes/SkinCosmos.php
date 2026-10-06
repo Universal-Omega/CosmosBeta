@@ -32,7 +32,7 @@ use function preg_replace;
 use function strtoupper;
 use function trim;
 
-class SkinCosmosBeta extends SkinMustache {
+class SkinCosmos extends SkinMustache {
 
 	private const array CONSTRUCTOR_OPTIONS = [
 		ConfigNames::EnablePortableInfoboxEuropaTheme,
