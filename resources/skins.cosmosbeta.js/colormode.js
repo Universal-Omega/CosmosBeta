@@ -1,7 +1,7 @@
 /* global mw, jQuery */
 
 ( function ( mw, $ ) {
-	const config = mw.config.get( 'wgCosmosBetaColorMode' );
+	const config = mw.config.get( 'wgCosmosColorMode' );
 
 	if ( !config ) {
 		return;

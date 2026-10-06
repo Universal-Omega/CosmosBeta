@@ -91,7 +91,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 		$out->addWikiMsg( 'cosmosbeta-themedesigner-text' );
 		$out->addModules( [ 'skins.cosmosbeta.themedesigner' ] );
-		$out->addJsConfigVars( 'wgCosmosBetaThemeDesigner', $this->getClientData() );
+		$out->addJsConfigVars( 'wgCosmosThemeDesigner', $this->getClientData() );
 		$out->addHTML( $this->buildForm() );
 	}
 
@@ -152,7 +152,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	private function buildForm(): string {
 		return $this->templateParser->processTemplate( 'ThemeDesigner', [
-			'form-id' => 'cosmosbeta-themedesigner-form',
+			'form-id' => 'skin-cosmos-themedesigner-form',
 			'action' => $this->getPageTitle()->getLocalURL(),
 			'html-token' => Html::hidden( 'wpEditToken', $this->getContext()->getCsrfTokenSet()->getToken()->toString() ),
 			'msg-nojs' => $this->msg( 'cosmosbeta-themedesigner-nojs' )->text(),

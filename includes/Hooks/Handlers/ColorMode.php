@@ -142,7 +142,7 @@ class ColorMode implements
 			$out->addHeadItem( 'skin-cosmos-colormode', $headItems );
 		}
 
-		$out->addJsConfigVars( 'wgCosmosBetaColorMode', [
+		$out->addJsConfigVars( 'wgCosmosColorMode', [
 			'render' => $mode,
 			'default' => $this->config->getDefaultMode(),
 			'auto' => $auto,
