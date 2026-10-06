@@ -11,17 +11,19 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdminDashboardStats;
 use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdvancedSectionBuilder;
 use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardControlRegistry;
-use MediaWiki\Skins\CosmosBeta\CosmosBackgroundLookup;
+use MediaWiki\Skins\CosmosBeta\BackgroundLookup;
 use MediaWiki\Skins\CosmosBeta\CosmosConfig;
 use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
 use MediaWiki\Skins\CosmosBeta\CosmosRailBuilder;
-use MediaWiki\Skins\CosmosBeta\CosmosWordmarkLookup;
 use MediaWiki\Skins\CosmosBeta\Hooks\CosmosHookRunner;
 use MediaWiki\Skins\CosmosBeta\LessUtil;
+use MediaWiki\Skins\CosmosBeta\WordmarkLookup;
 use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
 use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
 use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
 
+// PHPUnit does not understand coverage for this file.
+// It is covered though, see ServiceWiringTest.
 // @codeCoverageIgnoreStart
 
 return [
@@ -53,10 +55,9 @@ return [
 		return new AltModules( $services->get( 'ExtensionRegistry' ) );
 	},
 
-	'CosmosBetaBackgroundLookup' => static function ( MediaWikiServices $services ): CosmosBackgroundLookup {
+	'CosmosBetaBackgroundLookup' => static function ( MediaWikiServices $services ): BackgroundLookup {
 		$config = $services->get( 'CosmosBetaConfig' );
-
-		return new CosmosBackgroundLookup(
+		return new BackgroundLookup(
 			$services->getTitleFactory(),
 			$services->getRepoGroup(),
 			$config->getBackgroundImage(),
@@ -131,7 +132,6 @@ return [
 	'CosmosBetaTemplateParser' => static function (): TemplateParser {
 		$parser = new TemplateParser( __DIR__ . '/../templates' );
 		$parser->enableRecursivePartials( true );
-
 		return $parser;
 	},
 
@@ -140,12 +140,12 @@ return [
 			$services->getConnectionProvider(),
 			$services->getMainWANObjectCache(),
 			$services->getActorNormalization(),
-			LoggerFactory::getInstance( 'CosmosBeta' )
+			LoggerFactory::getInstance( 'Cosmos' )
 		);
 	},
 
-	'CosmosBetaWordmarkLookup' => static function ( MediaWikiServices $services ): CosmosWordmarkLookup {
-		return new CosmosWordmarkLookup(
+	'CosmosBetaWordmarkLookup' => static function ( MediaWikiServices $services ): WordmarkLookup {
+		return new WordmarkLookup(
 			$services->getTitleFactory(),
 			$services->getRepoGroup(),
 			$services->get( 'CosmosBetaConfig' )->getWordmark()
