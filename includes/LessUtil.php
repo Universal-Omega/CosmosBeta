@@ -51,7 +51,7 @@ class LessUtil {
 	/**
 	 * @return array{r: int, g: int, b: int}|null The color as seen, null when nothing is seen
 	 */
-	private function getVisibleColor( string $slot, string $mode ): ?array {
+	public function getVisibleColor( string $slot, string $mode ): ?array {
 		$color = self::parseColor( $this->cosmosConfig->getColor( $slot, $mode ) );
 		$alpha = $color === null ? 0.0 : (float)$color['a'] * $this->getOpacity( $slot );
 		if ( $color !== null && $alpha >= 1.0 ) {
@@ -346,7 +346,6 @@ class LessUtil {
 	public static function hexToRgb( string $hex ): array {
 		$hex = str_replace( '#', '', $hex );
 		$length = strlen( $hex );
-
 		if ( $length === 6 ) {
 			$rgb = [
 				'r' => hexdec( substr( $hex, 0, 2 ) ),
