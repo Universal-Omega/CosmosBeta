@@ -108,7 +108,6 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		$revertTo = $request->getInt( 'wpRevertTo' );
-
 		if ( $revertTo > 0 ) {
 			$saved = $this->store->restore(
 				$revertTo,
@@ -122,14 +121,12 @@ class SpecialThemeDesigner extends SpecialPage {
 			}
 		} else {
 			$decoded = json_decode( $request->getText( 'wpThemeJson' ), true );
-
 			if ( !is_array( $decoded ) ) {
 				$out->addHTML( Html::errorBox( $this->msg( 'cosmosbeta-themedesigner-error-json' )->escaped() ) );
 				return;
 			}
 
 			$decoded = $this->applyConfigurationRules( $decoded );
-
 			$this->store->save(
 				new ThemeSettings( $decoded, 0 ),
 				$this->getUser(),
@@ -229,7 +226,6 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	private function getNamespaceOptions(): array {
 		$options = [];
-
 		foreach ( $this->getLanguage()->getFormattedNamespaces() as $id => $name ) {
 			$options[] = [
 				'value' => (int)$id,
@@ -291,7 +287,6 @@ class SpecialThemeDesigner extends SpecialPage {
 			foreach ( $data['data-footer'][$key]['array-items'] ?? [] as $item ) {
 				$name = (string)( $item['name'] ?? '' );
 				$label = trim( (string)preg_replace( '/\s+/', ' ', strip_tags( (string)( $item['html'] ?? '' ) ) ) );
-
 				if ( $name !== '' ) {
 					$links[$name] = [
 						'name' => $name,
