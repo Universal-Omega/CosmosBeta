@@ -28,7 +28,7 @@ use const PREG_SPLIT_NO_EMPTY;
 class LessUtil {
 
 	// Content switches to light text at the point where both colors read the same.
-	private const float LUMINANCE_THRESHOLD = 0.179;
+	public const float CONTENT_THRESHOLD = 0.179;
 
 	// Chrome like the header and banner prefers light text a bit longer.
 	public const float CHROME_THRESHOLD = 0.3;
@@ -73,7 +73,7 @@ class LessUtil {
 	public static function isThemeDark(
 		string $background,
 		array $cosmosSettings,
-		float $threshold = self::LUMINANCE_THRESHOLD
+		float $threshold
 	): bool {
 		$parsed = self::parseColor( $cosmosSettings[$background] );
 		if ( $parsed === null || (float)$parsed['a'] === 0.0 ) {
