@@ -136,7 +136,29 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['footer-background-color'] = "rgba($r, $g, $b, $footerOpacity)";
 		$lessVars['footer-background-color-fallback'] = $this->getFallbackColor( $r, $g, $b, $footerOpacity, $blur );
 
-		$isFooterBackgroundColorDark = LessUtil::isThemeDark( 'footer-background-color', $settings, LessUtil::CHROME_THRESHOLD );
+		// The footer is often translucent, so its text follows the color that is actually seen,
+		// which is the footer laid over the page background.
+		[ $backdropRed, $backdropGreen, $backdropBlue, $backdropAlpha ] = $this->resolveColor(
+			$this->cosmosConfig->getColor( 'body', $mode )
+		);
+
+		if ( $backdropAlpha > 0 ) {
+			$mix = static fn ( int $footer, int $backdrop ): int =>
+				(int)round( $footer * $footerOpacity + $backdrop * ( 1 - $footerOpacity ) );
+			$isFooterBackgroundColorDark = LessUtil::isColorDark(
+				$mix( $r, $backdropRed ),
+				$mix( $g, $backdropGreen ),
+				$mix( $b, $backdropBlue ),
+				LessUtil::CHROME_THRESHOLD
+			);
+		} else {
+			$isFooterBackgroundColorDark = LessUtil::isThemeDark(
+				'footer-background-color',
+				$settings,
+				LessUtil::CHROME_THRESHOLD
+			);
+		}
+
 		$lessVars['footer-font-color1'] = $isFooterBackgroundColorDark ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.65)';
 		$lessVars['footer-font-color2'] = $isFooterBackgroundColorDark ? '#fff' : '#000';
 
