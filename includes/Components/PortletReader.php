@@ -15,7 +15,6 @@ final class PortletReader {
 	 */
 	public static function getItems( array $portlets, array $names ): array {
 		$items = [];
-
 		foreach ( $names as $name ) {
 			foreach ( $portlets[$name]['array-items'] ?? [] as $item ) {
 				$id = (string)( $item['id'] ?? '' );
