@@ -105,10 +105,8 @@ class SpecialAdminDashboard extends SpecialPage {
 	 */
 	private function getSections( array $controls ): array {
 		$sections = [];
-
 		foreach ( DashboardSection::cases() as $section ) {
 			$items = array_filter( $controls, static fn ( DashboardControl $control ): bool => $control->section === $section );
-
 			if ( !$items ) {
 				continue;
 			}
@@ -146,7 +144,6 @@ class SpecialAdminDashboard extends SpecialPage {
 		$groups = [];
 		foreach ( $this->advancedSectionBuilder->build( $this->getContext(), $excluded ) as $group => $pages ) {
 			$message = $this->msg( "specialpages-group-$group" );
-
 			$groups[] = [
 				'id' => $group,
 				'title' => $message->exists() ? $message->text() : $group,
