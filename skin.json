@@ -624,6 +624,7 @@
 			"+ext.uls.interface": "resources/skinStyles/ext.uls.interface.less",
 			"+ext.echo.styles.alert": "resources/skinStyles/ext.echo.styles.alert.less",
 			"+ext.wikiEditor": "resources/skinStyles/ext.wikiEditor.less",
+			"+mediawiki.action.edit": "resources/skinStyles/mediawiki.action.edit.less",
 			"+mediawiki.special.changeslist.legend": "resources/skinStyles/mediawiki.special.changeslist.legend.less",
 			"+mediawiki.rcfilters.filters.base.styles": "resources/skinStyles/mediawiki.rcfilters.filters.base.styles.less",
 			"+ext.uls.languagesettings": "resources/skinStyles/ext.uls.languagesettings.less",
