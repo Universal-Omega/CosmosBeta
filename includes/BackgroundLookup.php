@@ -13,8 +13,8 @@ use const NS_FILE;
 class BackgroundLookup {
 
 	public function __construct(
-		private readonly TitleFactory $titleFactory,
 		private readonly RepoGroup $repoGroup,
+		private readonly TitleFactory $titleFactory,
 		private readonly string $main,
 		private readonly string $wikiHeader,
 	) {
