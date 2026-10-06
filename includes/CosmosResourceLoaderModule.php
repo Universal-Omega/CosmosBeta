@@ -22,24 +22,23 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 	public function __construct(
 		array $options,
+		private readonly BackgroundLookup $backgroundLookup,
 		private readonly CosmosConfig $cosmosConfig,
-		private readonly CosmosBackgroundLookup $backgroundLookup,
-		private readonly CosmosWordmarkLookup $wordmarkLookup,
 		private readonly LessUtil $lessUtil,
+		private readonly WordmarkLookup $wordmarkLookup,
 	) {
 		parent::__construct( $options );
 		$this->isAlt = ( $options['variant'] ?? '' ) === 'alt';
 	}
 
-	public static function create( array $options ): self {
+	public static function factory( array $options ): self {
 		$services = MediaWikiServices::getInstance();
-
 		return new self(
 			$options,
-			$services->get( 'CosmosBetaConfig' ),
 			$services->get( 'CosmosBetaBackgroundLookup' ),
-			$services->get( 'CosmosBetaWordmarkLookup' ),
-			$services->get( 'CosmosBetaLessUtil' )
+			$services->get( 'CosmosBetaConfig' ),
+			$services->get( 'CosmosBetaLessUtil' ),
+			$services->get( 'CosmosBetaWordmarkLookup' )
 		);
 	}
 
@@ -77,6 +76,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 		$bannerColor = $this->cosmosConfig->getColor( 'banner', $mode );
 		$lessVars['banner-background-color'] = $bannerColor;
+
 		[ $br, $bg, $bb, $ba ] = $this->resolveColor( $bannerColor );
 		$lessVars['banner-background-color-fallback'] = $this->getFallbackColor( $br, $bg, $bb, $ba, $this->cosmosConfig->getBackdropBlur() );
 
@@ -170,13 +170,11 @@ class CosmosResourceLoaderModule extends SkinModule {
 	 */
 	private function getFallbackColor( int $r, int $g, int $b, float $alpha, int $blur ): string {
 		$boosted = $blur > 0 ? $alpha + ( 1 - $alpha ) * 0.6 : $alpha;
-
 		return sprintf( 'rgba(%d, %d, %d, %s)', $r, $g, $b, round( $boosted, 3 ) );
 	}
 
 	private function getToolbarFallback( string $color ): string {
 		[ $r, $g, $b, $a ] = $this->resolveColor( $color );
-
 		return $this->getFallbackColor( $r, $g, $b, (float)$a, $this->cosmosConfig->getBackdropBlur() );
 	}
 
@@ -191,7 +189,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 	private function getToolbarVars( string $mode, array $settings ): array {
 		$toolbarBackgroundColor = $this->cosmosConfig->getColor( 'toolbar', $mode );
-
 		return [
 			'toolbar-background-color2' => $toolbarBackgroundColor,
 			'toolbar-background-color-fallback' => $this->getToolbarFallback( $toolbarBackgroundColor ),
@@ -206,7 +203,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 	private function getContentVars( array $settings ): array {
 		$isContentBackgroundColorDark = LessUtil::isThemeDark( 'content-background-color', $settings );
-
 		return [
 			'font-color' => $isContentBackgroundColorDark ? '#D5D4D4' : '#000',
 			'theme-invert' => $isContentBackgroundColorDark ? 1 : 0,
@@ -222,7 +218,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 	private function getBannerVars( array $settings ): array {
 		$isBannerBackgroundColorDark = LessUtil::isThemeDark( 'banner-background-color', $settings, LessUtil::CHROME_THRESHOLD );
-
 		return [
 			'banner-font-color' =>
 				$isBannerBackgroundColorDark ? '#fff' : '#000',
@@ -240,7 +235,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 	private function getButtonVars( array $settings ): array {
 		$isButtonBackgroundColorDark = LessUtil::isThemeDark( 'button-background-color', $settings, LessUtil::CHROME_THRESHOLD );
-
 		return [
 			'notice-close-button-color' => $isButtonBackgroundColorDark ? 'fff' : '111',
 			'button-font-color' => $isButtonBackgroundColorDark ? '#fff' : '#000',
