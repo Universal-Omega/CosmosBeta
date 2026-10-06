@@ -10,7 +10,7 @@ use MediaWiki\Title\TitleFactory;
 use function preg_match;
 use const NS_FILE;
 
-class CosmosBackgroundLookup {
+class BackgroundLookup {
 
 	public function __construct(
 		private readonly TitleFactory $titleFactory,
