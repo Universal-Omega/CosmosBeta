@@ -139,6 +139,22 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['footer-font-color1'] = $isFooterBackgroundColorDark ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.65)';
 		$lessVars['footer-font-color2'] = $isFooterBackgroundColorDark ? '#fff' : '#000';
 
+		$footerSeen = $this->lessUtil->getVisibleColor( 'footer', $mode );
+		$footerSeen ??= [ 'r' => 248, 'g' => 249, 'b' => 250 ];
+		$shift = $isFooterBackgroundColorDark ? [ 255, 255, 255 ] : [ 0, 0, 0 ];
+		$shiftColor = static fn ( float $amount ): string => sprintf(
+			'#%02x%02x%02x',
+			...array_map(
+				static fn ( int $channel, int $target ): int => (int)round( $channel + ( $target - $channel ) * $amount ),
+				[ $footerSeen['r'], $footerSeen['g'], $footerSeen['b'] ],
+				$shift
+			)
+		);
+		$lessVars['footer-icon-background'] = $shiftColor( 0.12 );
+		$lessVars['footer-icon-background-hover'] = $shiftColor( 0.2 );
+		$lessVars['footer-icon-border'] = $shiftColor( 0.22 );
+		$lessVars['footer-icon-invert'] = $isFooterBackgroundColorDark ? 1 : 0;
+
 		$headerBackgroundColor = $this->cosmosConfig->getColor( 'header', $mode );
 		[ $r, $g, $b, $headerAlpha ] = $this->resolveColor( $headerBackgroundColor );
 		$colorName = $headerAlpha > 0 ? "rgba($r,$g,$b,$headerAlpha)" : 'transparent';
