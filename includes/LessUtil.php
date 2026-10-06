@@ -80,7 +80,12 @@ class LessUtil {
 			return true;
 		}
 
-		return self::getLuminance( $parsed['r'], $parsed['g'], $parsed['b'] ) < $threshold;
+		return self::isColorDark( $parsed['r'], $parsed['g'], $parsed['b'], $threshold );
+	}
+
+	/** Whether white text reads better than black text on an opaque color */
+	public static function isColorDark( int $red, int $green, int $blue, float $threshold ): bool {
+		return self::getLuminance( $red, $green, $blue ) < $threshold;
 	}
 
 	/** Relative luminance as defined by WCAG, 0 for black and 1 for white */
