@@ -64,7 +64,14 @@ final readonly class DashboardControlRegistry {
 			$this->external( 'help', $community, $localizer ),
 
 			$this->special( 'categories', $content, 'Categories', $user ),
-			$canCreate ? new DashboardControl( 'addpage', $content, '#create-article', opensCreateDialog: true ) : null,
+			$canCreate ? new DashboardControl(
+				id: 'addpage',
+				section: $content,
+				url: '#create-article',
+				specialPage: null,
+				opensCreateDialog: true,
+				isExternal: false,
+			) : null,
 			$this->options->get( MainConfigNames::EnableUploads ) ?
 				$this->special( 'upload', $content, 'Upload', $user ) :
 				null,
@@ -85,7 +92,14 @@ final readonly class DashboardControlRegistry {
 			return null;
 		}
 
-		return new DashboardControl( $id, $section, $page->getPageTitle()->getFullURL(), specialPage: $name );
+		return new DashboardControl(
+			id: $id,
+			section: $section,
+			url: $page->getPageTitle()->getFullURL(),
+			specialPage: $name,
+			opensCreateDialog: false,
+			isExternal: false,
+		);
 	}
 
 	private function interfacePage( string $id, DashboardSection $section, string $text, User $user ): ?DashboardControl {
@@ -94,7 +108,14 @@ final readonly class DashboardControlRegistry {
 			return null;
 		}
 
-		return new DashboardControl( $id, $section, $title->getFullURL( [ 'action' => 'edit' ] ) );
+		return new DashboardControl(
+			id: $id,
+			section: $section,
+			url: $title->getFullURL( [ 'action' => 'edit' ] ),
+			specialPage: null,
+			opensCreateDialog: false,
+			isExternal: false,
+		);
 	}
 
 	private function external( string $id, DashboardSection $section, MessageLocalizer $localizer ): ?DashboardControl {
@@ -103,6 +124,13 @@ final readonly class DashboardControlRegistry {
 			return null;
 		}
 
-		return new DashboardControl( $id, $section, $url, isExternal: true );
+		return new DashboardControl(
+			id: $id,
+			section: $section,
+			url: $url,
+			specialPage: null,
+			opensCreateDialog: false,
+			isExternal: true,
+		);
 	}
 }
