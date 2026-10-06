@@ -21,7 +21,7 @@
 				"CosmosBetaNavigation",
 				"CosmosBetaRailBuilder",
 				"CosmosBetaWordmarkLookup",
-				"ContentLanguage",
+				"ContentLanguageCode",
 				"ExtensionRegistry",
 				"LanguageNameUtils",
 				"PermissionManager",
