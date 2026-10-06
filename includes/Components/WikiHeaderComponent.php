@@ -20,9 +20,9 @@ class WikiHeaderComponent {
 	public function __construct(
 		private readonly IContextSource $context,
 		private readonly Config $config,
-		private readonly PermissionManager $permissionManager,
-		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly CosmosConfig $cosmosConfig,
+		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly PermissionManager $permissionManager,
 		private readonly WordmarkLookup $wordmarkLookup,
 	) {
 	}
