@@ -10,9 +10,8 @@ use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 
 class ResetThemeCache extends Maintenance {
 
-	private ThemeStore $themeStore;
-
 	private CosmosNavigation $navigation;
+	private ThemeStore $themeStore;
 
 	public function __construct() {
 		parent::__construct();
@@ -23,8 +22,8 @@ class ResetThemeCache extends Maintenance {
 
 	private function initServices(): void {
 		$services = $this->getServiceContainer();
-		$this->themeStore = $services->get( 'CosmosBetaThemeStore' );
 		$this->navigation = $services->get( 'CosmosBetaNavigation' );
+		$this->themeStore = $services->get( 'CosmosBetaThemeStore' );
 	}
 
 	public function execute(): void {
