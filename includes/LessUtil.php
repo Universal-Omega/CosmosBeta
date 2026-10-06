@@ -33,54 +33,71 @@ class LessUtil {
 	// Chrome like the header and banner prefers light text a bit longer.
 	public const float CHROME_THRESHOLD = 0.3;
 
-	/** @var array<string, array> */
-	private array $cosmosSettings = [];
-
 	public function __construct(
 		private readonly CosmosConfig $cosmosConfig,
 	) {
 	}
 
-	/** Gets the theme colors of a color mode in the form the stylesheets use them */
-	public function getCosmosSettings( string $mode ): array {
-		if ( !isset( $this->cosmosSettings[$mode] ) ) {
-			$slots = [
-				'banner-background-color' => 'banner',
-				'header-background-color' => 'header',
-				'content-background-color' => 'content',
-				'button-background-color' => 'button',
-				'toolbar-background-color' => 'toolbar',
-				'footer-background-color' => 'footer',
-				'link-color' => 'link',
-			];
+	/**
+	 * Whether light text reads better on a theme color, judged by what is actually seen.
+	 * Colors with an alpha, or with an opacity setting like the content and footer ones,
+	 * are blended with what sits behind them before they are compared.
+	 */
+	public function isDark( string $slot, string $mode, float $threshold ): bool {
+		$visible = $this->getVisibleColor( $slot, $mode );
 
-			foreach ( $slots as $name => $slot ) {
-				$this->cosmosSettings[$mode][$name] = self::sanitizeColor(
-					$this->cosmosConfig->getColor( $slot, $mode )
-				);
-			}
-		}
-
-		return $this->cosmosSettings[$mode];
+		return $visible === null || self::isColorDark( $visible['r'], $visible['g'], $visible['b'], $threshold );
 	}
 
-	public static function sanitizeColor( string $color ): string {
-		$color = trim( strtolower( $color ) );
-		return $color;
-	}
+	/**
+	 * @return array{r: int, g: int, b: int}|null The color as seen, null when nothing is seen
+	 */
+	private function getVisibleColor( string $slot, string $mode ): ?array {
+		$color = self::parseColor( $this->cosmosConfig->getColor( $slot, $mode ) );
+		$alpha = $color === null ? 0.0 : (float)$color['a'] * $this->getOpacity( $slot );
 
-	/** Whether white text reads better than black text on the given background setting */
-	public static function isThemeDark(
-		string $background,
-		array $cosmosSettings,
-		float $threshold
-	): bool {
-		$parsed = self::parseColor( $cosmosSettings[$background] );
-		if ( $parsed === null || (float)$parsed['a'] === 0.0 ) {
-			return true;
+		if ( $color !== null && $alpha >= 1.0 ) {
+			return [ 'r' => $color['r'], 'g' => $color['g'], 'b' => $color['b'] ];
 		}
 
-		return self::isColorDark( $parsed['r'], $parsed['g'], $parsed['b'], $threshold );
+		// Buttons sit on the content, everything else sits on the page background.
+		$backdrop = match ( $slot ) {
+			'body' => null,
+			'button' => $this->getVisibleColor( 'content', $mode ),
+			default => $this->getVisibleColor( 'body', $mode ),
+		};
+
+		if ( $backdrop === null ) {
+			return $color !== null && $alpha > 0.0 ?
+				[ 'r' => $color['r'], 'g' => $color['g'], 'b' => $color['b'] ] :
+				null;
+		}
+
+		return $color === null ? $backdrop : self::blend( $color, $alpha, $backdrop );
+	}
+
+	/** Opacity setting of a theme color on top of the alpha of the color itself */
+	private function getOpacity( string $slot ): float {
+		return match ( $slot ) {
+			'content' => $this->cosmosConfig->getContentOpacityLevel() / 100,
+			'footer' => $this->cosmosConfig->getFooterOpacity() / 100,
+			default => 1.0,
+		};
+	}
+
+	/**
+	 * @param array{r: int, g: int, b: int} $color
+	 * @param array{r: int, g: int, b: int} $backdrop
+	 * @return array{r: int, g: int, b: int} The color laid over the backdrop
+	 */
+	public static function blend( array $color, float $alpha, array $backdrop ): array {
+		$alpha = max( 0.0, min( 1.0, $alpha ) );
+
+		return [
+			'r' => (int)round( $color['r'] * $alpha + $backdrop['r'] * ( 1 - $alpha ) ),
+			'g' => (int)round( $color['g'] * $alpha + $backdrop['g'] * ( 1 - $alpha ) ),
+			'b' => (int)round( $color['b'] * $alpha + $backdrop['b'] * ( 1 - $alpha ) ),
+		];
 	}
 
 	/** Whether white text reads better than black text on an opaque color */
