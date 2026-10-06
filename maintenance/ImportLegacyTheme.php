@@ -37,7 +37,6 @@ class ImportLegacyTheme extends LoggedUpdateMaintenance {
 
 	protected function doDBUpdates(): LoggedUpdateOutcome {
 		$this->initServices();
-
 		if ( $this->themeStore->getCurrent()->getRevisionId() !== 0 ) {
 			$this->output( "A theme is already stored, nothing to import.\n" );
 			return LoggedUpdateOutcome::COMPLETE;
@@ -62,12 +61,11 @@ class ImportLegacyTheme extends LoggedUpdateMaintenance {
 
 		$this->themeStore->save(
 			ThemeSettings::newFromLegacy( $values ),
-			User::newSystemUser( 'CosmosBeta ThemeDesigner', [ 'steal' => true ] ),
+			User::newSystemUser( 'Cosmos ThemeDesigner', [ 'steal' => true ] ),
 			'Imported from a theme file'
 		);
 
 		$this->output( "Imported the theme file.\n" );
-
 		return LoggedUpdateOutcome::COMPLETE;
 	}
 }
