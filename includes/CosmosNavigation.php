@@ -39,11 +39,11 @@ class CosmosNavigation {
 	private const string ICON_PATTERN = '/\s*\{icon\s*=\s*([A-Za-z0-9-]+)\s*\}/';
 
 	public function __construct(
-		private readonly WANObjectCache $cache,
-		private readonly Language $contentLanguage,
-		private readonly UrlUtils $urlUtils,
-		private readonly TitleFactory $titleFactory,
 		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly Language $contentLanguage,
+		private readonly TitleFactory $titleFactory,
+		private readonly UrlUtils $urlUtils,
+		private readonly WANObjectCache $cache,
 		private readonly ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
