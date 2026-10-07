@@ -25,17 +25,19 @@
 	}
 
 	function getCurrentMode() {
-		return root.classList.contains( 'skin-cosmos-colormode-dark' ) ? 'dark' : 'light';
+		return root.classList.contains( 'skin-cosmos-colormode--dark' ) ? 'dark' : 'light';
 	}
 
 	function applyMode( mode ) {
-		root.classList.remove( 'skin-cosmos-colormode-light', 'skin-cosmos-colormode-dark', 'skin-cosmos-colormode-pending' );
-		root.classList.add( 'skin-cosmos-colormode-' + mode );
+		root.classList.remove( 'skin-cosmos-colormode--light', 'skin-cosmos-colormode--dark', 'skin-cosmos-colormode--pending' );
+		root.classList.add( 'skin-cosmos-colormode--' + mode );
 		root.style.backgroundColor = config.bodyColors[ mode ];
 		root.style.colorScheme = mode === 'dark' ? 'dark' : 'light';
 
 		document.body.classList.toggle( 'theme-dark', mode === 'dark' );
 		document.body.classList.toggle( 'theme-light', mode !== 'dark' );
+		document.body.classList.toggle( 'skin-cosmos-theme-dark', mode === 'dark' );
+		document.body.classList.toggle( 'skin-cosmos-theme-light', mode !== 'dark' );
 
 		const $item = $( '#m-colormode' ),
 			// eslint-disable-next-line mediawiki/msg-doc
@@ -83,7 +85,7 @@
 
 		loadAltStyles().then(
 			() => applyMode( mode ),
-			() => root.classList.remove( 'skin-cosmos-colormode-pending' )
+			() => root.classList.remove( 'skin-cosmos-colormode--pending' )
 		);
 	}
 
@@ -120,7 +122,7 @@
 			applyMode( query.matches ? 'dark' : 'light' );
 			query.addEventListener( 'change', ( event ) => applyMode( event.matches ? 'dark' : 'light' ) );
 		} else {
-			root.classList.remove( 'skin-cosmos-colormode-pending' );
+			root.classList.remove( 'skin-cosmos-colormode--pending' );
 		}
 	} );
 }( mediaWiki, jQuery ) );
