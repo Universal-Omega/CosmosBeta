@@ -194,6 +194,9 @@ class SpecialThemeDesigner extends SpecialPage {
 			];
 		}
 
+		// Reading the chrome builds the sidebar modules that the rail then lists
+		$chrome = $this->getChromeOptions();
+
 		return [
 			'canEdit' => $this->userCanExecute( $this->getUser() ),
 			'settings' => $current->toArray(),
@@ -211,7 +214,7 @@ class SpecialThemeDesigner extends SpecialPage {
 			'upload' => $this->getUploadData(),
 			'namespaces' => $this->getNamespaceOptions(),
 			'railModules' => $this->railBuilder->getAvailableModules(),
-		] + $this->getChromeOptions();
+		] + $chrome;
 	}
 
 	private function getUploadData(): array {
