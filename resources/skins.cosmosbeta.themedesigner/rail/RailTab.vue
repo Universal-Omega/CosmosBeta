@@ -1,5 +1,5 @@
 <template>
-	<div class="skin-cosmos-td-rail">
+	<div class="skin-cosmos-themedesigner__rail">
 		<p>{{ msg( 'rail-intro' ) }}</p>
 
 		<cdx-field>
@@ -49,13 +49,13 @@
 			></page-lookup>
 		</cdx-field>
 
-		<h3 class="skin-cosmos-td-rail-heading">
+		<h3 class="skin-cosmos-themedesigner__rail-heading">
 			{{ msg( 'rail-modules' ) }}
 		</h3>
-		<p class="skin-cosmos-td-help">
+		<p class="skin-cosmos-themedesigner__help">
 			{{ msg( 'rail-modules-help' ) }}
 		</p>
-		<div class="skin-cosmos-td-rail-modules">
+		<div class="skin-cosmos-themedesigner__rail-modules">
 			<rail-module-card
 				v-for="entry in entries"
 				:key="entry.id"
@@ -68,7 +68,7 @@
 			></rail-module-card>
 		</div>
 
-		<h3 class="skin-cosmos-td-rail-heading">
+		<h3 class="skin-cosmos-themedesigner__rail-heading">
 			{{ msg( 'rail-custom-add' ) }}
 		</h3>
 		<cdx-field
