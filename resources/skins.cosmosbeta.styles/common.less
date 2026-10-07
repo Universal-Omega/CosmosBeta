@@ -2360,10 +2360,10 @@ body {
 }
 
 #cosmos-page-header {
-	padding: 0;
+	padding: 20px 0 0 0;
 
 	&:has( > .skin-cosmos-associatedTabs ) {
-		padding-top: 6px;
+		padding-top: 12px;
 	}
 }
 
@@ -2588,7 +2588,11 @@ body h6 {
 }
 
 #cosmos-pageBody-content {
-	padding: 0 0 15px 0;
+	padding: 12px 0 15px 0;
+
+	#mw-content-text > .mw-parser-output > :first-child {
+		margin-top: 0;
+	}
 }
 
 body:not( .mw-special-Preferences ) #cosmos-pageBody-content {
