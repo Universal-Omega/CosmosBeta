@@ -48,8 +48,8 @@ class RailBuilder {
 	];
 
 	private const int RECENT_CHANGES_CACHE_SECONDS = 30;
+	private const int RECENT_CHANGES_CACHE_VERSION = 1;
 	private const int RECENT_CHANGES_LIMIT = 4;
-	private const string RECENT_CHANGES_CACHE_VERSION = 'v1';
 
 	/** @var RailModule[]|null The modules that do not depend on the page being built, built on first use */
 	private ?array $baseModules = null;
