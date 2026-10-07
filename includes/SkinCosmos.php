@@ -17,26 +17,21 @@ use MediaWiki\Skin\Cosmos\Components\ChromeComponent;
 use MediaWiki\Skin\Cosmos\Components\CreatePageDialogComponent;
 use MediaWiki\Skin\Cosmos\Components\PageHeaderComponent;
 use MediaWiki\Skin\Cosmos\Components\WikiHeaderComponent;
+use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\SkinMustache;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\Options\UserOptionsManager;
 use UserProfilePage;
-use function array_map;
 use function array_merge;
 use function class_exists;
 use function hash;
-use function in_array;
-use function preg_replace;
-use function strtoupper;
-use function trim;
 
 class SkinCosmos extends SkinMustache {
 
 	private const array CONSTRUCTOR_OPTIONS = [
 		ConfigNames::EnablePortableInfoboxEuropaTheme,
-		ConfigNames::RailSidebarPortlets,
 		ConfigNames::SocialProfileAllowBio,
 		ConfigNames::SocialProfileModernTabs,
 		ConfigNames::SocialProfileRoundAvatar,
@@ -49,11 +44,11 @@ class SkinCosmos extends SkinMustache {
 		private readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosNavigation $navigation,
 		private readonly Config $cosmosOptions,
-		private readonly CosmosRailBuilder $railBuilder,
 		private readonly LanguageCode $contentLanguageCode,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly LanguageNameUtils $languageNameUtils,
 		private readonly PermissionManager $permissionManager,
+		private readonly RailBuilder $railBuilder,
 		private readonly ServiceOptions $serviceOptions,
 		private readonly SpecialPageFactory $specialPageFactory,
 		private readonly TitleFactory $titleFactory,
@@ -71,7 +66,7 @@ class SkinCosmos extends SkinMustache {
 		Config $cosmosOptions,
 		CosmosConfig $cosmosConfig,
 		CosmosNavigation $navigation,
-		CosmosRailBuilder $railBuilder,
+		RailBuilder $railBuilder,
 		WordmarkLookup $wordmarkLookup,
 		LanguageCode $contentLanguageCode,
 		ExtensionRegistry $extensionRegistry,
@@ -88,11 +83,11 @@ class SkinCosmos extends SkinMustache {
 			$cosmosConfig,
 			$navigation,
 			$cosmosOptions,
-			$railBuilder,
 			$contentLanguageCode,
 			$extensionRegistry,
 			$languageNameUtils,
 			$permissionManager,
+			$railBuilder,
 			new ServiceOptions(
 				self::CONSTRUCTOR_OPTIONS,
 				$cosmosOptions
@@ -150,8 +145,8 @@ class SkinCosmos extends SkinMustache {
 			$this->extensionRegistry
 		);
 
-		$this->railBuilder->setSidebarModules( $this->getRailSidebarModules( $sidebar ) );
-		$toolsInRail = $this->shouldPutToolsInRail();
+		$this->railBuilder->setSidebarModulesFromPortlets( $sidebar );
+		$toolsInRail = $this->railBuilder->shouldPutToolsInRail();
 		$this->railBuilder->setToolsModule( $toolsInRail, $toolsInRail ? $chrome->getToolItems( $sidebar ) : [] );
 
 		$tree = $this->navigation->mergeSidebar(
@@ -193,8 +188,8 @@ class SkinCosmos extends SkinMustache {
 
 		// Real modules are added when the page is built. All that matters here is whether any will exist.
 		$this->railBuilder
-			->setSidebarModules( $this->getRailSidebarPlaceholders() )
-			->setToolsModule( $this->shouldPutToolsInRail(), [] );
+			->setSidebarModulesFromSections( $this->buildSidebar() )
+			->setToolsModule( $this->railBuilder->shouldPutToolsInRail(), [] );
 
 		if ( $this->railBuilder->hasModules() ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.rail';
@@ -226,77 +221,6 @@ class SkinCosmos extends SkinMustache {
 		}
 
 		return $modules;
-	}
-
-	/**
-	 * Stands in for the sidebar modules before the page is built, so the rail styles load only when there is a rail.
-	 */
-	private function getRailSidebarPlaceholders(): array {
-		$names = $this->getRailSidebarNames();
-		$modules = [];
-
-		foreach ( $this->buildSidebar() as $name => $items ) {
-			if ( $items && in_array( strtoupper( (string)$name ), $names, true ) ) {
-				$modules[] = [
-					'id' => CosmosRailBuilder::getSidebarModuleId( (string)$name ),
-					'label' => (string)$name,
-					'items' => [],
-				];
-			}
-		}
-
-		return $modules;
-	}
-
-	/** @return string[] */
-	private function getRailSidebarNames(): array {
-		return array_map( strtoupper( ... ), (array)$this->serviceOptions->get( ConfigNames::RailSidebarPortlets ) );
-	}
-
-	/**
-	 * Sidebar sections such as the dynamic user sidebar are moved out of the top navigation into the rail.
-	 */
-	private function getRailSidebarModules( array $sidebar ): array {
-		$names = $this->getRailSidebarNames();
-		$portlets = array_merge( [ $sidebar['data-portlets-first'] ?? null ], $sidebar['array-portlets-rest'] ?? [] );
-		$modules = [];
-
-		foreach ( $portlets as $portlet ) {
-			if ( !$portlet ) {
-				continue;
-			}
-
-			$id = strtoupper( (string)preg_replace( '/^p-/i', '', (string)( $portlet['id'] ?? '' ) ) );
-			$label = strtoupper( trim( (string)( $portlet['label'] ?? '' ) ) );
-			$name = in_array( $id, $names, true ) ? $id : ( in_array( $label, $names, true ) ? $label : null );
-
-			if ( $name === null ) {
-				continue;
-			}
-
-			$items = [];
-
-			foreach ( $portlet['array-items'] ?? [] as $item ) {
-				$items[] = [ 'html-item' => $item['html-item'] ?? '' ];
-			}
-
-			if ( $items ) {
-				$modules[] = [
-					'id' => CosmosRailBuilder::getSidebarModuleId( $name ),
-					'label' => (string)( $portlet['label'] ?? '' ),
-					'items' => $items,
-				];
-			}
-		}
-
-		return $modules;
-	}
-
-	private function shouldPutToolsInRail(): bool {
-		$settings = $this->cosmosConfig->getToolbarSettings();
-		return $settings['enabled'] &&
-			$settings['style'] === 'rail' &&
-			$this->railBuilder->isModuleAllowed( CosmosRailBuilder::MODULE_PAGE_TOOLS );
 	}
 
 	private function getSearchData( array $search ): array {
