@@ -1,6 +1,6 @@
 <template>
-	<div class="skin-cosmos-td-layout">
-		<div class="skin-cosmos-td-panel">
+	<div class="skin-cosmos-themedesigner__layout">
+		<div class="skin-cosmos-themedesigner__panel">
 			<cdx-message v-if="!designer.canEdit" type="warning">
 				{{ msg( 'readonly' ) }}
 			</cdx-message>
@@ -8,28 +8,28 @@
 			<cdx-tabs v-model:active="activeTab" :framed="false">
 				<cdx-tab name="themes" :label="msg( 'tab-themes' )">
 					<p>{{ msg( 'presets-intro' ) }}</p>
-					<div class="skin-cosmos-td-presets">
+					<div class="skin-cosmos-themedesigner__presets">
 						<button
 							v-for="preset in designer.presets"
 							:key="preset.name"
 							type="button"
-							class="skin-cosmos-td-preset"
-							:class="{ 'is-active': state.presets[ preset.mode ] === preset.name }"
+							class="skin-cosmos-themedesigner__preset"
+							:class="{ 'skin-cosmos-is-active': state.presets[ preset.mode ] === preset.name }"
 							:disabled="!designer.canEdit"
 							@click="applyPreset( preset )"
 						>
-							<span class="skin-cosmos-td-preset-swatches">
+							<span class="skin-cosmos-themedesigner__preset-swatches">
 								<span
 									v-for="slot in swatchSlots"
 									:key="slot"
-									class="skin-cosmos-td-swatch"
+									class="skin-cosmos-themedesigner__swatch"
 									:style="{ backgroundColor: preset.colors[ slot ] }"
 								></span>
 							</span>
-							<span class="skin-cosmos-td-preset-name">
+							<span class="skin-cosmos-themedesigner__preset-name">
 								{{ msg( 'preset-' + preset.name ) }}
 							</span>
-							<span class="skin-cosmos-td-preset-mode">
+							<span class="skin-cosmos-themedesigner__preset-mode">
 								{{ msg( 'mode-' + preset.mode ) }}
 							</span>
 						</button>
@@ -37,7 +37,7 @@
 				</cdx-tab>
 
 				<cdx-tab name="colors" :label="msg( 'tab-colors' )">
-					<div class="skin-cosmos-td-modes">
+					<div class="skin-cosmos-themedesigner__modes">
 						<span>{{ msg( 'editing' ) }}</span>
 						<cdx-button
 							v-for="mode in modes"
@@ -64,7 +64,7 @@
 						<template #description>
 							{{ msg( 'color-' + slot + '-help' ) }}
 						</template>
-						<div class="skin-cosmos-td-colorinputs">
+						<div class="skin-cosmos-themedesigner__colorinputs">
 							<input
 								type="color"
 								:value="pickerValue( slot )"
@@ -87,7 +87,7 @@
 								{{ msg( 'color-reset' ) }}
 							</cdx-button>
 						</div>
-						<div class="skin-cosmos-td-range skin-cosmos-td-alpha">
+						<div class="skin-cosmos-themedesigner__range skin-cosmos-themedesigner__alpha">
 							<span>{{ msg( 'color-opacity' ) }}</span>
 							<input
 								type="range"
@@ -192,7 +192,7 @@
 						<template v-if="range.help" #help-text>
 							{{ msg( range.help ) }}
 						</template>
-						<div class="skin-cosmos-td-range">
+						<div class="skin-cosmos-themedesigner__range">
 							<input
 								type="range"
 								min="0"
@@ -251,7 +251,7 @@
 						<template #label>
 							{{ msg( 'footer-opacity' ) }}
 						</template>
-						<div class="skin-cosmos-td-range">
+						<div class="skin-cosmos-themedesigner__range">
 							<input
 								type="range"
 								min="0"
@@ -331,15 +331,15 @@
 					<p v-if="!designer.history.length">
 						{{ msg( 'history-empty' ) }}
 					</p>
-					<ul v-else class="skin-cosmos-td-history">
+					<ul v-else class="skin-cosmos-themedesigner__history">
 						<li v-for="row in designer.history" :key="row.id">
-							<span class="skin-cosmos-td-history-main">
+							<span class="skin-cosmos-themedesigner__history-main">
 								{{ row.time }} &middot; {{ row.user }}
 							</span>
-							<span v-if="row.comment" class="skin-cosmos-td-help">
+							<span v-if="row.comment" class="skin-cosmos-themedesigner__help">
 								{{ row.comment }}
 							</span>
-							<span v-if="row.id === designer.revisionId" class="skin-cosmos-td-badge">
+							<span v-if="row.id === designer.revisionId" class="skin-cosmos-themedesigner__badge">
 								{{ msg( 'history-live' ) }}
 							</span>
 							<cdx-button
@@ -357,45 +357,45 @@
 			</cdx-tabs>
 		</div>
 
-		<div class="skin-cosmos-td-side">
-			<div class="skin-cosmos-td-preview" :style="preview.root" :aria-label="msg( 'preview' )">
-				<div class="skin-cosmos-td-pv-banner" :style="preview.banner">
+		<div class="skin-cosmos-themedesigner__side">
+			<div class="skin-cosmos-themedesigner__preview" :style="preview.root" :aria-label="msg( 'preview' )">
+				<div class="skin-cosmos-themedesigner__preview-banner" :style="preview.banner">
 					<span>{{ msg( 'preview-wordmark' ) }}</span>
 				</div>
-				<div class="skin-cosmos-td-pv-header" :style="preview.header">
+				<div class="skin-cosmos-themedesigner__preview-header" :style="preview.header">
 					<span>Menu&nbsp;&nbsp;Menu&nbsp;&nbsp;Menu</span>
 				</div>
-				<div class="skin-cosmos-td-pv-body">
-					<div class="skin-cosmos-td-pv-main" :style="preview.content">
-						<div class="skin-cosmos-td-pv-heading">
+				<div class="skin-cosmos-themedesigner__preview-body">
+					<div class="skin-cosmos-themedesigner__preview-main" :style="preview.content">
+						<div class="skin-cosmos-themedesigner__preview-heading">
 							{{ msg( 'preview-heading' ) }}
 						</div>
 						<div>{{ msg( 'preview-text' ) }}</div>
-						<div class="skin-cosmos-td-pv-link" :style="preview.link">
+						<div class="skin-cosmos-themedesigner__preview-link" :style="preview.link">
 							{{ msg( 'preview-link' ) }}
 						</div>
-						<div class="skin-cosmos-td-pv-button" :style="preview.button">
+						<div class="skin-cosmos-themedesigner__preview-button" :style="preview.button">
 							{{ msg( 'preview-button' ) }}
 						</div>
 					</div>
-					<div v-if="state.rail.enabled" class="skin-cosmos-td-pv-rail" :style="preview.content">
+					<div v-if="state.rail.enabled" class="skin-cosmos-themedesigner__preview-rail" :style="preview.content">
 						{{ msg( 'preview-rail' ) }}
 						<div
 							v-if="state.toolbar.enabled && state.toolbar.style === 'rail'"
-							class="skin-cosmos-td-pv-railtools"
+							class="skin-cosmos-themedesigner__preview-rail-tools"
 							:style="preview.toolbar"
 						>
 							{{ msg( 'preview-toolbar' ) }}
 						</div>
 					</div>
 				</div>
-				<div class="skin-cosmos-td-pv-footer" :style="preview.footer">
+				<div class="skin-cosmos-themedesigner__preview-footer" :style="preview.footer">
 					{{ msg( 'preview-footer' ) }}
 				</div>
 				<div
 					v-if="state.toolbar.enabled && ( state.toolbar.style !== 'rail' || !state.rail.enabled )"
-					class="skin-cosmos-td-pv-toolbar"
-					:class="'skin-cosmos-td-pv-toolbar--' + ( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
+					class="skin-cosmos-themedesigner__preview-toolbar"
+					:class="'skin-cosmos-themedesigner__preview-toolbar--' + ( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
 					:style="preview.toolbar"
 				>
 					{{ msg( 'preview-toolbar' ) }}
