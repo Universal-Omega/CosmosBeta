@@ -2588,10 +2588,15 @@ body h6 {
 }
 
 #cosmos-pageBody-content {
-	padding: 12px 0 15px 0;
+	padding: 8px 0 15px 0;
 
-	#mw-content-text > .mw-parser-output > :first-child {
+	#mw-content-text .mw-parser-output > :first-child {
+		padding-top: 0;
 		margin-top: 0;
+	}
+
+	#mw-content-text .mw-parser-output > p:first-child:has( > br:only-child ) {
+		display: none;
 	}
 }
 
