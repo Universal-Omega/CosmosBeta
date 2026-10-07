@@ -10,7 +10,7 @@
 					<header id="cosmos-page-header">
 						{{#data-cosmos-page-header}}{{> PageHeader}}{{/data-cosmos-page-header}}
 					</header>
-					<div class="skin-cosmos-articleContainer cosmos-articleContainer" id="bodyContent">
+					<div class="skin-cosmos-articleContainer cosmos-articleContainer{{#html-cosmos-rail}} skin-cosmos-has-rail{{/html-cosmos-rail}}" id="bodyContent">
 						<article id="cosmos-pageBody-content">
 							{{#html-subtitle}}<div id="cosmos-pageContent-subtitle">{{{.}}}</div>{{/html-subtitle}}
 							{{#html-undelete-link}}<div id="cosmos-pageContent-undelete">{{{.}}}</div>{{/html-undelete-link}}
