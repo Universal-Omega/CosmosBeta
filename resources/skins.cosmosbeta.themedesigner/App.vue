@@ -293,7 +293,7 @@
 				</cdx-tab>
 
 				<cdx-tab name="rail" :label="msg( 'tab-rail' )">
-					<rail-tab v-model="state.rail" :designer="designer"></rail-tab>
+					<rail-tab v-model="state.rail" :toolbar="state.toolbar" :designer="designer"></rail-tab>
 				</cdx-tab>
 
 				<cdx-tab name="darkmode" :label="msg( 'tab-darkmode' )">
