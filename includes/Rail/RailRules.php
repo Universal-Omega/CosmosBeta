@@ -24,10 +24,14 @@ final readonly class RailRules {
 	) {
 	}
 
+	/**
+	 * @param array{enabled?: bool, type?: string, disabledNamespaces?: int[], disabledPages?: string[]} $data
+	 *   Rules as the theme settings store them
+	 */
 	public static function newFromArray( array $data ): self {
 		return new self(
 			$data['enabled'] ?? null,
-			RailModuleType::tryFromMixed( $data['type'] ?? null ),
+			isset( $data['type'] ) ? RailModuleType::from( $data['type'] ) : null,
 			$data['disabledNamespaces'] ?? null,
 			$data['disabledPages'] ?? null
 		);
@@ -46,7 +50,6 @@ final readonly class RailRules {
 
 		$pages = $this->disabledPages ?? $defaultPages;
 		$isMainPageHidden = $title->isMainPage() && in_array( 'mainpage', $pages, true );
-
 		return !$title->inNamespaces( $this->disabledNamespaces ?? $defaultNamespaces ) &&
 			!$isMainPageHidden &&
 			!in_array( $title->getFullText(), $pages, true );
