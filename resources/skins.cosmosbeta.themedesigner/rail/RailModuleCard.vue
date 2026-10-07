@@ -24,7 +24,7 @@
 				{{ msg( 'rail-module-type' ) }}
 			</template>
 			<cdx-select
-				:selected="rules.type || ''"
+				:selected="rules.type || INHERIT"
 				:menu-items="typeItems"
 				:disabled="disabled"
 				@update:selected="onType"
@@ -87,7 +87,9 @@ const { CdxAccordion, CdxButton, CdxField, CdxSelect, CdxToggleSwitch } = mw.loa
 
 const BUILT_IN = 'builtin',
 	CUSTOM = 'custom',
-	RECENT_CHANGES = 'recentchanges';
+	INHERIT = 'inherit',
+	RECENT_CHANGES = 'recentchanges',
+	TYPES = [ 'normal', 'sticky' ];
 
 // @vue/component
 module.exports = exports = defineComponent( {
@@ -133,21 +135,21 @@ module.exports = exports = defineComponent( {
 
 		// Only recent changes is off unless asked for, every other module shows unless told not to
 		const displayItems = computed( () => items( [
-			[ '', canForceShow.value ? msg( 'rail-display-inherit' ) : msg( 'rail-display-show' ) ],
+			[ INHERIT, canForceShow.value ? msg( 'rail-display-inherit' ) : msg( 'rail-display-show' ) ],
 			...canForceShow.value ? [ [ 'show', msg( 'rail-display-show' ) ] ] : [],
 			[ 'hide', msg( 'rail-display-hide' ) ]
 		] ) );
 
 		// Custom modules have no wiki setting to follow, so they are normal unless made sticky
 		const typeItems = computed( () => items( [
-			[ '', isCustom.value ? msg( 'rail-type-normal' ) : msg( 'rail-type-inherit' ) ],
+			[ INHERIT, isCustom.value ? msg( 'rail-type-normal' ) : msg( 'rail-type-inherit' ) ],
 			...isCustom.value ? [] : [ [ 'normal', msg( 'rail-type-normal' ) ] ],
 			[ 'sticky', msg( 'rail-type-sticky' ) ]
 		] ) );
 
 		const display = computed( () => {
 			if ( props.rules.enabled === null ) {
-				return '';
+				return INHERIT;
 			}
 
 			return props.rules.enabled ? 'show' : 'hide';
@@ -162,11 +164,11 @@ module.exports = exports = defineComponent( {
 		].filter( Boolean ).join( ' · ' ) );
 
 		function onDisplay( value ) {
-			emit( 'update', { enabled: value === '' ? null : value === 'show' } );
+			emit( 'update', { enabled: { show: true, hide: false }[ value ] ?? null } );
 		}
 
 		function onType( value ) {
-			emit( 'update', { type: value === '' ? null : value } );
+			emit( 'update', { type: TYPES.includes( value ) ? value : null } );
 		}
 
 		function onPlaces( enabled ) {
@@ -184,6 +186,7 @@ module.exports = exports = defineComponent( {
 			hasPlaces,
 			summary,
 			removable,
+			INHERIT,
 			msg,
 			onDisplay,
 			onType,
