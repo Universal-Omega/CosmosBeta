@@ -12,7 +12,7 @@ use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinFactory;
 use MediaWiki\Skin\Cosmos\Components\PortletReader;
 use MediaWiki\Skin\Cosmos\CosmosConfig;
-use MediaWiki\Skin\Cosmos\CosmosRailBuilder;
+use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Theme\ThemePresets;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
@@ -53,7 +53,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	public function __construct(
 		private readonly CosmosConfig $config,
-		private readonly CosmosRailBuilder $railBuilder,
+		private readonly RailBuilder $railBuilder,
 		private readonly ThemeStore $store,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly SkinFactory $skinFactory,
