@@ -289,22 +289,22 @@ class PageHeaderComponent {
 
 		$classes = [
 			$item['class'],
-			"skin-cosmos-button skin-cosmos-button-$variant skin-cosmos-button-action",
+			"skin-cosmos-button skin-cosmos-button--$variant skin-cosmos-button--action",
 			"cosmos-button cosmos-button-$variant cosmos-button-action",
 		];
 
 		if ( $single && $variant === 'primary' ) {
-			$classes[] = 'skin-cosmos-button-single';
+			$classes[] = 'skin-cosmos-button--single';
 		}
 		$sourceId = $item['id'] ?? '';
 		$id = ( $item['icon'] ?? '' ) === 'close' ? 'cosmos-actions-cancel' : $sourceId;
 
 		if ( str_starts_with( $sourceId, 'ca-nstab-' ) ) {
-			$classes[] = 'skin-cosmos-actions-view cosmos-actions-view';
+			$classes[] = 'skin-cosmos-button--view cosmos-actions-view';
 		} elseif ( $sourceId === 'ca-talk' ) {
-			$classes[] = 'skin-cosmos-actions-talk cosmos-actions-talk';
+			$classes[] = 'skin-cosmos-button--talk cosmos-actions-talk';
 		} else {
-			$classes[] = 'skin-cosmos-actions-edit cosmos-actions-edit';
+			$classes[] = 'skin-cosmos-button--edit cosmos-actions-edit';
 		}
 
 		return [
