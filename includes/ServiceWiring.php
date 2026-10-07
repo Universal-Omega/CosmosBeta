@@ -14,9 +14,9 @@ use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControlRegistry;
 use MediaWiki\Skin\Cosmos\BackgroundLookup;
 use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\CosmosNavigation;
-use MediaWiki\Skin\Cosmos\CosmosRailBuilder;
 use MediaWiki\Skin\Cosmos\Hooks\CosmosHookRunner;
 use MediaWiki\Skin\Cosmos\LessUtil;
+use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
@@ -109,8 +109,8 @@ return [
 		return $services->getConfigFactory()->makeConfig( 'CosmosBeta' );
 	},
 
-	'CosmosBetaRailBuilder' => static function ( MediaWikiServices $services ): CosmosRailBuilder {
-		return new CosmosRailBuilder(
+	'CosmosBetaRailBuilder' => static function ( MediaWikiServices $services ): RailBuilder {
+		return new RailBuilder(
 			$services->get( 'CosmosBetaConfig' ),
 			$services->get( 'CosmosBetaHookRunner' ),
 			$services->get( 'CosmosBetaTemplateParser' ),
@@ -121,7 +121,7 @@ return [
 			$services->getMainWANObjectCache(),
 			RequestContext::getMain(),
 			new ServiceOptions(
-				CosmosRailBuilder::CONSTRUCTOR_OPTIONS,
+				RailBuilder::CONSTRUCTOR_OPTIONS,
 				$services->get( 'CosmosBetaOptions' )
 			),
 		);
