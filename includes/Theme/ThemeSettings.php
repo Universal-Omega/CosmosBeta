@@ -344,7 +344,7 @@ class ThemeSettings {
 		if ( !isset( $raw['recentchanges'] ) ) {
 			if ( $legacy === 'off' ) {
 				$raw['recentchanges'] = [ 'enabled' => false ];
-			} elseif ( RailModuleType::tryFromMixed( $legacy ) !== null ) {
+			} elseif ( self::toRailType( $legacy ) !== null ) {
 				$raw['recentchanges'] = [ 'enabled' => true, 'type' => $legacy ];
 			}
 		}
@@ -360,6 +360,10 @@ class ThemeSettings {
 		return $modules;
 	}
 
+	private static function toRailType( mixed $value ): ?RailModuleType {
+		return is_string( $value ) ? RailModuleType::tryFrom( $value ) : null;
+	}
+
 	private static function normalizeRailRules( array $raw ): array {
 		$rules = [];
 
@@ -368,7 +372,7 @@ class ThemeSettings {
 			$rules['enabled'] = $enabled;
 		}
 
-		$type = RailModuleType::tryFromMixed( $raw['type'] ?? null );
+		$type = self::toRailType( $raw['type'] ?? null );
 		if ( $type !== null ) {
 			$rules['type'] = $type->value;
 		}
