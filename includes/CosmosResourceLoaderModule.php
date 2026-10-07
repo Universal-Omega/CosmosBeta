@@ -100,6 +100,9 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['content-width-1596'] = $contentWidth === 'auto' ? 'auto' : 1178 + $contentWidth . 'px';
 
 		$lessVars['link-color'] = $this->cosmosConfig->getColor( 'link', $mode );
+		$linkIsDark = $this->lessUtil->isDark( 'link', $mode, LessUtil::CONTENT_THRESHOLD );
+		$lessVars['link-contrast-color'] = $linkIsDark ? '#fff' : '#202122';
+		$lessVars['link-contrast-invert'] = $linkIsDark ? 1 : 0;
 		$lessVars['button-background-color'] = $this->cosmosConfig->getColor( 'button', $mode );
 
 		if ( $this->cosmosConfig->getBackgroundImageRepeat() ) {
