@@ -242,8 +242,9 @@ class SkinCosmos extends SkinMustache {
 
 			$id = strtoupper( (string)preg_replace( '/^p-/i', '', (string)( $portlet['id'] ?? '' ) ) );
 			$label = strtoupper( trim( (string)( $portlet['label'] ?? '' ) ) );
+			$name = in_array( $id, $names, true ) ? $id : ( in_array( $label, $names, true ) ? $label : null );
 
-			if ( !in_array( $id, $names, true ) && !in_array( $label, $names, true ) ) {
+			if ( $name === null ) {
 				continue;
 			}
 
@@ -254,7 +255,11 @@ class SkinCosmos extends SkinMustache {
 			}
 
 			if ( $items ) {
-				$modules[] = [ 'label' => (string)( $portlet['label'] ?? '' ), 'items' => $items ];
+				$modules[] = [
+					'id' => CosmosRailBuilder::getSidebarModuleId( $name ),
+					'label' => (string)( $portlet['label'] ?? '' ),
+					'items' => $items,
+				];
 			}
 		}
 
@@ -263,7 +268,9 @@ class SkinCosmos extends SkinMustache {
 
 	private function shouldPutToolsInRail(): bool {
 		$settings = $this->cosmosConfig->getToolbarSettings();
-		return $settings['enabled'] && $settings['style'] === 'rail' && !$this->railBuilder->isHidden();
+		return $settings['enabled'] &&
+			$settings['style'] === 'rail' &&
+			$this->railBuilder->isModuleAllowed( CosmosRailBuilder::MODULE_PAGE_TOOLS );
 	}
 
 	private function getSearchData( array $search ): array {
