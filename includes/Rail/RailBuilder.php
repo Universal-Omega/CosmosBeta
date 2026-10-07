@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skin\Cosmos;
+namespace MediaWiki\Skin\Cosmos\Rail;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\IContextSource;
@@ -10,8 +10,9 @@ use MediaWiki\Html\TemplateParser;
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\RecentChanges\RecentChange;
+use MediaWiki\Skin\Cosmos\ConfigNames;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\Hooks\CosmosHookRunner;
-use MediaWiki\Skin\Cosmos\Rail\RailRules;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserFactory;
@@ -20,6 +21,8 @@ use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\SelectQueryBuilder;
 use function array_keys;
+use function array_map;
+use function array_merge;
 use function array_unique;
 use function htmlspecialchars;
 use function implode;
@@ -27,16 +30,18 @@ use function in_array;
 use function is_string;
 use function preg_replace;
 use function strtolower;
+use function strtoupper;
 use function trim;
 use const NS_SPECIAL;
 use const NS_USER;
 
-class CosmosRailBuilder {
+class RailBuilder {
 
 	public const array CONSTRUCTOR_OPTIONS = [
 		ConfigNames::EnabledRailModules,
 		ConfigNames::RailDisabledNamespaces,
 		ConfigNames::RailDisabledPages,
+		ConfigNames::RailSidebarPortlets,
 		MainConfigNames::ContentNamespaces,
 	];
 
@@ -84,12 +89,68 @@ class CosmosRailBuilder {
 	}
 
 	/**
-	 * @param array[] $modules Each with an id, a label and a list of html-item entries
+	 * Stands in for the sidebar modules before the page is built, so the rail styles load only when there is a rail.
+	 *
+	 * @param array<string, array> $sections The sidebar as core builds it, by section name
 	 */
-	public function setSidebarModules( array $modules ): self {
-		$this->sidebarModules = $modules;
-		$this->modules = null;
-		return $this;
+	public function setSidebarModulesFromSections( array $sections ): self {
+		$names = $this->getSidebarNames();
+		$modules = [];
+
+		foreach ( $sections as $name => $items ) {
+			if ( $items && in_array( strtoupper( (string)$name ), $names, true ) ) {
+				$modules[] = [
+					'id' => self::getSidebarModuleId( (string)$name ),
+					'label' => (string)$name,
+					'items' => [],
+				];
+			}
+		}
+
+		return $this->setSidebarModules( $modules );
+	}
+
+	/**
+	 * Sidebar sections such as the dynamic user sidebar are moved out of the top navigation into the rail.
+	 *
+	 * @param array $sidebar The sidebar template data of the skin
+	 */
+	public function setSidebarModulesFromPortlets( array $sidebar ): self {
+		$names = $this->getSidebarNames();
+		$portlets = array_merge( [ $sidebar['data-portlets-first'] ?? null ], $sidebar['array-portlets-rest'] ?? [] );
+		$modules = [];
+
+		foreach ( $portlets as $portlet ) {
+			if ( !$portlet ) {
+				continue;
+			}
+
+			$id = strtoupper( (string)preg_replace( '/^p-/i', '', (string)( $portlet['id'] ?? '' ) ) );
+			$label = strtoupper( trim( (string)( $portlet['label'] ?? '' ) ) );
+			$name = in_array( $id, $names, true ) ? $id : ( in_array( $label, $names, true ) ? $label : null );
+
+			$items = [];
+			foreach ( $portlet['array-items'] ?? [] as $item ) {
+				$items[] = [ 'html-item' => $item['html-item'] ?? '' ];
+			}
+
+			if ( $name !== null && $items ) {
+				$modules[] = [
+					'id' => self::getSidebarModuleId( $name ),
+					'label' => (string)( $portlet['label'] ?? '' ),
+					'items' => $items,
+				];
+			}
+		}
+
+		return $this->setSidebarModules( $modules );
+	}
+
+	public function shouldPutToolsInRail(): bool {
+		$settings = $this->cosmosConfig->getToolbarSettings();
+		return $settings['enabled'] &&
+			$settings['style'] === 'rail' &&
+			$this->isModuleAllowed( self::MODULE_PAGE_TOOLS );
 	}
 
 	public function buildRail(): string {
@@ -217,6 +278,20 @@ class CosmosRailBuilder {
 			$settings['disabledNamespaces'] ?? $this->options->get( ConfigNames::RailDisabledNamespaces ),
 			$settings['disabledPages'] ?? $this->options->get( ConfigNames::RailDisabledPages )
 		);
+	}
+
+	/**
+	 * @param array[] $modules Each with an id, a label and a list of html-item entries
+	 */
+	private function setSidebarModules( array $modules ): self {
+		$this->sidebarModules = $modules;
+		$this->modules = null;
+		return $this;
+	}
+
+	/** @return string[] */
+	private function getSidebarNames(): array {
+		return array_map( strtoupper( ... ), (array)$this->options->get( ConfigNames::RailSidebarPortlets ) );
 	}
 
 	private function describeModule( string $id, string $origin, string $label ): array {
