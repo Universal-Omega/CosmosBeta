@@ -37,7 +37,6 @@ class CosmosRailBuilder {
 		ConfigNames::EnabledRailModules,
 		ConfigNames::RailDisabledNamespaces,
 		ConfigNames::RailDisabledPages,
-		ConfigNames::RailSidebarPortlets,
 		MainConfigNames::ContentNamespaces,
 	];
 
@@ -136,6 +135,7 @@ class CosmosRailBuilder {
 
 	/**
 	 * Lists every module the rail can show, so the theme designer can offer a control for each.
+	 * Sidebar modules are known once the skin has built its template data, so call this after that.
 	 *
 	 * @return array<int, array{id: string, origin: string, label: string}>
 	 */
@@ -145,8 +145,10 @@ class CosmosRailBuilder {
 			$this->describeModule( self::MODULE_PAGE_TOOLS, self::ORIGIN_BUILT_IN, '' ),
 		];
 
-		foreach ( array_keys( $this->getConfiguredInterfaceModules() ) as $message ) {
-			$modules[] = $this->describeModule( "interface-$message", self::ORIGIN_INTERFACE, (string)$message );
+		foreach ( $this->getConfiguredInterfaceModules() as $message => $type ) {
+			if ( $type && !$this->context->msg( (string)$message )->isDisabled() ) {
+				$modules[] = $this->describeModule( "interface-$message", self::ORIGIN_INTERFACE, (string)$message );
+			}
 		}
 
 		foreach ( $this->cosmosConfig->getCustomRailModules() as $custom ) {
@@ -163,8 +165,8 @@ class CosmosRailBuilder {
 			$modules[] = $this->describeModule( (string)$id, self::ORIGIN_HOOK, (string)$id );
 		}
 
-		foreach ( (array)$this->options->get( ConfigNames::RailSidebarPortlets ) as $name ) {
-			$modules[] = $this->describeModule( self::getSidebarModuleId( $name ), self::ORIGIN_SIDEBAR, $name );
+		foreach ( $this->sidebarModules as $sidebar ) {
+			$modules[] = $this->describeModule( $sidebar['id'], self::ORIGIN_SIDEBAR, $sidebar['label'] );
 		}
 
 		return $modules;
