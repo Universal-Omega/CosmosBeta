@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skin\Cosmos\Theme;
 
 use MediaWiki\Skin\Cosmos\LessUtil;
-use MediaWiki\Skin\Cosmos\Rail\RailRules;
+use MediaWiki\Skin\Cosmos\Rail\RailModuleType;
 use function array_slice;
 use function array_values;
 use function in_array;
@@ -341,10 +341,12 @@ class ThemeSettings {
 
 		// Themes saved before modules had rules of their own only chose a mode for recent changes
 		$legacy = $rail['recentChanges'] ?? null;
-		if ( !isset( $raw['recentchanges'] ) && in_array( $legacy, [ 'off', ...RailRules::TYPES ], true ) ) {
-			$raw['recentchanges'] = $legacy === 'off' ?
-				[ 'enabled' => false ] :
-				[ 'enabled' => true, 'type' => $legacy ];
+		if ( !isset( $raw['recentchanges'] ) ) {
+			if ( $legacy === 'off' ) {
+				$raw['recentchanges'] = [ 'enabled' => false ];
+			} elseif ( RailModuleType::tryFromMixed( $legacy ) !== null ) {
+				$raw['recentchanges'] = [ 'enabled' => true, 'type' => $legacy ];
+			}
 		}
 
 		$modules = [];
@@ -366,8 +368,9 @@ class ThemeSettings {
 			$rules['enabled'] = $enabled;
 		}
 
-		if ( in_array( $raw['type'] ?? null, RailRules::TYPES, true ) ) {
-			$rules['type'] = $raw['type'];
+		$type = RailModuleType::tryFromMixed( $raw['type'] ?? null );
+		if ( $type !== null ) {
+			$rules['type'] = $type->value;
 		}
 
 		$namespaces = self::normalizeNamespaceList( $raw['disabledNamespaces'] ?? null );
