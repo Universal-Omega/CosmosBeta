@@ -908,6 +908,12 @@
 		"personaltools": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\PersonalTools"
 		},
+		"railcache": {
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\RailCache",
+			"services": [
+				"MainWANObjectCache"
+			]
+		},
 		"socialprofile": {
 			"factory": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
@@ -926,11 +932,17 @@
 		"AlternateEditPreview": {
 			"handler": "navigation"
 		},
+		"ArticleRevisionVisibilitySet": {
+			"handler": "railcache"
+		},
 		"BeforeInitialize": {
 			"handler": "navigation"
 		},
 		"BeforePageDisplay": {
 			"handler": "colormode"
+		},
+		"BlockIpComplete": {
+			"handler": "railcache"
 		},
 		"GetDoubleUnderscoreIDs": {
 			"handler": "parser"
@@ -955,6 +967,9 @@
 		},
 		"ParserFirstCallInit": {
 			"handler": "parser"
+		},
+		"RenameUserComplete": {
+			"handler": "railcache"
 		},
 		"ResourceLoaderRegisterModules": {
 			"handler": "colormode"
