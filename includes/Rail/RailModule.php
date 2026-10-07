@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skin\Cosmos\Rail;
 
-use function array_values;
-
 /**
  * A box in the rail. It shows either HTML, a list of tools or recent changes.
  */
@@ -68,21 +66,6 @@ final readonly class RailModule {
 		);
 	}
 
-	/**
-	 * Reads a module as extensions hand it over in the CosmosRailBuilder hook.
-	 */
-	public static function newFromHookData( string $id, array $data ): self {
-		return new self(
-			$id,
-			RailModuleType::fromMixed( $data['type'] ?? null ),
-			array_values( (array)( $data['class'] ?? 'custom-module' ) ),
-			isset( $data['header'] ) ? (string)$data['header'] : null,
-			(string)( $data['body'] ?? '' ),
-			(array)( $data['tools'] ?? [] ),
-			(array)( $data['recentchanges'] ?? [] )
-		);
-	}
-
 	public function withType( RailModuleType $type ): self {
 		return new self(
 			$this->id,
@@ -93,30 +76,5 @@ final readonly class RailModule {
 			$this->tools,
 			$this->recentChanges
 		);
-	}
-
-	/**
-	 * The module as the CosmosRailBuilder hook gets it.
-	 */
-	public function toHookData(): array {
-		$data = [
-			'class' => $this->classes,
-			'type' => $this->type->value,
-			'body' => $this->body,
-		];
-
-		if ( $this->header !== null ) {
-			$data['header'] = $this->header;
-		}
-
-		if ( $this->tools !== [] ) {
-			$data['tools'] = $this->tools;
-		}
-
-		if ( $this->recentChanges !== [] ) {
-			$data['recentchanges'] = $this->recentChanges;
-		}
-
-		return $data;
 	}
 }
