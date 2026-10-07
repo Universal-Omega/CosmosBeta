@@ -15,6 +15,7 @@ use MediaWiki\Skin\Cosmos\BackgroundLookup;
 use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\CosmosNavigation;
 use MediaWiki\Skin\Cosmos\Hooks\HookRunner;
+use MediaWiki\Skin\Cosmos\Legacy\LegacyConverter;
 use MediaWiki\Skin\Cosmos\LessUtil;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
@@ -85,6 +86,10 @@ return [
 
 	'CosmosBetaHookRunner' => static function ( MediaWikiServices $services ): HookRunner {
 		return new HookRunner( $services->getHookContainer() );
+	},
+
+	'CosmosBetaLegacyConverter' => static function (): LegacyConverter {
+		return new LegacyConverter();
 	},
 
 	'CosmosBetaLessUtil' => static function ( MediaWikiServices $services ): LessUtil {
