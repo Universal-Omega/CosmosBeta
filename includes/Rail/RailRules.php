@@ -12,31 +12,22 @@ use function in_array;
  */
 final readonly class RailRules {
 
-	public const string TYPE_NORMAL = 'normal';
-	public const string TYPE_STICKY = 'sticky';
-
-	public const array TYPES = [ self::TYPE_NORMAL, self::TYPE_STICKY ];
-
 	/**
 	 * @param string[]|null $disabledPages Full page names, or "mainpage" for the main page
 	 * @param int[]|null $disabledNamespaces
 	 */
 	public function __construct(
 		public ?bool $enabled,
-		public ?string $type,
+		public ?RailModuleType $type,
 		public ?array $disabledNamespaces,
 		public ?array $disabledPages,
 	) {
 	}
 
-	public static function newInheriting(): self {
-		return new self( null, null, null, null );
-	}
-
 	public static function newFromArray( array $data ): self {
 		return new self(
 			$data['enabled'] ?? null,
-			$data['type'] ?? null,
+			RailModuleType::tryFromMixed( $data['type'] ?? null ),
 			$data['disabledNamespaces'] ?? null,
 			$data['disabledPages'] ?? null
 		);
