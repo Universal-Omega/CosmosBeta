@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skin\Cosmos\Theme;
 
 use MediaWiki\Skin\Cosmos\LessUtil;
+use MediaWiki\Skin\Cosmos\Rail\RailRules;
 use function array_slice;
 use function array_values;
 use function in_array;
@@ -15,9 +16,11 @@ use function is_string;
 use function json_decode;
 use function json_encode;
 use function max;
+use function mb_substr;
 use function min;
 use function number_format;
 use function preg_match;
+use function preg_replace;
 use function round;
 use function rtrim;
 use function sprintf;
@@ -81,9 +84,12 @@ class ThemeSettings {
 	public const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
 	public const array BUTTON_STYLES = [ 'default', 'slim', 'pill', 'text' ];
 	public const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
-	public const array RAIL_RECENT_CHANGES = [ 'off', 'normal', 'sticky' ];
 
 	private const int MAX_LIST_ITEMS = 100;
+	private const int MAX_RAIL_MODULES = 50;
+	private const string RAIL_MODULE_ID_PATTERN = '/^[A-Za-z0-9._-]{1,100}$/';
+	private const string CUSTOM_RAIL_ID_PATTERN = '/^[a-z0-9]+(?:-[a-z0-9]+)*$/';
+	private const string MESSAGE_KEY_PATTERN = '/^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/';
 
 	private readonly array $data;
 
@@ -182,9 +188,10 @@ class ThemeSettings {
 			'rail' => [
 				'enabled' => true,
 				'hideForAnons' => false,
-				'recentChanges' => '',
 				'disabledNamespaces' => null,
 				'disabledPages' => null,
+				'modules' => [],
+				'customModules' => [],
 			],
 		];
 	}
@@ -278,35 +285,136 @@ class ThemeSettings {
 		if ( is_array( $rail ) ) {
 			$data['rail']['enabled'] = self::toBool( $rail['enabled'] ?? null, true );
 			$data['rail']['hideForAnons'] = self::toBool( $rail['hideForAnons'] ?? null, false );
-			if ( in_array( $rail['recentChanges'] ?? null, self::RAIL_RECENT_CHANGES, true ) ) {
-				$data['rail']['recentChanges'] = $rail['recentChanges'];
-			}
-
-			if ( isset( $rail['disabledNamespaces'] ) && is_array( $rail['disabledNamespaces'] ) ) {
-				$namespaces = [];
-				foreach ( array_slice( $rail['disabledNamespaces'], 0, self::MAX_LIST_ITEMS ) as $ns ) {
-					if ( is_numeric( $ns ) && (int)$ns >= -2 && (int)$ns < 100000 ) {
-						$namespaces[(int)$ns] = (int)$ns;
-					}
-				}
-
-				$data['rail']['disabledNamespaces'] = array_values( $namespaces );
-			}
-
-			if ( isset( $rail['disabledPages'] ) && is_array( $rail['disabledPages'] ) ) {
-				$pages = [];
-				foreach ( array_slice( $rail['disabledPages'], 0, self::MAX_LIST_ITEMS ) as $page ) {
-					$page = is_string( $page ) ? trim( $page ) : '';
-					if ( $page !== '' && strlen( $page ) <= 255 && !preg_match( '/[\x00-\x1f<>{}\[\]|]/', $page ) ) {
-						$pages[$page] = $page;
-					}
-				}
-
-				$data['rail']['disabledPages'] = array_values( $pages );
-			}
+			$data['rail']['disabledNamespaces'] = self::normalizeNamespaceList( $rail['disabledNamespaces'] ?? null );
+			$data['rail']['disabledPages'] = self::normalizePageList( $rail['disabledPages'] ?? null );
+			$data['rail']['modules'] = self::normalizeRailModules( $rail );
+			$data['rail']['customModules'] = self::normalizeCustomRailModules( $rail['customModules'] ?? null );
 		}
 
 		return $data;
+	}
+
+	/**
+	 * @return int[]|null Null when the value is not a list, so the wiki default applies
+	 */
+	private static function normalizeNamespaceList( mixed $value ): ?array {
+		if ( !is_array( $value ) ) {
+			return null;
+		}
+
+		$namespaces = [];
+		foreach ( array_slice( $value, 0, self::MAX_LIST_ITEMS ) as $namespace ) {
+			if ( is_numeric( $namespace ) && (int)$namespace >= -2 && (int)$namespace < 100000 ) {
+				$namespaces[(int)$namespace] = (int)$namespace;
+			}
+		}
+
+		return array_values( $namespaces );
+	}
+
+	/**
+	 * @return string[]|null Null when the value is not a list, so the wiki default applies
+	 */
+	private static function normalizePageList( mixed $value ): ?array {
+		if ( !is_array( $value ) ) {
+			return null;
+		}
+
+		$pages = [];
+		foreach ( array_slice( $value, 0, self::MAX_LIST_ITEMS ) as $page ) {
+			$page = is_string( $page ) ? trim( $page ) : '';
+			if ( $page !== '' && strlen( $page ) <= 255 && !preg_match( '/[\x00-\x1f<>{}\[\]|]/', $page ) ) {
+				$pages[$page] = $page;
+			}
+		}
+
+		return array_values( $pages );
+	}
+
+	/**
+	 * Keeps only the rules a module really sets, keyed by module id.
+	 *
+	 * @return array<string, array>
+	 */
+	private static function normalizeRailModules( array $rail ): array {
+		$raw = is_array( $rail['modules'] ?? null ) ? $rail['modules'] : [];
+
+		// Themes saved before modules had rules of their own only chose a mode for recent changes
+		$legacy = $rail['recentChanges'] ?? null;
+		if ( !isset( $raw['recentchanges'] ) && in_array( $legacy, [ 'off', ...RailRules::TYPES ], true ) ) {
+			$raw['recentchanges'] = $legacy === 'off' ?
+				[ 'enabled' => false ] :
+				[ 'enabled' => true, 'type' => $legacy ];
+		}
+
+		$modules = [];
+		foreach ( array_slice( $raw, 0, self::MAX_RAIL_MODULES, true ) as $id => $rules ) {
+			$rules = is_array( $rules ) ? self::normalizeRailRules( $rules ) : [];
+			if ( $rules !== [] && preg_match( self::RAIL_MODULE_ID_PATTERN, (string)$id ) ) {
+				$modules[(string)$id] = $rules;
+			}
+		}
+
+		return $modules;
+	}
+
+	private static function normalizeRailRules( array $raw ): array {
+		$rules = [];
+
+		$enabled = self::toBool( $raw['enabled'] ?? null, null );
+		if ( $enabled !== null ) {
+			$rules['enabled'] = $enabled;
+		}
+
+		if ( in_array( $raw['type'] ?? null, RailRules::TYPES, true ) ) {
+			$rules['type'] = $raw['type'];
+		}
+
+		$namespaces = self::normalizeNamespaceList( $raw['disabledNamespaces'] ?? null );
+		if ( $namespaces !== null ) {
+			$rules['disabledNamespaces'] = $namespaces;
+		}
+
+		$pages = self::normalizePageList( $raw['disabledPages'] ?? null );
+		if ( $pages !== null ) {
+			$rules['disabledPages'] = $pages;
+		}
+
+		return $rules;
+	}
+
+	/**
+	 * Interface modules the wiki added from the designer. Each shows one interface message.
+	 *
+	 * @return array<int, array{id: string, message: string, header: string}>
+	 */
+	private static function normalizeCustomRailModules( mixed $value ): array {
+		if ( !is_array( $value ) ) {
+			return [];
+		}
+
+		$modules = [];
+		foreach ( array_slice( $value, 0, self::MAX_RAIL_MODULES ) as $module ) {
+			$id = is_array( $module ) && is_string( $module['id'] ?? null ) ? $module['id'] : '';
+			$message = is_array( $module ) && is_string( $module['message'] ?? null ) ? trim( $module['message'] ) : '';
+			if ( strlen( $id ) > 60 || !preg_match( self::CUSTOM_RAIL_ID_PATTERN, $id ) ||
+				!preg_match( self::MESSAGE_KEY_PATTERN, $message )
+			) {
+				continue;
+			}
+
+			$header = is_string( $module['header'] ?? null ) ?
+				mb_substr( trim( (string)preg_replace( '/[\x00-\x1f<>]/', '', $module['header'] ) ), 0, 80 ) :
+				'';
+
+			$modules[$id] = [
+				'id' => $id,
+				'message' => $message,
+				'header' => $header,
+			];
+		}
+
+		return array_values( $modules );
 	}
 
 	/**
