@@ -145,10 +145,8 @@ class CosmosRailBuilder {
 			$this->describeModule( self::MODULE_PAGE_TOOLS, self::ORIGIN_BUILT_IN, '' ),
 		];
 
-		foreach ( $this->getConfiguredInterfaceModules() as $message => $type ) {
-			if ( $type && !$this->context->msg( (string)$message )->isDisabled() ) {
-				$modules[] = $this->describeModule( "interface-$message", self::ORIGIN_INTERFACE, (string)$message );
-			}
+		foreach ( array_keys( $this->getConfiguredInterfaceModules() ) as $message ) {
+			$modules[] = $this->describeModule( "interface-$message", self::ORIGIN_INTERFACE, (string)$message );
 		}
 
 		foreach ( $this->cosmosConfig->getCustomRailModules() as $custom ) {
