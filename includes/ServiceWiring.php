@@ -16,7 +16,12 @@ use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\CosmosNavigation;
 use MediaWiki\Skin\Cosmos\Hooks\CosmosHookRunner;
 use MediaWiki\Skin\Cosmos\LessUtil;
+use MediaWiki\Skin\Cosmos\Rail\MessageModuleFactory;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
+use MediaWiki\Skin\Cosmos\Rail\RailRenderer;
+use MediaWiki\Skin\Cosmos\Rail\RailVisibility;
+use MediaWiki\Skin\Cosmos\Rail\RecentChangesModuleFactory;
+use MediaWiki\Skin\Cosmos\Rail\SidebarModuleFactory;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
@@ -110,20 +115,36 @@ return [
 	},
 
 	'CosmosBetaRailBuilder' => static function ( MediaWikiServices $services ): RailBuilder {
+		$config = $services->get( 'CosmosBetaConfig' );
+		$context = RequestContext::getMain();
+		$options = $services->get( 'CosmosBetaOptions' );
+
 		return new RailBuilder(
-			$services->get( 'CosmosBetaConfig' ),
+			$config,
 			$services->get( 'CosmosBetaHookRunner' ),
-			$services->get( 'CosmosBetaTemplateParser' ),
-			$services->getConnectionProvider(),
-			$services->getLinkRenderer(),
-			$services->getSpecialPageFactory(),
-			$services->getUserFactory(),
-			$services->getMainWANObjectCache(),
-			RequestContext::getMain(),
-			new ServiceOptions(
-				RailBuilder::CONSTRUCTOR_OPTIONS,
-				$services->get( 'CosmosBetaOptions' )
+			new RailVisibility(
+				$config,
+				$context,
+				new ServiceOptions( RailVisibility::CONSTRUCTOR_OPTIONS, $options )
 			),
+			new RailRenderer( $services->get( 'CosmosBetaTemplateParser' ), $context ),
+			new RecentChangesModuleFactory(
+				$config,
+				$services->getConnectionProvider(),
+				$services->getLinkRenderer(),
+				$services->getSpecialPageFactory(),
+				$services->getUserFactory(),
+				$services->getMainWANObjectCache(),
+				$context,
+				new ServiceOptions( RecentChangesModuleFactory::CONSTRUCTOR_OPTIONS, $options )
+			),
+			new MessageModuleFactory(
+				$config,
+				$context,
+				new ServiceOptions( MessageModuleFactory::CONSTRUCTOR_OPTIONS, $options )
+			),
+			new SidebarModuleFactory( new ServiceOptions( SidebarModuleFactory::CONSTRUCTOR_OPTIONS, $options ) ),
+			$context,
 		);
 	},
 
