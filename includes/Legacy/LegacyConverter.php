@@ -27,10 +27,10 @@ use function substr;
  */
 final class LegacyConverter {
 
-	private const SELECTOR_CALL = '/(?:\$|jQuery|\.(?:find|closest|is|not|filter|has|children|parents|parentsUntil|parent|siblings|next|prev|nextAll|prevAll|nextUntil|prevUntil|querySelector|querySelectorAll|matches))\s*\(\s*$/';
-	private const DELEGATE_CALL = '/\.(?:on|off|one|delegate)\s*\(\s*(?:\'[^\']*\'|"[^"]*")\s*,\s*$/';
-	private const CLASS_CALL = '/(?:\.(?:addClass|removeClass|toggleClass|hasClass|getElementsByClassName)|classList\s*\.\s*(?:add|remove|toggle|contains|replace))\s*\(\s*(?:(?:\'[^\']*\'|"[^"]*")\s*,\s*)*$/';
-	private const CLASS_ASSIGN = '/(?:\.className\s*=|\bclass[\'"]?\s*:|setAttribute\s*\(\s*[\'"]class[\'"]\s*,)\s*$/';
+	private const string SELECTOR_CALL = '/(?:\$|jQuery|\.(?:find|closest|is|not|filter|has|children|parents|parentsUntil|parent|siblings|next|prev|nextAll|prevAll|nextUntil|prevUntil|querySelector|querySelectorAll|matches))\s*\(\s*$/';
+	private const string DELEGATE_CALL = '/\.(?:on|off|one|delegate)\s*\(\s*(?:\'[^\']*\'|"[^"]*")\s*,\s*$/';
+	private const string CLASS_CALL = '/(?:\.(?:addClass|removeClass|toggleClass|hasClass|getElementsByClassName)|classList\s*\.\s*(?:add|remove|toggle|contains|replace))\s*\(\s*(?:(?:\'[^\']*\'|"[^"]*")\s*,\s*)*$/';
+	private const string CLASS_ASSIGN = '/(?:\.className\s*=|\bclass[\'"]?\s*:|setAttribute\s*\(\s*[\'"]class[\'"]\s*,)\s*$/';
 
 	/** @var array<string,int> */
 	private array $replacements = [];
