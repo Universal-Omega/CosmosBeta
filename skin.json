@@ -366,18 +366,6 @@
 			},
 			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
-		"skins.cosmosbeta.codeeditor": {
-			"features": {
-				"content-body": false,
-				"toc": false
-			},
-			"styles": {
-				"resources/extensions/CodeEditor/CodeEditor.less": {
-					"media": "screen"
-				}
-			},
-			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
-		},
 		"skins.cosmosbeta.themedesigner.codex": {
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
