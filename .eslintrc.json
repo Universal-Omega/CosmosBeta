@@ -5,15 +5,11 @@
 		"wikimedia/jquery",
 		"wikimedia/mediawiki"
 	],
+	"ignorePatterns": [ "vendor/**" ],
 	"rules": {
-		"no-jquery/no-global-selector": 0,
-		"no-implicit-globals": 0,
-		"compat/compat": 0,
-		"prefer-const": "warn",
-		"no-var": "warn",
-		"no-redeclare": "warn"
+		"no-jquery/no-global-selector": "off"
 	},
 	"parserOptions": {
-		"ecmaVersion": 2022
+		"ecmaVersion": 2024
 	}
 }
