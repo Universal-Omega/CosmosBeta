@@ -55,6 +55,8 @@ $cfg['plugins'] = array_merge( $cfg['plugins'], [
 	'UseReturnValuePlugin',
 ] );
 
+$cfg['plugins'][] = __DIR__ . '/../vendor/miraheze/phan-plugins/NoOptionalParamPlugin.php';
+
 $cfg['analyze_signature_compatibility'] = true;
 $cfg['enable_class_alias_support'] = false;
 $cfg['enable_extended_internal_return_type_plugins'] = true;
