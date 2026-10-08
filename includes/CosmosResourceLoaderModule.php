@@ -7,6 +7,9 @@ namespace MediaWiki\Skin\Cosmos;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\SkinModule;
+use MediaWiki\Skin\Cosmos\Lookup\BackgroundLookup;
+use MediaWiki\Skin\Cosmos\Lookup\FontLookup;
+use MediaWiki\Skin\Cosmos\Lookup\WordmarkLookup;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\Cosmos\Theme\ThemeFont;
 use Wikimedia\Minify\CSSMin;
@@ -38,11 +41,11 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$services = MediaWikiServices::getInstance();
 		return new self(
 			$options,
-			$services->get( 'CosmosBetaBackgroundLookup' ),
-			$services->get( 'CosmosBetaEffectiveTheme' ),
-			$services->get( 'CosmosBetaFontLookup' ),
-			$services->get( 'CosmosBetaLessUtil' ),
-			$services->get( 'CosmosBetaWordmarkLookup' )
+			$services->get( 'Cosmos.BackgroundLookup' ),
+			$services->get( 'Cosmos.EffectiveTheme' ),
+			$services->get( 'Cosmos.FontLookup' ),
+			$services->get( 'Cosmos.LessUtil' ),
+			$services->get( 'Cosmos.WordmarkLookup' )
 		);
 	}
 
