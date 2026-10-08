@@ -1,18 +1,18 @@
-<div class="skin-cosmos-admindashboard" id="skin-cosmos-admindashboard">
-	<div class="skin-cosmos-admindashboard__layout">
-		<div class="skin-cosmos-admindashboard__main">
+<div class="skin-cosmos-admin-dashboard" id="skin-cosmos-admin-dashboard">
+	<div class="skin-cosmos-admin-dashboard__layout">
+		<div class="skin-cosmos-admin-dashboard__main">
 			{{#is-general}}
 			{{#array-sections}}
-			<section class="skin-cosmos-admindashboard__section" aria-labelledby="skin-cosmos-admindashboard-section-{{id}}">
-				<h2 class="skin-cosmos-admindashboard__heading" id="skin-cosmos-admindashboard-section-{{id}}">{{title}}</h2>
-				<ul class="skin-cosmos-admindashboard__controls">
+			<section class="skin-cosmos-admin-dashboard__section" aria-labelledby="skin-cosmos-admin-dashboard__section-{{id}}">
+				<h2 class="skin-cosmos-admin-dashboard__heading" id="skin-cosmos-admin-dashboard__section-{{id}}">{{title}}</h2>
+				<ul class="skin-cosmos-admin-dashboard__controls">
 					{{#array-controls}}
-					<li class="skin-cosmos-admindashboard__control">
-						<a class="skin-cosmos-admindashboard__link" href="{{url}}"{{#is-dialog}} data-skin-cosmos-create-page{{/is-dialog}}{{#is-external}} rel="noopener nofollow"{{/is-external}}>
-							<span class="skin-cosmos-admindashboard__badge" aria-hidden="true"><span class="skin-cosmos-admindashboard__icon skin-cosmos-admindashboard__icon--{{id}}"></span></span>
-							<span class="skin-cosmos-admindashboard__text">
-								<span class="skin-cosmos-admindashboard__label">{{label}}</span>
-								<span class="skin-cosmos-admindashboard__description">{{description}}</span>
+					<li class="skin-cosmos-admin-dashboard__control">
+						<a class="skin-cosmos-admin-dashboard__link" href="{{url}}"{{#is-dialog}} data-skin-cosmos-create-page{{/is-dialog}}{{#is-external}} rel="noopener nofollow"{{/is-external}}>
+							<span class="skin-cosmos-admin-dashboard__badge" aria-hidden="true"><span class="skin-cosmos-admin-dashboard__icon skin-cosmos-admin-dashboard__icon--{{id}}"></span></span>
+							<span class="skin-cosmos-admin-dashboard__text">
+								<span class="skin-cosmos-admin-dashboard__label">{{label}}</span>
+								<span class="skin-cosmos-admin-dashboard__description">{{description}}</span>
 							</span>
 						</a>
 					</li>
@@ -23,11 +23,11 @@
 			{{/is-general}}
 			{{#is-advanced}}
 			{{#array-groups}}
-			<section class="skin-cosmos-admindashboard__section" aria-labelledby="skin-cosmos-admindashboard-group-{{id}}">
-				<h2 class="skin-cosmos-admindashboard__heading" id="skin-cosmos-admindashboard-group-{{id}}">{{title}}</h2>
-				<ul class="skin-cosmos-admindashboard__pages">
+			<section class="skin-cosmos-admin-dashboard__section" aria-labelledby="skin-cosmos-admin-dashboard__group-{{id}}">
+				<h2 class="skin-cosmos-admin-dashboard__heading" id="skin-cosmos-admin-dashboard__group-{{id}}">{{title}}</h2>
+				<ul class="skin-cosmos-admin-dashboard__pages">
 					{{#array-links}}
-					<li class="skin-cosmos-admindashboard__page{{#is-restricted}} skin-cosmos-admindashboard__page--restricted{{/is-restricted}}"><a href="{{url}}">{{text}}</a></li>
+					<li class="skin-cosmos-admin-dashboard__page{{#is-restricted}} skin-cosmos-admin-dashboard__page--restricted{{/is-restricted}}"><a href="{{url}}">{{text}}</a></li>
 					{{/array-links}}
 				</ul>
 			</section>

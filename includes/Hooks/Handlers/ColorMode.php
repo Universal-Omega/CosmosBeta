@@ -62,7 +62,7 @@ class ColorMode implements
 		}
 
 		$mode = $this->config->getRenderMode();
-		$out->addHtmlClasses( "skin-cosmos-colormode-$mode" );
+		$out->addHtmlClasses( "skin-cosmos-colormode--$mode" );
 
 		$auto = $this->config->isAutoColorMode() && !$this->config->hasColorModePreference();
 
@@ -117,7 +117,7 @@ class ColorMode implements
 				'media' => '(prefers-color-scheme: dark)',
 				'href' => $url,
 			] );
-			$out->addHtmlClasses( 'skin-cosmos-colormode-auto' );
+			$out->addHtmlClasses( 'skin-cosmos-colormode--auto' );
 		}
 
 		if ( !$registered && $toggle ) {
@@ -131,10 +131,10 @@ class ColorMode implements
 				'if(m[1]!=="' . $rendered . '"){' .
 				'd.style.backgroundColor=' . json_encode( $bodyColors[$other] ) . ';' .
 				'd.style.colorScheme="' . ( $other === ThemeSettings::MODE_DARK ? 'dark' : 'light' ) . '";' .
-				'd.className+=" skin-cosmos-colormode-pending";' .
-				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode-pending","")},2500)}' .
+				'd.className+=" skin-cosmos-colormode--pending";' .
+				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode--pending","")},2500)}' .
 				'}());';
-			$headItems .= Html::inlineStyle( 'html.skin-cosmos-colormode-pending body{opacity:0}' ) .
+			$headItems .= Html::inlineStyle( 'html.skin-cosmos-colormode--pending body{opacity:0}' ) .
 				Html::inlineScript( $script, $out->getCSP()->getNonce() );
 		}
 

@@ -1,6 +1,6 @@
 <template>
-	<div class="skin-cosmos-td-layout">
-		<div class="skin-cosmos-td-panel">
+	<div class="skin-cosmos-themedesigner__layout">
+		<div class="skin-cosmos-themedesigner__panel">
 			<cdx-message v-if="!designer.canEdit" type="warning">
 				{{ msg( 'readonly' ) }}
 			</cdx-message>
@@ -8,28 +8,28 @@
 			<cdx-tabs v-model:active="activeTab" :framed="false">
 				<cdx-tab name="themes" :label="msg( 'tab-themes' )">
 					<p>{{ msg( 'presets-intro' ) }}</p>
-					<div class="skin-cosmos-td-presets">
+					<div class="skin-cosmos-themedesigner__presets">
 						<button
 							v-for="preset in designer.presets"
 							:key="preset.name"
 							type="button"
-							class="skin-cosmos-td-preset"
-							:class="{ 'is-active': state.presets[ preset.mode ] === preset.name }"
+							class="skin-cosmos-themedesigner__preset"
+							:class="{ 'skin-cosmos-is-active': state.presets[ preset.mode ] === preset.name }"
 							:disabled="!designer.canEdit"
 							@click="applyPreset( preset )"
 						>
-							<span class="skin-cosmos-td-preset-swatches">
+							<span class="skin-cosmos-themedesigner__preset-swatches">
 								<span
 									v-for="slot in swatchSlots"
 									:key="slot"
-									class="skin-cosmos-td-swatch"
-									:style="{ background: preset.colors[ slot ] }"
+									class="skin-cosmos-themedesigner__swatch"
+									:style="{ backgroundColor: preset.colors[ slot ] }"
 								></span>
 							</span>
-							<span class="skin-cosmos-td-preset-name">
+							<span class="skin-cosmos-themedesigner__preset-name">
 								{{ msg( 'preset-' + preset.name ) }}
 							</span>
-							<span class="skin-cosmos-td-preset-mode">
+							<span class="skin-cosmos-themedesigner__preset-mode">
 								{{ msg( 'mode-' + preset.mode ) }}
 							</span>
 						</button>
@@ -37,7 +37,7 @@
 				</cdx-tab>
 
 				<cdx-tab name="colors" :label="msg( 'tab-colors' )">
-					<div class="skin-cosmos-td-modes">
+					<div class="skin-cosmos-themedesigner__modes">
 						<span>{{ msg( 'editing' ) }}</span>
 						<cdx-button
 							v-for="mode in modes"
@@ -64,7 +64,7 @@
 						<template #description>
 							{{ msg( 'color-' + slot + '-help' ) }}
 						</template>
-						<div class="skin-cosmos-td-colorinputs">
+						<div class="skin-cosmos-themedesigner__colorinputs">
 							<input
 								type="color"
 								:value="pickerValue( slot )"
@@ -87,7 +87,7 @@
 								{{ msg( 'color-reset' ) }}
 							</cdx-button>
 						</div>
-						<div class="skin-cosmos-td-range skin-cosmos-td-alpha">
+						<div class="skin-cosmos-themedesigner__range skin-cosmos-themedesigner__alpha">
 							<span>{{ msg( 'color-opacity' ) }}</span>
 							<input
 								type="range"
@@ -192,7 +192,7 @@
 						<template v-if="range.help" #help-text>
 							{{ msg( range.help ) }}
 						</template>
-						<div class="skin-cosmos-td-range">
+						<div class="skin-cosmos-themedesigner__range">
 							<input
 								type="range"
 								min="0"
@@ -251,7 +251,7 @@
 						<template #label>
 							{{ msg( 'footer-opacity' ) }}
 						</template>
-						<div class="skin-cosmos-td-range">
+						<div class="skin-cosmos-themedesigner__range">
 							<input
 								type="range"
 								min="0"
@@ -293,68 +293,7 @@
 				</cdx-tab>
 
 				<cdx-tab name="rail" :label="msg( 'tab-rail' )">
-					<cdx-field>
-						<cdx-toggle-switch v-model="state.rail.enabled" :disabled="!designer.canEdit">
-							{{ msg( 'rail-enabled' ) }}
-						</cdx-toggle-switch>
-					</cdx-field>
-					<cdx-field>
-						<cdx-toggle-switch v-model="state.rail.hideForAnons" :disabled="!designer.canEdit">
-							{{ msg( 'rail-anons' ) }}
-						</cdx-toggle-switch>
-					</cdx-field>
-					<cdx-field>
-						<template #label>
-							{{ msg( 'rail-recentchanges' ) }}
-						</template>
-						<cdx-select
-							v-model:selected="state.rail.recentChanges"
-							:menu-items="recentChangesItems"
-							:disabled="!designer.canEdit"
-						></cdx-select>
-					</cdx-field>
-					<cdx-field>
-						<template #label>
-							{{ msg( 'rail-namespaces' ) }}
-						</template>
-						<template #help-text>
-							{{ msg( 'rail-namespaces-help' ) }}
-						</template>
-						<cdx-multiselect-lookup
-							v-model:selected="namespaceSelected"
-							v-model:input-chips="namespaceChips"
-							v-model:input-value="namespaceInput"
-							:menu-items="namespaceItems"
-							:menu-config="{ visibleItemLimit: 8 }"
-							:disabled="!designer.canEdit"
-							:placeholder="msg( 'rail-namespaces-placeholder' )"
-						>
-							<template #no-results>
-								{{ msg( 'rail-no-results' ) }}
-							</template>
-						</cdx-multiselect-lookup>
-					</cdx-field>
-					<cdx-field>
-						<template #label>
-							{{ msg( 'rail-pages' ) }}
-						</template>
-						<template #help-text>
-							{{ msg( 'rail-pages-help' ) }}
-						</template>
-						<cdx-multiselect-lookup
-							v-model:selected="pageSelected"
-							v-model:input-chips="pageChips"
-							v-model:input-value="pageInput"
-							:menu-items="pageItems"
-							:menu-config="{ visibleItemLimit: 8 }"
-							:disabled="!designer.canEdit"
-							:placeholder="msg( 'rail-pages-placeholder' )"
-						>
-							<template #no-results>
-								{{ msg( 'rail-no-results' ) }}
-							</template>
-						</cdx-multiselect-lookup>
-					</cdx-field>
+					<rail-tab v-model="state.rail" :toolbar="state.toolbar" :designer="designer"></rail-tab>
 				</cdx-tab>
 
 				<cdx-tab name="darkmode" :label="msg( 'tab-darkmode' )">
@@ -392,15 +331,15 @@
 					<p v-if="!designer.history.length">
 						{{ msg( 'history-empty' ) }}
 					</p>
-					<ul v-else class="skin-cosmos-td-history">
+					<ul v-else class="skin-cosmos-themedesigner__history">
 						<li v-for="row in designer.history" :key="row.id">
-							<span class="skin-cosmos-td-history-main">
+							<span class="skin-cosmos-themedesigner__history-main">
 								{{ row.time }} &middot; {{ row.user }}
 							</span>
-							<span v-if="row.comment" class="skin-cosmos-td-help">
+							<span v-if="row.comment" class="skin-cosmos-themedesigner__help">
 								{{ row.comment }}
 							</span>
-							<span v-if="row.id === designer.revisionId" class="skin-cosmos-td-badge">
+							<span v-if="row.id === designer.revisionId" class="skin-cosmos-themedesigner__badge">
 								{{ msg( 'history-live' ) }}
 							</span>
 							<cdx-button
@@ -418,45 +357,45 @@
 			</cdx-tabs>
 		</div>
 
-		<div class="skin-cosmos-td-side">
-			<div class="skin-cosmos-td-preview" :style="preview.root" :aria-label="msg( 'preview' )">
-				<div class="skin-cosmos-td-pv-banner" :style="preview.banner">
+		<div class="skin-cosmos-themedesigner__side">
+			<div class="skin-cosmos-themedesigner__preview" :style="preview.root" :aria-label="msg( 'preview' )">
+				<div class="skin-cosmos-themedesigner__preview-banner" :style="preview.banner">
 					<span>{{ msg( 'preview-wordmark' ) }}</span>
 				</div>
-				<div class="skin-cosmos-td-pv-header" :style="preview.header">
+				<div class="skin-cosmos-themedesigner__preview-header" :style="preview.header">
 					<span>Menu&nbsp;&nbsp;Menu&nbsp;&nbsp;Menu</span>
 				</div>
-				<div class="skin-cosmos-td-pv-body">
-					<div class="skin-cosmos-td-pv-main" :style="preview.content">
-						<div class="skin-cosmos-td-pv-heading">
+				<div class="skin-cosmos-themedesigner__preview-body">
+					<div class="skin-cosmos-themedesigner__preview-main" :style="preview.content">
+						<div class="skin-cosmos-themedesigner__preview-heading">
 							{{ msg( 'preview-heading' ) }}
 						</div>
 						<div>{{ msg( 'preview-text' ) }}</div>
-						<div class="skin-cosmos-td-pv-link" :style="preview.link">
+						<div class="skin-cosmos-themedesigner__preview-link" :style="preview.link">
 							{{ msg( 'preview-link' ) }}
 						</div>
-						<div class="skin-cosmos-td-pv-button" :style="preview.button">
+						<div class="skin-cosmos-themedesigner__preview-button" :style="preview.button">
 							{{ msg( 'preview-button' ) }}
 						</div>
 					</div>
-					<div v-if="state.rail.enabled" class="skin-cosmos-td-pv-rail" :style="preview.content">
+					<div v-if="state.rail.enabled" class="skin-cosmos-themedesigner__preview-rail" :style="preview.content">
 						{{ msg( 'preview-rail' ) }}
 						<div
 							v-if="state.toolbar.enabled && state.toolbar.style === 'rail'"
-							class="skin-cosmos-td-pv-railtools"
+							class="skin-cosmos-themedesigner__preview-rail-tools"
 							:style="preview.toolbar"
 						>
 							{{ msg( 'preview-toolbar' ) }}
 						</div>
 					</div>
 				</div>
-				<div class="skin-cosmos-td-pv-footer" :style="preview.footer">
+				<div class="skin-cosmos-themedesigner__preview-footer" :style="preview.footer">
 					{{ msg( 'preview-footer' ) }}
 				</div>
 				<div
 					v-if="state.toolbar.enabled && ( state.toolbar.style !== 'rail' || !state.rail.enabled )"
-					class="skin-cosmos-td-pv-toolbar"
-					:class="'skin-cosmos-td-pv-toolbar--' + ( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
+					class="skin-cosmos-themedesigner__preview-toolbar"
+					:class="'skin-cosmos-themedesigner__preview-toolbar--' + ( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
 					:style="preview.toolbar"
 				>
 					{{ msg( 'preview-toolbar' ) }}
@@ -472,7 +411,6 @@ const {
 		CdxCheckbox,
 		CdxField,
 		CdxMessage,
-		CdxMultiselectLookup,
 		CdxSelect,
 		CdxTab,
 		CdxTabs,
@@ -481,7 +419,9 @@ const {
 	} = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
 	{ computed, defineComponent, onMounted, reactive, ref, watch } = require( 'vue' ),
 	colors = require( './colors.js' ),
-	ImageField = require( './ImageField.vue' );
+	ImageField = require( './ImageField.vue' ),
+	msg = require( './msg.js' ),
+	RailTab = require( './rail/RailTab.vue' );
 
 const MODES = [ 'light', 'dark' ];
 
@@ -503,12 +443,6 @@ function merge( base, extra ) {
 	return base;
 }
 
-function msg( key ) {
-	// Messages used here: cosmosbeta-themedesigner-*
-	// eslint-disable-next-line mediawiki/msg-doc
-	return mw.msg( 'cosmosbeta-themedesigner-' + key );
-}
-
 // @vue/component
 module.exports = exports = defineComponent( {
 	name: 'ThemeDesigner',
@@ -520,13 +454,13 @@ module.exports = exports = defineComponent( {
 		CdxCheckbox,
 		CdxField,
 		CdxMessage,
-		CdxMultiselectLookup,
 		CdxSelect,
 		CdxTab,
 		CdxTabs,
 		CdxTextInput,
 		CdxToggleSwitch,
-		ImageField
+		ImageField,
+		RailTab
 	},
 	props: {
 		designer: {
@@ -574,12 +508,6 @@ module.exports = exports = defineComponent( {
 				[ 'bar', msg( 'toolbar-style-bar' ) ],
 				[ 'rail', msg( 'toolbar-style-rail' ) ]
 			] ),
-			recentChangesItems = items( [
-				[ '', msg( 'rail-recentchanges-config' ) ],
-				[ 'off', msg( 'rail-recentchanges-off' ) ],
-				[ 'normal', msg( 'rail-recentchanges-normal' ) ],
-				[ 'sticky', msg( 'rail-recentchanges-sticky' ) ]
-			] ),
 			modeItems = items( [ ...MODES, 'auto' ].map( ( mode ) => [ mode, msg( 'mode-' + mode ) ] ) );
 
 		const triModel = ( key ) => computed( {
@@ -600,98 +528,6 @@ module.exports = exports = defineComponent( {
 			comment: msg( 'image-upload-comment' ),
 			noResults: msg( 'rail-no-results' )
 		};
-
-		const mainPageValue = 'mainpage',
-			namespaceLabels = {};
-
-		props.designer.namespaces.forEach( ( ns ) => {
-			namespaceLabels[ ns.value ] = ns.label;
-		} );
-
-		const pageLabel = ( value ) => value === mainPageValue ? msg( 'rail-pages-mainpage' ) : value,
-			sameList = ( a, b ) => JSON.stringify( a ) === JSON.stringify( b );
-
-		const namespaceSelected = ref( ( state.rail.disabledNamespaces || [] ).slice() ),
-			namespaceChips = ref( namespaceSelected.value.map( ( value ) => ( { value, label: namespaceLabels[ value ] || String( value ) } ) ) ),
-			namespaceInput = ref( '' ),
-			pageSelected = ref( ( state.rail.disabledPages || [] ).slice() ),
-			pageChips = ref( pageSelected.value.map( ( value ) => ( { value, label: pageLabel( value ) } ) ) ),
-			pageInput = ref( '' ),
-			pageResults = ref( [] );
-
-		const namespaceItems = computed( () => {
-			const term = String( namespaceInput.value || '' ).trim().toLowerCase();
-
-			return props.designer.namespaces.filter( ( ns ) => term === '' || ns.label.toLowerCase().includes( term ) );
-		} );
-
-		const pageItems = computed( () => {
-			const term = String( pageInput.value || '' ).trim(),
-				list = [ { value: mainPageValue, label: pageLabel( mainPageValue ) } ];
-
-			pageResults.value.forEach( ( title ) => list.push( { value: title, label: title } ) );
-
-			if ( term !== '' && !list.some( ( item ) => item.value === term ) ) {
-				list.push( { value: term, label: term } );
-			}
-
-			return list.filter( ( item ) => term === '' || item.label.toLowerCase().includes( term.toLowerCase() ) );
-		} );
-
-		const mainNamespaces = props.designer.namespaces.map( ( ns ) => ns.value ).filter( ( id ) => id >= 0 );
-		let pageTimer = null,
-			pageRequest = 0;
-
-		watch( pageInput, ( value ) => {
-			const term = String( value || '' ).trim(),
-				id = ++pageRequest;
-
-			clearTimeout( pageTimer );
-
-			if ( term === '' ) {
-				pageResults.value = [];
-				return;
-			}
-
-			pageTimer = setTimeout( () => {
-				new mw.Api().get( {
-					action: 'opensearch',
-					search: term,
-					limit: 10,
-					namespace: mainNamespaces.join( '|' )
-				} ).then( ( data ) => {
-					if ( id === pageRequest ) {
-						pageResults.value = data[ 1 ] || [];
-					}
-				} );
-			}, 250 );
-		} );
-
-		watch( namespaceSelected, ( value ) => {
-			state.rail.disabledNamespaces = value.length ? value.map( Number ) : null;
-		}, { deep: true } );
-
-		watch( pageSelected, ( value ) => {
-			state.rail.disabledPages = value.length ? value.slice() : null;
-		}, { deep: true } );
-
-		watch( () => state.rail.disabledNamespaces, ( value ) => {
-			const list = value || [];
-
-			if ( !sameList( list, namespaceSelected.value ) ) {
-				namespaceSelected.value = list.slice();
-				namespaceChips.value = list.map( ( id ) => ( { value: id, label: namespaceLabels[ id ] || String( id ) } ) );
-			}
-		}, { deep: true } );
-
-		watch( () => state.rail.disabledPages, ( value ) => {
-			const list = value || [];
-
-			if ( !sameList( list, pageSelected.value ) ) {
-				pageSelected.value = list.slice();
-				pageChips.value = list.map( ( title ) => ( { value: title, label: pageLabel( title ) } ) );
-			}
-		}, { deep: true } );
 
 		const layoutRanges = [
 			{
@@ -898,20 +734,11 @@ module.exports = exports = defineComponent( {
 			triStateItems,
 			widthItems,
 			toolbarStyleItems,
-			recentChangesItems,
 			modeItems,
 			repeatModel,
 			fixedModel,
 			buttonStyleItems,
 			imageMessages,
-			namespaceSelected,
-			namespaceChips,
-			namespaceInput,
-			namespaceItems,
-			pageSelected,
-			pageChips,
-			pageInput,
-			pageItems,
 			layoutRanges,
 			preview,
 			msg,

@@ -9,6 +9,8 @@
 	--skin-cosmos-muted-color: fade( @font-color, 82% );
 	--skin-cosmos-content-background: @content-background-color;
 	--skin-cosmos-link-color: @link-color;
+	--skin-cosmos-link-contrast: @link-contrast-color;
+	--skin-cosmos-link-contrast-invert: @link-contrast-invert;
 	--skin-cosmos-border-color: @border-color;
 	--skin-cosmos-invert: @theme-invert;
 	--skin-cosmos-toolbar-invert: @toolbar-icon-invert;
@@ -36,6 +38,9 @@
 	--color-progressive--hover: @hover-link;
 	--color-progressive--active: @active-link;
 	--color-progressive--focus: @link-color;
+	--box-shadow-color-progressive-selected: @link-color;
+	--box-shadow-color-progressive-selected--hover: @hover-link;
+	--box-shadow-color-progressive-selected--active: @active-link;
 	--color-inverted: @content-background-color;
 	--background-color-progressive: @link-color;
 	--background-color-progressive--hover: @hover-link;
@@ -69,6 +74,16 @@
 
 	& when not ( @theme-invert = 1 ) {
 		.skin-cosmos-token-colors( #000, darken( @link-color, 8% ), darken( @link-color, 14% ) );
+	}
+}
+
+// Text on the link colored buttons follows how light the link color is
+body .cdx-button:enabled.cdx-button--action-progressive.cdx-button--weight-primary {
+	&,
+	&:hover,
+	&:active,
+	&:focus {
+		color: @link-contrast-color;
 	}
 }
 
@@ -110,7 +125,7 @@
 .skin-cosmos-light-boxes();
 
 // Logos in the footer are drawn for light backgrounds
-body .skin-cosmos-footerIcons-listItem a.cdx-button {
+body .skin-cosmos-footer__icons-item a.cdx-button {
 	box-sizing: border-box;
 	align-items: center;
 	justify-content: center;
@@ -119,6 +134,14 @@ body .skin-cosmos-footerIcons-listItem a.cdx-button {
 	border-radius: 2px;
 	background-color: #f8f9fa;
 	color: #202122;
+
+	&:hover,
+	&:active,
+	&:focus {
+		border-color: #a2a9b1;
+		background-color: #fff;
+		color: #202122;
+	}
 }
 
 // Core and extensions mark elements and images that need inverting on dark backgrounds with these classes
@@ -160,7 +183,7 @@ body a:focus {
 	text-decoration: none;
 }
 
-.skin-cosmos-search-box-form {
+.skin-cosmos-search-box__form {
 	display: flex;
 	width: 100%;
 	align-items: center;
@@ -196,7 +219,7 @@ body a:focus {
 	color: #000;
 }
 
-.skin-cosmos-dropdown-list {
+.skin-cosmos-dropdown__list {
 	position: absolute;
 	z-index: 999;
 	top: 100%;
@@ -243,6 +266,16 @@ body a:focus {
 	}
 }
 
+// The id outweighs the content link rule, since the list sits inside the content
+#cosmos-actions-actionsList .skin-cosmos-dropdown__list a:not( .new ) {
+	color: #39424d;
+
+	&:hover,
+	&:focus {
+		color: #0645ad;
+	}
+}
+
 #mw-content {
 	position: relative;
 	z-index: 1;
@@ -281,7 +314,7 @@ body > #mw-content-container {
 }
 
 #p-search {
-	.skin-cosmos-search-button,
+	.skin-cosmos-search-box__button,
 	.cdx-text-input__start-icon,
 	.cdx-typeahead-search__search-footer__icon {
 		display: none;
@@ -336,7 +369,7 @@ body > #mw-content-container {
 	}
 }
 
-.skin-cosmos-search-button {
+.skin-cosmos-search-box__button {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -423,7 +456,7 @@ body > #mw-content-container {
 	}
 }
 
-.skin-cosmos-userButton-label {
+.skin-cosmos-personal-tools__user-label {
 	display: block;
 	margin-top: 4px;
 	color: @banner-font-color;
@@ -437,9 +470,9 @@ body > #mw-content-container {
 	white-space: nowrap;
 }
 
-.skin-cosmos-userOptions-personalTools {
+.skin-cosmos-personal-tools {
 	&:hover {
-		.skin-cosmos-userButton-label {
+		.skin-cosmos-personal-tools__user-label {
 			color: @banner-font-color;
 		}
 
@@ -451,7 +484,7 @@ body > #mw-content-container {
 	}
 }
 
-.skin-cosmos-button.skin-cosmos-button-secondary {
+.skin-cosmos-button.skin-cosmos-button--secondary {
 	color: @alt-font-color;
 	stroke: @alt-font-color;
 	stroke-width: 2px;
@@ -466,16 +499,16 @@ body > #mw-content-container {
 .skin-cosmos-dropdown {
 	position: relative;
 
-	&-icon {
+	&__icon {
 		transition: transform 250ms ease;
 	}
 
 	&.skin-cosmos-is-open {
-		>.skin-cosmos-dropdown-list {
+		>.skin-cosmos-dropdown__list {
 			display: block;
 		}
 
-		.skin-cosmos-dropdown-icon {
+		.skin-cosmos-dropdown__icon {
 			transform: rotate( 180deg );
 		}
 	}
@@ -483,32 +516,32 @@ body > #mw-content-container {
 
 @media ( hover: hover ) {
 	.skin-cosmos-dropdown:hover {
-		>.skin-cosmos-button-secondary {
+		>.skin-cosmos-button--secondary {
 			opacity: 0.8;
 			transition: 0.4s;
 		}
 
-		>.skin-cosmos-dropdown-list {
+		>.skin-cosmos-dropdown__list {
 			display: block;
 		}
 
-		.skin-cosmos-dropdown-icon {
+		.skin-cosmos-dropdown__icon {
 			transform: rotate( 180deg );
 		}
 	}
 }
 
-.skin-cosmos-button-text {
+.skin-cosmos-button__text {
 	margin: auto;
 	text-decoration: none;
 }
 
-.skin-cosmos-bannerOption {
+.skin-cosmos-banner-option {
 	display: flex;
 	height: 100%;
 
 	&:hover {
-		>.skin-cosmos-bannerOption-button {
+		>.skin-cosmos-banner-option__button {
 			display: inline-flex;
 			place-items: center center;
 			margin-top: 0;
@@ -518,25 +551,25 @@ body > #mw-content-container {
 			transition: 0.4s;
 		}
 
-		.skin-cosmos-bannerOption-icon {
+		.skin-cosmos-banner-option__icon {
 			stroke: @banner-font-color;
 		}
 
-		.skin-cosmos-bannerOption-dropdownIcon {
+		.skin-cosmos-banner-option__dropdown-icon {
 			fill: @banner-font-color;
 			stroke: @banner-font-color;
 		}
 	}
 }
 
-.skin-cosmos-bannerOption-button {
+.skin-cosmos-banner-option__button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
 }
 
-.skin-cosmos-bannerOption-icon {
+.skin-cosmos-banner-option__icon {
 	display: flex;
 	height: 28px;
 	place-items: center center;
@@ -545,7 +578,7 @@ body > #mw-content-container {
 	stroke-width: 2px;
 }
 
-.skin-cosmos-bannerOption-dropdownIcon {
+.skin-cosmos-banner-option__dropdown-icon {
 	display: flex;
 	height: auto;
 	margin-left: 7px;
@@ -554,7 +587,7 @@ body > #mw-content-container {
 	stroke-width: 2px;
 }
 
-.skin-cosmos-emptyListMessage {
+.skin-cosmos-empty-list-message {
 	padding: 10px 10px 10px 15px;
 	font-style: italic;
 }
@@ -563,7 +596,7 @@ body > #mw-content-container {
 	margin: 0 0 -15px 0;
 }
 
-.skin-cosmos-footerIcons-listItem {
+.skin-cosmos-footer__icons-item {
 	display: inline-block;
 	margin: 0 0 15px 15px;
 }
@@ -624,7 +657,7 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-button-icon {
+.skin-cosmos-button__icon {
 	fill: none;
 }
 
@@ -646,7 +679,7 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-slim-buttons #cosmos-articleHeader-actions {
+.skin-cosmos-buttons--slim #cosmos-articleHeader-actions {
 	.skin-cosmos-button {
 		box-sizing: border-box;
 		height: 32px;
@@ -656,13 +689,13 @@ body > .suggestions {
 		line-height: 1;
 	}
 
-	.skin-cosmos-button-icon {
+	.skin-cosmos-button__icon {
 		width: 16px;
 		height: 16px;
 		margin: 0 0 0 -2px;
 	}
 
-	.skin-cosmos-button-text {
+	.skin-cosmos-button__text {
 		margin: 0;
 	}
 
@@ -671,12 +704,12 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-pill-buttons #cosmos-articleHeader-actions {
+.skin-cosmos-buttons--pill #cosmos-articleHeader-actions {
 	.skin-cosmos-button {
 		border-radius: 999px;
 	}
 
-	.skin-cosmos-actions-edit:not( .skin-cosmos-button-single ) {
+	.skin-cosmos-button--edit:not( .skin-cosmos-button--single ) {
 		border-radius: 999px 0 0 999px;
 	}
 
@@ -684,17 +717,17 @@ body > .suggestions {
 		border-radius: 0 999px 999px 0;
 	}
 
-	.skin-cosmos-dropdown-only #cosmos-actionsList-button {
+	.skin-cosmos-dropdown--only #cosmos-actionsList-button {
 		border-radius: 999px;
 	}
 }
 
-.skin-cosmos-dropdown-icon-alt,
-#cosmos-actionsList-dropdownIcon .skin-cosmos-dropdown-icon-alt {
+.skin-cosmos-dropdown__icon--alt,
+#cosmos-actionsList-dropdownIcon .skin-cosmos-dropdown__icon--alt {
 	display: none;
 }
 
-.skin-cosmos-text-buttons #cosmos-articleHeader-actions {
+.skin-cosmos-buttons--text #cosmos-articleHeader-actions {
 	gap: 4px 0;
 
 	> a {
@@ -745,8 +778,8 @@ body > .suggestions {
 		}
 	}
 
-	.skin-cosmos-button-icon,
-	.skin-cosmos-dropdown-icon .skin-cosmos-icon {
+	.skin-cosmos-button__icon,
+	.skin-cosmos-dropdown__icon .skin-cosmos-icon {
 		width: 16px;
 		min-width: 16px;
 		height: 16px;
@@ -757,7 +790,7 @@ body > .suggestions {
 		}
 	}
 
-	.skin-cosmos-button-text {
+	.skin-cosmos-button__text {
 		white-space: nowrap;
 	}
 
@@ -785,7 +818,7 @@ body > .suggestions {
 			display: none;
 		}
 
-		.skin-cosmos-dropdown-icon-alt {
+		.skin-cosmos-dropdown__icon--alt {
 			display: block;
 			width: 18px;
 			height: 18px;
@@ -793,7 +826,7 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-associatedTabs {
+.skin-cosmos-associated-tabs {
 	margin: 0 0 20px;
 	overflow-x: auto;
 	border-bottom: 1px solid var( --skin-cosmos-border-color );
@@ -831,14 +864,14 @@ body > .suggestions {
 		}
 	}
 
-	.skin-cosmos-associatedTabs-selected a {
+	.skin-cosmos-associated-tabs--selected a {
 		border-color: var( --skin-cosmos-border-color );
 		background-color: var( --skin-cosmos-content-background );
 		color: var( --skin-cosmos-font-color );
 	}
 }
 
-.skin-cosmos-button-primary {
+.skin-cosmos-button--primary {
 	background-color: @button-background-color;
 	color: @button-font-color;
 	stroke: @button-font-color;
@@ -876,11 +909,11 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-actions-edit {
+.skin-cosmos-button--edit {
 	border-radius: 4px 0 0 4px;
 }
 
-.skin-cosmos-button.skin-cosmos-button-single {
+.skin-cosmos-button.skin-cosmos-button--single {
 	border-radius: 4px;
 }
 
@@ -916,7 +949,7 @@ body > .suggestions {
 	cursor: auto;
 }
 
-.skin-cosmos-dropdown-only {
+.skin-cosmos-dropdown--only {
 	&#cosmos-actions-actionsList {
 		margin-left: 0;
 	}
@@ -931,7 +964,7 @@ body > .suggestions {
 	fill: @button-font-color;
 }
 
-.skin-cosmos-header-button {
+.skin-cosmos-header__button {
 	display: inline-flex;
 	min-height: 18px;
 	box-sizing: content-box;
@@ -1050,7 +1083,7 @@ body > .suggestions {
 			padding: 0;
 
 			>a {
-				&:not( .skin-cosmos-header-button ) {
+				&:not( .skin-cosmos-header__button ) {
 					padding-right: 9px;
 					padding-left: 9px;
 					color: #39424d;
@@ -1060,7 +1093,7 @@ body > .suggestions {
 
 			&:hover {
 				>a {
-					&:not( .skin-cosmos-header-button ) {
+					&:not( .skin-cosmos-header__button ) {
 						background-color: rgba( 8, 132, 136, 0.1 );
 						color: #088488;
 					}
@@ -1070,7 +1103,7 @@ body > .suggestions {
 
 		>li.skin-cosmos-is-selected {
 			>a {
-				&:not( .skin-cosmos-header-button ) {
+				&:not( .skin-cosmos-header__button ) {
 					background-color: rgba( 8, 132, 136, 0.1 );
 					color: #088488;
 				}
@@ -1149,7 +1182,7 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-header-button.skin-cosmos-is-secondary {
+.skin-cosmos-header__button.skin-cosmos-is-secondary {
 	border-color: #5f7a7b;
 	color: #5f7a7b;
 
@@ -1170,29 +1203,29 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-header-button.skin-cosmos-is-secondary.skin-cosmos-is-active {
+.skin-cosmos-header__button.skin-cosmos-is-secondary.skin-cosmos-is-active {
 	border-color: #94abac;
 }
 
-.skin-cosmos-header-button.skin-cosmos-is-text {
+.skin-cosmos-header__button.skin-cosmos-is-text {
 	border: 0;
 	color: @link-color;
 }
 
-a.skin-cosmos-header-button {
+a.skin-cosmos-header__button {
 	cursor: pointer;
 }
 
-button.skin-cosmos-header-button {
+button.skin-cosmos-header__button {
 	cursor: pointer;
 }
 
-.skin-cosmos-header-button.skin-cosmos-is-active {
+.skin-cosmos-header__button.skin-cosmos-is-active {
 	text-decoration: none;
 }
 
-.skin-cosmos-header-buttons {
-	>.skin-cosmos-header-button {
+.skin-cosmos-header__buttons {
+	>.skin-cosmos-header__button {
 		&:not( .skin-cosmos-is-secondary ) {
 			&:not( :last-child ) {
 				border-right: 1px solid #fff;
@@ -1225,25 +1258,25 @@ button.skin-cosmos-header-button {
 
 	>.skin-cosmos-menu {
 		&:not( :last-child ) {
-			.skin-cosmos-header-button {
+			.skin-cosmos-header__button {
 				border-right: 1px solid #fff;
 			}
 		}
 
 		&:not( :first-child ) {
-			.skin-cosmos-header-button {
+			.skin-cosmos-header__button {
 				border-left: 1px solid #fff;
 			}
 		}
 
 		&:first-child {
-			.skin-cosmos-header-button {
+			.skin-cosmos-header__button {
 				border-radius: 3px 0 0 3px;
 			}
 		}
 
 		&:last-child {
-			.skin-cosmos-header-button {
+			.skin-cosmos-header__button {
 				border-radius: 0 3px 3px 0;
 			}
 		}
@@ -1402,7 +1435,7 @@ button.skin-cosmos-header-button {
 	border-top: 1px solid @border-color;
 }
 
-.skin-cosmos-header__local-navigation {
+.skin-cosmos-header__navigation {
 	display: flex;
 	height: 46px;
 	padding-left: 11px;
@@ -1687,14 +1720,14 @@ button.skin-cosmos-header-button {
 		.skin-cosmos-list.skin-cosmos-list--linked {
 			li {
 				>a {
-					&:not( .skin-cosmos-header-button ) {
+					&:not( .skin-cosmos-header__button ) {
 						color: #3a3a3a;
 					}
 				}
 
 				&:hover {
 					>a {
-						&:not( .skin-cosmos-header-button ) {
+						&:not( .skin-cosmos-header__button ) {
 							background-color: rgba( 0, 108, 176, 0.1 );
 							color: @link-color;
 						}
@@ -1722,7 +1755,7 @@ button.skin-cosmos-header-button {
 		}
 	}
 
-	.skin-cosmos-header-button.skin-cosmos-is-secondary {
+	.skin-cosmos-header__button.skin-cosmos-is-secondary {
 		border-color: #fff;
 		background-color: @header-button-background;
 		color: #fff;
@@ -1738,8 +1771,8 @@ button.skin-cosmos-header-button {
 		}
 	}
 
-	.skin-cosmos-header-buttons {
-		>.skin-cosmos-header-button {
+	.skin-cosmos-header__buttons {
+		>.skin-cosmos-header__button {
 			&:not( .skin-cosmos-is-secondary ) {
 				&:not( :last-child ) {
 					border-right-color: #fff;
@@ -1753,13 +1786,13 @@ button.skin-cosmos-header-button {
 
 		>.skin-cosmos-menu {
 			&:not( :last-child ) {
-				.skin-cosmos-header-button {
+				.skin-cosmos-header__button {
 					border-right-color: #fff;
 				}
 			}
 
 			&:not( :first-child ) {
-				.skin-cosmos-header-button {
+				.skin-cosmos-header__button {
 					border-left-color: #fff;
 				}
 			}
@@ -1818,7 +1851,7 @@ button.skin-cosmos-header-button {
 	}
 }
 
-.skin-cosmos-header__top-container {
+.skin-cosmos-header__top {
 	display: flex;
 	height: 59px;
 }
@@ -1856,7 +1889,7 @@ button.skin-cosmos-header-button {
 	text-transform: uppercase;
 }
 
-.skin-cosmos-header__wiki-buttons {
+.skin-cosmos-header__buttons {
 	margin: 20px 20px auto 15px;
 
 	.skin-cosmos-menu__toggle {
@@ -1881,7 +1914,7 @@ body #mw-teleport-target {
 	z-index: 100001;
 }
 
-.skin-cosmos-modal-content {
+.skin-cosmos-modal__content {
 	width: auto;
 	min-width: 280px;
 	max-width: 640px;
@@ -1975,7 +2008,7 @@ body #mw-teleport-target {
 	color: #222;
 }
 
-.skin-cosmos-modal-close {
+.skin-cosmos-modal__close {
 	color: #aaa;
 	float: right;
 	cursor: pointer;
@@ -2034,6 +2067,13 @@ body code {
 		td {
 			width: 50%;
 		}
+	}
+}
+
+.skin-cosmos-plain-links() {
+	a:not( .new ):where( :not( .cdx-button, .mw-ui-button, .oo-ui-buttonElement-button, .oo-ui-tool-link ) ) {
+		color: @link-color;
+		text-decoration: none;
 	}
 }
 
@@ -2236,21 +2276,11 @@ h6 {
 		}
 	}
 
-	a {
-		&:not( .new ) {
-			color: @link-color;
-			text-decoration: none;
-		}
-	}
+	.skin-cosmos-plain-links();
 }
 
 body {
-	a {
-		&:not( .new ) {
-			color: @link-color;
-			text-decoration: none;
-		}
-	}
+	.skin-cosmos-plain-links();
 }
 
 #catlinks {
@@ -2277,7 +2307,7 @@ body {
 	margin: 0;
 }
 
-.skin-cosmos-footerLinks-list {
+.skin-cosmos-footer__links {
 	padding: 0;
 	margin: 0;
 	color: @footer-font-color1;
@@ -2319,7 +2349,7 @@ body {
 	list-style: none;
 }
 
-.skin-cosmos-footerIcons-listItem {
+.skin-cosmos-footer__icons-item {
 	display: flex;
 	align-items: center;
 	margin: 0 0 15px 15px;
@@ -2342,9 +2372,9 @@ body {
 }
 
 #cosmos-page-header {
-	padding: 20px 0 10px 0;
+	padding: 20px 0 0 0;
 
-	&:has( > .skin-cosmos-associatedTabs ) {
+	&:has( > .skin-cosmos-associated-tabs ) {
 		padding-top: 12px;
 	}
 }
@@ -2361,13 +2391,13 @@ body {
 	align-items: flex-start;
 	font-size: 12px;
 
-	&-in {
+	&__label {
 		padding-right: 4px;
 		font-weight: 600;
 		white-space: nowrap;
 	}
 
-	&-dropdown {
+	&__menu {
 		z-index: 99999;
 		padding-bottom: 12px;
 
@@ -2381,7 +2411,7 @@ body {
 		}
 	}
 
-	&-links {
+	&__links {
 		font-style: italic;
 		line-height: 16px;
 		overflow-wrap: break-word;
@@ -2428,10 +2458,10 @@ body {
 	justify-content: space-between;
 }
 
-.skin-cosmos-header-border #cosmos-header-articleHeader {
-	padding-bottom: 6px;
+.skin-cosmos-has-header-border #cosmos-header-articleHeader {
+	padding-bottom: 4px;
 	border-bottom: 1.5px solid @border-color;
-	margin-bottom: 14px;
+	margin-bottom: 0;
 }
 
 #catlinks {
@@ -2503,7 +2533,7 @@ body h6 {
 	float: right;
 }
 
-#cosmos-toolbar.skin-cosmos-toolbar-bar {
+#cosmos-toolbar.skin-cosmos-toolbar--bar {
 	position: static;
 	width: 100%;
 	max-width: none;
@@ -2520,7 +2550,7 @@ body h6 {
 	display: none;
 }
 
-.skin-cosmos-toolbar-tools {
+.skin-cosmos-toolbar__tools {
 	display: -webkit-box;
 	display: flex;
 	align-items: center;
@@ -2529,8 +2559,8 @@ body h6 {
 	font-size: 12px;
 }
 
-.skin-cosmos-tools-list,
-.skin-cosmos-tools-list ul {
+.skin-cosmos-toolbar__list,
+.skin-cosmos-toolbar__list ul {
 	padding: 0;
 	margin: 0;
 	list-style: none;
@@ -2571,6 +2601,15 @@ body h6 {
 
 #cosmos-pageBody-content {
 	padding: 0 0 15px 0;
+
+	#mw-content-text .mw-parser-output > :first-child {
+		padding-top: 0;
+		margin-top: 0;
+	}
+
+	#mw-content-text .mw-parser-output > p:first-child:has( > br:only-child ) {
+		display: none;
+	}
 }
 
 body:not( .mw-special-Preferences ) #cosmos-pageBody-content {
@@ -2587,15 +2626,15 @@ body:not( .mw-special-Preferences ) #cosmos-pageBody-content {
 	margin-bottom: 11px;
 }
 
-.skin-cosmos-header-button .skin-cosmos-icon-articleAdd {
+.skin-cosmos-header__button .skin-cosmos-icon-articleAdd {
 	margin-right: 5px;
 }
 
-.skin-cosmos-header-button.skin-cosmos-is-flush .skin-cosmos-icon-articleAdd {
+.skin-cosmos-header__button.skin-cosmos-is-flush .skin-cosmos-icon-articleAdd {
 	margin-right: 0;
 }
 
-.skin-cosmos-mobile-navigation {
+.skin-cosmos-mobile-menu {
 	display: none;
 }
 
@@ -2627,7 +2666,7 @@ body .postedit-container {
 	line-height: 1.35;
 }
 
-.skin-cosmos-dropdown-list #ca-wikilove a {
+.skin-cosmos-dropdown__list #ca-wikilove a {
 	width: auto;
 	padding: 12px 16px;
 	margin-bottom: 0;
@@ -2694,7 +2733,7 @@ table.mw-interwikitable.body td.mw-interwikitable-local-yes {
 	float: right;
 }
 
-.skin-cosmos-rail .skin-cosmos-rail-module h3 {
+.skin-cosmos-rail .skin-cosmos-rail__module h3 {
 	border-bottom: 3px solid @rail-header-bottom-border;
 }
 
@@ -2754,31 +2793,31 @@ div.thumbinner {
 	height: 12px;
 }
 
-.skin-cosmos-bannerOption-icon .skin-cosmos-icon {
+.skin-cosmos-banner-option__icon .skin-cosmos-icon {
 	width: 28px;
 	height: 28px;
 }
 
-.skin-cosmos-button-icon {
+.skin-cosmos-button__icon {
 	width: 20px;
 	height: 20px;
 	margin: 0 5px 0 -2px;
 }
 
-.skin-cosmos-button-icon.skin-cosmos-icon-close {
+.skin-cosmos-button__icon.skin-cosmos-icon-close {
 	margin-left: -3px;
 }
 
-.skin-cosmos-bannerOption-icon {
+.skin-cosmos-banner-option__icon {
 	color: @banner-font-color;
 }
 
-.skin-cosmos-dropdown-icon .skin-cosmos-icon {
+.skin-cosmos-dropdown__icon .skin-cosmos-icon {
 	width: 14px;
 	height: 14px;
 }
 
-.skin-cosmos-personalTools-talkAlert {
+.skin-cosmos-personal-tools__talk-alert {
 	display: none;
 }
 
@@ -2787,7 +2826,7 @@ div.thumbinner {
 		display: none;
 	}
 
-	.skin-cosmos-personalTools-list .skin-cosmos-personalTools-talkAlert {
+	.skin-cosmos-personal-tools__list .skin-cosmos-personal-tools__talk-alert {
 		display: block;
 		padding: 0;
 		// The list has padding at the top, so the notice reaches the top edge of the menu
@@ -2806,7 +2845,7 @@ div.thumbinner {
 	}
 }
 
-.skin-cosmos-personalTools-list {
+.skin-cosmos-personal-tools__list {
 	.mw-ui-icon::before,
 	.mw-ui-icon-before::before,
 	.uls-trigger::before {
@@ -2821,7 +2860,7 @@ div.thumbinner {
 	}
 }
 
-.skin-cosmos-header-button .skin-cosmos-icon {
+.skin-cosmos-header__button .skin-cosmos-icon {
 	width: 18px;
 	min-width: 18px;
 	height: 18px;
@@ -2834,13 +2873,13 @@ div.thumbinner {
 	margin-right: 4px;
 }
 
-.skin-cosmos-colormode-toggle a {
+.skin-cosmos-colormode__toggle a {
 	display: flex;
 	align-items: center;
 	gap: 8px;
 }
 
-.skin-cosmos-rail-tools {
+.skin-cosmos-rail__tools {
 	padding: 0;
 	margin: 0;
 	list-style: none;
@@ -2867,16 +2906,16 @@ div.thumbinner {
 	}
 }
 
-.skin-cosmos-bannerOption-dropdownIcon {
+.skin-cosmos-banner-option__dropdown-icon {
 	margin-left: 0;
 	color: @banner-font-color;
 }
 
-.skin-cosmos-bannerOption-dropdownIcon .skin-cosmos-icon {
+.skin-cosmos-banner-option__dropdown-icon .skin-cosmos-icon {
 	width: 12px;
 	height: 12px;
 }
 
-.skin-cosmos-button-icon.skin-cosmos-icon-edit::before {
+.skin-cosmos-button__icon.skin-cosmos-icon-edit::before {
 	.cdx-mixin-css-icon-background-image( @cdx-icon-highlight, currentcolor );
 }

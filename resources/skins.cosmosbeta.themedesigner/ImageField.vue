@@ -1,10 +1,10 @@
 <template>
-	<div class="skin-cosmos-td-imagefield">
-		<div class="skin-cosmos-td-imagefield-row">
+	<div class="skin-cosmos-themedesigner__imagefield">
+		<div class="skin-cosmos-themedesigner__imagefield-row">
 			<cdx-lookup
 				v-model:selected="selected"
 				v-model:input-value="text"
-				class="skin-cosmos-td-imagefield-lookup"
+				class="skin-cosmos-themedesigner__imagefield-lookup"
 				:menu-items="items"
 				:menu-config="{ visibleItemLimit: 6 }"
 				:placeholder="placeholder"
@@ -26,7 +26,7 @@
 				</cdx-button>
 				<input
 					ref="file"
-					class="skin-cosmos-td-imagefield-file"
+					class="skin-cosmos-themedesigner__imagefield-file"
 					type="file"
 					:accept="accept"
 					@change="onFile"
