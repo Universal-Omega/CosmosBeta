@@ -17,6 +17,7 @@ use MediaWiki\Skin\Cosmos\Components\ChromeComponent;
 use MediaWiki\Skin\Cosmos\Components\CreatePageDialogComponent;
 use MediaWiki\Skin\Cosmos\Components\PageHeaderComponent;
 use MediaWiki\Skin\Cosmos\Components\WikiHeaderComponent;
+use MediaWiki\Skin\Cosmos\Lookup\WordmarkLookup;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
@@ -178,7 +179,7 @@ class SkinCosmos extends SkinMustache {
 			'is-cosmos-closable-notice' => $hasNotice && !$dismissable && !$noticeClosed,
 			'is-cosmos-empty-notice' => !$hasNotice,
 			'cosmos-notice-hash' => $hasNotice ? hash( 'crc32b', $siteNotice ) : null,
-			'msg-cosmosbeta-tagline' => $this->msg( 'cosmosbeta-tagline' )->escaped(),
+			'msg-cosmos-tagline' => $this->msg( 'cosmos-tagline' )->escaped(),
 		];
 	}
 
@@ -196,7 +197,7 @@ class SkinCosmos extends SkinMustache {
 		}
 
 		if ( $this->theme->getFooterSettings()['showIcons'] ) {
-			$modules['styles']['skin'][] = 'skins.cosmosbeta.footer.codex';
+			$modules['styles']['skin'][] = 'skins.cosmos.footer.codex';
 		}
 
 		if ( $this->extensionRegistry->isLoaded( 'PortableInfobox' ) ) {

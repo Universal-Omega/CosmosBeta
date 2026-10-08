@@ -56,7 +56,7 @@ class PageHeaderComponent {
 		}
 
 		return $tabs ? [
-			'msg-label' => $this->context->msg( 'cosmosbeta-associated-tabs-label' )->text(),
+			'msg-label' => $this->context->msg( 'cosmos-associated-tabs-label' )->text(),
 			'array-items' => $tabs,
 		] : null;
 	}
@@ -96,11 +96,11 @@ class PageHeaderComponent {
 		unset( $category );
 
 		return [
-			'msg-in' => $this->context->msg( 'cosmosbeta-article-header-categories-in' )->text(),
+			'msg-in' => $this->context->msg( 'cosmos-article-header-categories-in' )->text(),
 			'array-links' => $visible,
 			'has-more' => $hasMore,
-			'msg-more-separator' => $this->context->msg( 'cosmosbeta-article-header-categories-more-separator' )->text(),
-			'msg-more' => $this->context->msg( 'cosmosbeta-article-header-categories-more' )
+			'msg-more-separator' => $this->context->msg( 'cosmos-article-header-categories-more-separator' )->text(),
+			'msg-more' => $this->context->msg( 'cosmos-article-header-categories-more' )
 				->numParams( count( $more ) )->text(),
 			'array-more-links' => $more,
 		];
@@ -194,7 +194,7 @@ class PageHeaderComponent {
 					break;
 				default:
 					if ( $key === 'addsection' ) {
-						$item['text'] = $this->context->msg( 'cosmosbeta-action-addsection' )->text();
+						$item['text'] = $this->context->msg( 'cosmos-action-addsection' )->text();
 					}
 
 					if ( str_starts_with( $key, 'nstab-' ) ) {
@@ -215,21 +215,21 @@ class PageHeaderComponent {
 		$isTalkPage = $title->isTalkPage();
 		$talkUrl = $title->getTalkPageIfDefined()?->getLinkURL();
 		$pageUrl = $title->getLinkURL();
-		$backToPage = $view ? $this->context->msg( 'cosmosbeta-action-backtopage', $view['text'] )->text() : '';
+		$backToPage = $view ? $this->context->msg( 'cosmos-action-backtopage', $view['text'] )->text() : '';
 		$primary = $secondary = null;
 
 		if ( $isEditPage || $isSpecialAction ) {
 			if ( $isTalkPage ) {
 				$primary = $talk ? [
 					'icon' => 'close',
-					'text' => $this->context->msg( 'cosmosbeta-action-cancel' )->text(),
+					'text' => $this->context->msg( 'cosmos-action-cancel' )->text(),
 					'href' => $talkUrl ?? $talk['href'],
 				] + $talk : null;
 				$secondary = $view ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
 			} else {
 				$primary = $view ? [
 					'icon' => 'close',
-					'text' => $this->context->msg( 'cosmosbeta-action-cancel' )->text(),
+					'text' => $this->context->msg( 'cosmos-action-cancel' )->text(),
 					'href' => $pageUrl,
 				] + $view : null;
 				$secondary = $talk ? [ 'icon' => 'speechBubble' ] + $talk : null;
@@ -245,13 +245,13 @@ class PageHeaderComponent {
 			if ( $isTalkPage ) {
 				$primary = $talk ? [
 					'icon' => 'undo',
-					'text' => $this->context->msg( 'cosmosbeta-action-back' )->text(),
+					'text' => $this->context->msg( 'cosmos-action-back' )->text(),
 				] + $talk : null;
 				$secondary = $view ? [ 'icon' => 'undo', 'text' => $backToPage ] + $view : null;
 			} else {
 				$primary = $view ? [
 					'icon' => 'undo',
-					'text' => $this->context->msg( 'cosmosbeta-action-back' )->text(),
+					'text' => $this->context->msg( 'cosmos-action-back' )->text(),
 				] + $view : null;
 				$secondary = $talk;
 			}

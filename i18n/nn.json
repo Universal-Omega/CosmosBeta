@@ -4,5 +4,5 @@
 			"Njardarlogar"
 		]
 	},
-	"cosmosbeta-searchsuggest-containing": "Søk etter sider som inneheld <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>"
+	"cosmos-searchsuggest-containing": "Søk etter sider som inneheld <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>"
 }

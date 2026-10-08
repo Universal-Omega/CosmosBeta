@@ -40,7 +40,7 @@
 </template>
 
 <script>
-const { CdxButton, CdxLookup, CdxMessage } = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+const { CdxButton, CdxLookup, CdxMessage } = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ defineComponent, ref, watch } = require( 'vue' );
 
 const DELAY = 250;

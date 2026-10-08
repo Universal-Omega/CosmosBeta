@@ -41,7 +41,7 @@
 
 		const $item = $( '#m-colormode' ),
 			// eslint-disable-next-line mediawiki/msg-doc
-			label = mw.msg( 'cosmosbeta-colormode-switch-' + mode );
+			label = mw.msg( 'cosmos-colormode-switch-' + mode );
 
 		$item.attr( { title: label, 'aria-label': label } );
 		root.className = root.className.replace( /skin-theme-clientpref-\w+/, 'skin-theme-clientpref-' + ( mode === 'dark' ? 'night' : 'day' ) );

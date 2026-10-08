@@ -32,7 +32,7 @@ class ImportLegacyTheme extends LoggedUpdateMaintenance {
 	}
 
 	private function initServices(): void {
-		$this->themeStore = $this->getServiceContainer()->get( 'CosmosBetaThemeStore' );
+		$this->themeStore = $this->getServiceContainer()->get( 'Cosmos.ThemeStore' );
 	}
 
 	protected function doDBUpdates(): LoggedUpdateOutcome {

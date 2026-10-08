@@ -15,14 +15,14 @@ class AdminLinks implements AdminLinksHook {
 
 	/** @inheritDoc */
 	public function onAdminLinks( ALTree &$adminLinksTree ): void {
-		$section = new ALSection( wfMessage( 'skinname-cosmosbeta' )->text() );
-		$row = new ALRow( 'cosmosbeta' );
+		$section = new ALSection( wfMessage( 'skinname-cosmos' )->text() );
+		$row = new ALRow( 'cosmos' );
 
 		$links = [
-			'Cosmosbeta-navigation' => 'cosmosbeta-adminlinks-edit-navigation',
-			'Cosmosbeta-tagline' => 'cosmosbeta-adminlinks-edit-tagline',
-			'Cosmosbeta.css' => 'cosmosbeta-adminlinks-edit-css',
-			'Cosmosbeta.js' => 'cosmosbeta-adminlinks-edit-js',
+			'cosmos-navigation' => 'cosmos-adminlinks-edit-navigation',
+			'cosmos-tagline' => 'cosmos-adminlinks-edit-tagline',
+			'Cosmos.css' => 'cosmos-adminlinks-edit-css',
+			'Cosmos.js' => 'cosmos-adminlinks-edit-js',
 		];
 
 		foreach ( $links as $page => $message ) {

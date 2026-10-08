@@ -36,7 +36,7 @@ class BannerComponent {
 
 		return [
 			'is-registered' => $registered,
-			'username' => $registered ? $user->getName() : $this->context->msg( 'cosmosbeta-anonymous' )->text(),
+			'username' => $registered ? $user->getName() : $this->context->msg( 'cosmos-anonymous' )->text(),
 			'html-avatar' => $this->getAvatar( $user->getId() ),
 			'html-notifications' => $registered ? ( $portlets['data-notifications']['html-items'] ?? null ) : null,
 			'html-personal-items' => $items,

@@ -27,8 +27,8 @@ class ImportConfigTheme extends Maintenance {
 
 	private function initServices(): void {
 		$services = $this->getServiceContainer();
-		$this->configDefaults = $services->get( 'CosmosBetaConfigDefaults' );
-		$this->themeStore = $services->get( 'CosmosBetaThemeStore' );
+		$this->configDefaults = $services->get( 'Cosmos.ConfigDefaults' );
+		$this->themeStore = $services->get( 'Cosmos.ThemeStore' );
 	}
 
 	public function execute(): void {
@@ -47,7 +47,7 @@ class ImportConfigTheme extends Maintenance {
 		);
 
 		if ( !$this->configDefaults->isThemeDesignerOnly() ) {
-			$this->output( "Set \$wgCosmosBetaThemeDesignerOnly to true to stop using the configuration for the theme.\n" );
+			$this->output( "Set \$wgCosmosThemeDesignerOnly to true to stop using the configuration for the theme.\n" );
 		}
 	}
 }

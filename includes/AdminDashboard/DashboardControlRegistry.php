@@ -46,12 +46,12 @@ final readonly class DashboardControlRegistry {
 			$this->permissionManager->userHasRight( $user, 'edit' );
 
 		return array_values( array_filter( [
-			$this->special( 'themedesigner', $wiki, 'CosmosBetaThemeDesigner', $user ),
+			$this->special( 'themedesigner', $wiki, 'CosmosThemeDesigner', $user ),
 			$this->special( 'recentchanges', $wiki, 'Recentchanges', $user ),
 			$this->interfacePage( 'navigation', $wiki, CosmosNavigation::MESSAGE, $user ),
-			$this->interfacePage( 'tagline', $wiki, 'cosmosbeta-tagline', $user ),
-			$this->interfacePage( 'css', $wiki, 'Cosmosbeta.css', $user ),
-			$this->interfacePage( 'js', $wiki, 'Cosmosbeta.js', $user ),
+			$this->interfacePage( 'tagline', $wiki, 'cosmos-tagline', $user ),
+			$this->interfacePage( 'css', $wiki, 'Cosmos.css', $user ),
+			$this->interfacePage( 'js', $wiki, 'Cosmos.js', $user ),
 			$this->extensionRegistry->isLoaded( 'ManageWiki' ) ?
 				$this->special( 'managewiki', $wiki, 'ManageWiki', $user ) :
 				null,
@@ -119,7 +119,7 @@ final readonly class DashboardControlRegistry {
 	}
 
 	private function external( string $id, DashboardSection $section, MessageLocalizer $localizer ): ?DashboardControl {
-		$url = trim( $localizer->msg( "cosmosbeta-admindashboard-control-$id-url" )->inContentLanguage()->plain() );
+		$url = trim( $localizer->msg( "cosmos-admindashboard-control-$id-url" )->inContentLanguage()->plain() );
 		if ( !preg_match( '#^https?://#i', $url ) ) {
 			return null;
 		}

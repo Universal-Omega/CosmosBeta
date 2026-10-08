@@ -12,7 +12,7 @@
 </template>
 
 <script>
-const { CdxButton } = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+const { CdxButton } = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ defineComponent } = require( 'vue' ),
 	msg = require( './msg.js' ),
 	{ useReset } = require( './reset.js' );

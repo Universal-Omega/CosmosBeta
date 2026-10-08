@@ -245,7 +245,7 @@ class RailBuilder {
 				RailModule::ID_PAGE_TOOLS,
 				RailModuleType::Normal,
 				'page-tools-module',
-				'cosmosbeta-rail-page-tools',
+				'cosmos-rail-page-tools',
 				$this->toolItems
 			);
 		}

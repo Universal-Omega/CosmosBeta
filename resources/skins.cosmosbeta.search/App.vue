@@ -30,11 +30,11 @@
 			>
 		</template>
 		<template #search-results-pending>
-			{{ $i18n( 'cosmosbeta-search-loader' ).text() }}
+			{{ $i18n( 'cosmos-search-loader' ).text() }}
 		</template>
 		<!-- eslint-disable-next-line vue/no-template-shadow -->
 		<template #search-footer-text="{ searchQuery }">
-			<span v-i18n-html:cosmosbeta-searchsuggest-containing="[ searchQuery ]"></span>
+			<span v-i18n-html:cosmos-searchsuggest-containing="[ searchQuery ]"></span>
 		</template>
 	</cdx-typeahead-search>
 </template>

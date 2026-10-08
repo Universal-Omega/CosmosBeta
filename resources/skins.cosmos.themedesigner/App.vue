@@ -492,7 +492,7 @@ const {
 		CdxTabs,
 		CdxTextInput,
 		CdxToggleSwitch
-	} = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+	} = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ computed, defineComponent, onMounted, reactive, ref, watch } = require( 'vue' ),
 	colors = require( './colors.js' ),
 	FileField = require( './FileField.vue' ),

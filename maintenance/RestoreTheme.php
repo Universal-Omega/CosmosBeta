@@ -22,7 +22,7 @@ class RestoreTheme extends Maintenance {
 	}
 
 	private function initServices(): void {
-		$this->themeStore = $this->getServiceContainer()->get( 'CosmosBetaThemeStore' );
+		$this->themeStore = $this->getServiceContainer()->get( 'Cosmos.ThemeStore' );
 	}
 
 	public function execute(): void {

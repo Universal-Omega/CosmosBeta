@@ -4,15 +4,15 @@
 			"Yupik"
 		]
 	},
-	"cosmosbeta-counter-label": "{{PLURAL:$1|artikkel|artikkeeʹl|artikkeeʹled}}",
-	"cosmosbeta-createpage-header": "Raaj ođđ artikkeeʹl",
-	"cosmosbeta-personaltools-userpage": "Õõʹnniseidd",
-	"cosmosbeta-action-addsection": "Ođđ teeʹmm",
-	"cosmosbeta-action-cancel": "Jõõsk",
-	"cosmosbeta-add-new-image": "Lââʹzzet ođđ snimldõõǥǥ leʹbe kaart",
-	"cosmosbeta-add-new-video": "Lââʹzzet ođđ video",
-	"cosmosbeta-add-new-page-title": "Lââʹzzet ođđ seeid",
-	"cosmosbeta-add-new-page-text": "Lââʹzzet",
-	"cosmosbeta-anon-add-new-page-text": "Lââʹzzet ođđ seeid",
-	"cosmosbeta-newfiles": "Ođđ teâttõõzz"
+	"cosmos-counter-label": "{{PLURAL:$1|artikkel|artikkeeʹl|artikkeeʹled}}",
+	"cosmos-createpage-header": "Raaj ođđ artikkeeʹl",
+	"cosmos-personaltools-userpage": "Õõʹnniseidd",
+	"cosmos-action-addsection": "Ođđ teeʹmm",
+	"cosmos-action-cancel": "Jõõsk",
+	"cosmos-add-new-image": "Lââʹzzet ođđ snimldõõǥǥ leʹbe kaart",
+	"cosmos-add-new-video": "Lââʹzzet ođđ video",
+	"cosmos-add-new-page-title": "Lââʹzzet ođđ seeid",
+	"cosmos-add-new-page-text": "Lââʹzzet",
+	"cosmos-anon-add-new-page-text": "Lââʹzzet ođđ seeid",
+	"cosmos-newfiles": "Ođđ teâttõõzz"
 }

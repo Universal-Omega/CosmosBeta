@@ -10,8 +10,8 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SiteStats\SiteStats;
+use MediaWiki\Skin\Cosmos\Lookup\WordmarkLookup;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
-use MediaWiki\Skin\Cosmos\WordmarkLookup;
 use MediaWiki\SpecialPage\SpecialPage;
 use function ucwords;
 
@@ -38,7 +38,7 @@ class WikiHeaderComponent {
 			'sitename' => $this->context->msg( 'sitetitle' )->text(),
 			'can-read' => $canRead,
 			'counter-value' => $this->context->getLanguage()->formatNum( $articles ),
-			'counter-label' => $this->context->msg( 'cosmosbeta-counter-label' )->numParams( $articles )->escaped(),
+			'counter-label' => $this->context->msg( 'cosmos-counter-label' )->numParams( $articles )->escaped(),
 		];
 
 		return $canRead ? $data + $this->getButtons( !$user->isNamed() ) : $data;
@@ -53,10 +53,10 @@ class WikiHeaderComponent {
 		$canUpload = $can( 'upload' ) && $this->config->get( MainConfigNames::EnableUploads );
 		$canAddVideo = $can( 'addvideo' ) && $this->extensionRegistry->isLoaded( 'Video' );
 		$canViewAdminLinks = $can( 'adminlinks' );
-		$canViewDashboard = $can( 'cosmosbeta-admindashboard' );
+		$canViewDashboard = $can( 'cosmos-admindashboard' );
 
 		$recentChanges = $this->context->msg( 'recentchanges' );
-		$addNewPage = $this->context->msg( 'cosmosbeta-add-new-page-text' );
+		$addNewPage = $this->context->msg( 'cosmos-add-new-page-text' );
 		$uploadUrl = $this->config->get( MainConfigNames::UploadNavigationUrl ) ?:
 			SpecialPage::getTitleFor( 'Upload' )->getFullURL();
 		$recentChangesUrl = SpecialPage::getTitleFor( 'Recentchanges' )->getFullURL();
@@ -66,7 +66,7 @@ class WikiHeaderComponent {
 			$createText = $isAnon ? $addNewPage->text() : null;
 		} else {
 			$createText = $isAnon ?
-				$this->context->msg( 'cosmosbeta-anon-add-new-page-text' )->text() :
+				$this->context->msg( 'cosmos-anon-add-new-page-text' )->text() :
 				$addNewPage->text();
 		}
 
@@ -80,7 +80,7 @@ class WikiHeaderComponent {
 			'has-create' => $canCreate && $canEdit,
 			'create-text' => $createText,
 			'create-flush' => !$isAnon && $canViewAdminLinks,
-			'create-title' => $this->context->msg( 'cosmosbeta-add-new-page-title' )->text(),
+			'create-title' => $this->context->msg( 'cosmos-add-new-page-title' )->text(),
 			'has-recentchanges' => !$isAnon || $onlyRead,
 			'recentchanges-text' => $onlyRead ? $recentChanges->text() : null,
 			'recentchanges-url' => $recentChangesUrl,
@@ -88,21 +88,21 @@ class WikiHeaderComponent {
 			'has-admin' => $canViewDashboard || ( $canViewAdminLinks && $this->extensionRegistry->isLoaded( 'Admin Links' ) ),
 			'admin-url' => SpecialPage::getTitleFor( $canViewDashboard ? 'AdminDashboard' : 'AdminLinks' )->getFullURL(),
 			'admin-title' => $canViewDashboard ?
-				$this->context->msg( 'cosmosbeta-admindashboard' )->text() :
+				$this->context->msg( 'cosmos-admindashboard' )->text() :
 				ucwords( $this->context->msg( 'adminlinks' )->text() ),
 			'has-more' => $hasMore,
 			'has-colormode' => $hasColorMode,
 			'colormode-icon' => $mode === 'dark' ? 'bright' : 'moon',
-			'colormode-text' => $this->context->msg( "cosmosbeta-colormode-switch-$mode" )->text(),
+			'colormode-text' => $this->context->msg( "cosmos-colormode-switch-$mode" )->text(),
 			'colormode-url' => $user->isNamed() ?
 				SpecialPage::getTitleFor( 'Preferences' )->getLocalURL() . '#mw-prefsection-rendering' :
 				'#',
 			'has-more-image' => $canUpload,
 			'more-image-url' => $uploadUrl,
-			'msg-more-image' => $this->context->msg( 'cosmosbeta-add-new-image' )->text(),
+			'msg-more-image' => $this->context->msg( 'cosmos-add-new-image' )->text(),
 			'has-more-video' => $canAddVideo,
 			'more-video-url' => SpecialPage::getTitleFor( 'AddVideo' )->getFullURL(),
-			'msg-more-video' => $this->context->msg( 'cosmosbeta-add-new-video' )->text(),
+			'msg-more-video' => $this->context->msg( 'cosmos-add-new-video' )->text(),
 			'msg-recentchanges' => $recentChanges->text(),
 		];
 	}

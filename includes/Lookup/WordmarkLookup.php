@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skin\Cosmos;
+namespace MediaWiki\Skin\Cosmos\Lookup;
 
 use MediaWiki\FileRepo\File\File;
 use MediaWiki\FileRepo\RepoGroup;
