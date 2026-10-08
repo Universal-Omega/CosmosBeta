@@ -95,7 +95,7 @@ class SocialProfile {
 		return [
 			'url' => SpecialPage::getTitleFor( 'Contributions', $owner->getName() )->getFullURL(),
 			'count' => (string)$owner->getEditCount(),
-			'label' => $context->msg( 'cosmosbeta-editcount-label' )->text(),
+			'label' => $context->msg( 'cosmos-editcount-label' )->text(),
 			'registration' => date( 'F j, Y', strtotime( (string)$owner->getRegistration() ) ),
 		];
 	}
@@ -104,7 +104,7 @@ class SocialProfile {
 		if ( $owner->getBlock() ) {
 			return [ [
 				'class' => 'skin-cosmos-profile__tag--blocked tag-blocked',
-				'text' => $context->msg( 'cosmosbeta-user-blocked' )->text(),
+				'text' => $context->msg( 'cosmos-user-blocked' )->text(),
 			] ];
 		}
 

@@ -45,11 +45,11 @@ class ColorMode implements
 		$preferences[ColorModeResolver::OPTION] = [
 			'type' => 'radio',
 			'section' => 'rendering/skin/skin-prefs',
-			'label-message' => 'cosmosbeta-pref-colormode',
+			'label-message' => 'cosmos-pref-colormode',
 			'options-messages' => [
-				'cosmosbeta-pref-colormode-default' => '',
-				'cosmosbeta-pref-colormode-light' => ThemeSettings::MODE_LIGHT,
-				'cosmosbeta-pref-colormode-dark' => ThemeSettings::MODE_DARK,
+				'cosmos-pref-colormode-default' => '',
+				'cosmos-pref-colormode-light' => ThemeSettings::MODE_LIGHT,
+				'cosmos-pref-colormode-dark' => ThemeSettings::MODE_DARK,
 			],
 			'hide-if' => [ '!==', 'skin', 'cosmosbeta' ],
 		];

@@ -34,7 +34,7 @@ class CosmosNavigation {
 		ConfigNames::RailSidebarPortlets,
 	];
 
-	public const string MESSAGE = 'cosmosbeta-navigation';
+	public const string MESSAGE = 'cosmos-navigation';
 
 	private const string EXPLORE_ICON = 'globe';
 	private const string ICON_PATTERN = '/\s*\{icon\s*=\s*([A-Za-z0-9-]+)\s*\}/';
@@ -173,7 +173,7 @@ class CosmosNavigation {
 			return [];
 		}
 
-		$exploreText = $localizer->msg( 'cosmosbeta-explore' )->text();
+		$exploreText = $localizer->msg( 'cosmos-explore' )->text();
 		$tree = [];
 
 		foreach ( $nodes[0]['children'] as $index ) {

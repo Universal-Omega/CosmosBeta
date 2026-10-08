@@ -4,10 +4,10 @@
 			"Neptune, the Mystic"
 		]
 	},
-	"cosmosbeta-createpage-input-label": "Ovdje upišite naziv svoje stranice:",
-	"cosmosbeta-personaltools-userpage": "Suradnička stranica",
-	"cosmosbeta-personaltools-usertalk": "Razgovor sa suradnikom",
-	"cosmosbeta-action-addsection": "Nova tema",
-	"cosmosbeta-anon-add-new-page-text": "Dodaj novu stranicu",
-	"cosmosbeta-explore": "Istraži"
+	"cosmos-createpage-input-label": "Ovdje upišite naziv svoje stranice:",
+	"cosmos-personaltools-userpage": "Suradnička stranica",
+	"cosmos-personaltools-usertalk": "Razgovor sa suradnikom",
+	"cosmos-action-addsection": "Nova tema",
+	"cosmos-anon-add-new-page-text": "Dodaj novu stranicu",
+	"cosmos-explore": "Istraži"
 }

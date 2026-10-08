@@ -30,24 +30,24 @@ class CreatePageDialogComponent {
 	public function getTemplateData(): array {
 		$wantedPagesEnabled = (bool)$this->config->get( ConfigNames::EnableWantedPages );
 		$wantedPagesMessage = $wantedPagesEnabled ?
-			$this->context->msg( 'cosmosbeta-createpage-wanted-pages' )->text() :
+			$this->context->msg( 'cosmos-createpage-wanted-pages' )->text() :
 			$this->context->msg(
-				'cosmosbeta-createpage-no-wanted-pages',
+				'cosmos-createpage-no-wanted-pages',
 				SpecialPage::getTitleFor( 'Wantedpages' )->getPrefixedText()
 			)->text();
 
 		return [
 			'form-action' => $this->config->get( MainConfigNames::Script ),
-			'msg-close' => $this->context->msg( 'cosmosbeta-createpage-close' )->text(),
-			'msg-header' => $this->context->msg( 'cosmosbeta-createpage-header' )->text(),
-			'msg-label' => $this->context->msg( 'cosmosbeta-createpage-input-label' )->text(),
+			'msg-close' => $this->context->msg( 'cosmos-createpage-close' )->text(),
+			'msg-header' => $this->context->msg( 'cosmos-createpage-header' )->text(),
+			'msg-label' => $this->context->msg( 'cosmos-createpage-input-label' )->text(),
 			'html-text' => $this->context->msg(
-				'cosmosbeta-createpage-text',
+				'cosmos-createpage-text',
 				$this->context->getLanguage()->formatNum( SiteStats::articles() ),
 				$this->context->msg( 'sitetitle' )->text(),
 				$wantedPagesMessage
 			)->parse(),
-			'msg-next' => $this->context->msg( 'cosmosbeta-createpage-next' )->text(),
+			'msg-next' => $this->context->msg( 'cosmos-createpage-next' )->text(),
 			'array-proposals' => $wantedPagesEnabled ? $this->getMostWantedPages() : [],
 		];
 	}

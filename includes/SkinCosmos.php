@@ -179,7 +179,7 @@ class SkinCosmos extends SkinMustache {
 			'is-cosmos-closable-notice' => $hasNotice && !$dismissable && !$noticeClosed,
 			'is-cosmos-empty-notice' => !$hasNotice,
 			'cosmos-notice-hash' => $hasNotice ? hash( 'crc32b', $siteNotice ) : null,
-			'msg-cosmosbeta-tagline' => $this->msg( 'cosmosbeta-tagline' )->escaped(),
+			'msg-cosmos-tagline' => $this->msg( 'cosmos-tagline' )->escaped(),
 		];
 	}
 

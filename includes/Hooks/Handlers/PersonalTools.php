@@ -10,9 +10,9 @@ use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
 class PersonalTools implements SkinTemplateNavigation__UniversalHook {
 
 	private const array LABELS = [
-		'userpage' => 'cosmosbeta-personaltools-userpage',
-		'mytalk' => 'cosmosbeta-personaltools-usertalk',
-		'anontalk' => 'cosmosbeta-personaltools-anontalk',
+		'userpage' => 'cosmos-personaltools-userpage',
+		'mytalk' => 'cosmos-personaltools-usertalk',
+		'anontalk' => 'cosmos-personaltools-anontalk',
 	];
 
 	private const array MENUS = [

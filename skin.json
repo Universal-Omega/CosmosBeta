@@ -3,8 +3,8 @@
 	"version": "10.0.0",
 	"author": "Universal Omega",
 	"url": "https://www.mediawiki.org/wiki/Skin:Cosmos",
-	"descriptionmsg": "cosmosbeta-desc",
-	"namemsg": "skinname-cosmosbeta",
+	"descriptionmsg": "cosmos-desc",
+	"namemsg": "skinname-cosmos",
 	"license-name": "GPL-3.0-or-later",
 	"type": "skin",
 	"requires": {
@@ -65,8 +65,8 @@
 						}
 					},
 					"messages": [
-						"cosmosbeta-colormode-switch-light",
-						"cosmosbeta-colormode-switch-dark"
+						"cosmos-colormode-switch-light",
+						"cosmos-colormode-switch-dark"
 					]
 				}
 			]
@@ -180,8 +180,8 @@
 				"mediawiki.user"
 			],
 			"messages": [
-				"cosmosbeta-colormode-switch-light",
-				"cosmosbeta-colormode-switch-dark"
+				"cosmos-colormode-switch-light",
+				"cosmos-colormode-switch-dark"
 			]
 		},
 		"skins.cosmosbeta.searchLoader": {
@@ -197,7 +197,7 @@
 				"mediawiki.util"
 			],
 			"messages": [
-				"cosmosbeta-search-loader"
+				"cosmos-search-loader"
 			]
 		},
 		"skins.cosmosbeta.search.codex.styles": {
@@ -240,8 +240,8 @@
 			"messages": [
 				"searchbutton",
 				"searchresults",
-				"cosmosbeta-search-loader",
-				"cosmosbeta-searchsuggest-containing"
+				"cosmos-search-loader",
+				"cosmos-searchsuggest-containing"
 			]
 		},
 		"skins.cosmos.footer.codex": {
@@ -746,8 +746,8 @@
 				"recentchanges": false,
 				"interface": [
 					{
-						"cosmosbeta-custom-rail-module": "normal",
-						"cosmosbeta-custom-sticky-rail-module": "sticky"
+						"cosmos-custom-rail-module": "normal",
+						"cosmos-custom-sticky-rail-module": "sticky"
 					}
 				]
 			},

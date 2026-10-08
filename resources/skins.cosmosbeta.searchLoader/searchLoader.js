@@ -59,7 +59,7 @@ function renderSearchLoadingIndicator( event ) {
 	}
 
 	if ( !form.dataset.loadingMsg ) {
-		form.dataset.loadingMsg = mw.msg( 'cosmosbeta-search-loader' );
+		form.dataset.loadingMsg = mw.msg( 'cosmos-search-loader' );
 	}
 
 	if ( event.type === 'input' ) {

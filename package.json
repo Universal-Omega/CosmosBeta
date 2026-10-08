@@ -1,5 +1,5 @@
 {
-	"name": "CosmosBeta",
+	"name": "Cosmos",
 	"private": true,
 	"scripts": {
 		"test": "npm -s run lint",
