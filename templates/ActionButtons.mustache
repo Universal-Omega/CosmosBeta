@@ -1,13 +1,13 @@
 {{#data-primary}}{{> ActionButton}}{{/data-primary}}
 {{#has-dropdown}}
-<div class="skin-cosmos-dropdown cosmos-dropdown{{#is-dropdown-only}} skin-cosmos-dropdown-only{{/is-dropdown-only}}" id="cosmos-actions-actionsList">
-	<div class="skin-cosmos-button cosmos-button skin-cosmos-button-primary cosmos-button-primary skin-cosmos-button-action cosmos-button-action skin-cosmos-dropdown-button cosmos-dropdown-button" id="cosmos-actionsList-button">
-		<div id="cosmos-actionsList-dropdownIcon" class="skin-cosmos-dropdown-icon cosmos-dropdown-icon">
+<div class="skin-cosmos-dropdown cosmos-dropdown{{#is-dropdown-only}} skin-cosmos-dropdown--only{{/is-dropdown-only}}" id="cosmos-actions-actionsList">
+	<div class="skin-cosmos-button cosmos-button skin-cosmos-button--primary cosmos-button-primary skin-cosmos-button--action cosmos-button-action skin-cosmos-dropdown__button cosmos-dropdown-button" id="cosmos-actionsList-button">
+		<div id="cosmos-actionsList-dropdownIcon" class="skin-cosmos-dropdown__icon cosmos-dropdown-icon">
 			<span class="skin-cosmos-icon skin-cosmos-icon-expand" aria-hidden="true"></span>
-			<span class="skin-cosmos-icon skin-cosmos-icon-verticalEllipsis skin-cosmos-dropdown-icon-alt" aria-hidden="true"></span>
+			<span class="skin-cosmos-icon skin-cosmos-icon-verticalEllipsis skin-cosmos-dropdown__icon--alt" aria-hidden="true"></span>
 		</div>
 	</div>
-	<ul class="skin-cosmos-dropdown-list cosmos-dropdown-list" id="cosmos-actionsList-list">
+	<ul class="skin-cosmos-dropdown__list cosmos-dropdown-list" id="cosmos-actionsList-list">
 		{{#array-dropdown-items}}{{{html-item}}}{{/array-dropdown-items}}
 	</ul>
 </div>
