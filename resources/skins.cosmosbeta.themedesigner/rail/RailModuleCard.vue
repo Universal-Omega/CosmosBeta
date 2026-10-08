@@ -1,8 +1,8 @@
 <template>
-	<cdx-accordion class="skin-cosmos-td-rail-module">
+	<cdx-accordion class="skin-cosmos-themedesigner__rail-module">
 		<template #title>
 			{{ title }}
-			<span class="skin-cosmos-td-rail-origin">{{ msg( 'rail-origin-' + entry.origin ) }}</span>
+			<span class="skin-cosmos-themedesigner__rail-origin">{{ msg( 'rail-origin-' + entry.origin ) }}</span>
 		</template>
 		<template v-if="summary !== ''" #description>
 			{{ summary }}

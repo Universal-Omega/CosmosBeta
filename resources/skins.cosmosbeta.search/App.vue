@@ -135,7 +135,7 @@ module.exports = exports = defineComponent( {
 	computed: {
 		rootClasses() {
 			return {
-				'skin-cosmos-search-box-disable-transitions': this.disableTransitions,
+				'skin-cosmos-search-box--no-transitions': this.disableTransitions,
 				'cosmos-search-box-disable-transitions': this.disableTransitions,
 				'skin-cosmos-typeahead-search--active': this.isFocused,
 				'cosmos-typeahead-search--active': this.isFocused

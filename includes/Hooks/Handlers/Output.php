@@ -33,26 +33,29 @@ class Output implements
 		}
 
 		$user = $skin->getUser();
+		$isNamed = $user->isNamed();
+		$isDark = $this->lessUtil->isDark(
+			'content',
+			$this->config->getRenderMode(),
+			LessUtil::CONTENT_THRESHOLD
+		);
+
 		$classes = [
-			$user->isNamed() ? 'user-logged' : 'user-anon',
-			$this->lessUtil->isDark(
-				'content',
-				$this->config->getRenderMode(),
-				LessUtil::CONTENT_THRESHOLD
-			) ? 'theme-dark' : 'theme-light',
+			$isNamed ? 'user-logged skin-cosmos-user-logged' : 'user-anon skin-cosmos-user-anon',
+			$isDark ? 'theme-dark skin-cosmos-theme-dark' : 'theme-light skin-cosmos-theme-light',
 		];
 
 		if ( $this->config->hasHeaderBorder() ) {
-			$classes[] = 'skin-cosmos-header-border';
+			$classes[] = 'skin-cosmos-has-header-border';
 		}
 
 		$buttonStyle = $this->config->getButtonStyle();
 		if ( $buttonStyle !== 'default' ) {
-			$classes[] = "skin-cosmos-$buttonStyle-buttons";
+			$classes[] = "skin-cosmos-buttons--$buttonStyle";
 		}
 
 		if ( $out->getTitle()->isMainPage() ) {
-			$classes[] = 'mainpage';
+			$classes[] = 'mainpage skin-cosmos-is-main-page';
 		}
 
 		$additional = $out->getProperty( 'additionalBodyClass' );

@@ -1,17 +1,17 @@
-<div id="p-personal" class="skin-cosmos-userOptions-personalTools cosmos-userOptions-personalTools skin-cosmos-dropdown cosmos-dropdown skin-cosmos-bannerOption cosmos-bannerOption" aria-labelledby="p-personal-label">
-	<div id="cosmos-personalTools-userButton" class="skin-cosmos-dropdown-button cosmos-dropdown-button skin-cosmos-bannerOption-button cosmos-bannerOption-button">
-		<div id="cosmos-userButton-avatar" class="skin-cosmos-bannerOption-icon cosmos-bannerOption-icon">
+<div id="p-personal" class="skin-cosmos-personal-tools cosmos-userOptions-personalTools skin-cosmos-dropdown cosmos-dropdown skin-cosmos-banner-option cosmos-bannerOption" aria-labelledby="p-personal-label">
+	<div id="cosmos-personalTools-userButton" class="skin-cosmos-dropdown__button cosmos-dropdown-button skin-cosmos-banner-option__button cosmos-bannerOption-button">
+		<div id="cosmos-userButton-avatar" class="skin-cosmos-banner-option__icon cosmos-bannerOption-icon">
 			{{#html-avatar}}{{{.}}}{{/html-avatar}}
 			{{^html-avatar}}<span class="skin-cosmos-icon skin-cosmos-icon-userAvatarOutline" aria-hidden="true"></span>{{/html-avatar}}
 		</div>
-		<span id="p-personal-label" class="skin-cosmos-userButton-label cosmos-userButton-label">{{username}}</span>
-		<div id="cosmos-userButton-icon" class="skin-cosmos-dropdown-icon cosmos-dropdown-icon skin-cosmos-bannerOption-dropdownIcon cosmos-bannerOption-dropdownIcon">
+		<span id="p-personal-label" class="skin-cosmos-personal-tools__user-label cosmos-userButton-label">{{username}}</span>
+		<div id="cosmos-userButton-icon" class="skin-cosmos-dropdown__icon cosmos-dropdown-icon skin-cosmos-banner-option__dropdown-icon cosmos-bannerOption-dropdownIcon">
 			<span class="skin-cosmos-icon skin-cosmos-icon-expand" aria-hidden="true"></span>
 		</div>
 	</div>
-	<div class="body skin-cosmos-personalTools-list cosmos-personalTools-list skin-cosmos-dropdown-list cosmos-dropdown-list">
+	<div class="body skin-cosmos-personal-tools__list cosmos-personalTools-list skin-cosmos-dropdown__list cosmos-dropdown-list">
 		<ul>
-			{{#data-talk-alert}}<li class="skin-cosmos-personalTools-talkAlert"><a href="{{href}}">{{text}}</a></li>{{/data-talk-alert}}
+			{{#data-talk-alert}}<li class="skin-cosmos-personal-tools__talk-alert"><a href="{{href}}">{{text}}</a></li>{{/data-talk-alert}}
 			{{{html-personal-items}}}
 		</ul>
 	</div>

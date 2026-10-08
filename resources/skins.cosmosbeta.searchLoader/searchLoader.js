@@ -10,7 +10,7 @@
 
 const /** @type {CosmosResourceLoaderVirtualConfig} */
 	config = require( /** @type {string} */ ( './config.json' ) ),
-	SEARCH_LOADING_CLASS = 'search-form__loader';
+	SEARCH_LOADING_CLASSES = [ 'skin-cosmos-search-form__loader', 'search-form__loader' ];
 
 /**
  * Loads the search module via `mw.loader.using` on the element's
@@ -63,13 +63,13 @@ function renderSearchLoadingIndicator( event ) {
 	}
 
 	if ( event.type === 'input' ) {
-		form.classList.add( SEARCH_LOADING_CLASS );
+		form.classList.add( ...SEARCH_LOADING_CLASSES );
 
 	} else if ( event.type === 'focusout' ) {
-		form.classList.remove( SEARCH_LOADING_CLASS );
+		form.classList.remove( ...SEARCH_LOADING_CLASSES );
 
 	} else if ( event.type === 'focusin' && input.value.trim() ) {
-		form.classList.add( SEARCH_LOADING_CLASS );
+		form.classList.add( ...SEARCH_LOADING_CLASSES );
 	}
 }
 
@@ -91,7 +91,7 @@ function setLoadingIndicatorListeners( element, attach, eventCallback ) {
 	} );
 
 	if ( !attach ) {
-		element.classList.remove( SEARCH_LOADING_CLASS );
+		element.classList.remove( ...SEARCH_LOADING_CLASSES );
 	}
 }
 
@@ -121,7 +121,7 @@ function initSearchLoader( document ) {
 	 */
 	if ( mw.loader.getState( 'skins.cosmosbeta.search' ) === null ) {
 		document.body.classList.remove(
-			'skin-cosmos-search-vue'
+			'skin-cosmos-has-vue-search'
 		);
 		return;
 	}
@@ -172,13 +172,13 @@ function initSearchFocusState() {
 
 	document.addEventListener( 'focusin', ( event ) => {
 		if ( $( window ).width() < 851 && isInSearch( event.target ) ) {
-			banner.classList.add( 'skin-cosmos-search-active' );
+			banner.classList.add( 'skin-cosmos-is-search-active' );
 		}
 	} );
 
 	document.addEventListener( 'focusout', ( event ) => {
 		if ( !isInSearch( event.relatedTarget ) ) {
-			banner.classList.remove( 'skin-cosmos-search-active' );
+			banner.classList.remove( 'skin-cosmos-is-search-active' );
 		}
 	} );
 }

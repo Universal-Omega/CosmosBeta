@@ -1,9 +1,9 @@
-<form id="{{form-id}}" class="skin-cosmos-td" method="post" action="{{action}}">
+<form id="{{form-id}}" class="skin-cosmos-themedesigner" method="post" action="{{action}}">
 	{{{html-token}}}
-	<div id="skin-cosmos-themedesigner-app">
+	<div id="skin-cosmos-themedesigner__app">
 		<noscript>{{msg-nojs}}</noscript>
 	</div>
-	<details class="cdx-accordion skin-cosmos-td-advanced">
+	<details class="cdx-accordion skin-cosmos-themedesigner__advanced">
 		<summary>
 			<h3 class="cdx-accordion__header">
 				<span class="cdx-accordion__header__title">{{msg-advanced}}</span>
@@ -12,11 +12,11 @@
 		</summary>
 		<div class="cdx-accordion__content">
 			<div class="cdx-text-area">
-				<textarea class="cdx-text-area__textarea" id="skin-cosmos-themedesigner-json" name="wpThemeJson" rows="14" spellcheck="false">{{json}}</textarea>
+				<textarea class="cdx-text-area__textarea" id="skin-cosmos-themedesigner__json" name="wpThemeJson" rows="14" spellcheck="false">{{json}}</textarea>
 			</div>
 		</div>
 	</details>
-	<div class="skin-cosmos-td-publish">
+	<div class="skin-cosmos-themedesigner__publish">
 		<div class="cdx-text-input">
 			<input class="cdx-text-input__input" type="text" name="wpComment" maxlength="200" placeholder="{{msg-comment}}" aria-label="{{msg-comment}}">
 		</div>

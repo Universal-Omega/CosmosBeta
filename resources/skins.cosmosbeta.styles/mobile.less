@@ -1,5 +1,5 @@
 .skin-cosmos-header__sitename a,
-.skin-cosmos-header__local-navigation,
+.skin-cosmos-header__navigation,
 .skin-cosmos-header__wordmark,
 #cosmos-search-buttonContainer {
 	display: none;
@@ -128,21 +128,21 @@ div.thumb {
 	color: #000;
 }
 
-.skin-cosmos-mobile-menu-button {
+.skin-cosmos-mobile-menu__button {
 	font-size: 18px;
 	font-weight: bold;
 	transform: scale( 1.4, 1 );
 }
 
-.skin-cosmos-mobile-navigation {
+.skin-cosmos-mobile-menu {
 	display: flex;
 }
 
-.skin-cosmos-button.skin-cosmos-button-primary.skin-cosmos-mobile-menu-button {
+.skin-cosmos-button.skin-cosmos-button--primary.skin-cosmos-mobile-menu__button {
 	background: transparent;
 }
 
-.skin-cosmos-menu__content .skin-cosmos-list.skin-cosmos-list--linked > li:hover > a:not( .skin-cosmos-header-button ) {
+.skin-cosmos-menu__content .skin-cosmos-list.skin-cosmos-list--linked > li:hover > a:not( .skin-cosmos-header__button ) {
 	color: #088488;
 }
 
@@ -160,9 +160,9 @@ div.thumb {
 	display: none;
 }
 
-#cosmos-banner.skin-cosmos-search-active {
+#cosmos-banner.skin-cosmos-is-search-active {
 	#cosmos-banner-userOptions,
-	.skin-cosmos-mobile-menu-button {
+	.skin-cosmos-mobile-menu__button {
 		display: none;
 	}
 
@@ -177,7 +177,7 @@ div.thumb {
 	background-color: var( --skin-cosmos-content-background );
 	border-radius: 4px;
 
-	.skin-cosmos-header__local-navigation {
+	.skin-cosmos-header__navigation {
 		display: block;
 		height: auto;
 		padding: 0;
@@ -225,14 +225,14 @@ div.thumb {
 }
 
 /* Smaller default and rounded buttons, the slim and text styles have their own sizes */
-body:not( .skin-cosmos-slim-buttons ):not( .skin-cosmos-text-buttons ) #cosmos-articleHeader-actions {
+body:not( .skin-cosmos-buttons--slim ):not( .skin-cosmos-buttons--text ) #cosmos-articleHeader-actions {
 	.skin-cosmos-button {
 		height: 20px;
 		padding: 5px 12px;
 		font-size: 12px;
 	}
 
-	.skin-cosmos-button-icon {
+	.skin-cosmos-button__icon {
 		width: 16px;
 		height: 16px;
 		margin: 0 4px 0 -2px;

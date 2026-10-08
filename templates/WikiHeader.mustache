@@ -4,7 +4,7 @@
 		<a href="{{link-mainpage}}" title="{{sitename}}"><img src="{{.}}" alt="{{sitename}}"></a>
 	</div>
 	{{/wordmark-url}}
-	<div class="skin-cosmos-header__top-container cosmos-header__top-container">
+	<div class="skin-cosmos-header__top cosmos-header__top-container">
 		<div class="skin-cosmos-header__sitename cosmos-header__sitename">
 			<a href="{{link-mainpage}}">{{{msg-cosmosbeta-tagline}}}</a>
 		</div>
@@ -13,31 +13,31 @@
 			<span class="skin-cosmos-header__counter-value cosmos-header__counter-value">{{counter-value}}</span>
 			<span class="skin-cosmos-header__counter-label cosmos-header__counter-label">{{{counter-label}}}</span>
 		</div>
-		<div class="skin-cosmos-header__wiki-buttons cosmos-header__wiki-buttons skin-cosmos-header-buttons wds-button-group">
+		<div class="skin-cosmos-header__buttons cosmos-header__wiki-buttons wds-button-group">
 			{{#has-create}}
-			<a class="skin-cosmos-header-button wds-button skin-cosmos-is-secondary wds-is-secondary createpage{{#create-flush}} skin-cosmos-is-flush cosmos-is-flush{{/create-flush}}" id="createpage" href="#create-article" title="{{create-title}}">
-				<span class="skin-cosmos-icon skin-cosmos-icon-add" aria-hidden="true"></span>{{create-text}}
+			<a class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary createpage skin-cosmos-header__button--create{{#create-flush}} skin-cosmos-is-flush cosmos-is-flush{{/create-flush}}" id="createpage" href="#create-article" title="{{create-title}}">
+				<span class="skin-cosmos-icon skin-cosmos-icon-add skin-cosmos-header__icon--create wds-icon wds-icon-small" aria-hidden="true"></span>{{create-text}}
 			</a>
 			{{/has-create}}
 			{{#has-recentchanges}}
-			<a class="skin-cosmos-header-button wds-button skin-cosmos-is-secondary wds-is-secondary" href="{{recentchanges-url}}" title="{{recentchanges-title}}">
-				<span class="skin-cosmos-icon skin-cosmos-icon-recentChanges" aria-hidden="true"></span>{{#recentchanges-text}}&nbsp;&nbsp;{{.}}{{/recentchanges-text}}
+			<a class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary" href="{{recentchanges-url}}" title="{{recentchanges-title}}">
+				<span class="skin-cosmos-icon skin-cosmos-icon-recentChanges skin-cosmos-header__icon--recent-changes wds-icon wds-icon-small" aria-hidden="true"></span>{{#recentchanges-text}}&nbsp;&nbsp;{{.}}{{/recentchanges-text}}
 			</a>
 			{{/has-recentchanges}}
 			{{#has-admin}}
-			<a class="skin-cosmos-header-button wds-button skin-cosmos-is-secondary wds-is-secondary" href="{{admin-url}}" title="{{admin-title}}">
-				<span class="skin-cosmos-icon skin-cosmos-icon-settings" aria-hidden="true"></span>
+			<a class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary" href="{{admin-url}}" title="{{admin-title}}">
+				<span class="skin-cosmos-icon skin-cosmos-icon-settings skin-cosmos-header__icon--admin wds-icon wds-icon-small" aria-hidden="true"></span>
 			</a>
 			{{/has-admin}}
 			{{#has-colormode}}
-			<a class="skin-cosmos-header-button wds-button skin-cosmos-is-secondary wds-is-secondary skin-cosmos-colormode-toggle" id="m-colormode" href="{{colormode-url}}" title="{{colormode-text}}" aria-label="{{colormode-text}}">
+			<a class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary skin-cosmos-colormode__toggle" id="m-colormode" href="{{colormode-url}}" title="{{colormode-text}}" aria-label="{{colormode-text}}">
 				<span class="skin-cosmos-icon skin-cosmos-icon-{{colormode-icon}}" aria-hidden="true"></span>
 			</a>
 			{{/has-colormode}}
 			{{#has-more}}
 			<div class="skin-cosmos-menu wds-dropdown" id="p-more">
-				<div class="skin-cosmos-header-button wds-button skin-cosmos-is-secondary wds-is-secondary skin-cosmos-menu__toggle wds-dropdown__toggle">
-					<span class="skin-cosmos-icon skin-cosmos-icon-verticalEllipsis" aria-hidden="true"></span>
+				<div class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary skin-cosmos-menu__toggle wds-dropdown__toggle">
+					<span class="skin-cosmos-icon skin-cosmos-icon-verticalEllipsis skin-cosmos-header__icon--more wds-icon wds-icon-small" aria-hidden="true"></span>
 				</div>
 				<div class="skin-cosmos-menu__content wds-dropdown__content skin-cosmos-is-unscrollable wds-is-not-scrollable skin-cosmos-is-right wds-is-right-aligned">
 					<ul class="skin-cosmos-list wds-list skin-cosmos-list--linked wds-is-linked">
@@ -51,7 +51,7 @@
 		</div>
 		{{/can-read}}
 	</div>
-	<nav class="skin-cosmos-header__local-navigation cosmos-header__local-navigation" id="p-cosmos-navigation">
+	<nav class="skin-cosmos-header__navigation cosmos-header__local-navigation" id="p-cosmos-navigation">
 		{{> Navigation}}
 	</nav>
 </header>

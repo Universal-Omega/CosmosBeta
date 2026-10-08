@@ -155,7 +155,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	private function buildForm(): string {
 		return $this->templateParser->processTemplate( 'ThemeDesigner', [
-			'form-id' => 'skin-cosmos-themedesigner-form',
+			'form-id' => 'skin-cosmos-themedesigner__form',
 			'action' => $this->getPageTitle()->getLocalURL(),
 			'html-token' => Html::hidden( 'wpEditToken', $this->getContext()->getCsrfTokenSet()->getToken()->toString() ),
 			'msg-nojs' => $this->msg( 'cosmosbeta-themedesigner-nojs' )->text(),

@@ -523,7 +523,7 @@ class RailBuilder {
 		$all = [];
 		foreach ( $classes as $class ) {
 			$all[] = $class;
-			$all[] = "skin-cosmos-$class";
+			$all[] = 'skin-cosmos-rail__module--' . preg_replace( '/-module$/', '', $class );
 		}
 
 		return implode( ' ', array_unique( $all ) );

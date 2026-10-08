@@ -39,7 +39,7 @@
 					"wrapSiteNotice": true,
 					"clientPrefEnabled": true,
 					"bodyClasses": [
-						"skin-cosmos-search-vue"
+						"skin-cosmos-has-vue-search"
 					],
 					"menus": [
 						"associated-pages",
@@ -112,6 +112,12 @@
 				"SkinFactory",
 				"CosmosBetaTemplateParser",
 				"TitleFactory"
+			]
+		},
+		"CosmosBetaLegacyConverter": {
+			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialLegacyConverter",
+			"services": [
+				"CosmosBetaLegacyConverter"
 			]
 		},
 		"AdminDashboard": {
