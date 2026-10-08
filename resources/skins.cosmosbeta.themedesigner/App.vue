@@ -184,7 +184,10 @@
 						></cdx-select>
 						<reset-button path="layout/font"></reset-button>
 					</cdx-field>
-					<cdx-field v-if="state.layout.font.type === 'file'">
+					<cdx-message v-if="state.layout.font.type === 'file' && !fontUpload.extensions.length" type="warning">
+						{{ msg( 'font-file-unavailable' ) }}
+					</cdx-message>
+					<cdx-field v-else-if="state.layout.font.type === 'file'">
 						<template #label>
 							{{ msg( 'font-file-label' ) }}
 						</template>
@@ -626,7 +629,7 @@ module.exports = exports = defineComponent( {
 		const fontItems = items( [
 			[ 'default', msg( 'font-default' ) ],
 			...Object.keys( props.designer.fontPresets ).map( ( key ) => [ 'preset:' + key, msg( 'font-preset-' + key ) ] ),
-			...( fontUpload.extensions.length || state.layout.font.type === 'file' ? [ [ 'file', msg( 'font-file' ) ] ] : [] ),
+			[ 'file', msg( 'font-file' ) ],
 			[ 'custom', msg( 'font-custom' ) ]
 		] );
 
