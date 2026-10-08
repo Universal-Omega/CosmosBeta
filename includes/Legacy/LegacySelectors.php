@@ -122,6 +122,15 @@ final class LegacySelectors {
 		'wds-tabs__tab-label' => 'skin-cosmos-nav__label',
 	];
 
+	public const array IDS = [
+		'wds-icons-activity-small' => 'skin-cosmos-header__icon--recent-changes',
+		'wds-icons-dashboard-small' => 'skin-cosmos-header__icon--admin',
+		'wds-icons-dropdown-tiny' => 'skin-cosmos-menu__chevron',
+		'wds-icons-menu-control-tiny' => 'skin-cosmos-submenu__chevron',
+		'wds-icons-more' => 'skin-cosmos-header__icon--more',
+		'wds-icons-page-small' => 'skin-cosmos-header__icon--create',
+	];
+
 	/** Old SVG icon classes which no longer match anything meaningful. */
 	public const array ICON_CLASSES = [
 		'wds-icon',
