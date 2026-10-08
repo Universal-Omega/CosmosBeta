@@ -194,6 +194,8 @@
 	"cosmosbeta-themedesigner-font-preset-system": "Option of the font menu on Special:ThemeDesigner. Uses the font of the visitor's device.",
 	"cosmosbeta-themedesigner-font-preset-times": "Option of the font menu on Special:ThemeDesigner. The font name is not translated, serif is the type of font.",
 	"cosmosbeta-themedesigner-font-preset-verdana": "Option of the font menu on Special:ThemeDesigner. {{notranslate}}",
+	"cosmosbeta-themedesigner-font-preview": "Sample sentence shown below the font choices on Special:ThemeDesigner, set in the chosen font. Use a sentence with many different letters, and digits.",
+	"cosmosbeta-themedesigner-font-sample": "Short sample text shown in each font choice on Special:ThemeDesigner, set in that font. Use the first letters of your alphabet, in capital and small form if your script has both.",
 	"cosmosbeta-themedesigner-footer-hidden": "Text used on Special:ThemeDesigner.",
 	"cosmosbeta-themedesigner-footer-hidden-help": "Help text under the list of footer links that can be hidden.",
 	"cosmosbeta-themedesigner-footer-icons": "Text used on Special:ThemeDesigner.",
