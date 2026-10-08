@@ -17,6 +17,7 @@ use MediaWiki\Skin\Cosmos\Components\ChromeComponent;
 use MediaWiki\Skin\Cosmos\Components\CreatePageDialogComponent;
 use MediaWiki\Skin\Cosmos\Components\PageHeaderComponent;
 use MediaWiki\Skin\Cosmos\Components\WikiHeaderComponent;
+use MediaWiki\Skin\Cosmos\Lookup\WordmarkLookup;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
