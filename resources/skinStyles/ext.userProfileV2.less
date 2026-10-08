@@ -28,10 +28,10 @@ body #firstHeading {
 	object-fit: cover;
 
 	&[ src*='/default.png' ] {
-		padding: 14px;
-		margin: 2px;
 		box-sizing: border-box;
+		padding: 14px;
 		border: 0;
+		margin: 2px;
 		background: none;
 		filter: invert( var( --skin-cosmos-invert ) );
 		object-fit: contain;
@@ -43,6 +43,7 @@ body #firstHeading {
 	opacity: 0.85;
 }
 
+// stylelint-disable-next-line plugin/no-unsupported-browser-features
 .profile-avatar:has( > .profile-avatar-image[ src*='/default.png' ] ) {
 	isolation: isolate;
 
@@ -50,8 +51,8 @@ body #firstHeading {
 		position: absolute;
 		z-index: -1;
 		border: 2px solid color-mix( in srgb, var( --skin-cosmos-font-color ) 30%, transparent );
-		background-color: var( --skin-cosmos-tabs-background );
 		border-radius: @userprofile-avatar-border-radius;
+		background-color: var( --skin-cosmos-tabs-background );
 		content: '';
 		inset: 0;
 	}
@@ -87,6 +88,7 @@ body #firstHeading {
 	gap: 8px 16px;
 }
 
+// stylelint-disable-next-line plugin/no-unsupported-browser-features
 .profile-header-attributes {
 	display: flex;
 	width: auto;
@@ -98,20 +100,22 @@ body #firstHeading {
 
 	> h1,
 	> h2 {
+		// stylelint-disable-next-line declaration-no-important
 		margin: 0 !important;
 		color: var( --skin-cosmos-alt-font-color );
+		// stylelint-disable-next-line declaration-no-important
 		font-family: inherit !important;
 	}
 
 	> h1 {
-		font-size: 30px;
-		line-height: 38px;
+		font-size: 1.875rem;
+		line-height: 2.375rem;
 		overflow-wrap: anywhere;
 	}
 
 	> h2 {
 		color: var( --skin-cosmos-muted-color );
-		font-size: 16px;
+		font-size: 1rem;
 	}
 }
 
@@ -129,7 +133,7 @@ body #firstHeading {
 	box-shadow: none;
 	color: var( --skin-cosmos-button-font-color );
 	cursor: pointer;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: bold;
 	text-transform: uppercase;
 
@@ -146,6 +150,7 @@ body #firstHeading {
 		filter: brightness( 110% );
 	}
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	&:focus-visible {
 		outline: 2px solid var( --skin-cosmos-button-font-color );
 		outline-offset: 2px;
@@ -153,9 +158,10 @@ body #firstHeading {
 }
 
 .profile-header-statistics {
+	// stylelint-disable-next-line declaration-no-important
 	margin: 4px 0 0 !important;
 	color: var( --skin-cosmos-font-color );
-	font-size: 12px;
+	font-size: 0.75rem;
 	letter-spacing: 0.28px;
 }
 
@@ -170,7 +176,7 @@ body #firstHeading {
 .profile-header-about {
 	margin-top: 10px;
 	color: var( --skin-cosmos-alt-font-color );
-	font-size: 16px;
+	font-size: 1rem;
 	line-height: 1.5;
 	overflow-wrap: anywhere;
 	white-space: pre-line;
@@ -232,18 +238,18 @@ body #firstHeading {
 
 		> h1 {
 			width: 100%;
-			font-size: 24px;
-			line-height: 30px;
+			font-size: 1.5rem;
+			line-height: 1.875rem;
 		}
 
 		> h2 {
-			font-size: 14px;
+			font-size: 0.875rem;
 		}
 	}
 
 	.profile-user-group {
 		padding: 2px 6px;
-		font-size: 11px;
+		font-size: 0.6875rem;
 	}
 
 	.profile-header-actions {
@@ -254,7 +260,7 @@ body #firstHeading {
 
 	.profile-header-actions #userProfileV2-edit.mw-ui-button {
 		padding: 5px 14px;
-		font-size: 12px;
+		font-size: 0.75rem;
 	}
 
 	.profile-externalLinks,
@@ -264,6 +270,7 @@ body #firstHeading {
 
 	.profile-header-statistics {
 		align-self: center;
+		// stylelint-disable-next-line declaration-no-important
 		margin: 0 !important;
 		grid-column: 1 / 3;
 		grid-row: 2;
