@@ -46,7 +46,7 @@ final readonly class DashboardControlRegistry {
 			$this->permissionManager->userHasRight( $user, 'edit' );
 
 		return array_values( array_filter( [
-			$this->special( 'themedesigner', $wiki, 'CosmosBetaThemeDesigner', $user ),
+			$this->special( 'themedesigner', $wiki, 'CosmosThemeDesigner', $user ),
 			$this->special( 'recentchanges', $wiki, 'Recentchanges', $user ),
 			$this->interfacePage( 'navigation', $wiki, CosmosNavigation::MESSAGE, $user ),
 			$this->interfacePage( 'tagline', $wiki, 'cosmosbeta-tagline', $user ),
