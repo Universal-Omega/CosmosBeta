@@ -1,7 +1,15 @@
 @import 'mediawiki.skin.variables.less';
 @import 'mediawiki.skin.codex-design-tokens/theme-wikimedia-ui-mixin-dark.less';
 
-@font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+.skin-cosmos-font-face( @source ) when not( @source = 0 ) {
+	@font-face {
+		font-family: @font-file-family;
+		src: @source;
+		font-display: swap;
+	}
+}
+
+.skin-cosmos-font-face( @font-file );
 
 :root {
 	--skin-cosmos-font-color: @font-color;

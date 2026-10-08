@@ -27,6 +27,7 @@ final readonly class ThemeDefaults {
 		public bool $backgroundFixed = true,
 		public string $contentWidth = 'default',
 		public int $contentOpacity = 100,
+		public string $fontFamily = "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
 		public bool $europa = true,
 		public array $railDisabledNamespaces = [ NS_SPECIAL, NS_MEDIAWIKI, NS_MEDIAWIKI_TALK ],
 		public array $railDisabledPages = [ 'mainpage' ],

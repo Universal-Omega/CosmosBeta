@@ -13,6 +13,7 @@ use MediaWiki\Skin\Cosmos\AdminDashboard\AdvancedSectionBuilder;
 use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControlRegistry;
 use MediaWiki\Skin\Cosmos\BackgroundLookup;
 use MediaWiki\Skin\Cosmos\CosmosNavigation;
+use MediaWiki\Skin\Cosmos\FontLookup;
 use MediaWiki\Skin\Cosmos\Hooks\HookRunner;
 use MediaWiki\Skin\Cosmos\Legacy\LegacyConverter;
 use MediaWiki\Skin\Cosmos\LessUtil;
@@ -93,6 +94,13 @@ return [
 				EffectiveTheme::CONSTRUCTOR_OPTIONS,
 				$services->get( 'CosmosBetaOptions' )
 			)
+		);
+	},
+
+	'CosmosBetaFontLookup' => static function ( MediaWikiServices $services ): FontLookup {
+		return new FontLookup(
+			$services->getRepoGroup(),
+			$services->getTitleFactory()
 		);
 	},
 
