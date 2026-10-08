@@ -177,11 +177,12 @@
 						<template #help-text>
 							{{ msg( 'layout-font-help' ) }}
 						</template>
-						<cdx-select
-							v-model:selected="fontChoice"
-							:menu-items="fontItems"
+						<font-picker
+							v-model="state.layout.font"
+							:presets="designer.fontPresets"
+							:fallback="designer.effective.layout.fontFamily"
 							:disabled="!designer.canEdit"
-						></cdx-select>
+						></font-picker>
 						<reset-button path="layout/font"></reset-button>
 					</cdx-field>
 					<cdx-message v-if="state.layout.font.type === 'file' && !fontUpload.extensions.length" type="warning">
@@ -495,6 +496,8 @@ const {
 	{ computed, defineComponent, onMounted, reactive, ref, watch } = require( 'vue' ),
 	colors = require( './colors.js' ),
 	FileField = require( './FileField.vue' ),
+	FontPicker = require( './FontPicker.vue' ),
+	{ getStack: getFontStack } = require( './font.js' ),
 	msg = require( './msg.js' ),
 	RailTab = require( './rail/RailTab.vue' ),
 	ResetButton = require( './ResetButton.vue' ),
@@ -537,6 +540,7 @@ module.exports = exports = defineComponent( {
 		CdxTextInput,
 		CdxToggleSwitch,
 		FileField,
+		FontPicker,
 		RailTab,
 		ResetButton
 	},
@@ -626,36 +630,7 @@ module.exports = exports = defineComponent( {
 			extensions: props.designer.upload.fontExtensions
 		};
 
-		const fontItems = items( [
-			[ 'default', msg( 'font-default' ) ],
-			...Object.keys( props.designer.fontPresets ).map( ( key ) => [ 'preset:' + key, msg( 'font-preset-' + key ) ] ),
-			[ 'file', msg( 'font-file' ) ],
-			[ 'custom', msg( 'font-custom' ) ]
-		] );
-
-		// The font is a type and a value, the menu mixes the presets in with the types
-		const fontChoice = computed( {
-			get: () => {
-				const { type, value } = state.layout.font;
-
-				return type === 'preset' ? 'preset:' + value : type || 'default';
-			},
-			set: ( choice ) => {
-				const [ type, value = '' ] = choice.split( ':' );
-
-				state.layout.font = type === 'default' ? { type: '', value: '' } : { type, value };
-			}
-		} );
-
-		const fontStack = computed( () => {
-			const { type, value } = state.layout.font;
-
-			if ( type === 'preset' ) {
-				return props.designer.fontPresets[ value ];
-			}
-
-			return type === 'custom' && value !== '' ? value : effective.layout.fontFamily;
-		} );
+		const fontStack = computed( () => getFontStack( state.layout.font, props.designer.fontPresets, effective.layout.fontFamily ) );
 
 		const layoutRanges = [
 			{
@@ -875,8 +850,6 @@ module.exports = exports = defineComponent( {
 			toolsLost,
 			buttonStyleItems,
 			fileMessages,
-			fontChoice,
-			fontItems,
 			fontUpload,
 			layoutRanges,
 			preview,
