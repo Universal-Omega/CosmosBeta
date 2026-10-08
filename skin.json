@@ -102,7 +102,7 @@
 		"cosmosbeta-themedesigner"
 	],
 	"SpecialPages": {
-		"CosmosBetaThemeDesigner": {
+		"CosmosThemeDesigner": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialThemeDesigner",
 			"services": [
 				"Cosmos.Config",
@@ -116,7 +116,7 @@
 				"TitleFactory"
 			]
 		},
-		"CosmosBetaLegacyConverter": {
+		"CosmosLegacyConverter": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialLegacyConverter",
 			"services": [
 				"Cosmos.LegacyConverter"
