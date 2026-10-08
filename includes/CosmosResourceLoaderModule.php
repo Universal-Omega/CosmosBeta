@@ -8,6 +8,7 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\SkinModule;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
+use MediaWiki\Skin\Cosmos\Theme\ThemeFont;
 use Wikimedia\Minify\CSSMin;
 use function array_merge;
 use function array_values;
@@ -25,6 +26,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		array $options,
 		private readonly BackgroundLookup $backgroundLookup,
 		private readonly EffectiveTheme $theme,
+		private readonly FontLookup $fontLookup,
 		private readonly LessUtil $lessUtil,
 		private readonly WordmarkLookup $wordmarkLookup,
 	) {
@@ -38,6 +40,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 			$options,
 			$services->get( 'CosmosBetaBackgroundLookup' ),
 			$services->get( 'CosmosBetaEffectiveTheme' ),
+			$services->get( 'CosmosBetaFontLookup' ),
 			$services->get( 'CosmosBetaLessUtil' ),
 			$services->get( 'CosmosBetaWordmarkLookup' )
 		);
@@ -100,6 +103,10 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['content-width-1084'] = $contentWidth === 'auto' ? 'auto' : 1024 + $contentWidth . 'px';
 		$lessVars['content-width-1596'] = $contentWidth === 'auto' ? 'auto' : 1178 + $contentWidth . 'px';
 
+		$fontUrl = $this->fontLookup->getUrl( $this->theme->getFont()->getFileName() );
+		$lessVars['font-family'] = $this->theme->getFontFamily( $fontUrl !== null );
+		$lessVars['font-file'] = $fontUrl !== null ? CSSMin::buildUrlValue( $fontUrl ) : 0;
+		$lessVars['font-file-family'] = "'" . ThemeFont::FILE_FAMILY . "'";
 		$lessVars['link-color'] = $this->theme->getColor( 'link', $mode );
 		$linkIsDark = $this->lessUtil->isDark( 'link', $mode, LessUtil::CONTENT_THRESHOLD );
 		$lessVars['link-contrast-color'] = $linkIsDark ? '#fff' : '#202122';
