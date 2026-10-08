@@ -9,9 +9,6 @@ use const NS_MEDIAWIKI;
 use const NS_MEDIAWIKI_TALK;
 use const NS_SPECIAL;
 
-/**
- * What a theme setting is when the theme does not set it.
- */
 final readonly class ThemeDefaults {
 
 	/**
