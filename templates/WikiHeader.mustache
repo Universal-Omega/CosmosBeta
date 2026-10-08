@@ -16,17 +16,17 @@
 		<div class="skin-cosmos-header__buttons cosmos-header__wiki-buttons wds-button-group">
 			{{#has-create}}
 			<a class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary createpage skin-cosmos-header__button--create{{#create-flush}} skin-cosmos-is-flush cosmos-is-flush{{/create-flush}}" id="createpage" href="#create-article" title="{{create-title}}">
-				<span class="skin-cosmos-icon skin-cosmos-icon-add wds-icon wds-icon-small" id="wds-icons-page-small" aria-hidden="true"></span>{{create-text}}
+				<span class="skin-cosmos-icon skin-cosmos-icon-add skin-cosmos-header__icon--create wds-icon wds-icon-small" aria-hidden="true"></span>{{create-text}}
 			</a>
 			{{/has-create}}
 			{{#has-recentchanges}}
 			<a class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary" href="{{recentchanges-url}}" title="{{recentchanges-title}}">
-				<span class="skin-cosmos-icon skin-cosmos-icon-recentChanges wds-icon wds-icon-small" id="wds-icons-activity-small" aria-hidden="true"></span>{{#recentchanges-text}}&nbsp;&nbsp;{{.}}{{/recentchanges-text}}
+				<span class="skin-cosmos-icon skin-cosmos-icon-recentChanges skin-cosmos-header__icon--recent-changes wds-icon wds-icon-small" aria-hidden="true"></span>{{#recentchanges-text}}&nbsp;&nbsp;{{.}}{{/recentchanges-text}}
 			</a>
 			{{/has-recentchanges}}
 			{{#has-admin}}
 			<a class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary" href="{{admin-url}}" title="{{admin-title}}">
-				<span class="skin-cosmos-icon skin-cosmos-icon-settings wds-icon wds-icon-small" id="wds-icons-dashboard-small" aria-hidden="true"></span>
+				<span class="skin-cosmos-icon skin-cosmos-icon-settings skin-cosmos-header__icon--admin wds-icon wds-icon-small" aria-hidden="true"></span>
 			</a>
 			{{/has-admin}}
 			{{#has-colormode}}
@@ -37,7 +37,7 @@
 			{{#has-more}}
 			<div class="skin-cosmos-menu wds-dropdown" id="p-more">
 				<div class="skin-cosmos-header__button wds-button skin-cosmos-is-secondary wds-is-secondary skin-cosmos-menu__toggle wds-dropdown__toggle">
-					<span class="skin-cosmos-icon skin-cosmos-icon-verticalEllipsis wds-icon wds-icon-small" id="wds-icons-more" aria-hidden="true"></span>
+					<span class="skin-cosmos-icon skin-cosmos-icon-verticalEllipsis skin-cosmos-header__icon--more wds-icon wds-icon-small" aria-hidden="true"></span>
 				</div>
 				<div class="skin-cosmos-menu__content wds-dropdown__content skin-cosmos-is-unscrollable wds-is-not-scrollable skin-cosmos-is-right wds-is-right-aligned">
 					<ul class="skin-cosmos-list wds-list skin-cosmos-list--linked wds-is-linked">
