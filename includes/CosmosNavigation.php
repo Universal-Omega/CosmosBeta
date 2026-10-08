@@ -2,10 +2,11 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\Language;
+use MediaWiki\Language\LanguageCode;
 use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\Registration\ExtensionRegistry;
@@ -35,16 +36,15 @@ class CosmosNavigation {
 
 	public const string MESSAGE = 'cosmosbeta-navigation';
 
+	private const string EXPLORE_ICON = 'globe';
 	private const string ICON_PATTERN = '/\s*\{icon\s*=\s*([A-Za-z0-9-]+)\s*\}/';
 
-	private const string EXPLORE_ICON = 'globe';
-
 	public function __construct(
-		private readonly WANObjectCache $cache,
-		private readonly Language $contentLanguage,
-		private readonly UrlUtils $urlUtils,
-		private readonly TitleFactory $titleFactory,
 		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly LanguageCode $contentLanguageCode,
+		private readonly TitleFactory $titleFactory,
+		private readonly UrlUtils $urlUtils,
+		private readonly WANObjectCache $cache,
 		private readonly ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
@@ -52,8 +52,7 @@ class CosmosNavigation {
 
 	public function getTree( MessageLocalizer $localizer, Language $userLanguage ): array {
 		$build = fn (): array => $this->buildTree( $localizer, $this->getMenuLines( $localizer ) );
-
-		if ( $userLanguage->getCode() !== $this->contentLanguage->getCode() ) {
+		if ( $userLanguage->getCode() !== $this->contentLanguageCode->toString() ) {
 			return $build();
 		}
 
@@ -61,7 +60,7 @@ class CosmosNavigation {
 			$this->getCacheKey(),
 			WANObjectCache::TTL_HOUR * 8,
 			$build,
-			[ 'version' => 5 ]
+			[ 'version' => 1 ]
 		);
 	}
 
@@ -97,24 +96,37 @@ class CosmosNavigation {
 				continue;
 			}
 
-			$children = [];
+			$target = null;
+			foreach ( $tree as $index => $node ) {
+				if ( strtoupper( $node['text'] ) === strtoupper( $label ) ) {
+					$target = $index;
+					break;
+				}
+			}
 
+			$texts = [];
+			foreach ( $target !== null ? $tree[$target]['array-children'] : [] as $child ) {
+				$texts[strtoupper( trim( (string)$child['text'] ) )] = true;
+			}
+
+			$children = [];
 			foreach ( $portlet['array-items'] ?? [] as $item ) {
 				$link = $item['array-links'][0] ?? [];
 				$href = '';
-
 				foreach ( $link['array-attributes'] ?? [] as $attribute ) {
 					if ( $attribute['key'] === 'href' ) {
 						$href = (string)$attribute['value'];
 					}
 				}
 
-				if ( $href === '' || isset( $known[$href] ) ) {
+				$text = (string)( $link['text'] ?? '' );
+				$textKey = strtoupper( trim( $text ) );
+				if ( $href === '' || isset( $known[$href] ) || isset( $texts[$textKey] ) ) {
 					continue;
 				}
 
 				$known[$href] = true;
-				$text = (string)( $link['text'] ?? '' );
+				$texts[$textKey] = true;
 				$children[] = [
 					'id' => Sanitizer::escapeIdForAttribute( $text ),
 					'text' => $text,
@@ -131,18 +143,10 @@ class CosmosNavigation {
 				continue;
 			}
 
-			$matched = false;
-
-			foreach ( $tree as $index => $node ) {
-				if ( strtoupper( $node['text'] ) === strtoupper( $label ) ) {
-					$tree[$index]['array-children'] = array_merge( $node['array-children'], $children );
-					$tree[$index]['has-children'] = true;
-					$matched = true;
-					break;
-				}
-			}
-
-			if ( !$matched ) {
+			if ( $target !== null ) {
+				$tree[$target]['array-children'] = array_merge( $tree[$target]['array-children'], $children );
+				$tree[$target]['has-children'] = true;
+			} else {
 				$tree[] = [
 					'id' => Sanitizer::escapeIdForAttribute( $label ),
 					'text' => $label,
@@ -165,7 +169,6 @@ class CosmosNavigation {
 
 	public function buildTree( MessageLocalizer $localizer, array $lines ): array {
 		$nodes = $this->parse( $localizer, $lines );
-
 		if ( !isset( $nodes[0]['children'] ) ) {
 			return [];
 		}
@@ -196,7 +199,6 @@ class CosmosNavigation {
 
 	private function buildChildren( array $nodes, array $children ): array {
 		$items = [];
-
 		foreach ( $children as $position => $index ) {
 			$node = $nodes[$index];
 			$grandChildren = $node['children'] ?? [];
@@ -260,7 +262,6 @@ class CosmosNavigation {
 
 	public function parseLine( MessageLocalizer $localizer, string $line ): array {
 		$icon = null;
-
 		if ( preg_match( self::ICON_PATTERN, $line, $matches ) ) {
 			$icon = in_array( $matches[1], $this->getAllowedIcons(), true ) ? $matches[1] : null;
 			$line = (string)preg_replace( self::ICON_PATTERN, '', $line, 1 );
@@ -319,7 +320,6 @@ class CosmosNavigation {
 		) {
 			$exploreChildUrl = '**' . htmlspecialchars( (string)SpecialPage::getTitleFor( 'NewVideos' ) ) . '|';
 			$exploreChildText = 'newvideos';
-
 			if ( str_contains( $navigation, '{$WANTEDPAGES_FORCE}' ) ) {
 				$forceChildUrl = "\n**" . htmlspecialchars( (string)SpecialPage::getTitleFor( 'Wantedpages' ) ) . '|';
 				$forceChildText = 'wantedpages';
@@ -340,7 +340,6 @@ class CosmosNavigation {
 		);
 
 		$message = trim( $cleaned . $exploreChildUrl . $exploreChildText . $forceChildUrl . $forceChildText );
-
 		return $message !== '' && $message !== '-' ? explode( "\n", $message ) : [];
 	}
 
@@ -349,7 +348,6 @@ class CosmosNavigation {
 	 */
 	public function getAllowedIcons(): array {
 		$modules = $this->extensionRegistry->getAttribute( 'ResourceModules' );
-
 		return $modules['skins.cosmosbeta.icons']['icons'] ?? [];
 	}
 
@@ -362,6 +360,6 @@ class CosmosNavigation {
 	}
 
 	private function getCacheKey(): string {
-		return $this->cache->makeKey( 'CosmosBeta', 'navigation', 'tree' );
+		return $this->cache->makeKey( 'Cosmos', 'navigation', 'tree' );
 	}
 }

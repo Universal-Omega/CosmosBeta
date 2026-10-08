@@ -1,3 +1,5 @@
+@import 'mediawiki.skin.variables.less';
+
 @media screen {
 	div.mw-echo-ui-overlay {
 		z-index: 1000000000;
@@ -58,31 +60,81 @@
 	}
 }
 
-#pt-notifications-alert .mw-echo-notifications-badge.mw-echo-notifications-badge-all-read,
-#pt-notifications-notice .mw-echo-notifications-badge.mw-echo-notifications-badge-all-read {
-	opacity: 1;
+#cosmos-notifications-list {
+	min-width: 350px;
 }
 
-#pt-notifications-alert .mw-echo-notifications-badge,
-#pt-notifications-notice .mw-echo-notifications-badge {
-	top: 0;
-	width: 28px;
-	height: 28px;
+.skin-cosmos-notifications__count {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	display: flex;
+	min-width: 13px;
+	height: 13px;
+	place-content: center center;
+	padding: 3px;
+	background-color: #f00;
+	border-radius: 9px;
+	color: var( --skin-cosmos-banner-font-color );
+	font-size: 8pt;
+	font-weight: bolder;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 #cosmos-notification-icons {
 	display: flex;
 	height: 100%;
 	place-items: center center;
-	padding: 5px 2px;
-	gap: 10px;
+	padding: 5px 18px 5px 2px;
+	gap: 22px;
 	list-style: none;
 }
 
-#cosmos-notification-icons #pt-notifications-notice {
-	padding-left: 14px;
+@media ( max-width: 850px ) {
+	#cosmos-notification-icons {
+		padding-right: 14px;
+		gap: 18px;
+	}
 }
 
-.mw-echo-ui-notificationBadgeButtonPopupWidget-popup * {
-	color: #000;
+#cosmos-banner {
+	#pt-notifications-alert .mw-echo-notifications-badge,
+	#pt-notifications-notice .mw-echo-notifications-badge {
+		top: 0;
+		width: 28px;
+		height: 28px;
+		opacity: 1;
+	}
+
+	.oo-ui-icon-bell,
+	.oo-ui-icon-tray {
+		position: relative;
+		background-image: none;
+	}
+
+	.oo-ui-icon-bell::before,
+	.oo-ui-icon-tray::before {
+		position: absolute;
+		content: '';
+		inset: 0;
+		-webkit-mask-position: center;
+		mask-position: center;
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-size: contain;
+		mask-size: contain;
+	}
+
+	.oo-ui-icon-bell::before {
+		.cdx-mixin-css-icon-background-image( @cdx-icon-bell-outline, var( --skin-cosmos-banner-font-color ) );
+	}
+
+	.oo-ui-icon-tray::before {
+		.cdx-mixin-css-icon-background-image( @cdx-icon-info, var( --skin-cosmos-banner-font-color ) );
+	}
 }

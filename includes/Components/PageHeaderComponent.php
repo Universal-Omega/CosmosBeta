@@ -2,15 +2,16 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Components;
+namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Context\IContextSource;
-use MediaWiki\Language\Language;
+use MediaWiki\Language\LanguageCode;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Title\TitleFactory;
 use function array_slice;
 use function count;
 use function implode;
+use function reset;
 use function str_contains;
 use function str_starts_with;
 use const CONTENT_MODEL_WIKITEXT;
@@ -20,11 +21,13 @@ class PageHeaderComponent {
 
 	private const int VISIBLE_CATEGORIES = 3;
 
+	private const string ASSOCIATED_PREFIX = 'special-specialAssociatedNavigationLinks-link-';
+
 	public function __construct(
 		private readonly IContextSource $context,
-		private readonly TitleFactory $titleFactory,
+		private readonly LanguageCode $contentLanguageCode,
 		private readonly LanguageNameUtils $languageNameUtils,
-		private readonly Language $contentLanguage,
+		private readonly TitleFactory $titleFactory,
 	) {
 	}
 
@@ -33,7 +36,29 @@ class PageHeaderComponent {
 			'data-categories' => $this->getCategories(),
 			'data-interlang' => $this->getInterlang( $portlets ),
 			'data-actions' => $this->getActions( $portlets ),
+			'data-associated-tabs' => $this->getAssociatedTabs( $portlets ),
 		];
+	}
+
+	private function getAssociatedTabs( array $portlets ): ?array {
+		$tabs = [];
+		foreach ( PortletReader::getItems( $portlets, [ 'data-associated-pages' ] ) as $key => $item ) {
+			if ( !str_starts_with( $key, self::ASSOCIATED_PREFIX ) || $item['href'] === null ) {
+				continue;
+			}
+
+			$tabs[] = [
+				'id' => $item['id'],
+				'text' => $item['text'],
+				'href' => $item['href'],
+				'is-selected' => $this->hasClass( $item['class'], 'selected' ),
+			];
+		}
+
+		return $tabs ? [
+			'msg-label' => $this->context->msg( 'cosmosbeta-associated-tabs-label' )->text(),
+			'array-items' => $tabs,
+		] : null;
 	}
 
 	private function getCategories(): ?array {
@@ -90,7 +115,6 @@ class PageHeaderComponent {
 		}
 
 		$data = [];
-
 		if ( $variants ) {
 			$label = $this->context->msg( 'variants' )->text();
 			foreach ( $variants as $variant ) {
@@ -109,9 +133,8 @@ class PageHeaderComponent {
 		if ( $languages ) {
 			$title = $this->context->getTitle();
 			$code = $title->getPageLanguage()->getCode();
-
 			if ( $title->isSpecialPage() || !$title->hasContentModel( CONTENT_MODEL_WIKITEXT ) ) {
-				$code = $this->contentLanguage->getCode();
+				$code = $this->contentLanguageCode->toString();
 			}
 
 			$data['data-languages'] = [
@@ -125,7 +148,6 @@ class PageHeaderComponent {
 
 	private function toLinks( array $items ): array {
 		$links = [];
-
 		foreach ( $items as $item ) {
 			$links[] = [
 				'id' => $item['id'],
@@ -150,6 +172,10 @@ class PageHeaderComponent {
 		$isEditing = $isViewSource = $isHistory = $isSpecialAction = false;
 
 		foreach ( $items as $key => $item ) {
+			if ( str_starts_with( $key, self::ASSOCIATED_PREFIX ) ) {
+				continue;
+			}
+
 			$selected = $this->hasClass( $item['class'], 'selected' );
 
 			switch ( $key ) {
@@ -185,13 +211,14 @@ class PageHeaderComponent {
 			}
 		}
 
+		$isEditPage = $isEditing || in_array( $this->context->getActionName(), [ 'edit', 'submit' ], true );
 		$isTalkPage = $title->isTalkPage();
 		$talkUrl = $title->getTalkPageIfDefined()?->getLinkURL();
 		$pageUrl = $title->getLinkURL();
 		$backToPage = $view ? $this->context->msg( 'cosmosbeta-action-backtopage', $view['text'] )->text() : '';
 		$primary = $secondary = null;
 
-		if ( $isEditing || $isSpecialAction ) {
+		if ( $isEditPage || $isSpecialAction ) {
 			if ( $isTalkPage ) {
 				$primary = $talk ? [
 					'icon' => 'close',
@@ -208,7 +235,10 @@ class PageHeaderComponent {
 				$secondary = $talk ? [ 'icon' => 'speechBubble' ] + $talk : null;
 			}
 
-			if ( !$isEditing && $edit ) {
+			if ( $isEditPage ) {
+				$secondary = null;
+				$dropdown = [];
+			} elseif ( $edit ) {
 				$dropdown = [ 'edit' => $edit ] + $dropdown;
 			}
 		} elseif ( $isHistory || $isViewSource ) {
@@ -237,37 +267,48 @@ class PageHeaderComponent {
 			$secondary = $view ? $talk : null;
 		}
 
+		if ( $primary === null && count( $dropdown ) === 1 ) {
+			$primary = reset( $dropdown );
+			$dropdown = [];
+		}
+
 		return [
-			'data-primary' => $this->toButton( $primary, 'primary' ),
-			'data-secondary' => $this->toButton( $secondary, 'secondary' ),
+			'data-primary' => $this->toButton( $primary, 'primary', $dropdown === [] ),
+			'data-secondary' => $this->toButton( $secondary, 'secondary', false ),
 			'has-dropdown' => $dropdown !== [],
+			'is-dropdown-only' => $primary === null && $dropdown !== [],
 			'array-dropdown-items' => $this->toDropdown( $dropdown ),
 			'is-view' => $view !== null,
 		];
 	}
 
-	private function toButton( ?array $item, string $variant ): ?array {
+	private function toButton( ?array $item, string $variant, bool $single ): ?array {
 		if ( !$item ) {
 			return null;
 		}
 
 		$classes = [
 			$item['class'],
-			"skin-cosmos-button skin-cosmos-button-$variant skin-cosmos-button-action",
+			"skin-cosmos-button skin-cosmos-button--$variant skin-cosmos-button--action",
 			"cosmos-button cosmos-button-$variant cosmos-button-action",
 		];
-		$id = $item['id'] ?? '';
 
-		if ( str_starts_with( $id, 'ca-nstab-' ) ) {
-			$classes[] = 'skin-cosmos-actions-view cosmos-actions-view';
-		} elseif ( $id === 'ca-talk' ) {
-			$classes[] = 'skin-cosmos-actions-talk cosmos-actions-talk';
+		if ( $single && $variant === 'primary' ) {
+			$classes[] = 'skin-cosmos-button--single';
+		}
+		$sourceId = $item['id'] ?? '';
+		$id = ( $item['icon'] ?? '' ) === 'close' ? 'cosmos-actions-cancel' : $sourceId;
+
+		if ( str_starts_with( $sourceId, 'ca-nstab-' ) ) {
+			$classes[] = 'skin-cosmos-button--view cosmos-actions-view';
+		} elseif ( $sourceId === 'ca-talk' ) {
+			$classes[] = 'skin-cosmos-button--talk cosmos-actions-talk';
 		} else {
-			$classes[] = 'skin-cosmos-actions-edit cosmos-actions-edit';
+			$classes[] = 'skin-cosmos-button--edit cosmos-actions-edit';
 		}
 
 		return [
-			'id' => $item['id'] ?? null,
+			'id' => $id !== '' ? $id : null,
 			'class' => implode( ' ', $classes ),
 			'href' => $item['href'] ?? null,
 			'title' => $item['title'] ?? '',
@@ -278,7 +319,6 @@ class PageHeaderComponent {
 
 	private function toDropdown( array $items ): array {
 		$list = [];
-
 		foreach ( $items as $item ) {
 			$list[] = [ 'html-item' => $item['html-item'] ];
 		}

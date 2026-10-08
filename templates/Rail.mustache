@@ -1,16 +1,16 @@
 <div class="skin-cosmos-rail CosmosRail" id="CosmosRailWrapper">
-	<div class="skin-cosmos-rail-inner cosmos-rail-inner" id="CosmosRail">
+	<div class="skin-cosmos-rail__inner cosmos-rail-inner" id="CosmosRail">
 		{{#array-modules}}
-		<section class="skin-cosmos-rail-module railModule module{{#is-sticky}} skin-cosmos-rail-module--sticky rail-sticky-module{{/is-sticky}} {{class}}">
+		<section class="skin-cosmos-rail__module railModule module{{#is-sticky}} skin-cosmos-rail__module--sticky rail-sticky-module{{/is-sticky}} {{class}}">
 			{{#header}}<h3>{{.}}</h3>{{/header}}
 			{{#array-recentchanges}}
 			<li>
-				<div class="skin-cosmos-recentChanges-page cosmos-recentChanges-page">{{{html-page}}}</div>
-				<div class="skin-cosmos-recentChanges-info cosmos-recentChanges-info">{{{html-user}}} &bull; {{{time}}}</div>
+				<div class="skin-cosmos-recent-changes__page cosmos-recentChanges-page">{{{html-page}}}</div>
+				<div class="skin-cosmos-recent-changes__info cosmos-recentChanges-info">{{{html-user}}} &bull; {{{time}}}</div>
 			</li>
 			{{/array-recentchanges}}
 			{{#data-tools}}
-			<ul class="skin-cosmos-rail-tools">{{#array-items}}{{{html-item}}}{{/array-items}}</ul>
+			<ul class="skin-cosmos-rail__tools">{{#array-items}}{{{html-item}}}{{/array-items}}</ul>
 			{{/data-tools}}
 			{{{html-body}}}
 		</section>

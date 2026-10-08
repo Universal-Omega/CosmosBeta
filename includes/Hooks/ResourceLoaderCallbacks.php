@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks;
+namespace MediaWiki\Skin\Cosmos\Hooks;
 
 use MediaWiki\Config\Config;
 use MediaWiki\MainConfigNames;
 use MediaWiki\ResourceLoader\Context;
-use MediaWiki\Skins\CosmosBeta\ConfigNames;
+use MediaWiki\Skin\Cosmos\ConfigNames;
 
 class ResourceLoaderCallbacks {
 
