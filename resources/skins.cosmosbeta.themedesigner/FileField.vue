@@ -1,10 +1,10 @@
 <template>
-	<div class="skin-cosmos-themedesigner__imagefield">
-		<div class="skin-cosmos-themedesigner__imagefield-row">
+	<div class="skin-cosmos-themedesigner__filefield">
+		<div class="skin-cosmos-themedesigner__filefield-row">
 			<cdx-lookup
 				v-model:selected="selected"
 				v-model:input-value="text"
-				class="skin-cosmos-themedesigner__imagefield-lookup"
+				class="skin-cosmos-themedesigner__filefield-lookup"
 				:menu-items="items"
 				:menu-config="{ visibleItemLimit: 6 }"
 				:placeholder="placeholder"
@@ -26,7 +26,7 @@
 				</cdx-button>
 				<input
 					ref="file"
-					class="skin-cosmos-themedesigner__imagefield-file"
+					class="skin-cosmos-themedesigner__filefield-file"
 					type="file"
 					:accept="accept"
 					@change="onFile"
@@ -47,7 +47,7 @@ const DELAY = 250;
 
 // @vue/component
 module.exports = exports = defineComponent( {
-	name: 'ImageField',
+	name: 'FileField',
 	components: { CdxButton, CdxLookup, CdxMessage },
 	props: {
 		modelValue: {
@@ -81,6 +81,8 @@ module.exports = exports = defineComponent( {
 			file = ref( null ),
 			accept = props.upload.extensions.map( ( ext ) => '.' + ext ).join( ',' );
 
+		const isAllowed = ( name ) => props.upload.extensions.includes( name.split( '.' ).pop().toLowerCase() );
+
 		let timer = null,
 			counter = 0;
 
@@ -104,11 +106,10 @@ module.exports = exports = defineComponent( {
 					return;
 				}
 
-				items.value = ( data.query.prefixsearch || [] ).map( ( page ) => {
-					const name = page.title.replace( /^[^:]+:/, '' );
-
-					return { value: name, label: name };
-				} );
+				items.value = ( data.query.prefixsearch || [] )
+					.map( ( page ) => page.title.replace( /^[^:]+:/, '' ) )
+					.filter( isAllowed )
+					.map( ( name ) => ( { value: name, label: name } ) );
 			} );
 		}
 
