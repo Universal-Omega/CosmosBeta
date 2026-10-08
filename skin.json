@@ -125,9 +125,9 @@
 		"AdminDashboard": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialAdminDashboard",
 			"services": [
-				"Cosmos.AdminDashboardControls",
 				"Cosmos.AdminDashboardStats",
 				"Cosmos.AdvancedSectionBuilder",
+				"Cosmos.AdminDashboardControls",
 				"Cosmos.TemplateParser"
 			]
 		}
