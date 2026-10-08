@@ -3,7 +3,7 @@
 declare( strict_types = 1 );
 
 // phpcs:disable Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 /**
  * Names of the configuration variables used by the skin, to protect against typos.

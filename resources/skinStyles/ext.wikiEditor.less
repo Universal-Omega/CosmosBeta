@@ -34,6 +34,43 @@
 	}
 }
 
+html body .wikiEditor-ui-toolbar {
+	.tool.tool-element,
+	.ve-init-mw-editSwitch,
+	.ve-init-mw-editSwitch .oo-ui-toolbar-bar,
+	.ve-init-mw-editSwitch .oo-ui-popupToolGroup,
+	.ve-init-mw-editSwitch .oo-ui-popupToolGroup-tools {
+		filter: none;
+	}
+
+	.section-secondary {
+		z-index: 3;
+	}
+
+	.ve-init-mw-editSwitch .oo-ui-popupToolGroup-tools {
+		z-index: 10;
+		border-color: var( --skin-cosmos-border-color );
+		background-color: var( --skin-cosmos-content-background );
+	}
+
+	.ve-init-mw-editSwitch .oo-ui-popupToolGroup-tools .oo-ui-tool-link {
+		color: var( --skin-cosmos-font-color );
+	}
+
+	.ve-init-mw-editSwitch .oo-ui-popupToolGroup-tools .oo-ui-tool.oo-ui-tool-active > .oo-ui-tool-link {
+		background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 24%, var( --skin-cosmos-content-background ) );
+	}
+
+	.cm-mw-toggle-wikieditor .oo-ui-icon-syntax-highlight {
+		background-color: var( --skin-cosmos-font-color );
+		filter: none;
+	}
+
+	.cm-mw-toggle-wikieditor.oo-ui-toggleWidget-on .oo-ui-icon-syntax-highlight {
+		background-color: var( --skin-cosmos-link-color );
+	}
+}
+
 body .wikiEditor-ui-toolbar .cm-mw-toggle-wikieditor.oo-ui-toggleWidget-on .oo-ui-labelElement-label {
 	color: var( --skin-cosmos-link-color );
 }
@@ -126,7 +163,7 @@ body .ui-dialog {
 	}
 }
 
-html.skin-cosmos-colormode-dark body {
+html.skin-cosmos-colormode--dark body {
 	.ui-dialog,
 	.ui-dialog .ui-dialog-content,
 	.ui-dialog .ui-dialog-buttonpane {
@@ -203,6 +240,27 @@ html.skin-cosmos-colormode-dark body {
 	}
 }
 
-html.skin-cosmos-colormode-dark body .ui-dialog .ui-dialog-titlebar-close .ui-icon {
+html.skin-cosmos-colormode--dark body .ui-dialog .ui-dialog-titlebar-close .ui-icon {
 	filter: invert( 1 );
+}
+
+body .wikiEditor-ui-toolbar .tool-select {
+	background-color: transparent;
+
+	.label::after {
+		filter: brightness( 0 ) invert( var( --skin-cosmos-invert ) );
+	}
+
+	.options {
+		border-color: var( --skin-cosmos-border-color );
+		background-color: var( --skin-cosmos-content-background );
+
+		.option {
+			color: var( --skin-cosmos-font-color );
+
+			&:hover {
+				background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 18%, var( --skin-cosmos-content-background ) );
+			}
+		}
+	}
 }

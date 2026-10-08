@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Theme;
+namespace MediaWiki\Skin\Cosmos\Theme;
 
 use MediaWiki\User\Options\UserOptionsLookup;
 use MediaWiki\User\UserIdentity;
@@ -10,7 +10,7 @@ use function in_array;
 
 class ColorModeResolver {
 
-	public const string OPTION = 'cosmosbeta-colormode';
+	public const string OPTION = 'cosmos-colormode';
 
 	public function __construct(
 		private readonly ThemeStore $store,
@@ -19,13 +19,12 @@ class ColorModeResolver {
 	}
 
 	/**
-	 * Anonymous users always get the wiki default so cached pages stay identical for everyone.
+	 * Anonymous and temporary users always get the wiki default so cached pages stay identical for everyone.
 	 */
 	public function getRenderMode( ?UserIdentity $user ): string {
 		$theme = $this->store->getCurrent();
 		$default = $theme->getDefaultMode();
-
-		if ( !$theme->isToggleEnabled() || $user === null || !$user->isRegistered() ) {
+		if ( !$theme->isToggleEnabled() || !$user?->isNamed() ) {
 			return $default;
 		}
 
@@ -37,7 +36,7 @@ class ColorModeResolver {
 	 * Whether a registered user picked light or dark themselves.
 	 */
 	public function hasPreference( ?UserIdentity $user ): bool {
-		if ( !$this->store->getCurrent()->isToggleEnabled() || $user === null || !$user->isRegistered() ) {
+		if ( !$this->store->getCurrent()->isToggleEnabled() || !$user?->isNamed() ) {
 			return false;
 		}
 

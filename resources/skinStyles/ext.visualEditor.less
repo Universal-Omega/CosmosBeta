@@ -59,10 +59,6 @@
 	background: none;
 }
 
-.ve-ui-toolbar-saveButton span {
-	color: #fff;
-}
-
 .ve-ui-mwNoticesPopupTool-item .warningbox {
 	padding: 0.5em 1em;
 	border: 1px solid;
@@ -74,22 +70,16 @@
 	background-color: #808080;
 }
 
-.ve-ui-mwSaveDialog .oo-ui-window-frame {
-	width: 60%;
-	height: 60%;
-}
+@media ( min-width: 851px ) {
+	.ve-ui-mwSaveDialog .oo-ui-window-frame {
+		width: 60%;
+		height: 60%;
+	}
 
-.ve-init-mw-tempWikitextEditorWidget {
-	background: transparent;
-}
-
-.ve-activated .oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-active > .oo-ui-window-frame {
-	max-width: 60%;
-	max-height: 60%;
-}
-
-.ve-activated .ve-ui-mwSaveDialog-savePanel .oo-ui-fieldLayout-header {
-	color: #000;
+	.ve-activated .oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-active > .oo-ui-window-frame {
+		max-width: 60%;
+		max-height: 60%;
+	}
 }
 
 .ve-ui-toolbar:not( .ve-ui-toolbar-floating ) .oo-ui-toolbar-bar {
@@ -99,18 +89,4 @@
 .ve-ui-toolbar .oo-ui-tool.oo-ui-widget-disabled .oo-ui-iconElement-icon,
 .ve-ui-toolbar .oo-ui-tool.oo-ui-widget-disabled .oo-ui-labelElement-label {
 	opacity: 0.45;
-}
-
-.ve-ui-toolbar .oo-ui-toolbar-bar,
-.ve-ui-toolbar .oo-ui-toolGroup,
-.ve-ui-toolbar-saveButton {
-	background-color: var( --skin-cosmos-content-background );
-}
-
-.ve-ui-mwNoticesPopupTool-item {
-	color: var( --skin-cosmos-font-color );
-}
-
-.ve-ui-mwNoticesPopupTool-item .oo-ui-messageWidget {
-	color: #202122;
 }

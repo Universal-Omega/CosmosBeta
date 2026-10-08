@@ -60,15 +60,11 @@
 	}
 }
 
-.mw-echo-ui-notificationBadgeButtonPopupWidget-popup * {
-	color: #000;
-}
-
 #cosmos-notifications-list {
 	min-width: 350px;
 }
 
-.skin-cosmos-notifications-numNotifs {
+.skin-cosmos-notifications__count {
 	position: absolute;
 	top: 5px;
 	left: 5px;
@@ -140,16 +136,5 @@
 
 	.oo-ui-icon-tray::before {
 		.cdx-mixin-css-icon-background-image( @cdx-icon-info, var( --skin-cosmos-banner-font-color ) );
-	}
-}
-
-html.skin-cosmos-colormode-dark body {
-	.mw-echo-ui-notificationBadgeButtonPopupWidget .oo-ui-popupWidget-popup,
-	.mw-echo-ui-notificationBadgeButtonPopupWidget .oo-ui-popupWidget-body,
-	.mw-echo-ui-notificationBadgeButtonPopupWidget .oo-ui-popupWidget-head,
-	.mw-echo-ui-notificationBadgeButtonPopupWidget .oo-ui-popupWidget-footer {
-		border-color: var( --skin-cosmos-border-color );
-		background-color: var( --skin-cosmos-content-background );
-		color: var( --skin-cosmos-font-color );
 	}
 }

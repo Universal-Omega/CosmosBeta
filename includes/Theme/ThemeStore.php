@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Theme;
+namespace MediaWiki\Skin\Cosmos\Theme;
 
 use MediaWiki\User\ActorNormalization;
 use MediaWiki\User\UserIdentity;
@@ -27,17 +27,18 @@ use const TS_MW;
  */
 class ThemeStore {
 
-	private const string TABLE = 'cosmosbeta_theme';
 	private const int CACHE_VERSION = 1;
 	private const int MAX_REVISIONS = 100;
 	private const int MAX_COMMENT_BYTES = 767;
+	private const string TABLE = 'cosmos_theme';
 
+	private string $currentTimestamp = '';
 	private ?ThemeSettings $current = null;
 
 	public function __construct(
+		private readonly ActorNormalization $actorStore,
 		private readonly IConnectionProvider $dbProvider,
 		private readonly WANObjectCache $cache,
-		private readonly ActorNormalization $actorStore,
 		private readonly LoggerInterface $logger,
 	) {
 	}
@@ -55,20 +56,21 @@ class ThemeStore {
 					$setOpts += Database::getCacheSetOptions( $dbr );
 
 					try {
-						$row = $this->fetchLatest( $dbr, [ 'cth_id', 'cth_data' ] );
+						$row = $this->fetchLatest( $dbr, [ 'cth_id', 'cth_data', 'cth_timestamp' ] );
 					} catch ( DBError $e ) {
 						// Table is missing until update.php has run. Fall back to defaults and retry soon.
 						$this->logger->error( 'Unable to read Cosmos theme: {message}', [
 							'message' => $e->getMessage(),
 						] );
-						$ttl = 30;
 
-						return [ 'id' => 0, 'json' => '' ];
+						$ttl = 30;
+						return [ 'id' => 0, 'json' => '', 'ts' => '' ];
 					}
 
 					return [
 						'id' => $row ? (int)$row->cth_id : 0,
 						'json' => $row ? (string)$row->cth_data : '',
+						'ts' => $row ? (string)wfTimestamp( TS_MW, $row->cth_timestamp ) : '',
 					];
 				},
 				[
@@ -79,12 +81,19 @@ class ThemeStore {
 				]
 			);
 
+			$this->currentTimestamp = (string)( $value['ts'] ?? '' );
 			$this->current = $value['json'] === '' ?
 				new ThemeSettings( [], 0 ) :
 				ThemeSettings::newFromJson( $value['json'], $value['id'] );
 		}
 
 		return $this->current;
+	}
+
+	/** @return string MW timestamp of the live theme, empty if none was ever saved */
+	public function getCurrentTimestamp(): string {
+		$this->getCurrent();
+		return $this->currentTimestamp;
 	}
 
 	public function getRevision( int $id ): ?ThemeSettings {
@@ -123,7 +132,11 @@ class ThemeStore {
 	}
 
 	/** @return int Id of the live revision. Unchanged settings do not create a new one. */
-	public function save( ThemeSettings $settings, UserIdentity $user, string $comment ): int {
+	public function save(
+		ThemeSettings $settings,
+		UserIdentity $user,
+		string $comment
+	): int {
 		$dbw = $this->dbProvider->getPrimaryDatabase();
 
 		$json = $settings->toJson();
@@ -156,7 +169,6 @@ class ThemeStore {
 			->execute();
 
 		$this->purgeCache();
-
 		return $id;
 	}
 
@@ -167,7 +179,6 @@ class ThemeStore {
 	 */
 	public function restore( int $id, UserIdentity $user, string $comment ): ?int {
 		$settings = $this->getRevision( $id );
-
 		return $settings ? $this->save( $settings, $user, $comment ) : null;
 	}
 
@@ -178,6 +189,7 @@ class ThemeStore {
 		$this->cache->touchCheckKey( $this->getCheckKey() );
 		$this->cache->delete( $this->getCacheKey() );
 		$this->current = null;
+		$this->currentTimestamp = '';
 	}
 
 	/** @param string[] $fields */
@@ -192,10 +204,10 @@ class ThemeStore {
 	}
 
 	private function getCacheKey(): string {
-		return $this->cache->makeKey( 'CosmosBeta', 'theme', 'current' );
+		return $this->cache->makeKey( 'Cosmos', 'theme', 'current' );
 	}
 
 	private function getCheckKey(): string {
-		return $this->cache->makeKey( 'CosmosBeta', 'theme', 'check' );
+		return $this->cache->makeKey( 'Cosmos', 'theme', 'check' );
 	}
 }

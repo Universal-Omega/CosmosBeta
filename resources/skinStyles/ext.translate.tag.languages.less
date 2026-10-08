@@ -51,30 +51,9 @@
 		}
 
 		&.mw-pt-languages-selected {
-			border-color: var( --skin-cosmos-button-background );
-			background-color: var( --skin-cosmos-button-background );
-			color: var( --skin-cosmos-button-font-color );
-			font-weight: normal;
-
-			&::after {
-				outline-color: var( --skin-cosmos-button-font-color );
-			}
-
-			&.mw-pt-progress--low::after {
-				border-color: var( --skin-cosmos-button-font-color );
-			}
-
-			&.mw-pt-progress--med::after {
-				background: conic-gradient( var( --skin-cosmos-button-font-color ) 180deg, transparent 0deg );
-			}
-
-			&.mw-pt-progress--high::after {
-				background: conic-gradient( var( --skin-cosmos-button-font-color ) 252deg, transparent 0deg );
-			}
-
-			&.mw-pt-progress--complete::after {
-				background: var( --skin-cosmos-button-font-color );
-			}
+			border-color: var( --skin-cosmos-link-color );
+			background-color: color-mix( in srgb, var( --skin-cosmos-link-color ) 16%, var( --skin-cosmos-content-background ) );
+			color: var( --skin-cosmos-font-color );
 		}
 	}
 }
