@@ -895,8 +895,8 @@
 		"colormode": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\ColorMode",
 			"services": [
-				"CosmosBetaEffectiveTheme",
-				"CosmosBetaAltModules"
+				"CosmosBetaAltModules",
+				"CosmosBetaEffectiveTheme"
 			]
 		},
 		"themecache": {
