@@ -10,10 +10,10 @@ use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Preferences\Hook\GetPreferencesHook;
 use MediaWiki\ResourceLoader\Hook\ResourceLoaderRegisterModulesHook;
 use MediaWiki\ResourceLoader\ResourceLoader;
-use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use function array_merge;
 use function array_unique;
@@ -26,8 +26,8 @@ class ColorMode implements
 {
 
 	public function __construct(
-		private readonly CosmosConfig $config,
 		private readonly AltModules $altModules,
+		private readonly EffectiveTheme $theme,
 	) {
 	}
 
@@ -38,7 +38,7 @@ class ColorMode implements
 
 	/** @inheritDoc */
 	public function onGetPreferences( $user, &$preferences ): void {
-		if ( !$this->config->isColorModeToggleEnabled() ) {
+		if ( !$this->theme->isColorModeToggleEnabled() ) {
 			return;
 		}
 
@@ -61,16 +61,16 @@ class ColorMode implements
 			return;
 		}
 
-		$mode = $this->config->getRenderMode();
+		$mode = $this->theme->getRenderMode();
 		$out->addHtmlClasses( "skin-cosmos-colormode--$mode" );
 
-		$auto = $this->config->isAutoColorMode() && !$this->config->hasColorModePreference();
+		$auto = $this->theme->isAutoColorMode() && !$this->theme->hasColorModePreference();
 
 		// Core and extensions style their dark mode through these classes, so they follow the skin
 		$out->addHtmlClasses( $auto ? 'skin-theme-clientpref-os' : ( $mode === ThemeSettings::MODE_DARK ?
 			'skin-theme-clientpref-night' :
 			'skin-theme-clientpref-day' ) );
-		$toggle = $this->config->isColorModeToggleEnabled();
+		$toggle = $this->theme->isColorModeToggleEnabled();
 		$bodyColors = $this->getBodyColors();
 
 		$out->addHeadItem( 'skin-cosmos-canvas', Html::inlineStyle(
@@ -144,9 +144,9 @@ class ColorMode implements
 
 		$out->addJsConfigVars( 'wgCosmosColorMode', [
 			'render' => $mode,
-			'default' => $this->config->getDefaultMode(),
+			'default' => $this->theme->getDefaultMode(),
 			'auto' => $auto,
-			'autoDefault' => $this->config->isAutoColorMode(),
+			'autoDefault' => $this->theme->isAutoColorMode(),
 			'toggle' => $toggle,
 			'registered' => $registered,
 			'altModules' => $altModules,
@@ -159,7 +159,7 @@ class ColorMode implements
 	private function getBodyColors(): array {
 		$colors = [];
 		foreach ( ThemeSettings::MODES as $name ) {
-			$colors[$name] = ThemeSettings::normalizeColor( $this->config->getColor( 'body', $name ) ) ?? 'transparent';
+			$colors[$name] = ThemeSettings::normalizeColor( $this->theme->getColor( 'body', $name ) ) ?? 'transparent';
 		}
 
 		return $colors;
