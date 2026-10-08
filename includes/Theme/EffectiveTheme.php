@@ -129,6 +129,14 @@ class EffectiveTheme {
 			$this->defaults->contentOpacity );
 	}
 
+	public function getFont(): ThemeFont {
+		return ThemeFont::newFromArray( $this->getTheme()->getSection( 'layout' )['font'] );
+	}
+
+	public function getFontFamily( bool $fileFound ): string {
+		return $this->getFont()->getFamily( $this->defaults->fontFamily, $fileFound );
+	}
+
 	public function getHeaderButtonOpacity(): int {
 		return (int)$this->getTheme()->getSection( 'layout' )['headerButtonOpacity'];
 	}
