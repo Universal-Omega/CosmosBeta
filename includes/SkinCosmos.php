@@ -206,10 +206,6 @@ class SkinCosmos extends SkinMustache {
 				'skins.cosmosbeta.portableinfobox.default';
 		}
 
-		if ( $this->extensionRegistry->isLoaded( 'CodeEditor' ) ) {
-			$modules['styles']['skin'][] = 'skins.cosmosbeta.codeeditor';
-		}
-
 		foreach ( $this->getSocialProfileModules() as $module ) {
 			$modules['styles']['skin'][] = $module;
 		}
