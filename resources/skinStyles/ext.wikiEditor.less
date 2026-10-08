@@ -98,6 +98,7 @@ body .wikiEditor-ui-toolbar .oo-ui-toggleWidget-on > .oo-ui-buttonElement-button
 	color: var( --skin-cosmos-font-color );
 }
 
+// stylelint-disable-next-line no-duplicate-selectors
 html body .wikiEditor-ui-toolbar {
 	.oo-ui-tool > .oo-ui-tool-link,
 	.oo-ui-tool > .oo-ui-buttonElement-button,
@@ -143,7 +144,7 @@ html body .wikiEditor-ui-toolbar {
 body .ui-dialog {
 	max-width: calc( 100vw - 16px );
 	box-sizing: border-box;
-	font-size: 14px;
+	font-size: 0.875rem;
 
 	.ui-dialog-content {
 		padding: 12px 16px;
@@ -222,12 +223,15 @@ html.skin-cosmos-colormode--dark body {
 
 @media screen and ( max-width: 600px ) {
 	body .ui-dialog {
+		// stylelint-disable declaration-no-important
 		right: 8px !important;
 		left: 8px !important;
 		width: auto !important;
+		// stylelint-enable declaration-no-important
 	}
 
 	body .ui-dialog .ui-dialog-content {
+		// stylelint-disable-next-line declaration-no-important
 		width: auto !important;
 		box-sizing: border-box;
 	}
