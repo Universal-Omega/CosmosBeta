@@ -187,6 +187,7 @@
 	"cosmosbeta-themedesigner-font-file": "Option of the font menu on Special:ThemeDesigner. Shows a field to choose or upload a font file.",
 	"cosmosbeta-themedesigner-font-file-help": "Help text of the font file field on Special:ThemeDesigner. WOFF2, WOFF, TTF and OTF are file formats.",
 	"cosmosbeta-themedesigner-font-file-label": "Label of the font file field on Special:ThemeDesigner.",
+	"cosmosbeta-themedesigner-font-file-unavailable": "Warning shown in the font settings of Special:ThemeDesigner when the wiki does not allow uploading font files. $wgFileExtensions is a setting name, and woff2, woff, ttf and otf are file extensions.",
 	"cosmosbeta-themedesigner-font-preset-arial": "Option of the font menu on Special:ThemeDesigner. {{notranslate}}",
 	"cosmosbeta-themedesigner-font-preset-georgia": "Option of the font menu on Special:ThemeDesigner. The font name is not translated, serif is the type of font.",
 	"cosmosbeta-themedesigner-font-preset-monospace": "Option of the font menu on Special:ThemeDesigner. A font where every letter has the same width.",
