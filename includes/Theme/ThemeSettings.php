@@ -172,6 +172,7 @@ class ThemeSettings {
 			'layout' => [
 				'contentWidth' => '',
 				'contentOpacity' => null,
+				'font' => [ 'type' => '', 'value' => '' ],
 				'headerButtonOpacity' => 20,
 				'backdropBlur' => 0,
 				'headerBorder' => true,
@@ -256,6 +257,7 @@ class ThemeSettings {
 			}
 
 			$data['layout']['contentOpacity'] = self::toPercent( $layout['contentOpacity'] ?? null, null );
+			$data['layout']['font'] = ThemeFont::newFromArray( $layout['font'] ?? null )->toArray();
 			$data['layout']['headerButtonOpacity'] = self::toPercent( $layout['headerButtonOpacity'] ?? null, 20 );
 			$data['layout']['headerBorder'] = self::toBool( $layout['headerBorder'] ?? null, true );
 			$data['layout']['backdropBlur'] = is_numeric( $layout['backdropBlur'] ?? null ) ?
