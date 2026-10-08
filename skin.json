@@ -17,8 +17,8 @@
 			"services": [
 				"Cosmos.AltModules",
 				"Cosmos.Config",
-				"Cosmos.EffectiveTheme",
 				"Cosmos.Navigation",
+				"Cosmos.EffectiveTheme",
 				"Cosmos.RailBuilder",
 				"Cosmos.WordmarkLookup",
 				"ContentLanguageCode",
