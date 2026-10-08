@@ -35,7 +35,7 @@ class SpecialAdminDashboard extends SpecialPage {
 
 	/** @inheritDoc */
 	public function getRestriction(): string {
-		return 'cosmosbeta-admindashboard';
+		return 'cosmos-admindashboard';
 	}
 
 	/** @inheritDoc */
@@ -45,7 +45,7 @@ class SpecialAdminDashboard extends SpecialPage {
 
 	/** @inheritDoc */
 	public function getDescription(): Message {
-		return $this->msg( 'cosmosbeta-admindashboard' );
+		return $this->msg( 'cosmos-admindashboard' );
 	}
 
 	/** @inheritDoc */
@@ -83,8 +83,8 @@ class SpecialAdminDashboard extends SpecialPage {
 		}
 
 		$out->addModuleStyles( [
-			'skins.cosmosbeta.admindashboard.codex',
-			'skins.cosmosbeta.admindashboard',
+			'skins.cosmos.admindashboard.codex',
+			'skins.cosmos.admindashboard',
 		] );
 
 		$out->addHTML( $this->templateParser->processTemplate( 'AdminDashboard', $this->getTemplateData( $tab ) ) );
@@ -166,7 +166,7 @@ class SpecialAdminDashboard extends SpecialPage {
 
 	private function getStatsData( DashboardStats $stats ): array {
 		$language = $this->getLanguage();
-		$format = $this->msg( 'cosmosbeta-admindashboard-stats-date-format' )->plain();
+		$format = $this->msg( 'cosmos-admindashboard-stats-date-format' )->plain();
 		$number = static fn ( int $value ): string => $language->formatNum( $value );
 
 		$totals = [
@@ -179,17 +179,17 @@ class SpecialAdminDashboard extends SpecialPage {
 		];
 
 		return [
-			'msg-stats-title' => $this->msg( 'cosmosbeta-admindashboard-stats-title' )->text(),
-			'msg-activity-title' => $this->msg( 'cosmosbeta-admindashboard-stats-activity' )->text(),
-			'msg-date' => $this->msg( 'cosmosbeta-admindashboard-stats-date' )->text(),
-			'msg-edits' => $this->msg( 'cosmosbeta-admindashboard-stats-edits' )->text(),
-			'msg-pages' => $this->msg( 'cosmosbeta-admindashboard-stats-pages' )->text(),
-			'msg-uploads' => $this->msg( 'cosmosbeta-admindashboard-stats-uploads' )->text(),
-			'msg-week' => $this->msg( 'cosmosbeta-admindashboard-stats-week' )->text(),
+			'msg-stats-title' => $this->msg( 'cosmos-admindashboard-stats-title' )->text(),
+			'msg-activity-title' => $this->msg( 'cosmos-admindashboard-stats-activity' )->text(),
+			'msg-date' => $this->msg( 'cosmos-admindashboard-stats-date' )->text(),
+			'msg-edits' => $this->msg( 'cosmos-admindashboard-stats-edits' )->text(),
+			'msg-pages' => $this->msg( 'cosmos-admindashboard-stats-pages' )->text(),
+			'msg-uploads' => $this->msg( 'cosmos-admindashboard-stats-uploads' )->text(),
+			'msg-week' => $this->msg( 'cosmos-admindashboard-stats-week' )->text(),
 			'array-totals' => array_values( array_map(
 				fn ( string $id, int $value ): array => [
 					'id' => $id,
-					'label' => $this->msg( "cosmosbeta-admindashboard-stats-total-$id" )->text(),
+					'label' => $this->msg( "cosmos-admindashboard-stats-total-$id" )->text(),
 					'value' => $number( $value ),
 				],
 				array_keys( $totals ),

@@ -10,6 +10,7 @@
 			>
 				{{ msg( 'rail-enabled' ) }}
 			</cdx-toggle-switch>
+			<reset-button path="rail/enabled"></reset-button>
 		</cdx-field>
 		<cdx-field>
 			<cdx-toggle-switch
@@ -19,6 +20,7 @@
 			>
 				{{ msg( 'rail-anons' ) }}
 			</cdx-toggle-switch>
+			<reset-button path="rail/hideForAnons"></reset-button>
 		</cdx-field>
 		<cdx-field>
 			<template #label>
@@ -28,11 +30,12 @@
 				{{ msg( 'rail-namespaces-help' ) }}
 			</template>
 			<namespace-lookup
-				:model-value="rail.disabledNamespaces || []"
+				:model-value="rail.disabledNamespaces ?? designer.effective.rail.disabledNamespaces"
 				:namespaces="designer.namespaces"
 				:disabled="disabled"
-				@update:model-value="update( { disabledNamespaces: $event.length ? $event : null } )"
+				@update:model-value="update( { disabledNamespaces: $event } )"
 			></namespace-lookup>
+			<reset-button path="rail/disabledNamespaces"></reset-button>
 		</cdx-field>
 		<cdx-field>
 			<template #label>
@@ -42,11 +45,12 @@
 				{{ msg( 'rail-pages-help' ) }}
 			</template>
 			<page-lookup
-				:model-value="rail.disabledPages || []"
+				:model-value="rail.disabledPages ?? designer.effective.rail.disabledPages"
 				:namespaces="designer.namespaces"
 				:disabled="disabled"
-				@update:model-value="update( { disabledPages: $event.length ? $event : null } )"
+				@update:model-value="update( { disabledPages: $event } )"
 			></page-lookup>
+			<reset-button path="rail/disabledPages"></reset-button>
 		</cdx-field>
 
 		<h3 class="skin-cosmos-themedesigner__rail-heading">
@@ -61,6 +65,7 @@
 				:key="entry.id"
 				:entry="entry"
 				:rules="getRules( rail.modules, entry.id )"
+				:defaults="getModuleDefaults( entry.id )"
 				:namespaces="designer.namespaces"
 				:disabled="disabled"
 				@update="setModuleRules( entry.id, $event )"
@@ -109,17 +114,20 @@
 </template>
 
 <script>
-const { CdxButton, CdxField, CdxTextInput, CdxToggleSwitch } = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+const { CdxButton, CdxField, CdxTextInput, CdxToggleSwitch } = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ computed, defineComponent, ref } = require( 'vue' ),
 	msg = require( '../msg.js' ),
 	NamespaceLookup = require( './NamespaceLookup.vue' ),
 	PageLookup = require( './PageLookup.vue' ),
 	RailModuleCard = require( './RailModuleCard.vue' ),
+	ResetButton = require( '../ResetButton.vue' ),
 	{ getRules, removeRules, setRules, slugify } = require( './rules.js' );
 
 const CUSTOM = 'custom',
 	CUSTOM_PREFIX = 'custom-',
 	PAGE_TOOLS = 'page-tools',
+	RECENT_CHANGES = 'recentchanges',
+	INTERFACE_PREFIX = 'interface-',
 	MESSAGE_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/;
 
 const getModuleId = ( custom ) => CUSTOM_PREFIX + custom.id;
@@ -134,7 +142,8 @@ module.exports = exports = defineComponent( {
 		CdxToggleSwitch,
 		NamespaceLookup,
 		PageLookup,
-		RailModuleCard
+		RailModuleCard,
+		ResetButton
 	},
 	props: {
 		modelValue: {
@@ -195,6 +204,21 @@ module.exports = exports = defineComponent( {
 			emit( 'update:modelValue', Object.assign( {}, rail.value, patch ) );
 		}
 
+		// Recent changes and interface modules take their defaults from the wiki, the rest are on and normal
+		function getModuleDefaults( id ) {
+			const defaults = props.designer.effective.rail;
+
+			if ( id === RECENT_CHANGES ) {
+				return defaults.recentChanges;
+			}
+
+			if ( id.startsWith( INTERFACE_PREFIX ) ) {
+				return { enabled: true, type: defaults.interface[ id.slice( INTERFACE_PREFIX.length ) ] || 'normal' };
+			}
+
+			return { enabled: true, type: 'normal' };
+		}
+
 		function setModuleRules( id, patch ) {
 			update( { modules: setRules( rail.value.modules, id, patch ) } );
 		}
@@ -234,6 +258,7 @@ module.exports = exports = defineComponent( {
 			msg,
 			getRules,
 			update,
+			getModuleDefaults,
 			setModuleRules,
 			addCustomModule,
 			removeCustomModule

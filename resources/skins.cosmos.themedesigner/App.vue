@@ -4,6 +4,9 @@
 			<cdx-message v-if="!designer.canEdit" type="warning">
 				{{ msg( 'readonly' ) }}
 			</cdx-message>
+			<cdx-message v-if="designer.themeOnly">
+				{{ msg( 'theme-only' ) }}
+			</cdx-message>
 
 			<cdx-tabs v-model:active="activeTab" :framed="false">
 				<cdx-tab name="themes" :label="msg( 'tab-themes' )">
@@ -34,6 +37,14 @@
 							</span>
 						</button>
 					</div>
+					<p>
+						<reset-button
+							:path="Object.keys( designer.defaults )"
+							message="reset-all"
+							confirm="reset-all-confirm"
+							@reset="clearColorInputs"
+						></reset-button>
+					</p>
 				</cdx-tab>
 
 				<cdx-tab name="colors" :label="msg( 'tab-colors' )">
@@ -51,6 +62,13 @@
 						</cdx-button>
 					</div>
 					<p>{{ msg( 'colors-intro' ) }}</p>
+					<p>
+						<reset-button
+							:path="[ 'palettes/' + editing, 'presets/' + editing ]"
+							message="reset-colors"
+							@reset="clearColorInputs"
+						></reset-button>
+					</p>
 
 					<cdx-field
 						v-for="slot in designer.slots"
@@ -78,14 +96,10 @@
 								:disabled="!designer.canEdit"
 								@update:model-value="setColor( slot, $event )"
 							></cdx-text-input>
-							<cdx-button
-								type="button"
-								weight="quiet"
-								:disabled="!designer.canEdit"
-								@click="resetColor( slot )"
-							>
-								{{ msg( 'color-reset' ) }}
-							</cdx-button>
+							<reset-button
+								:path="'palettes/' + editing + '/' + slot"
+								@reset="clearColorInput( slot )"
+							></reset-button>
 						</div>
 						<div class="skin-cosmos-themedesigner__range skin-cosmos-themedesigner__alpha">
 							<span>{{ msg( 'color-opacity' ) }}</span>
@@ -110,43 +124,37 @@
 						<template #label>
 							{{ msg( 'image-' + key ) }}
 						</template>
-						<image-field
+						<file-field
 							v-model="state.images[ key ]"
-							:placeholder="msg( 'image-default' )"
+							:placeholder="designer.effective.images[ key ] || msg( 'image-default' )"
 							:disabled="!designer.canEdit"
 							:upload="designer.upload"
-							:messages="imageMessages"
-						></image-field>
+							:messages="fileMessages"
+						></file-field>
+						<reset-button :path="'images/' + key"></reset-button>
 					</cdx-field>
 					<cdx-field>
 						<template #label>
 							{{ msg( 'image-size' ) }}
 						</template>
 						<cdx-select
-							v-model:selected="state.images.backgroundSize"
+							v-model:selected="sizeModel"
 							:menu-items="sizeItems"
 							:disabled="!designer.canEdit"
 						></cdx-select>
+						<reset-button path="images/backgroundSize"></reset-button>
 					</cdx-field>
 					<cdx-field>
-						<template #label>
+						<cdx-toggle-switch v-model="repeatModel" :disabled="!designer.canEdit">
 							{{ msg( 'image-repeat' ) }}
-						</template>
-						<cdx-select
-							v-model:selected="repeatModel"
-							:menu-items="triStateItems"
-							:disabled="!designer.canEdit"
-						></cdx-select>
+						</cdx-toggle-switch>
+						<reset-button path="images/backgroundRepeat"></reset-button>
 					</cdx-field>
 					<cdx-field>
-						<template #label>
+						<cdx-toggle-switch v-model="fixedModel" :disabled="!designer.canEdit">
 							{{ msg( 'image-fixed' ) }}
-						</template>
-						<cdx-select
-							v-model:selected="fixedModel"
-							:menu-items="triStateItems"
-							:disabled="!designer.canEdit"
-						></cdx-select>
+						</cdx-toggle-switch>
+						<reset-button path="images/backgroundFixed"></reset-button>
 					</cdx-field>
 				</cdx-tab>
 
@@ -156,10 +164,55 @@
 							{{ msg( 'layout-width' ) }}
 						</template>
 						<cdx-select
-							v-model:selected="state.layout.contentWidth"
+							v-model:selected="widthModel"
 							:menu-items="widthItems"
 							:disabled="!designer.canEdit"
 						></cdx-select>
+						<reset-button path="layout/contentWidth"></reset-button>
+					</cdx-field>
+					<cdx-field>
+						<template #label>
+							{{ msg( 'layout-font' ) }}
+						</template>
+						<template #help-text>
+							{{ msg( 'layout-font-help' ) }}
+						</template>
+						<font-picker
+							v-model="state.layout.font"
+							:presets="designer.fontPresets"
+							:fallback="designer.effective.layout.fontFamily"
+							:disabled="!designer.canEdit"
+						></font-picker>
+						<reset-button path="layout/font"></reset-button>
+					</cdx-field>
+					<cdx-message v-if="state.layout.font.type === 'file' && !fontUpload.extensions.length" type="warning">
+						{{ msg( 'font-file-unavailable' ) }}
+					</cdx-message>
+					<cdx-field v-else-if="state.layout.font.type === 'file'">
+						<template #label>
+							{{ msg( 'font-file-label' ) }}
+						</template>
+						<template #help-text>
+							{{ msg( 'font-file-help' ) }}
+						</template>
+						<file-field
+							v-model="state.layout.font.value"
+							:disabled="!designer.canEdit"
+							:upload="fontUpload"
+							:messages="fileMessages"
+						></file-field>
+					</cdx-field>
+					<cdx-field v-else-if="state.layout.font.type === 'custom'">
+						<template #label>
+							{{ msg( 'font-custom-label' ) }}
+						</template>
+						<template #help-text>
+							{{ msg( 'font-custom-help' ) }}
+						</template>
+						<cdx-text-input
+							v-model="state.layout.font.value"
+							:disabled="!designer.canEdit"
+						></cdx-text-input>
 					</cdx-field>
 					<cdx-field>
 						<template #label>
@@ -173,6 +226,7 @@
 							:menu-items="buttonStyleItems"
 							:disabled="!designer.canEdit"
 						></cdx-select>
+						<reset-button path="layout/buttonStyle"></reset-button>
 					</cdx-field>
 					<cdx-field>
 						<cdx-toggle-switch
@@ -181,6 +235,7 @@
 						>
 							{{ msg( 'layout-header-border' ) }}
 						</cdx-toggle-switch>
+						<reset-button path="layout/headerBorder"></reset-button>
 						<template #help-text>
 							{{ msg( 'layout-header-border-help' ) }}
 						</template>
@@ -203,7 +258,17 @@
 								@input="range.set( Number( $event.target.value ) )"
 							>
 							<output>{{ range.get() }}{{ range.unit }}</output>
+							<reset-button :path="range.path"></reset-button>
 						</div>
+					</cdx-field>
+					<cdx-field v-if="designer.portableInfobox">
+						<cdx-toggle-switch v-model="europaModel" :disabled="!designer.canEdit">
+							{{ msg( 'europa' ) }}
+						</cdx-toggle-switch>
+						<template #help-text>
+							{{ msg( 'europa-help' ) }}
+						</template>
+						<reset-button path="extensions/portableInfoboxEuropa"></reset-button>
 					</cdx-field>
 				</cdx-tab>
 
@@ -215,6 +280,7 @@
 						>
 							{{ msg( 'toolbar-enabled' ) }}
 						</cdx-toggle-switch>
+						<reset-button path="toolbar/enabled"></reset-button>
 					</cdx-field>
 					<cdx-field>
 						<template #label>
@@ -228,7 +294,11 @@
 							:menu-items="toolbarStyleItems"
 							:disabled="!designer.canEdit"
 						></cdx-select>
+						<reset-button path="toolbar/style"></reset-button>
 					</cdx-field>
+					<cdx-message v-if="toolsLost" type="warning">
+						{{ msg( 'toolbar-rail-off' ) }}
+					</cdx-message>
 					<cdx-field :is-fieldset="true">
 						<template #label>
 							{{ msg( 'toolbar-hidden' ) }}
@@ -245,6 +315,7 @@
 						>
 							{{ item.label }}
 						</cdx-checkbox>
+						<reset-button path="toolbar/hiddenItems"></reset-button>
 					</cdx-field>
 
 					<cdx-field>
@@ -262,6 +333,7 @@
 								@input="state.footer.opacity = Number( $event.target.value )"
 							>
 							<output>{{ state.footer.opacity }}%</output>
+							<reset-button path="footer/opacity"></reset-button>
 						</div>
 					</cdx-field>
 					<cdx-field :help-text="designer.canHideFooterIcons ? '' : msg( 'footer-icons-locked' )">
@@ -271,6 +343,7 @@
 						>
 							{{ msg( 'footer-icons' ) }}
 						</cdx-toggle-switch>
+						<reset-button path="footer/showIcons"></reset-button>
 					</cdx-field>
 					<cdx-field :is-fieldset="true">
 						<template #label>
@@ -289,6 +362,7 @@
 						>
 							{{ item.label }}
 						</cdx-checkbox>
+						<reset-button path="footer/hiddenLinks"></reset-button>
 					</cdx-field>
 				</cdx-tab>
 
@@ -302,6 +376,7 @@
 						<cdx-toggle-switch v-model="state.colorMode.toggle" :disabled="!designer.canEdit">
 							{{ msg( 'darkmode-toggle' ) }}
 						</cdx-toggle-switch>
+						<reset-button path="colorMode/toggle"></reset-button>
 					</cdx-field>
 					<cdx-field>
 						<template #label>
@@ -315,6 +390,7 @@
 							:menu-items="modeItems"
 							:disabled="!designer.canEdit"
 						></cdx-select>
+						<reset-button path="colorMode/default"></reset-button>
 					</cdx-field>
 					<cdx-message>
 						{{ msg( 'darkmode-builtin' ) }}
@@ -393,7 +469,7 @@
 					{{ msg( 'preview-footer' ) }}
 				</div>
 				<div
-					v-if="state.toolbar.enabled && ( state.toolbar.style !== 'rail' || !state.rail.enabled )"
+					v-if="state.toolbar.enabled && state.toolbar.style !== 'rail'"
 					class="skin-cosmos-themedesigner__preview-toolbar"
 					:class="'skin-cosmos-themedesigner__preview-toolbar--' + ( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
 					:style="preview.toolbar"
@@ -416,12 +492,16 @@ const {
 		CdxTabs,
 		CdxTextInput,
 		CdxToggleSwitch
-	} = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+	} = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ computed, defineComponent, onMounted, reactive, ref, watch } = require( 'vue' ),
 	colors = require( './colors.js' ),
-	ImageField = require( './ImageField.vue' ),
+	FileField = require( './FileField.vue' ),
+	FontPicker = require( './FontPicker.vue' ),
+	{ getStack: getFontStack } = require( './font.js' ),
 	msg = require( './msg.js' ),
-	RailTab = require( './rail/RailTab.vue' );
+	RailTab = require( './rail/RailTab.vue' ),
+	ResetButton = require( './ResetButton.vue' ),
+	{ provideReset } = require( './reset.js' );
 
 const MODES = [ 'light', 'dark' ];
 
@@ -459,8 +539,10 @@ module.exports = exports = defineComponent( {
 		CdxTabs,
 		CdxTextInput,
 		CdxToggleSwitch,
-		ImageField,
-		RailTab
+		FileField,
+		FontPicker,
+		RailTab,
+		ResetButton
 	},
 	props: {
 		designer: {
@@ -486,13 +568,11 @@ module.exports = exports = defineComponent( {
 		const swatchSlots = [ 'banner', 'body', 'content', 'button', 'link' ],
 			imageFields = [ 'wordmark', 'header', 'background' ];
 
-		const items = ( pairs ) => pairs.map( ( [ value, label ] ) => ( { value, label } ) );
-		const inherit = msg( 'inherit' );
+		const items = ( pairs ) => pairs.map( ( [ value, label ] ) => ( { value, label } ) ),
+			effective = props.designer.effective;
 
-		const sizeItems = items( [ [ '', inherit ], [ 'auto', 'auto' ], [ 'contain', 'contain' ], [ 'cover', 'cover' ] ] ),
-			triStateItems = items( [ [ '', inherit ], [ 'true', msg( 'yes' ) ], [ 'false', msg( 'no' ) ] ] ),
+		const sizeItems = items( [ [ 'auto', 'auto' ], [ 'contain', 'contain' ], [ 'cover', 'cover' ] ] ),
 			widthItems = items( [
-				[ '', inherit ],
 				[ 'default', msg( 'layout-width-default' ) ],
 				[ 'large', msg( 'layout-width-large' ) ],
 				[ 'full', msg( 'layout-width-full' ) ]
@@ -510,24 +590,47 @@ module.exports = exports = defineComponent( {
 			] ),
 			modeItems = items( [ ...MODES, 'auto' ].map( ( mode ) => [ mode, msg( 'mode-' + mode ) ] ) );
 
-		const triModel = ( key ) => computed( {
-			get: () => state.images[ key ] === null ? '' : String( state.images[ key ] ),
+		// What the theme does not set shows as the default it falls back to
+		const fallbackModel = ( section, key, fallback ) => computed( {
+			get: () => state[ section ][ key ] || fallback,
 			set: ( value ) => {
-				state.images[ key ] = value === '' ? null : value === 'true';
+				state[ section ][ key ] = value;
 			}
 		} );
 
-		const repeatModel = triModel( 'backgroundRepeat' ),
-			fixedModel = triModel( 'backgroundFixed' );
+		const flagModel = ( section, key, fallback ) => computed( {
+			get: () => state[ section ][ key ] ?? fallback,
+			set: ( value ) => {
+				state[ section ][ key ] = value;
+			}
+		} );
 
-		const imageMessages = {
-			upload: msg( 'image-upload' ),
-			uploading: msg( 'image-uploading' ),
-			exists: msg( 'image-upload-exists' ),
-			failed: msg( 'image-upload-failed' ),
-			comment: msg( 'image-upload-comment' ),
+		const sizeModel = fallbackModel( 'images', 'backgroundSize', effective.images.backgroundSize ),
+			widthModel = fallbackModel( 'layout', 'contentWidth', effective.layout.contentWidth ),
+			repeatModel = flagModel( 'images', 'backgroundRepeat', effective.images.backgroundRepeat ),
+			fixedModel = flagModel( 'images', 'backgroundFixed', effective.images.backgroundFixed ),
+			europaModel = flagModel( 'extensions', 'portableInfoboxEuropa', effective.extensions.portableInfoboxEuropa );
+
+		provideReset( state, props.designer.defaults, () => !props.designer.canEdit );
+
+		// Page tools in the rail have nowhere to show once the rail is off
+		const toolsLost = computed( () => state.toolbar.enabled && state.toolbar.style === 'rail' && !state.rail.enabled );
+
+		const fileMessages = {
+			upload: msg( 'file-upload' ),
+			uploading: msg( 'file-uploading' ),
+			exists: msg( 'file-upload-exists' ),
+			failed: msg( 'file-upload-failed' ),
+			comment: msg( 'file-upload-comment' ),
 			noResults: msg( 'rail-no-results' )
 		};
+
+		const fontUpload = {
+			enabled: props.designer.upload.enabled,
+			extensions: props.designer.upload.fontExtensions
+		};
+
+		const fontStack = computed( () => getFontStack( state.layout.font, props.designer.fontPresets, effective.layout.fontFamily ) );
 
 		const layoutRanges = [
 			{
@@ -535,7 +638,8 @@ module.exports = exports = defineComponent( {
 				max: 100,
 				unit: '%',
 				label: 'layout-opacity',
-				get: () => state.layout.contentOpacity === null ? props.designer.config.contentOpacity : state.layout.contentOpacity,
+				path: 'layout/contentOpacity',
+				get: () => state.layout.contentOpacity === null ? effective.layout.contentOpacity : state.layout.contentOpacity,
 				set: ( value ) => {
 					state.layout.contentOpacity = value;
 				}
@@ -545,6 +649,7 @@ module.exports = exports = defineComponent( {
 				max: 100,
 				unit: '%',
 				label: 'layout-header-button-opacity',
+				path: 'layout/headerButtonOpacity',
 				get: () => state.layout.headerButtonOpacity,
 				set: ( value ) => {
 					state.layout.headerButtonOpacity = value;
@@ -555,6 +660,7 @@ module.exports = exports = defineComponent( {
 				max: 40,
 				unit: 'px',
 				label: 'layout-backdrop-blur',
+				path: 'layout/backdropBlur',
 				help: 'layout-backdrop-blur-help',
 				get: () => state.layout.backdropBlur,
 				set: ( value ) => {
@@ -632,12 +738,14 @@ module.exports = exports = defineComponent( {
 			state.presets[ editing.value ] = '';
 		}
 
-		function resetColor( slot ) {
-			const key = rawKey( slot );
+		function clearColorInput( slot ) {
+			delete rawColors[ rawKey( slot ) ];
+			colorErrors[ rawKey( slot ) ] = false;
+		}
 
-			delete rawColors[ key ];
-			colorErrors[ key ] = false;
-			delete state.palettes[ editing.value ][ slot ];
+		function clearColorInputs() {
+			Object.keys( rawColors ).forEach( ( key ) => delete rawColors[ key ] );
+			Object.keys( colorErrors ).forEach( ( key ) => delete colorErrors[ key ] );
 		}
 
 		function applyPreset( preset ) {
@@ -671,12 +779,12 @@ module.exports = exports = defineComponent( {
 				content = color( 'content' ),
 				parsed = colors.parse( content ),
 				opacity = ( state.layout.contentOpacity === null ?
-					props.designer.config.contentOpacity :
+					effective.layout.contentOpacity :
 					state.layout.contentOpacity ) / 100,
 				on = ( slot ) => ( { background: color( slot ), color: colors.readableOn( color( slot ) ) } );
 
 			return {
-				root: { background: color( 'body' ) },
+				root: { background: color( 'body' ), fontFamily: fontStack.value },
 				blur: state.layout.backdropBlur > 0 ? { backdropFilter: 'blur(' + state.layout.backdropBlur + 'px)' } : {},
 				banner: on( 'banner' ),
 				header: on( 'header' ),
@@ -731,14 +839,18 @@ module.exports = exports = defineComponent( {
 			swatchSlots,
 			imageFields,
 			sizeItems,
-			triStateItems,
 			widthItems,
 			toolbarStyleItems,
 			modeItems,
+			sizeModel,
+			widthModel,
 			repeatModel,
 			fixedModel,
+			europaModel,
+			toolsLost,
 			buttonStyleItems,
-			imageMessages,
+			fileMessages,
+			fontUpload,
 			layoutRanges,
 			preview,
 			msg,
@@ -749,7 +861,8 @@ module.exports = exports = defineComponent( {
 			setPicked,
 			setAlpha,
 			alphaValue,
-			resetColor,
+			clearColorInput,
+			clearColorInputs,
 			applyPreset,
 			generateDark,
 			restore

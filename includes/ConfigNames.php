@@ -10,7 +10,7 @@ namespace MediaWiki\Skin\Cosmos;
  */
 class ConfigNames {
 
-	public const string AllowFooterIconHiding = 'CosmosBetaAllowFooterIconHiding';
+	public const string AllowFooterIconHiding = 'CosmosAllowFooterIconHiding';
 
 	public const string BackgroundImage = 'CosmosBetaBackgroundImage';
 
@@ -40,7 +40,7 @@ class ConfigNames {
 
 	public const string FooterBackgroundColor = 'CosmosBetaFooterBackgroundColor';
 
-	public const string FooterProtectedLinks = 'CosmosBetaFooterProtectedLinks';
+	public const string FooterProtectedLinks = 'CosmosFooterProtectedLinks';
 
 	public const string LinkColor = 'CosmosBetaLinkColor';
 
@@ -77,6 +77,10 @@ class ConfigNames {
 	public const string SocialProfileShowGroupTags = 'CosmosBetaSocialProfileShowGroupTags';
 
 	public const string SocialProfileTagGroups = 'CosmosBetaSocialProfileTagGroups';
+
+	public const string ThemeDesignerOnly = 'CosmosThemeDesignerOnly';
+
+	public const string ThemeDesignerPublicView = 'CosmosThemeDesignerPublicView';
 
 	public const string ToolbarBackgroundColor = 'CosmosBetaToolbarBackgroundColor';
 

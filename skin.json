@@ -3,8 +3,8 @@
 	"version": "10.0.0",
 	"author": "Universal Omega",
 	"url": "https://www.mediawiki.org/wiki/Skin:Cosmos",
-	"descriptionmsg": "cosmosbeta-desc",
-	"namemsg": "skinname-cosmosbeta",
+	"descriptionmsg": "cosmos-desc",
+	"namemsg": "skinname-cosmos",
 	"license-name": "GPL-3.0-or-later",
 	"type": "skin",
 	"requires": {
@@ -15,12 +15,12 @@
 			"displayname": "CosmosBeta",
 			"factory": "MediaWiki\\Skin\\Cosmos\\SkinCosmos::factory",
 			"services": [
-				"CosmosBetaAltModules",
-				"CosmosBetaOptions",
-				"CosmosBetaConfig",
-				"CosmosBetaNavigation",
-				"CosmosBetaRailBuilder",
-				"CosmosBetaWordmarkLookup",
+				"Cosmos.AltModules",
+				"Cosmos.Config",
+				"Cosmos.Navigation",
+				"Cosmos.EffectiveTheme",
+				"Cosmos.RailBuilder",
+				"Cosmos.WordmarkLookup",
 				"ContentLanguageCode",
 				"ExtensionRegistry",
 				"LanguageNameUtils",
@@ -53,7 +53,7 @@
 					],
 					"styles": [
 						"skins.cosmosbeta.styles",
-						"skins.cosmosbeta.icons"
+						"skins.cosmos.icons"
 					],
 					"scripts": [
 						"skins.cosmosbeta.searchLoader",
@@ -65,8 +65,8 @@
 						}
 					},
 					"messages": [
-						"cosmosbeta-colormode-switch-light",
-						"cosmosbeta-colormode-switch-dark"
+						"cosmos-colormode-switch-light",
+						"cosmos-colormode-switch-dark"
 					]
 				}
 			]
@@ -93,40 +93,42 @@
 	},
 	"GroupPermissions": {
 		"sysop": {
-			"cosmosbeta-themedesigner": true,
-			"cosmosbeta-admindashboard": true
+			"cosmos-admindashboard": true,
+			"cosmos-themedesigner": true
 		}
 	},
 	"AvailableRights": [
-		"cosmosbeta-admindashboard",
-		"cosmosbeta-themedesigner"
+		"cosmos-admindashboard",
+		"cosmos-themedesigner"
 	],
 	"SpecialPages": {
-		"CosmosBetaThemeDesigner": {
+		"CosmosThemeDesigner": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialThemeDesigner",
 			"services": [
-				"CosmosBetaConfig",
-				"CosmosBetaRailBuilder",
-				"CosmosBetaThemeStore",
+				"Cosmos.Config",
+				"Cosmos.ConfigDefaults",
+				"Cosmos.EffectiveTheme",
+				"Cosmos.RailBuilder",
+				"Cosmos.ThemeStore",
 				"ExtensionRegistry",
 				"SkinFactory",
-				"CosmosBetaTemplateParser",
+				"Cosmos.TemplateParser",
 				"TitleFactory"
 			]
 		},
-		"CosmosBetaLegacyConverter": {
+		"CosmosLegacyConverter": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialLegacyConverter",
 			"services": [
-				"CosmosBetaLegacyConverter"
+				"Cosmos.LegacyConverter"
 			]
 		},
 		"AdminDashboard": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialAdminDashboard",
 			"services": [
-				"CosmosBetaAdminDashboardStats",
-				"CosmosBetaAdvancedSectionBuilder",
-				"CosmosBetaAdminDashboardControls",
-				"CosmosBetaTemplateParser"
+				"Cosmos.AdminDashboardStats",
+				"Cosmos.AdvancedSectionBuilder",
+				"Cosmos.AdminDashboardControls",
+				"Cosmos.TemplateParser"
 			]
 		}
 	},
@@ -178,8 +180,8 @@
 				"mediawiki.user"
 			],
 			"messages": [
-				"cosmosbeta-colormode-switch-light",
-				"cosmosbeta-colormode-switch-dark"
+				"cosmos-colormode-switch-light",
+				"cosmos-colormode-switch-dark"
 			]
 		},
 		"skins.cosmosbeta.searchLoader": {
@@ -195,7 +197,7 @@
 				"mediawiki.util"
 			],
 			"messages": [
-				"cosmosbeta-search-loader"
+				"cosmos-search-loader"
 			]
 		},
 		"skins.cosmosbeta.search.codex.styles": {
@@ -238,11 +240,11 @@
 			"messages": [
 				"searchbutton",
 				"searchresults",
-				"cosmosbeta-search-loader",
-				"cosmosbeta-searchsuggest-containing"
+				"cosmos-search-loader",
+				"cosmos-searchsuggest-containing"
 			]
 		},
-		"skins.cosmosbeta.footer.codex": {
+		"skins.cosmos.footer.codex": {
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexStyleOnly": true,
 			"codexComponents": [
@@ -252,16 +254,16 @@
 		"skins.cosmosbeta.rail": {
 			"styles": "resources/skins.cosmosbeta.rail/rail.less"
 		},
-		"skins.cosmosbeta.admindashboard.codex": {
+		"skins.cosmos.admindashboard.codex": {
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexStyleOnly": true,
 			"codexComponents": [
 				"CdxTable"
 			]
 		},
-		"skins.cosmosbeta.admindashboard": {
+		"skins.cosmos.admindashboard": {
 			"styles": [
-				"resources/skins.cosmosbeta.admindashboard/admindashboard.less"
+				"resources/skins.cosmos.admindashboard/admindashboard.less"
 			]
 		},
 		"skins.cosmosbeta.portableinfobox": {
@@ -364,19 +366,7 @@
 			},
 			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
 		},
-		"skins.cosmosbeta.codeeditor": {
-			"features": {
-				"content-body": false,
-				"toc": false
-			},
-			"styles": {
-				"resources/extensions/CodeEditor/CodeEditor.less": {
-					"media": "screen"
-				}
-			},
-			"factory": "MediaWiki\\Skin\\Cosmos\\CosmosResourceLoaderModule::factory"
-		},
-		"skins.cosmosbeta.themedesigner.codex": {
+		"skins.cosmos.themedesigner.codex": {
 			"class": "MediaWiki\\ResourceLoader\\CodexModule",
 			"codexComponents": [
 				"CdxAccordion",
@@ -393,195 +383,220 @@
 				"CdxToggleSwitch"
 			]
 		},
-		"skins.cosmosbeta.themedesigner": {
+		"skins.cosmos.themedesigner": {
 			"dependencies": [
 				"vue",
-				"skins.cosmosbeta.themedesigner.codex"
+				"skins.cosmos.themedesigner.codex"
 			],
 			"packageFiles": [
-				"resources/skins.cosmosbeta.themedesigner/init.js",
-				"resources/skins.cosmosbeta.themedesigner/App.vue",
-				"resources/skins.cosmosbeta.themedesigner/ImageField.vue",
-				"resources/skins.cosmosbeta.themedesigner/colors.js",
-				"resources/skins.cosmosbeta.themedesigner/msg.js",
-				"resources/skins.cosmosbeta.themedesigner/rail/NamespaceLookup.vue",
-				"resources/skins.cosmosbeta.themedesigner/rail/PageLookup.vue",
-				"resources/skins.cosmosbeta.themedesigner/rail/RailModuleCard.vue",
-				"resources/skins.cosmosbeta.themedesigner/rail/RailTab.vue",
-				"resources/skins.cosmosbeta.themedesigner/rail/rules.js",
-				"resources/skins.cosmosbeta.themedesigner/rail/useChipList.js"
+				"resources/skins.cosmos.themedesigner/init.js",
+				"resources/skins.cosmos.themedesigner/App.vue",
+				"resources/skins.cosmos.themedesigner/FileField.vue",
+				"resources/skins.cosmos.themedesigner/FontPicker.vue",
+				"resources/skins.cosmos.themedesigner/ResetButton.vue",
+				"resources/skins.cosmos.themedesigner/colors.js",
+				"resources/skins.cosmos.themedesigner/font.js",
+				"resources/skins.cosmos.themedesigner/msg.js",
+				"resources/skins.cosmos.themedesigner/reset.js",
+				"resources/skins.cosmos.themedesigner/rail/NamespaceLookup.vue",
+				"resources/skins.cosmos.themedesigner/rail/PageLookup.vue",
+				"resources/skins.cosmos.themedesigner/rail/RailModuleCard.vue",
+				"resources/skins.cosmos.themedesigner/rail/RailTab.vue",
+				"resources/skins.cosmos.themedesigner/rail/rules.js",
+				"resources/skins.cosmos.themedesigner/rail/useChipList.js"
 			],
 			"styles": [
-				"resources/skins.cosmosbeta.themedesigner/themedesigner.less"
+				"resources/skins.cosmos.themedesigner/themedesigner.less"
 			],
 			"messages": [
-				"cosmosbeta-themedesigner-advanced",
-				"cosmosbeta-themedesigner-advanced-help",
-				"cosmosbeta-themedesigner-color-banner",
-				"cosmosbeta-themedesigner-color-banner-help",
-				"cosmosbeta-themedesigner-color-body",
-				"cosmosbeta-themedesigner-color-body-help",
-				"cosmosbeta-themedesigner-color-button",
-				"cosmosbeta-themedesigner-color-button-help",
-				"cosmosbeta-themedesigner-color-content",
-				"cosmosbeta-themedesigner-color-content-help",
-				"cosmosbeta-themedesigner-color-footer",
-				"cosmosbeta-themedesigner-color-footer-help",
-				"cosmosbeta-themedesigner-color-header",
-				"cosmosbeta-themedesigner-color-header-help",
-				"cosmosbeta-themedesigner-color-invalid",
-				"cosmosbeta-themedesigner-color-link",
-				"cosmosbeta-themedesigner-color-link-help",
-				"cosmosbeta-themedesigner-color-opacity",
-				"cosmosbeta-themedesigner-color-reset",
-				"cosmosbeta-themedesigner-color-toolbar",
-				"cosmosbeta-themedesigner-color-toolbar-help",
-				"cosmosbeta-themedesigner-colors-intro",
-				"cosmosbeta-themedesigner-comment",
-				"cosmosbeta-themedesigner-darkmode-auto-help",
-				"cosmosbeta-themedesigner-darkmode-builtin",
-				"cosmosbeta-themedesigner-darkmode-default",
-				"cosmosbeta-themedesigner-darkmode-generate",
-				"cosmosbeta-themedesigner-darkmode-generated",
-				"cosmosbeta-themedesigner-darkmode-intro",
-				"cosmosbeta-themedesigner-darkmode-toggle",
-				"cosmosbeta-themedesigner-editing",
-				"cosmosbeta-themedesigner-error-json",
-				"cosmosbeta-themedesigner-error-permission",
-				"cosmosbeta-themedesigner-error-revision",
-				"cosmosbeta-themedesigner-error-token",
-				"cosmosbeta-themedesigner-footer-hidden",
-				"cosmosbeta-themedesigner-footer-hidden-help",
-				"cosmosbeta-themedesigner-footer-icons",
-				"cosmosbeta-themedesigner-footer-icons-locked",
-				"cosmosbeta-themedesigner-footer-opacity",
-				"cosmosbeta-themedesigner-history-empty",
-				"cosmosbeta-themedesigner-history-intro",
-				"cosmosbeta-themedesigner-history-live",
-				"cosmosbeta-themedesigner-history-restore",
-				"cosmosbeta-themedesigner-image-background",
-				"cosmosbeta-themedesigner-image-default",
-				"cosmosbeta-themedesigner-image-fixed",
-				"cosmosbeta-themedesigner-image-header",
-				"cosmosbeta-themedesigner-image-repeat",
-				"cosmosbeta-themedesigner-image-size",
-				"cosmosbeta-themedesigner-image-upload",
-				"cosmosbeta-themedesigner-image-upload-comment",
-				"cosmosbeta-themedesigner-image-upload-exists",
-				"cosmosbeta-themedesigner-image-upload-failed",
-				"cosmosbeta-themedesigner-image-uploading",
-				"cosmosbeta-themedesigner-image-wordmark",
-				"cosmosbeta-themedesigner-images-intro",
-				"cosmosbeta-themedesigner-inherit",
-				"cosmosbeta-themedesigner-layout-backdrop-blur",
-				"cosmosbeta-themedesigner-layout-backdrop-blur-help",
-				"cosmosbeta-themedesigner-layout-button-style",
-				"cosmosbeta-themedesigner-layout-button-style-default",
-				"cosmosbeta-themedesigner-layout-button-style-help",
-				"cosmosbeta-themedesigner-layout-button-style-pill",
-				"cosmosbeta-themedesigner-layout-button-style-slim",
-				"cosmosbeta-themedesigner-layout-button-style-text",
-				"cosmosbeta-themedesigner-layout-header-border",
-				"cosmosbeta-themedesigner-layout-header-border-help",
-				"cosmosbeta-themedesigner-layout-header-button-opacity",
-				"cosmosbeta-themedesigner-layout-opacity",
-				"cosmosbeta-themedesigner-layout-width",
-				"cosmosbeta-themedesigner-layout-width-default",
-				"cosmosbeta-themedesigner-layout-width-full",
-				"cosmosbeta-themedesigner-layout-width-large",
-				"cosmosbeta-themedesigner-mode-auto",
-				"cosmosbeta-themedesigner-mode-dark",
-				"cosmosbeta-themedesigner-mode-light",
-				"cosmosbeta-themedesigner-no",
-				"cosmosbeta-themedesigner-nojs",
-				"cosmosbeta-themedesigner-preset-applied",
-				"cosmosbeta-themedesigner-preset-cosmos-dark",
-				"cosmosbeta-themedesigner-preset-cosmos-light",
-				"cosmosbeta-themedesigner-preset-ember",
-				"cosmosbeta-themedesigner-preset-forest",
-				"cosmosbeta-themedesigner-preset-lavender",
-				"cosmosbeta-themedesigner-preset-midnight",
-				"cosmosbeta-themedesigner-preset-moss",
-				"cosmosbeta-themedesigner-preset-sky",
-				"cosmosbeta-themedesigner-preset-sunset",
-				"cosmosbeta-themedesigner-presets-intro",
-				"cosmosbeta-themedesigner-preview",
-				"cosmosbeta-themedesigner-preview-button",
-				"cosmosbeta-themedesigner-preview-footer",
-				"cosmosbeta-themedesigner-preview-heading",
-				"cosmosbeta-themedesigner-preview-link",
-				"cosmosbeta-themedesigner-preview-rail",
-				"cosmosbeta-themedesigner-preview-text",
-				"cosmosbeta-themedesigner-preview-toolbar",
-				"cosmosbeta-themedesigner-preview-wordmark",
-				"cosmosbeta-themedesigner-protected",
-				"cosmosbeta-themedesigner-publish",
-				"cosmosbeta-themedesigner-rail-anons",
-				"cosmosbeta-themedesigner-rail-custom-add",
-				"cosmosbeta-themedesigner-rail-custom-add-button",
-				"cosmosbeta-themedesigner-rail-custom-exists",
-				"cosmosbeta-themedesigner-rail-custom-header",
-				"cosmosbeta-themedesigner-rail-custom-invalid",
-				"cosmosbeta-themedesigner-rail-custom-message",
-				"cosmosbeta-themedesigner-rail-custom-message-help",
-				"cosmosbeta-themedesigner-rail-custom-remove",
-				"cosmosbeta-themedesigner-rail-display-hide",
-				"cosmosbeta-themedesigner-rail-display-inherit",
-				"cosmosbeta-themedesigner-rail-display-show",
-				"cosmosbeta-themedesigner-rail-enabled",
-				"cosmosbeta-themedesigner-rail-intro",
-				"cosmosbeta-themedesigner-rail-module-display",
-				"cosmosbeta-themedesigner-rail-module-namespaces",
-				"cosmosbeta-themedesigner-rail-module-page-tools",
-				"cosmosbeta-themedesigner-rail-module-pages",
-				"cosmosbeta-themedesigner-rail-module-places",
-				"cosmosbeta-themedesigner-rail-module-places-help",
-				"cosmosbeta-themedesigner-rail-module-recentchanges",
-				"cosmosbeta-themedesigner-rail-module-type",
-				"cosmosbeta-themedesigner-rail-modules",
-				"cosmosbeta-themedesigner-rail-modules-help",
-				"cosmosbeta-themedesigner-rail-namespaces",
-				"cosmosbeta-themedesigner-rail-namespaces-help",
-				"cosmosbeta-themedesigner-rail-namespaces-placeholder",
-				"cosmosbeta-themedesigner-rail-no-results",
-				"cosmosbeta-themedesigner-rail-origin-builtin",
-				"cosmosbeta-themedesigner-rail-origin-custom",
-				"cosmosbeta-themedesigner-rail-origin-hook",
-				"cosmosbeta-themedesigner-rail-origin-interface",
-				"cosmosbeta-themedesigner-rail-origin-sidebar",
-				"cosmosbeta-themedesigner-rail-pages",
-				"cosmosbeta-themedesigner-rail-pages-help",
-				"cosmosbeta-themedesigner-rail-pages-mainpage",
-				"cosmosbeta-themedesigner-rail-pages-placeholder",
-				"cosmosbeta-themedesigner-rail-summary-places",
-				"cosmosbeta-themedesigner-rail-type-inherit",
-				"cosmosbeta-themedesigner-rail-type-normal",
-				"cosmosbeta-themedesigner-rail-type-sticky",
-				"cosmosbeta-themedesigner-readonly",
-				"cosmosbeta-themedesigner-restore-comment",
-				"cosmosbeta-themedesigner-success",
-				"cosmosbeta-themedesigner-swatches",
-				"cosmosbeta-themedesigner-tab-chrome",
-				"cosmosbeta-themedesigner-tab-colors",
-				"cosmosbeta-themedesigner-tab-darkmode",
-				"cosmosbeta-themedesigner-tab-history",
-				"cosmosbeta-themedesigner-tab-images",
-				"cosmosbeta-themedesigner-tab-layout",
-				"cosmosbeta-themedesigner-tab-rail",
-				"cosmosbeta-themedesigner-tab-themes",
-				"cosmosbeta-themedesigner-text",
-				"cosmosbeta-themedesigner-toolbar-enabled",
-				"cosmosbeta-themedesigner-toolbar-hidden",
-				"cosmosbeta-themedesigner-toolbar-hidden-help",
-				"cosmosbeta-themedesigner-toolbar-style",
-				"cosmosbeta-themedesigner-toolbar-style-bar",
-				"cosmosbeta-themedesigner-toolbar-style-floating",
-				"cosmosbeta-themedesigner-toolbar-style-help",
-				"cosmosbeta-themedesigner-toolbar-style-rail",
-				"cosmosbeta-themedesigner-yes"
+				"cosmos-themedesigner-advanced",
+				"cosmos-themedesigner-advanced-help",
+				"cosmos-themedesigner-color-banner",
+				"cosmos-themedesigner-color-banner-help",
+				"cosmos-themedesigner-color-body",
+				"cosmos-themedesigner-color-body-help",
+				"cosmos-themedesigner-color-button",
+				"cosmos-themedesigner-color-button-help",
+				"cosmos-themedesigner-color-content",
+				"cosmos-themedesigner-color-content-help",
+				"cosmos-themedesigner-color-footer",
+				"cosmos-themedesigner-color-footer-help",
+				"cosmos-themedesigner-color-header",
+				"cosmos-themedesigner-color-header-help",
+				"cosmos-themedesigner-color-invalid",
+				"cosmos-themedesigner-color-link",
+				"cosmos-themedesigner-color-link-help",
+				"cosmos-themedesigner-color-opacity",
+				"cosmos-themedesigner-color-toolbar",
+				"cosmos-themedesigner-color-toolbar-help",
+				"cosmos-themedesigner-colors-intro",
+				"cosmos-themedesigner-comment",
+				"cosmos-themedesigner-darkmode-auto-help",
+				"cosmos-themedesigner-darkmode-builtin",
+				"cosmos-themedesigner-darkmode-default",
+				"cosmos-themedesigner-darkmode-generate",
+				"cosmos-themedesigner-darkmode-generated",
+				"cosmos-themedesigner-darkmode-intro",
+				"cosmos-themedesigner-darkmode-toggle",
+				"cosmos-themedesigner-editing",
+				"cosmos-themedesigner-error-json",
+				"cosmos-themedesigner-error-permission",
+				"cosmos-themedesigner-error-revision",
+				"cosmos-themedesigner-error-token",
+				"cosmos-themedesigner-europa",
+				"cosmos-themedesigner-europa-help",
+				"cosmos-themedesigner-file-upload",
+				"cosmos-themedesigner-file-upload-comment",
+				"cosmos-themedesigner-file-upload-exists",
+				"cosmos-themedesigner-file-upload-failed",
+				"cosmos-themedesigner-file-uploading",
+				"cosmos-themedesigner-font-custom",
+				"cosmos-themedesigner-font-custom-help",
+				"cosmos-themedesigner-font-custom-label",
+				"cosmos-themedesigner-font-default",
+				"cosmos-themedesigner-font-file",
+				"cosmos-themedesigner-font-file-help",
+				"cosmos-themedesigner-font-file-label",
+				"cosmos-themedesigner-font-file-unavailable",
+				"cosmos-themedesigner-font-preset-arial",
+				"cosmos-themedesigner-font-preset-georgia",
+				"cosmos-themedesigner-font-preset-monospace",
+				"cosmos-themedesigner-font-preset-system",
+				"cosmos-themedesigner-font-preset-times",
+				"cosmos-themedesigner-font-preset-verdana",
+				"cosmos-themedesigner-font-preview",
+				"cosmos-themedesigner-font-sample",
+				"cosmos-themedesigner-footer-hidden",
+				"cosmos-themedesigner-footer-hidden-help",
+				"cosmos-themedesigner-footer-icons",
+				"cosmos-themedesigner-footer-icons-locked",
+				"cosmos-themedesigner-footer-opacity",
+				"cosmos-themedesigner-history-empty",
+				"cosmos-themedesigner-history-intro",
+				"cosmos-themedesigner-history-live",
+				"cosmos-themedesigner-history-restore",
+				"cosmos-themedesigner-image-background",
+				"cosmos-themedesigner-image-default",
+				"cosmos-themedesigner-image-fixed",
+				"cosmos-themedesigner-image-header",
+				"cosmos-themedesigner-image-repeat",
+				"cosmos-themedesigner-image-size",
+				"cosmos-themedesigner-image-wordmark",
+				"cosmos-themedesigner-images-intro",
+				"cosmos-themedesigner-layout-backdrop-blur",
+				"cosmos-themedesigner-layout-backdrop-blur-help",
+				"cosmos-themedesigner-layout-button-style",
+				"cosmos-themedesigner-layout-button-style-default",
+				"cosmos-themedesigner-layout-button-style-help",
+				"cosmos-themedesigner-layout-button-style-pill",
+				"cosmos-themedesigner-layout-button-style-slim",
+				"cosmos-themedesigner-layout-button-style-text",
+				"cosmos-themedesigner-layout-font",
+				"cosmos-themedesigner-layout-font-help",
+				"cosmos-themedesigner-layout-header-border",
+				"cosmos-themedesigner-layout-header-border-help",
+				"cosmos-themedesigner-layout-header-button-opacity",
+				"cosmos-themedesigner-layout-opacity",
+				"cosmos-themedesigner-layout-width",
+				"cosmos-themedesigner-layout-width-default",
+				"cosmos-themedesigner-layout-width-full",
+				"cosmos-themedesigner-layout-width-large",
+				"cosmos-themedesigner-mode-auto",
+				"cosmos-themedesigner-mode-dark",
+				"cosmos-themedesigner-mode-light",
+				"cosmos-themedesigner-nojs",
+				"cosmos-themedesigner-preset-applied",
+				"cosmos-themedesigner-preset-cosmos-dark",
+				"cosmos-themedesigner-preset-cosmos-light",
+				"cosmos-themedesigner-preset-ember",
+				"cosmos-themedesigner-preset-forest",
+				"cosmos-themedesigner-preset-lavender",
+				"cosmos-themedesigner-preset-midnight",
+				"cosmos-themedesigner-preset-moss",
+				"cosmos-themedesigner-preset-sky",
+				"cosmos-themedesigner-preset-sunset",
+				"cosmos-themedesigner-presets-intro",
+				"cosmos-themedesigner-preview",
+				"cosmos-themedesigner-preview-button",
+				"cosmos-themedesigner-preview-footer",
+				"cosmos-themedesigner-preview-heading",
+				"cosmos-themedesigner-preview-link",
+				"cosmos-themedesigner-preview-rail",
+				"cosmos-themedesigner-preview-text",
+				"cosmos-themedesigner-preview-toolbar",
+				"cosmos-themedesigner-preview-wordmark",
+				"cosmos-themedesigner-protected",
+				"cosmos-themedesigner-publish",
+				"cosmos-themedesigner-rail-anons",
+				"cosmos-themedesigner-rail-custom-add",
+				"cosmos-themedesigner-rail-custom-add-button",
+				"cosmos-themedesigner-rail-custom-exists",
+				"cosmos-themedesigner-rail-custom-header",
+				"cosmos-themedesigner-rail-custom-invalid",
+				"cosmos-themedesigner-rail-custom-message",
+				"cosmos-themedesigner-rail-custom-message-help",
+				"cosmos-themedesigner-rail-custom-remove",
+				"cosmos-themedesigner-rail-display-hide",
+				"cosmos-themedesigner-rail-display-show",
+				"cosmos-themedesigner-rail-enabled",
+				"cosmos-themedesigner-rail-intro",
+				"cosmos-themedesigner-rail-module-display",
+				"cosmos-themedesigner-rail-module-namespaces",
+				"cosmos-themedesigner-rail-module-page-tools",
+				"cosmos-themedesigner-rail-module-pages",
+				"cosmos-themedesigner-rail-module-places",
+				"cosmos-themedesigner-rail-module-places-help",
+				"cosmos-themedesigner-rail-module-recentchanges",
+				"cosmos-themedesigner-rail-module-type",
+				"cosmos-themedesigner-rail-modules",
+				"cosmos-themedesigner-rail-modules-help",
+				"cosmos-themedesigner-rail-namespaces",
+				"cosmos-themedesigner-rail-namespaces-help",
+				"cosmos-themedesigner-rail-namespaces-placeholder",
+				"cosmos-themedesigner-rail-no-results",
+				"cosmos-themedesigner-rail-origin-builtin",
+				"cosmos-themedesigner-rail-origin-custom",
+				"cosmos-themedesigner-rail-origin-hook",
+				"cosmos-themedesigner-rail-origin-interface",
+				"cosmos-themedesigner-rail-origin-sidebar",
+				"cosmos-themedesigner-rail-pages",
+				"cosmos-themedesigner-rail-pages-help",
+				"cosmos-themedesigner-rail-pages-mainpage",
+				"cosmos-themedesigner-rail-pages-placeholder",
+				"cosmos-themedesigner-rail-summary-places",
+				"cosmos-themedesigner-rail-type-normal",
+				"cosmos-themedesigner-rail-type-sticky",
+				"cosmos-themedesigner-readonly",
+				"cosmos-themedesigner-reset",
+				"cosmos-themedesigner-reset-all",
+				"cosmos-themedesigner-reset-all-confirm",
+				"cosmos-themedesigner-reset-colors",
+				"cosmos-themedesigner-reset-module",
+				"cosmos-themedesigner-restore-comment",
+				"cosmos-themedesigner-success",
+				"cosmos-themedesigner-swatches",
+				"cosmos-themedesigner-tab-chrome",
+				"cosmos-themedesigner-tab-colors",
+				"cosmos-themedesigner-tab-darkmode",
+				"cosmos-themedesigner-tab-history",
+				"cosmos-themedesigner-tab-images",
+				"cosmos-themedesigner-tab-layout",
+				"cosmos-themedesigner-tab-rail",
+				"cosmos-themedesigner-tab-themes",
+				"cosmos-themedesigner-text",
+				"cosmos-themedesigner-theme-only",
+				"cosmos-themedesigner-toolbar-enabled",
+				"cosmos-themedesigner-toolbar-hidden",
+				"cosmos-themedesigner-toolbar-hidden-help",
+				"cosmos-themedesigner-toolbar-rail-off",
+				"cosmos-themedesigner-toolbar-style",
+				"cosmos-themedesigner-toolbar-style-bar",
+				"cosmos-themedesigner-toolbar-style-floating",
+				"cosmos-themedesigner-toolbar-style-help",
+				"cosmos-themedesigner-toolbar-style-rail"
 			]
 		},
-		"skins.cosmosbeta.icons": {
+		"skins.cosmos.icons": {
 			"class": "MediaWiki\\ResourceLoader\\OOUIIconPackModule",
 			"selectorWithoutVariant": ".skin-cosmos-icon-{name}::before",
 			"useDataURI": false,
@@ -678,7 +693,7 @@
 		}
 	},
 	"config": {
-		"CosmosBetaAllowFooterIconHiding": {
+		"CosmosAllowFooterIconHiding": {
 			"value": true,
 			"description": "Whether the theme designer may hide the footer icons."
 		},
@@ -731,8 +746,8 @@
 				"recentchanges": false,
 				"interface": [
 					{
-						"cosmosbeta-custom-rail-module": "normal",
-						"cosmosbeta-custom-sticky-rail-module": "sticky"
+						"cosmos-custom-rail-module": "normal",
+						"cosmos-custom-sticky-rail-module": "sticky"
 					}
 				]
 			},
@@ -746,7 +761,7 @@
 			"value": "#c0c0c0",
 			"description": "Changes the background color of the footer"
 		},
-		"CosmosBetaFooterProtectedLinks": {
+		"CosmosFooterProtectedLinks": {
 			"value": [
 				"about",
 				"copyright",
@@ -838,6 +853,14 @@
 			],
 			"description": "Array of usergroups to show on SocialProfile pages if the user has them"
 		},
+		"CosmosThemeDesignerOnly": {
+			"value": false,
+			"description": "If true the theme designer is the only place the theme is set. The other theme variables (colors, images, content width and opacity, background options, the rail defaults, and the Europa infobox theme) are ignored, and the designer starts from built in defaults. Run maintenance/run.php Cosmos:ImportConfigTheme first to keep the current look."
+		},
+		"CosmosThemeDesignerPublicView": {
+			"value": false,
+			"description": "If true anyone can open the theme designer. People without the cosmos-themedesigner right see it read only, and publishing fails for them."
+		},
 		"CosmosBetaToolbarBackgroundColor": {
 			"value": "#000000",
 			"description": "Changes the background color of the toolbar"
@@ -880,14 +903,14 @@
 		"colormode": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\ColorMode",
 			"services": [
-				"CosmosBetaConfig",
-				"CosmosBetaAltModules"
+				"Cosmos.AltModules",
+				"Cosmos.EffectiveTheme"
 			]
 		},
 		"themecache": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\ThemeCache",
 			"services": [
-				"CosmosBetaThemeStore"
+				"Cosmos.ThemeStore"
 			]
 		},
 		"installer": {
@@ -896,16 +919,16 @@
 		"navigation": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Navigation",
 			"services": [
-				"CosmosBetaNavigation",
-				"CosmosBetaTemplateParser",
+				"Cosmos.Navigation",
+				"Cosmos.TemplateParser",
 				"TitleFactory"
 			]
 		},
 		"output": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Output",
 			"services": [
-				"CosmosBetaConfig",
-				"CosmosBetaLessUtil"
+				"Cosmos.EffectiveTheme",
+				"Cosmos.LessUtil"
 			]
 		},
 		"parser": {
@@ -923,8 +946,8 @@
 		"socialprofile": {
 			"factory": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
-				"CosmosBetaOptions",
-				"CosmosBetaTemplateParser",
+				"Cosmos.Config",
+				"Cosmos.TemplateParser",
 				"TitleFactory",
 				"UserGroupManager",
 				"WikiPageFactory"

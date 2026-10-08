@@ -11,8 +11,8 @@ use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\Skin\Cosmos\ConfigNames;
-use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\Hooks\HookRunner;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserFactory;
@@ -28,7 +28,6 @@ use function array_unique;
 use function htmlspecialchars;
 use function implode;
 use function in_array;
-use function is_string;
 use function preg_replace;
 use function str_replace;
 use function strtolower;
@@ -40,9 +39,6 @@ use const NS_USER;
 class RailBuilder {
 
 	public const array CONSTRUCTOR_OPTIONS = [
-		ConfigNames::EnabledRailModules,
-		ConfigNames::RailDisabledNamespaces,
-		ConfigNames::RailDisabledPages,
 		ConfigNames::RailSidebarPortlets,
 		MainConfigNames::ContentNamespaces,
 	];
@@ -65,7 +61,7 @@ class RailBuilder {
 	private bool $toolsInRail = false;
 
 	public function __construct(
-		private readonly CosmosConfig $cosmosConfig,
+		private readonly EffectiveTheme $theme,
 		private readonly HookRunner $hookRunner,
 		private readonly TemplateParser $templateParser,
 		private readonly IConnectionProvider $dbProvider,
@@ -138,7 +134,7 @@ class RailBuilder {
 	}
 
 	public function shouldPutToolsInRail(): bool {
-		$settings = $this->cosmosConfig->getToolbarSettings();
+		$settings = $this->theme->getToolbarSettings();
 		return $settings['enabled'] &&
 			$settings['style'] === 'rail' &&
 			$this->isModuleAllowed( RailModule::ID_PAGE_TOOLS );
@@ -163,7 +159,7 @@ class RailBuilder {
 	 * Whether the rail as a whole is off, whatever the page. Modules can still be hidden one by one.
 	 */
 	public function isHidden(): bool {
-		$settings = $this->cosmosConfig->getRailSettings();
+		$settings = $this->theme->getRailSettings();
 		return !$settings['enabled'] ||
 			( $settings['hideForAnons'] && !$this->context->getUser()->isNamed() ) ||
 			(bool)$this->context->getOutput()->getProperty( 'norail' );
@@ -188,11 +184,11 @@ class RailBuilder {
 			new RailModuleInfo( RailModule::ID_PAGE_TOOLS, RailModuleOrigin::BuiltIn, '' ),
 		];
 
-		foreach ( array_keys( $this->getConfiguredInterfaceTypes() ) as $message ) {
+		foreach ( array_keys( $this->theme->getDefaults()->interfaceModules ) as $message ) {
 			$modules[] = new RailModuleInfo( "interface-$message", RailModuleOrigin::Interface, $message );
 		}
 
-		foreach ( $this->cosmosConfig->getCustomRailModules() as $custom ) {
+		foreach ( $this->theme->getCustomRailModules() as $custom ) {
 			$modules[] = new RailModuleInfo(
 				"custom-{$custom['id']}",
 				RailModuleOrigin::Custom,
@@ -232,7 +228,7 @@ class RailBuilder {
 				continue;
 			}
 
-			$type = $this->cosmosConfig->getRailRules( $module->id )->type;
+			$type = $this->theme->getRailRules( $module->id )->type;
 			$modules[] = $type === null ? $module : $module->withType( $type );
 		}
 
@@ -249,7 +245,7 @@ class RailBuilder {
 				RailModule::ID_PAGE_TOOLS,
 				RailModuleType::Normal,
 				'page-tools-module',
-				'cosmosbeta-rail-page-tools',
+				'cosmos-rail-page-tools',
 				$this->toolItems
 			);
 		}
@@ -285,14 +281,13 @@ class RailBuilder {
 	private function isAllowed( string $id ): bool {
 		// Page tools in the rail are the only way to reach them, so by default they show on every page
 		$isEverywhere = $id === RailModule::ID_PAGE_TOOLS;
-		$settings = $this->cosmosConfig->getRailSettings();
+		$settings = $this->theme->getRailSettings();
+		$defaults = $this->theme->getDefaults();
 
-		return $this->cosmosConfig->getRailRules( $id )->isShownOn(
+		return $this->theme->getRailRules( $id )->isShownOn(
 			$this->context->getTitle(),
-			$settings['disabledNamespaces'] ??
-				( $isEverywhere ? [] : $this->options->get( ConfigNames::RailDisabledNamespaces ) ),
-			$settings['disabledPages'] ??
-				( $isEverywhere ? [] : $this->options->get( ConfigNames::RailDisabledPages ) )
+			$settings['disabledNamespaces'] ?? ( $isEverywhere ? [] : $defaults->railDisabledNamespaces ),
+			$settings['disabledPages'] ?? ( $isEverywhere ? [] : $defaults->railDisabledPages )
 		);
 	}
 
@@ -341,33 +336,11 @@ class RailBuilder {
 	}
 
 	/**
-	 * The wiki configuration is loose about types, so anything but a known type is normal.
-	 */
-	private function getConfiguredType( mixed $configured ): RailModuleType {
-		return ( is_string( $configured ) ? RailModuleType::tryFrom( $configured ) : null ) ?? RailModuleType::Normal;
-	}
-
-	/**
-	 * @return array<string, RailModuleType> The configured messages, by the type each is shown as
-	 */
-	private function getConfiguredInterfaceTypes(): array {
-		$configured = $this->options->get( ConfigNames::EnabledRailModules )['interface'] ?? [];
-		$types = [];
-		foreach ( (array)( $configured[0] ?? $configured ) as $message => $type ) {
-			if ( $type ) {
-				$types[(string)$message] = $this->getConfiguredType( $type );
-			}
-		}
-
-		return $types;
-	}
-
-	/**
 	 * @return RailModule[]
 	 */
 	private function newInterfaceModules(): array {
 		$modules = [];
-		foreach ( $this->getConfiguredInterfaceTypes() as $message => $type ) {
+		foreach ( $this->theme->getDefaults()->interfaceModules as $message => $type ) {
 			$module = $this->newMessageModule( "interface-$message", $message, null, $type );
 			if ( $module !== null ) {
 				$modules[] = $module;
@@ -382,7 +355,7 @@ class RailBuilder {
 	 */
 	private function newCustomModules(): array {
 		$modules = [];
-		foreach ( $this->cosmosConfig->getCustomRailModules() as $custom ) {
+		foreach ( $this->theme->getCustomRailModules() as $custom ) {
 			$module = $this->newMessageModule(
 				"custom-{$custom['id']}",
 				$custom['message'],
@@ -418,9 +391,9 @@ class RailBuilder {
 	 * @return RailModule[]
 	 */
 	private function newRecentChangesModules(): array {
-		$configured = $this->options->get( ConfigNames::EnabledRailModules )[RailModule::ID_RECENT_CHANGES] ?? false;
-		$rules = $this->cosmosConfig->getRailRules( RailModule::ID_RECENT_CHANGES );
-		$isEnabled = $rules->enabled ?? (bool)$configured;
+		$defaults = $this->theme->getDefaults();
+		$rules = $this->theme->getRailRules( RailModule::ID_RECENT_CHANGES );
+		$isEnabled = $rules->enabled ?? $defaults->recentChanges;
 		if ( !$isEnabled || !$this->isAllowed( RailModule::ID_RECENT_CHANGES ) ) {
 			return [];
 		}
@@ -428,7 +401,7 @@ class RailBuilder {
 		$entries = $this->getRecentChangeEntries();
 		return $entries === [] ?
 			[] :
-			[ RailModule::newWithRecentChanges( $this->getConfiguredType( $configured ), $entries ) ];
+			[ RailModule::newWithRecentChanges( $defaults->recentChangesType, $entries ) ];
 	}
 
 	/**

@@ -4,6 +4,8 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skin\Cosmos;
 
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
+
 use function array_slice;
 use function count;
 use function ctype_xdigit;
@@ -34,7 +36,7 @@ class LessUtil {
 	public const float CHROME_THRESHOLD = 0.3;
 
 	public function __construct(
-		private readonly CosmosConfig $cosmosConfig,
+		private readonly EffectiveTheme $theme,
 	) {
 	}
 
@@ -52,7 +54,7 @@ class LessUtil {
 	 * @return array{r: int, g: int, b: int}|null The color as seen, null when nothing is seen
 	 */
 	private function getVisibleColor( string $slot, string $mode ): ?array {
-		$color = self::parseColor( $this->cosmosConfig->getColor( $slot, $mode ) );
+		$color = self::parseColor( $this->theme->getColor( $slot, $mode ) );
 		$alpha = $color === null ? 0.0 : (float)$color['a'] * $this->getOpacity( $slot );
 		if ( $color !== null && $alpha >= 1.0 ) {
 			return [ 'r' => $color['r'], 'g' => $color['g'], 'b' => $color['b'] ];
@@ -77,8 +79,8 @@ class LessUtil {
 	/** Opacity setting of a theme color on top of the alpha of the color itself */
 	private function getOpacity( string $slot ): float {
 		return match ( $slot ) {
-			'content' => $this->cosmosConfig->getContentOpacityLevel() / 100,
-			'footer' => $this->cosmosConfig->getFooterOpacity() / 100,
+			'content' => $this->theme->getContentOpacityLevel() / 100,
+			'footer' => $this->theme->getFooterOpacity() / 100,
 			default => 1.0,
 		};
 	}

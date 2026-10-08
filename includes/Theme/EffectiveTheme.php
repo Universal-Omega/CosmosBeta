@@ -2,55 +2,30 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skin\Cosmos;
+namespace MediaWiki\Skin\Cosmos\Theme;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Skin\Cosmos\ConfigNames;
 use MediaWiki\Skin\Cosmos\Rail\RailRules;
-use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
-use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
-use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use function array_diff;
 use function array_values;
 
-class CosmosConfig {
+/**
+ * The theme as it applies on the wiki, with the defaults filled in where the theme leaves a setting alone.
+ */
+class EffectiveTheme {
 
 	public const array CONSTRUCTOR_OPTIONS = [
 		ConfigNames::AllowFooterIconHiding,
-		ConfigNames::BackgroundImage,
-		ConfigNames::BackgroundImageFixed,
-		ConfigNames::BackgroundImageRepeat,
-		ConfigNames::BackgroundImageSize,
-		ConfigNames::BannerBackgroundColor,
-		ConfigNames::ButtonBackgroundColor,
-		ConfigNames::ContentBackgroundColor,
-		ConfigNames::ContentOpacityLevel,
-		ConfigNames::ContentWidth,
-		ConfigNames::FooterBackgroundColor,
 		ConfigNames::FooterProtectedLinks,
-		ConfigNames::LinkColor,
-		ConfigNames::MainBackgroundColor,
-		ConfigNames::ToolbarBackgroundColor,
-		ConfigNames::WikiHeaderBackgroundColor,
-		ConfigNames::WikiHeaderBackgroundImage,
-		ConfigNames::Wordmark,
 		MainConfigNames::Logos,
-	];
-
-	private const array SLOT_OPTIONS = [
-		'banner' => ConfigNames::BannerBackgroundColor,
-		'header' => ConfigNames::WikiHeaderBackgroundColor,
-		'body' => ConfigNames::MainBackgroundColor,
-		'content' => ConfigNames::ContentBackgroundColor,
-		'button' => ConfigNames::ButtonBackgroundColor,
-		'link' => ConfigNames::LinkColor,
-		'footer' => ConfigNames::FooterBackgroundColor,
-		'toolbar' => ConfigNames::ToolbarBackgroundColor,
 	];
 
 	public function __construct(
 		private readonly ColorModeResolver $colorModeResolver,
+		private readonly ThemeDefaults $defaults,
 		private readonly ThemeStore $themeStore,
 		private readonly ServiceOptions $options,
 	) {
@@ -90,17 +65,23 @@ class CosmosConfig {
 	}
 
 	public function getFallbackColor( string $slot, string $mode ): string {
-		if ( $mode !== $this->getDefaultMode() ) {
-			return $mode === ThemeSettings::MODE_DARK ?
-				ThemeSettings::DARK_DEFAULTS[$slot] :
-				ThemeSettings::LIGHT_DEFAULTS[$slot];
-		}
+		return $this->defaults->getColor( $slot, $mode, $this->getDefaultMode() );
+	}
 
-		return (string)$this->options->get( self::SLOT_OPTIONS[$slot] );
+	/**
+	 * What the theme settings are when the theme does not set them.
+	 */
+	public function getDefaults(): ThemeDefaults {
+		return $this->defaults;
+	}
+
+	public function isPortableInfoboxEuropaEnabled(): bool {
+		return (bool)( $this->getTheme()->getSection( 'extensions' )['portableInfoboxEuropa'] ??
+			$this->defaults->europa );
 	}
 
 	public function getWordmark(): string {
-		$fallback = $this->options->get( ConfigNames::Wordmark ) ?:
+		$fallback = $this->defaults->wordmark ?:
 			$this->options->get( MainConfigNames::Logos )['wordmark']['src'] ??
 			$this->options->get( MainConfigNames::Logos )['1x'] ?? '';
 
@@ -109,32 +90,32 @@ class CosmosConfig {
 
 	public function getWikiHeaderBackgroundImage(): string {
 		return $this->getTheme()->getSection( 'images' )['header'] ?:
-			(string)$this->options->get( ConfigNames::WikiHeaderBackgroundImage );
+			$this->defaults->headerImage;
 	}
 
 	public function getBackgroundImage(): string {
 		return $this->getTheme()->getSection( 'images' )['background'] ?:
-			(string)$this->options->get( ConfigNames::BackgroundImage );
+			$this->defaults->backgroundImage;
 	}
 
 	public function getBackgroundImageSize(): string {
 		return $this->getTheme()->getSection( 'images' )['backgroundSize'] ?:
-			(string)$this->options->get( ConfigNames::BackgroundImageSize );
+			$this->defaults->backgroundSize;
 	}
 
 	public function getBackgroundImageRepeat(): bool {
 		return (bool)( $this->getTheme()->getSection( 'images' )['backgroundRepeat'] ??
-			$this->options->get( ConfigNames::BackgroundImageRepeat ) );
+			$this->defaults->backgroundRepeat );
 	}
 
 	public function getBackgroundImageFixed(): bool {
 		return (bool)( $this->getTheme()->getSection( 'images' )['backgroundFixed'] ??
-			$this->options->get( ConfigNames::BackgroundImageFixed ) );
+			$this->defaults->backgroundFixed );
 	}
 
 	public function getContentWidth(): string {
 		$setting = $this->getTheme()->getSection( 'layout' )['contentWidth'] ?:
-			$this->options->get( ConfigNames::ContentWidth );
+			$this->defaults->contentWidth;
 
 		return match ( $setting ) {
 			'full' => 'auto',
@@ -145,7 +126,15 @@ class CosmosConfig {
 
 	public function getContentOpacityLevel(): int {
 		return (int)( $this->getTheme()->getSection( 'layout' )['contentOpacity'] ??
-			$this->options->get( ConfigNames::ContentOpacityLevel ) );
+			$this->defaults->contentOpacity );
+	}
+
+	public function getFont(): ThemeFont {
+		return ThemeFont::newFromArray( $this->getTheme()->getSection( 'layout' )['font'] );
+	}
+
+	public function getFontFamily( bool $fileFound ): string {
+		return $this->getFont()->getFamily( $this->defaults->fontFamily, $fileFound );
 	}
 
 	public function getHeaderButtonOpacity(): int {

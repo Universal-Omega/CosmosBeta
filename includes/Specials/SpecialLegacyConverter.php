@@ -6,6 +6,7 @@ namespace MediaWiki\Skin\Cosmos\Specials;
 
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Message\Message;
 use MediaWiki\Skin\Cosmos\Legacy\LegacyConversionResult;
 use MediaWiki\Skin\Cosmos\Legacy\LegacyConverter;
@@ -19,7 +20,7 @@ class SpecialLegacyConverter extends SpecialPage {
 	public function __construct(
 		private readonly LegacyConverter $converter,
 	) {
-		parent::__construct( 'CosmosBetaLegacyConverter' );
+		parent::__construct( 'CosmosLegacyConverter' );
 	}
 
 	/** @inheritDoc */
@@ -29,33 +30,33 @@ class SpecialLegacyConverter extends SpecialPage {
 
 	/** @inheritDoc */
 	public function getDescription(): Message {
-		return $this->msg( 'cosmosbeta-legacyconverter' );
+		return $this->msg( 'cosmos-legacyconverter' );
 	}
 
 	/** @inheritDoc */
 	public function execute( $subPage ): void {
 		$this->setHeaders();
-		$this->getOutput()->addWikiMsg( 'cosmosbeta-legacyconverter-intro' );
+		$this->getOutput()->addWikiMsg( 'cosmos-legacyconverter-intro' );
 
 		$form = new HTMLForm( [
 			'type' => [
 				'type' => 'radio',
-				'label-message' => 'cosmosbeta-legacyconverter-type',
+				'label-message' => 'cosmos-legacyconverter-type',
 				'options-messages' => [
-					'cosmosbeta-legacyconverter-type-css' => 'css',
-					'cosmosbeta-legacyconverter-type-js' => 'js',
+					'cosmos-legacyconverter-type-css' => 'css',
+					'cosmos-legacyconverter-type-js' => 'js',
 				],
 				'default' => 'css',
 			],
 			'source' => [
 				'type' => 'textarea',
-				'label-message' => 'cosmosbeta-legacyconverter-source',
+				'label-message' => 'cosmos-legacyconverter-source',
 				'rows' => 16,
 				'required' => true,
 				'spellcheck' => false,
 			],
-		], $this->getContext(), 'cosmosbeta-legacyconverter' );
-		$form->setSubmitTextMsg( 'cosmosbeta-legacyconverter-submit' )
+		], $this->getContext(), 'cosmos-legacyconverter' );
+		$form->setSubmitTextMsg( 'cosmos-legacyconverter-submit' )
 			->setSubmitCallback( $this->convert( ... ) )
 			->show();
 
@@ -64,12 +65,12 @@ class SpecialLegacyConverter extends SpecialPage {
 		}
 	}
 
-	private function convert( array $data ): bool|Message {
+	private function convert( array $data ): false|Message {
 		$source = (string)$data['source'];
-		$limit = (int)$this->getConfig()->get( 'MaxArticleSize' ) * 1024;
+		$limit = (int)$this->getConfig()->get( MainConfigNames::MaxArticleSize ) * 1024;
 
 		if ( strlen( $source ) > $limit ) {
-			return $this->msg( 'cosmosbeta-legacyconverter-toolarge' );
+			return $this->msg( 'cosmos-legacyconverter-toolarge' );
 		}
 
 		$this->result = $data['type'] === 'js'
@@ -80,7 +81,7 @@ class SpecialLegacyConverter extends SpecialPage {
 	}
 
 	private function renderResult( LegacyConversionResult $result ): string {
-		$html = Html::element( 'h2', [], $this->msg( 'cosmosbeta-legacyconverter-output' )->text() );
+		$html = Html::element( 'h2', [], $this->msg( 'cosmos-legacyconverter-output' )->text() );
 		$html .= Html::element( 'textarea', [
 			'class' => 'skin-cosmos-legacyconverter-output',
 			'rows' => 16,
@@ -91,7 +92,7 @@ class SpecialLegacyConverter extends SpecialPage {
 
 		if ( $result->replacements === [] ) {
 			$html .= Html::noticeBox(
-				$this->msg( 'cosmosbeta-legacyconverter-nochanges' )->escaped(),
+				$this->msg( 'cosmos-legacyconverter-nochanges' )->escaped(),
 				'skin-cosmos-legacyconverter-summary'
 			);
 		} else {
@@ -104,19 +105,19 @@ class SpecialLegacyConverter extends SpecialPage {
 				);
 			}
 
-			$html .= Html::element( 'h2', [], $this->msg( 'cosmosbeta-legacyconverter-summary' )->text() );
+			$html .= Html::element( 'h2', [], $this->msg( 'cosmos-legacyconverter-summary' )->text() );
 			$html .= Html::rawElement( 'table', [ 'class' => 'wikitable' ],
 				Html::rawElement( 'tr', [],
-					Html::element( 'th', [], $this->msg( 'cosmosbeta-legacyconverter-old' )->text() ) .
-					Html::element( 'th', [], $this->msg( 'cosmosbeta-legacyconverter-new' )->text() ) .
-					Html::element( 'th', [], $this->msg( 'cosmosbeta-legacyconverter-count' )->text() )
+					Html::element( 'th', [], $this->msg( 'cosmos-legacyconverter-old' )->text() ) .
+					Html::element( 'th', [], $this->msg( 'cosmos-legacyconverter-new' )->text() ) .
+					Html::element( 'th', [], $this->msg( 'cosmos-legacyconverter-count' )->text() )
 				) . $rows
 			);
 		}
 
 		if ( $result->iconClasses !== [] ) {
 			$html .= Html::warningBox(
-				$this->msg( 'cosmosbeta-legacyconverter-icons' )
+				$this->msg( 'cosmos-legacyconverter-icons' )
 					->params( $this->getLanguage()->commaList( $result->iconClasses ) )
 					->parse()
 			);

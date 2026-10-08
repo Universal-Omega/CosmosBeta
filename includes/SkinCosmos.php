@@ -17,8 +17,10 @@ use MediaWiki\Skin\Cosmos\Components\ChromeComponent;
 use MediaWiki\Skin\Cosmos\Components\CreatePageDialogComponent;
 use MediaWiki\Skin\Cosmos\Components\PageHeaderComponent;
 use MediaWiki\Skin\Cosmos\Components\WikiHeaderComponent;
+use MediaWiki\Skin\Cosmos\Lookup\WordmarkLookup;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\SkinMustache;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleFactory;
@@ -31,7 +33,6 @@ use function hash;
 class SkinCosmos extends SkinMustache {
 
 	private const array CONSTRUCTOR_OPTIONS = [
-		ConfigNames::EnablePortableInfoboxEuropaTheme,
 		ConfigNames::SocialProfileAllowBio,
 		ConfigNames::SocialProfileModernTabs,
 		ConfigNames::SocialProfileRoundAvatar,
@@ -41,9 +42,9 @@ class SkinCosmos extends SkinMustache {
 
 	public function __construct(
 		private readonly AltModules $altModules,
-		private readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosNavigation $navigation,
 		private readonly Config $cosmosOptions,
+		private readonly EffectiveTheme $theme,
 		private readonly LanguageCode $contentLanguageCode,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly LanguageNameUtils $languageNameUtils,
@@ -64,8 +65,8 @@ class SkinCosmos extends SkinMustache {
 	public static function factory(
 		AltModules $altModules,
 		Config $cosmosOptions,
-		CosmosConfig $cosmosConfig,
 		CosmosNavigation $navigation,
+		EffectiveTheme $theme,
 		RailBuilder $railBuilder,
 		WordmarkLookup $wordmarkLookup,
 		LanguageCode $contentLanguageCode,
@@ -80,9 +81,9 @@ class SkinCosmos extends SkinMustache {
 	): self {
 		return new self(
 			$altModules,
-			$cosmosConfig,
 			$navigation,
 			$cosmosOptions,
+			$theme,
 			$contentLanguageCode,
 			$extensionRegistry,
 			$languageNameUtils,
@@ -119,7 +120,7 @@ class SkinCosmos extends SkinMustache {
 		$header = new WikiHeaderComponent(
 			$context,
 			$this->getConfig(),
-			$this->cosmosConfig,
+			$this->theme,
 			$this->extensionRegistry,
 			$this->permissionManager,
 			$this->wordmarkLookup
@@ -141,7 +142,7 @@ class SkinCosmos extends SkinMustache {
 
 		$chrome = new ChromeComponent(
 			$context,
-			$this->cosmosConfig,
+			$this->theme,
 			$this->extensionRegistry
 		);
 
@@ -171,14 +172,14 @@ class SkinCosmos extends SkinMustache {
 			],
 			'data-cosmos-dialog' => $dialog->getTemplateData(),
 			'data-cosmos-footer' => $chrome->getFooterData( $data['data-footer'] ?? [] ),
-			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar, $toolsInRail ),
+			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar ),
 			'html-cosmos-rail' => $this->railBuilder->buildRail(),
 			'html-cosmos-cookiewarning' => $this->getCookieWarning(),
 			'is-cosmos-dismissable-notice' => $hasNotice && $dismissable,
 			'is-cosmos-closable-notice' => $hasNotice && !$dismissable && !$noticeClosed,
 			'is-cosmos-empty-notice' => !$hasNotice,
 			'cosmos-notice-hash' => $hasNotice ? hash( 'crc32b', $siteNotice ) : null,
-			'msg-cosmosbeta-tagline' => $this->msg( 'cosmosbeta-tagline' )->escaped(),
+			'msg-cosmos-tagline' => $this->msg( 'cosmos-tagline' )->escaped(),
 		];
 	}
 
@@ -195,26 +196,22 @@ class SkinCosmos extends SkinMustache {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.rail';
 		}
 
-		if ( $this->cosmosConfig->getFooterSettings()['showIcons'] ) {
-			$modules['styles']['skin'][] = 'skins.cosmosbeta.footer.codex';
+		if ( $this->theme->getFooterSettings()['showIcons'] ) {
+			$modules['styles']['skin'][] = 'skins.cosmos.footer.codex';
 		}
 
 		if ( $this->extensionRegistry->isLoaded( 'PortableInfobox' ) ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.portableinfobox';
-			$modules['styles']['skin'][] = $this->serviceOptions->get( ConfigNames::EnablePortableInfoboxEuropaTheme ) ?
+			$modules['styles']['skin'][] = $this->theme->isPortableInfoboxEuropaEnabled() ?
 				'skins.cosmosbeta.portableinfobox.europa' :
 				'skins.cosmosbeta.portableinfobox.default';
-		}
-
-		if ( $this->extensionRegistry->isLoaded( 'CodeEditor' ) ) {
-			$modules['styles']['skin'][] = 'skins.cosmosbeta.codeeditor';
 		}
 
 		foreach ( $this->getSocialProfileModules() as $module ) {
 			$modules['styles']['skin'][] = $module;
 		}
 
-		if ( $this->cosmosConfig->getRenderMode() !== $this->cosmosConfig->getDefaultMode() ) {
+		if ( $this->theme->getRenderMode() !== $this->theme->getDefaultMode() ) {
 			foreach ( $modules['styles']['skin'] ?? [] as $index => $name ) {
 				$modules['styles']['skin'][$index] = $this->altModules->getTwinName( $name ) ?? $name;
 			}

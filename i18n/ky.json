@@ -4,7 +4,7 @@
 			"Bosogo"
 		]
 	},
-	"cosmosbeta-action-cancel": "Жокко чыгаруу",
-	"cosmosbeta-add-new-page-title": "Жаңы баракты кошуу",
-	"cosmosbeta-searchsuggest-containing": "\"<strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>\" камтыган барактарды издөө"
+	"cosmos-action-cancel": "Жокко чыгаруу",
+	"cosmos-add-new-page-title": "Жаңы баракты кошуу",
+	"cosmos-searchsuggest-containing": "\"<strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>\" камтыган барактарды издөө"
 }

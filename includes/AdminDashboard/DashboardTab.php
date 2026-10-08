@@ -17,6 +17,6 @@ enum DashboardTab: string {
 	}
 
 	public function getMessageKey(): string {
-		return "cosmosbeta-admindashboard-tab-{$this->value}";
+		return "cosmos-admindashboard-tab-{$this->value}";
 	}
 }

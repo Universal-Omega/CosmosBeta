@@ -5,7 +5,9 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skin\Cosmos\Theme;
 
 use MediaWiki\Skin\Cosmos\LessUtil;
+use MediaWiki\Skin\Cosmos\Rail\RailModule;
 use MediaWiki\Skin\Cosmos\Rail\RailModuleType;
+use function array_merge;
 use function array_slice;
 use function array_values;
 use function in_array;
@@ -170,6 +172,7 @@ class ThemeSettings {
 			'layout' => [
 				'contentWidth' => '',
 				'contentOpacity' => null,
+				'font' => [ 'type' => '', 'value' => '' ],
 				'headerButtonOpacity' => 20,
 				'backdropBlur' => 0,
 				'headerBorder' => true,
@@ -184,6 +187,9 @@ class ThemeSettings {
 				'opacity' => 90,
 				'showIcons' => true,
 				'hiddenLinks' => [],
+			],
+			'extensions' => [
+				'portableInfoboxEuropa' => null,
 			],
 			'rail' => [
 				'enabled' => true,
@@ -251,6 +257,7 @@ class ThemeSettings {
 			}
 
 			$data['layout']['contentOpacity'] = self::toPercent( $layout['contentOpacity'] ?? null, null );
+			$data['layout']['font'] = ThemeFont::newFromArray( $layout['font'] ?? null )->toArray();
 			$data['layout']['headerButtonOpacity'] = self::toPercent( $layout['headerButtonOpacity'] ?? null, 20 );
 			$data['layout']['headerBorder'] = self::toBool( $layout['headerBorder'] ?? null, true );
 			$data['layout']['backdropBlur'] = is_numeric( $layout['backdropBlur'] ?? null ) ?
@@ -279,6 +286,11 @@ class ThemeSettings {
 			$data['footer']['opacity'] = self::toPercent( $footer['opacity'] ?? null, 90 );
 			$data['footer']['showIcons'] = self::toBool( $footer['showIcons'] ?? null, true );
 			$data['footer']['hiddenLinks'] = self::normalizeIdList( $footer['hiddenLinks'] ?? [] );
+		}
+
+		$extensions = $raw['extensions'] ?? [];
+		if ( is_array( $extensions ) ) {
+			$data['extensions']['portableInfoboxEuropa'] = self::toBool( $extensions['portableInfoboxEuropa'] ?? null, null );
 		}
 
 		$rail = $raw['rail'] ?? [];
@@ -559,6 +571,73 @@ class ThemeSettings {
 
 	public function getSection( string $name ): array {
 		return $this->data[$name] ?? [];
+	}
+
+	public function withDefaults( ThemeDefaults $defaults ): self {
+		$data = $this->data;
+		$default = $this->getDefaultMode();
+
+		foreach ( self::MODES as $mode ) {
+			foreach ( self::COLOR_SLOTS as $slot ) {
+				$data['palettes'][$mode][$slot] ??= self::normalizeColor(
+					$defaults->getColor( $slot, $mode, $default )
+				) ?? self::LIGHT_DEFAULTS[$slot];
+			}
+		}
+
+		$images = &$data['images'];
+		foreach ( [ 'wordmark' => $defaults->wordmark, 'header' => $defaults->headerImage, 'background' => $defaults->backgroundImage ] as $key => $value ) {
+			$images[$key] = $images[$key] !== '' ? $images[$key] : self::normalizeImage( $value );
+		}
+
+		$images['backgroundSize'] = $images['backgroundSize'] !== '' ? $images['backgroundSize'] :
+			( in_array( $defaults->backgroundSize, self::BACKGROUND_SIZES, true ) ? $defaults->backgroundSize : 'cover' );
+		$images['backgroundRepeat'] ??= $defaults->backgroundRepeat;
+		$images['backgroundFixed'] ??= $defaults->backgroundFixed;
+		unset( $images );
+
+		$layout = &$data['layout'];
+		$layout['contentWidth'] = $layout['contentWidth'] !== '' ? $layout['contentWidth'] :
+			( in_array( $defaults->contentWidth, self::CONTENT_WIDTHS, true ) ? $defaults->contentWidth : 'default' );
+		$layout['contentOpacity'] ??= max( 0, min( 100, $defaults->contentOpacity ) );
+		unset( $layout );
+
+		$data['extensions']['portableInfoboxEuropa'] ??= $defaults->europa;
+		$data['rail']['disabledNamespaces'] ??= $defaults->railDisabledNamespaces;
+		$data['rail']['disabledPages'] ??= $defaults->railDisabledPages;
+
+		$modules = $data['rail']['modules'];
+		$modules[RailModule::ID_RECENT_CHANGES] = array_merge(
+			[ 'enabled' => $defaults->recentChanges, 'type' => $defaults->recentChangesType->value ],
+			$modules[RailModule::ID_RECENT_CHANGES] ?? []
+		);
+
+		$custom = [];
+		foreach ( $data['rail']['customModules'] as $module ) {
+			$custom[$module['id']] = $module;
+		}
+
+		foreach ( $defaults->interfaceModules as $message => $type ) {
+			$id = self::slugify( $message );
+			if ( $id === '' || strlen( $id ) > 60 || !preg_match( self::MESSAGE_KEY_PATTERN, $message ) ) {
+				continue;
+			}
+
+			$custom[$id] ??= [ 'id' => $id, 'message' => $message, 'header' => '' ];
+			$old = $modules["interface-$message"] ?? [];
+			unset( $modules["interface-$message"] );
+			$modules["custom-$id"] = array_merge( [ 'type' => $type->value ], $old, $modules["custom-$id"] ?? [] );
+		}
+
+		$data['rail']['customModules'] = array_values( $custom );
+		$data['rail']['modules'] = $modules;
+
+		return new self( $data, $this->revisionId );
+	}
+
+	/** Lowercase words joined by dashes, as the ids of custom modules are written */
+	private static function slugify( string $text ): string {
+		return substr( trim( (string)preg_replace( '/[^a-z0-9]+/', '-', strtolower( $text ) ), '-' ), 0, 60 );
 	}
 
 	/** @return bool Whether nothing has been customized */

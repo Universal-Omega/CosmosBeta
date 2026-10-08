@@ -8,9 +8,9 @@ use MediaWiki\Output\Hook\OutputPageBodyAttributesHook;
 use MediaWiki\Output\Hook\OutputPageParserOutputHook;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\ResourceLoader\Context;
-use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\LessUtil;
 use MediaWiki\Skin\Cosmos\SkinCosmos;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\Hook\SkinPageReadyConfigHook;
 use function implode;
 
@@ -21,7 +21,7 @@ class Output implements
 {
 
 	public function __construct(
-		private readonly CosmosConfig $config,
+		private readonly EffectiveTheme $theme,
 		private readonly LessUtil $lessUtil,
 	) {
 	}
@@ -36,7 +36,7 @@ class Output implements
 		$isNamed = $user->isNamed();
 		$isDark = $this->lessUtil->isDark(
 			'content',
-			$this->config->getRenderMode(),
+			$this->theme->getRenderMode(),
 			LessUtil::CONTENT_THRESHOLD
 		);
 
@@ -45,11 +45,11 @@ class Output implements
 			$isDark ? 'theme-dark skin-cosmos-theme-dark' : 'theme-light skin-cosmos-theme-light',
 		];
 
-		if ( $this->config->hasHeaderBorder() ) {
+		if ( $this->theme->hasHeaderBorder() ) {
 			$classes[] = 'skin-cosmos-has-header-border';
 		}
 
-		$buttonStyle = $this->config->getButtonStyle();
+		$buttonStyle = $this->theme->getButtonStyle();
 		if ( $buttonStyle !== 'default' ) {
 			$classes[] = "skin-cosmos-buttons--$buttonStyle";
 		}

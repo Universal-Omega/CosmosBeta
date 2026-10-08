@@ -1,11 +1,19 @@
 @import 'mediawiki.skin.variables.less';
 @import 'mediawiki.skin.codex-design-tokens/theme-wikimedia-ui-mixin-dark.less';
 
-@skin-cosmos-font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+.skin-cosmos-font-face( @source ) when not( @source = 0 ) {
+	@font-face {
+		font-family: @font-file-family;
+		src: @source;
+		font-display: swap;
+	}
+}
+
+.skin-cosmos-font-face( @font-file );
 
 :root {
 	--skin-cosmos-font-color: @font-color;
-	--skin-cosmos-font-family: @skin-cosmos-font-family;
+	--skin-cosmos-font-family: @font-family;
 	--skin-cosmos-muted-color: fade( @font-color, 82% );
 	--skin-cosmos-content-background: @content-background-color;
 	--skin-cosmos-link-color: @link-color;
@@ -42,6 +50,7 @@
 	--box-shadow-color-progressive-selected--hover: @hover-link;
 	--box-shadow-color-progressive-selected--active: @active-link;
 	--color-inverted: @content-background-color;
+	--color-inverted-fixed: @link-contrast-color;
 	--background-color-progressive: @link-color;
 	--background-color-progressive--hover: @hover-link;
 	--background-color-progressive--active: @active-link;
@@ -2636,11 +2645,6 @@ body:not( .mw-special-Preferences ) #cosmos-pageBody-content {
 
 .skin-cosmos-mobile-menu {
 	display: none;
-}
-
-body .mw-notification {
-	background: @button-background-color;
-	color: @button-font-color;
 }
 
 body .postedit::after {

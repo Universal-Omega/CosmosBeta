@@ -15,7 +15,7 @@
 </template>
 
 <script>
-const { CdxMultiselectLookup } = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+const { CdxMultiselectLookup } = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ computed, defineComponent, ref, watch } = require( 'vue' ),
 	msg = require( '../msg.js' ),
 	useChipList = require( './useChipList.js' );

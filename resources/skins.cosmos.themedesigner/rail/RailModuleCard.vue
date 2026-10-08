@@ -8,6 +8,7 @@
 			{{ summary }}
 		</template>
 
+		<reset-button :path="'rail/modules/' + entry.id" message="reset-module"></reset-button>
 		<cdx-field>
 			<template #label>
 				{{ msg( 'rail-module-display' ) }}
@@ -24,7 +25,7 @@
 				{{ msg( 'rail-module-type' ) }}
 			</template>
 			<cdx-select
-				:selected="rules.type || ''"
+				:selected="type"
 				:menu-items="typeItems"
 				:disabled="disabled"
 				@update:selected="onType"
@@ -79,15 +80,15 @@
 </template>
 
 <script>
-const { CdxAccordion, CdxButton, CdxField, CdxSelect, CdxToggleSwitch } = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+const { CdxAccordion, CdxButton, CdxField, CdxSelect, CdxToggleSwitch } = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ computed, defineComponent } = require( 'vue' ),
 	msg = require( '../msg.js' ),
 	NamespaceLookup = require( './NamespaceLookup.vue' ),
-	PageLookup = require( './PageLookup.vue' );
+	PageLookup = require( './PageLookup.vue' ),
+	ResetButton = require( '../ResetButton.vue' );
 
 const BUILT_IN = 'builtin',
-	CUSTOM = 'custom',
-	RECENT_CHANGES = 'recentchanges';
+	CUSTOM = 'custom';
 
 // @vue/component
 module.exports = exports = defineComponent( {
@@ -99,7 +100,8 @@ module.exports = exports = defineComponent( {
 		CdxSelect,
 		CdxToggleSwitch,
 		NamespaceLookup,
-		PageLookup
+		PageLookup,
+		ResetButton
 	},
 	props: {
 		entry: {
@@ -107,6 +109,10 @@ module.exports = exports = defineComponent( {
 			required: true
 		},
 		rules: {
+			type: Object,
+			required: true
+		},
+		defaults: {
 			type: Object,
 			required: true
 		},
@@ -124,49 +130,43 @@ module.exports = exports = defineComponent( {
 		const items = ( pairs ) => pairs.map( ( [ value, label ] ) => ( { value, label } ) );
 
 		const isCustom = computed( () => props.entry.origin === CUSTOM ),
-			canForceShow = computed( () => props.entry.id === RECENT_CHANGES ),
 			removable = computed( () => isCustom.value && !props.disabled );
 
 		const title = computed( () => props.entry.origin === BUILT_IN ?
 			msg( 'rail-module-' + props.entry.id ) :
 			props.entry.label );
 
-		// Only recent changes is off unless asked for, every other module shows unless told not to
-		const displayItems = computed( () => items( [
-			[ '', canForceShow.value ? msg( 'rail-display-inherit' ) : msg( 'rail-display-show' ) ],
-			...canForceShow.value ? [ [ 'show', msg( 'rail-display-show' ) ] ] : [],
+		const displayItems = items( [
+			[ 'show', msg( 'rail-display-show' ) ],
 			[ 'hide', msg( 'rail-display-hide' ) ]
-		] ) );
+		] );
 
-		// Custom modules have no wiki setting to follow, so they are normal unless made sticky
-		const typeItems = computed( () => items( [
-			[ '', isCustom.value ? msg( 'rail-type-normal' ) : msg( 'rail-type-inherit' ) ],
-			...isCustom.value ? [] : [ [ 'normal', msg( 'rail-type-normal' ) ] ],
+		const typeItems = items( [
+			[ 'normal', msg( 'rail-type-normal' ) ],
 			[ 'sticky', msg( 'rail-type-sticky' ) ]
-		] ) );
+		] );
 
-		const display = computed( () => {
-			if ( props.rules.enabled === null ) {
-				return '';
-			}
-
-			return props.rules.enabled ? 'show' : 'hide';
-		} );
+		// What a module does not set follows its default
+		const display = computed( () => ( props.rules.enabled ?? props.defaults.enabled ) ? 'show' : 'hide' ),
+			type = computed( () => props.rules.type ?? props.defaults.type );
 
 		const hasPlaces = computed( () => props.rules.disabledNamespaces !== null || props.rules.disabledPages !== null );
 
 		const summary = computed( () => [
-			props.rules.enabled === false ? msg( 'rail-display-hide' ) : null,
-			props.rules.type === 'sticky' ? msg( 'rail-type-sticky' ) : null,
+			display.value === 'hide' ? msg( 'rail-display-hide' ) : null,
+			type.value === 'sticky' ? msg( 'rail-type-sticky' ) : null,
 			hasPlaces.value ? msg( 'rail-summary-places' ) : null
 		].filter( Boolean ).join( ' · ' ) );
 
+		// Choosing what the default already is leaves the module following it
 		function onDisplay( value ) {
-			emit( 'update', { enabled: value === '' ? null : value === 'show' } );
+			const enabled = value === 'show';
+
+			emit( 'update', { enabled: enabled === props.defaults.enabled ? null : enabled } );
 		}
 
 		function onType( value ) {
-			emit( 'update', { type: value === '' ? null : value } );
+			emit( 'update', { type: value === props.defaults.type ? null : value } );
 		}
 
 		function onPlaces( enabled ) {
@@ -180,6 +180,7 @@ module.exports = exports = defineComponent( {
 			title,
 			display,
 			displayItems,
+			type,
 			typeItems,
 			hasPlaces,
 			summary,

@@ -5,7 +5,7 @@
  * @return {string}
  */
 module.exports = function msg( key ) {
-	// Messages used here: cosmosbeta-themedesigner-*
+	// Messages used here: cosmos-themedesigner-*
 	// eslint-disable-next-line mediawiki/msg-doc
-	return mw.msg( 'cosmosbeta-themedesigner-' + key );
+	return mw.msg( 'cosmos-themedesigner-' + key );
 };

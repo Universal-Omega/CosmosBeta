@@ -6,7 +6,7 @@ namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\SpecialPage\SpecialPage;
 use function in_array;
 
@@ -14,13 +14,13 @@ class ChromeComponent {
 
 	public function __construct(
 		private readonly IContextSource $context,
-		private readonly CosmosConfig $config,
+		private readonly EffectiveTheme $theme,
 		private readonly ExtensionRegistry $extensionRegistry,
 	) {
 	}
 
 	public function getFooterData( array $footer ): array {
-		$settings = $this->config->getFooterSettings();
+		$settings = $this->theme->getFooterSettings();
 		return [
 			'array-info' => $this->getLinks( $footer['data-info']['array-items'] ?? [], $settings['hiddenLinks'] ),
 			'array-places' => $this->getLinks( $footer['data-places']['array-items'] ?? [], $settings['hiddenLinks'] ),
@@ -29,7 +29,7 @@ class ChromeComponent {
 	}
 
 	public function getToolItems( array $sidebar ): array {
-		$settings = $this->config->getToolbarSettings();
+		$settings = $this->theme->getToolbarSettings();
 		$items = [];
 		$portlet = PortletReader::findPortlet( $sidebar, 'p-tb' );
 
@@ -42,9 +42,9 @@ class ChromeComponent {
 		return $items;
 	}
 
-	public function getToolbarData( array $sidebar, bool $inRail ): ?array {
-		$settings = $this->config->getToolbarSettings();
-		if ( !$settings['enabled'] || $inRail ) {
+	public function getToolbarData( array $sidebar ): ?array {
+		$settings = $this->theme->getToolbarSettings();
+		if ( !$settings['enabled'] || $settings['style'] === 'rail' ) {
 			return null;
 		}
 
@@ -66,7 +66,7 @@ class ChromeComponent {
 		}
 
 		return [
-			'style' => $settings['style'] === 'rail' ? 'bar' : $settings['style'],
+			'style' => $settings['style'],
 			'array-items' => $items,
 		];
 	}
