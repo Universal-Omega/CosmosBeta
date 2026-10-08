@@ -105,9 +105,9 @@
 		"CosmosBetaThemeDesigner": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialThemeDesigner",
 			"services": [
+				"CosmosBetaOptions",
 				"CosmosBetaConfigDefaults",
 				"CosmosBetaEffectiveTheme",
-				"CosmosBetaOptions",
 				"CosmosBetaRailBuilder",
 				"CosmosBetaThemeStore",
 				"ExtensionRegistry",
