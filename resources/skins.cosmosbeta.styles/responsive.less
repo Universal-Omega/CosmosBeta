@@ -52,7 +52,7 @@
 		margin-bottom: 0;
 	}
 
-	.skin-cosmos-header__top-container {
+	.skin-cosmos-header__top {
 		height: 69px;
 	}
 
@@ -91,7 +91,7 @@
 }
 
 @media only screen and ( max-width: 1023px ) {
-	.skin-cosmos-header__local-navigation {
+	.skin-cosmos-header__navigation {
 		.skin-cosmos-nav__label {
 			font-size: 10px;
 		}
@@ -109,7 +109,7 @@
 		direction: ltr;
 	}
 
-	.skin-cosmos-footerIcons-listItem {
+	.skin-cosmos-footer__icons-item {
 		margin: 0 15px 15px 0;
 	}
 }
@@ -156,3 +156,38 @@
 		}
 	}
 }
+
+.skin-cosmos-backdrop() when ( @backdrop-blur-enabled = 1 ) {
+	@supports ( backdrop-filter: blur( 1px ) ) or ( -webkit-backdrop-filter: blur( 1px ) ) {
+		#cosmos-banner,
+		#cosmos-footer,
+		#cosmos-toolbar,
+		#mw-content,
+		#catlinks {
+			-webkit-backdrop-filter: blur( @backdrop-blur );
+			backdrop-filter: blur( @backdrop-blur );
+		}
+	}
+
+	@supports not ( ( backdrop-filter: blur( 1px ) ) or ( -webkit-backdrop-filter: blur( 1px ) ) ) {
+		#cosmos-banner {
+			background-color: @banner-background-color-fallback;
+		}
+
+		#cosmos-footer {
+			background-color: @footer-background-color-fallback;
+		}
+
+		#cosmos-toolbar {
+			background-color: @toolbar-background-color-fallback;
+			background-image: none;
+		}
+
+		#mw-content,
+		#catlinks {
+			background-color: @content-opacity-level-fallback;
+		}
+	}
+}
+
+.skin-cosmos-backdrop();

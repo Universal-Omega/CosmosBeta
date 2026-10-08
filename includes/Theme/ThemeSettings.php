@@ -2,9 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Theme;
+namespace MediaWiki\Skin\Cosmos\Theme;
 
-use MediaWiki\Skins\CosmosBeta\LessUtil;
+use MediaWiki\Skin\Cosmos\LessUtil;
+use MediaWiki\Skin\Cosmos\Rail\RailModuleType;
 use function array_slice;
 use function array_values;
 use function in_array;
@@ -15,14 +16,17 @@ use function is_string;
 use function json_decode;
 use function json_encode;
 use function max;
+use function mb_substr;
 use function min;
 use function number_format;
 use function preg_match;
+use function preg_replace;
 use function round;
 use function rtrim;
 use function sprintf;
 use function str_starts_with;
 use function strlen;
+use function strtolower;
 use function substr;
 use function trim;
 use const JSON_UNESCAPED_SLASHES;
@@ -38,7 +42,10 @@ class ThemeSettings {
 
 	public const string MODE_LIGHT = 'light';
 	public const string MODE_DARK = 'dark';
+	public const string MODE_AUTO = 'auto';
+
 	public const array MODES = [ self::MODE_LIGHT, self::MODE_DARK ];
+	public const array DEFAULT_MODES = [ self::MODE_LIGHT, self::MODE_DARK, self::MODE_AUTO ];
 
 	public const array COLOR_SLOTS = [
 		'banner',
@@ -75,23 +82,26 @@ class ThemeSettings {
 
 	public const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
 	public const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
+	public const array BUTTON_STYLES = [ 'default', 'slim', 'pill', 'text' ];
 	public const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
-	public const array RAIL_RECENT_CHANGES = [ 'off', 'normal', 'sticky' ];
 
 	private const int MAX_LIST_ITEMS = 100;
+	private const int MAX_RAIL_MODULES = 50;
+	private const string RAIL_MODULE_ID_PATTERN = '/^[A-Za-z0-9._-]{1,100}$/';
+	private const string CUSTOM_RAIL_ID_PATTERN = '/^[a-z0-9]+(?:-[a-z0-9]+)*$/';
+	private const string MESSAGE_KEY_PATTERN = '/^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/';
 
 	private readonly array $data;
 
 	public function __construct(
-		array $data = [],
-		private readonly int $revisionId = 0,
+		array $data,
+		private readonly int $revisionId,
 	) {
 		$this->data = self::normalize( $data );
 	}
 
-	public static function newFromJson( string $json, int $revisionId = 0 ): self {
+	public static function newFromJson( string $json, int $revisionId ): self {
 		$decoded = json_decode( $json, true );
-
 		return new self( is_array( $decoded ) ? $decoded : [], $revisionId );
 	}
 
@@ -118,7 +128,6 @@ class ThemeSettings {
 		}
 
 		$opacity = (int)( $values['CosmosContentOpacityLevel'] ?? 0 );
-
 		return new self( [
 			'palettes' => [ self::MODE_LIGHT => $light ],
 			'images' => [
@@ -132,7 +141,7 @@ class ThemeSettings {
 			'layout' => [
 				'contentOpacity' => $opacity > 0 ? $opacity : null,
 			],
-		] );
+		], 0 );
 	}
 
 	public static function getDefaults(): array {
@@ -161,8 +170,10 @@ class ThemeSettings {
 			'layout' => [
 				'contentWidth' => '',
 				'contentOpacity' => null,
-				'bannerIconOpacity' => 100,
-				'headerIconOpacity' => 100,
+				'headerButtonOpacity' => 20,
+				'backdropBlur' => 0,
+				'headerBorder' => true,
+				'buttonStyle' => 'default',
 			],
 			'toolbar' => [
 				'enabled' => true,
@@ -177,21 +188,22 @@ class ThemeSettings {
 			'rail' => [
 				'enabled' => true,
 				'hideForAnons' => false,
-				'recentChanges' => '',
 				'disabledNamespaces' => null,
 				'disabledPages' => null,
+				'modules' => [],
+				'customModules' => [],
 			],
 		];
 	}
 
 	public static function normalize( array $raw ): array {
 		$data = self::getDefaults();
-
 		$mode = $raw['colorMode'] ?? [];
 		if ( is_array( $mode ) ) {
-			if ( in_array( $mode['default'] ?? null, self::MODES, true ) ) {
+			if ( in_array( $mode['default'] ?? null, self::DEFAULT_MODES, true ) ) {
 				$data['colorMode']['default'] = $mode['default'];
 			}
+
 			$data['colorMode']['toggle'] = self::toBool( $mode['toggle'] ?? null, false );
 		}
 
@@ -239,14 +251,22 @@ class ThemeSettings {
 			}
 
 			$data['layout']['contentOpacity'] = self::toPercent( $layout['contentOpacity'] ?? null, null );
-			$data['layout']['bannerIconOpacity'] = self::toPercent( $layout['bannerIconOpacity'] ?? null, 100 );
-			$data['layout']['headerIconOpacity'] = self::toPercent( $layout['headerIconOpacity'] ?? null, 100 );
+			$data['layout']['headerButtonOpacity'] = self::toPercent( $layout['headerButtonOpacity'] ?? null, 20 );
+			$data['layout']['headerBorder'] = self::toBool( $layout['headerBorder'] ?? null, true );
+			$data['layout']['backdropBlur'] = is_numeric( $layout['backdropBlur'] ?? null ) ?
+				max( 0, min( 40, (int)round( (float)$layout['backdropBlur'] ) ) ) :
+				0;
+
+			if ( in_array( $layout['buttonStyle'] ?? null, self::BUTTON_STYLES, true ) ) {
+				$data['layout']['buttonStyle'] = $layout['buttonStyle'];
+			} elseif ( self::toBool( $layout['slimButtons'] ?? null, false ) ) {
+				$data['layout']['buttonStyle'] = 'slim';
+			}
 		}
 
 		$toolbar = $raw['toolbar'] ?? [];
 		if ( is_array( $toolbar ) ) {
 			$data['toolbar']['enabled'] = self::toBool( $toolbar['enabled'] ?? null, true );
-
 			if ( in_array( $toolbar['style'] ?? null, self::TOOLBAR_STYLES, true ) ) {
 				$data['toolbar']['style'] = $toolbar['style'];
 			}
@@ -265,34 +285,143 @@ class ThemeSettings {
 		if ( is_array( $rail ) ) {
 			$data['rail']['enabled'] = self::toBool( $rail['enabled'] ?? null, true );
 			$data['rail']['hideForAnons'] = self::toBool( $rail['hideForAnons'] ?? null, false );
-
-			if ( in_array( $rail['recentChanges'] ?? null, self::RAIL_RECENT_CHANGES, true ) ) {
-				$data['rail']['recentChanges'] = $rail['recentChanges'];
-			}
-
-			if ( isset( $rail['disabledNamespaces'] ) && is_array( $rail['disabledNamespaces'] ) ) {
-				$namespaces = [];
-				foreach ( array_slice( $rail['disabledNamespaces'], 0, self::MAX_LIST_ITEMS ) as $ns ) {
-					if ( is_numeric( $ns ) && (int)$ns >= -2 && (int)$ns < 100000 ) {
-						$namespaces[(int)$ns] = (int)$ns;
-					}
-				}
-				$data['rail']['disabledNamespaces'] = array_values( $namespaces );
-			}
-
-			if ( isset( $rail['disabledPages'] ) && is_array( $rail['disabledPages'] ) ) {
-				$pages = [];
-				foreach ( array_slice( $rail['disabledPages'], 0, self::MAX_LIST_ITEMS ) as $page ) {
-					$page = is_string( $page ) ? trim( $page ) : '';
-					if ( $page !== '' && strlen( $page ) <= 255 && !preg_match( '/[\x00-\x1f<>{}\[\]|]/', $page ) ) {
-						$pages[$page] = $page;
-					}
-				}
-				$data['rail']['disabledPages'] = array_values( $pages );
-			}
+			$data['rail']['disabledNamespaces'] = self::normalizeNamespaceList( $rail['disabledNamespaces'] ?? null );
+			$data['rail']['disabledPages'] = self::normalizePageList( $rail['disabledPages'] ?? null );
+			$data['rail']['modules'] = self::normalizeRailModules( $rail );
+			$data['rail']['customModules'] = self::normalizeCustomRailModules( $rail['customModules'] ?? null );
 		}
 
 		return $data;
+	}
+
+	/**
+	 * @return int[]|null Null when the value is not a list, so the wiki default applies
+	 */
+	private static function normalizeNamespaceList( mixed $value ): ?array {
+		if ( !is_array( $value ) ) {
+			return null;
+		}
+
+		$namespaces = [];
+		foreach ( array_slice( $value, 0, self::MAX_LIST_ITEMS ) as $namespace ) {
+			if ( is_numeric( $namespace ) && (int)$namespace >= -2 && (int)$namespace < 100000 ) {
+				$namespaces[(int)$namespace] = (int)$namespace;
+			}
+		}
+
+		return array_values( $namespaces );
+	}
+
+	/**
+	 * @return string[]|null Null when the value is not a list, so the wiki default applies
+	 */
+	private static function normalizePageList( mixed $value ): ?array {
+		if ( !is_array( $value ) ) {
+			return null;
+		}
+
+		$pages = [];
+		foreach ( array_slice( $value, 0, self::MAX_LIST_ITEMS ) as $page ) {
+			$page = is_string( $page ) ? trim( $page ) : '';
+			if ( $page !== '' && strlen( $page ) <= 255 && !preg_match( '/[\x00-\x1f<>{}\[\]|]/', $page ) ) {
+				$pages[$page] = $page;
+			}
+		}
+
+		return array_values( $pages );
+	}
+
+	/**
+	 * Keeps only the rules a module really sets, keyed by module id.
+	 *
+	 * @return array<string, array>
+	 */
+	private static function normalizeRailModules( array $rail ): array {
+		$raw = is_array( $rail['modules'] ?? null ) ? $rail['modules'] : [];
+
+		// Themes saved before modules had rules of their own only chose a mode for recent changes
+		$legacy = $rail['recentChanges'] ?? null;
+		if ( !isset( $raw['recentchanges'] ) ) {
+			if ( $legacy === 'off' ) {
+				$raw['recentchanges'] = [ 'enabled' => false ];
+			} elseif ( self::toRailType( $legacy ) !== null ) {
+				$raw['recentchanges'] = [ 'enabled' => true, 'type' => $legacy ];
+			}
+		}
+
+		$modules = [];
+		foreach ( array_slice( $raw, 0, self::MAX_RAIL_MODULES, true ) as $id => $rules ) {
+			$rules = is_array( $rules ) ? self::normalizeRailRules( $rules ) : [];
+			if ( $rules !== [] && preg_match( self::RAIL_MODULE_ID_PATTERN, (string)$id ) ) {
+				$modules[(string)$id] = $rules;
+			}
+		}
+
+		return $modules;
+	}
+
+	private static function toRailType( mixed $value ): ?RailModuleType {
+		return is_string( $value ) ? RailModuleType::tryFrom( $value ) : null;
+	}
+
+	private static function normalizeRailRules( array $raw ): array {
+		$rules = [];
+
+		$enabled = self::toBool( $raw['enabled'] ?? null, null );
+		if ( $enabled !== null ) {
+			$rules['enabled'] = $enabled;
+		}
+
+		$type = self::toRailType( $raw['type'] ?? null );
+		if ( $type !== null ) {
+			$rules['type'] = $type->value;
+		}
+
+		$namespaces = self::normalizeNamespaceList( $raw['disabledNamespaces'] ?? null );
+		if ( $namespaces !== null ) {
+			$rules['disabledNamespaces'] = $namespaces;
+		}
+
+		$pages = self::normalizePageList( $raw['disabledPages'] ?? null );
+		if ( $pages !== null ) {
+			$rules['disabledPages'] = $pages;
+		}
+
+		return $rules;
+	}
+
+	/**
+	 * Interface modules the wiki added from the designer. Each shows one interface message.
+	 *
+	 * @return array<int, array{id: string, message: string, header: string}>
+	 */
+	private static function normalizeCustomRailModules( mixed $value ): array {
+		if ( !is_array( $value ) ) {
+			return [];
+		}
+
+		$modules = [];
+		foreach ( array_slice( $value, 0, self::MAX_RAIL_MODULES ) as $module ) {
+			$id = is_array( $module ) && is_string( $module['id'] ?? null ) ? $module['id'] : '';
+			$message = is_array( $module ) && is_string( $module['message'] ?? null ) ? trim( $module['message'] ) : '';
+			if ( strlen( $id ) > 60 || !preg_match( self::CUSTOM_RAIL_ID_PATTERN, $id ) ||
+				!preg_match( self::MESSAGE_KEY_PATTERN, $message )
+			) {
+				continue;
+			}
+
+			$header = is_string( $module['header'] ?? null ) ?
+				mb_substr( trim( (string)preg_replace( '/[\x00-\x1f<>]/', '', $module['header'] ) ), 0, 80 ) :
+				'';
+
+			$modules[$id] = [
+				'id' => $id,
+				'message' => $message,
+				'header' => $header,
+			];
+		}
+
+		return array_values( $modules );
 	}
 
 	/**
@@ -302,7 +431,6 @@ class ThemeSettings {
 	 */
 	public static function normalizeColor( string $color ): ?string {
 		$parsed = LessUtil::parseColor( $color );
-
 		if ( $parsed === null ) {
 			return null;
 		}
@@ -327,13 +455,12 @@ class ThemeSettings {
 	/**
 	 * Accepts a file name or a http(s) URL.
 	 */
-	public static function normalizeImage( $value ): string {
+	public static function normalizeImage( mixed $value ): string {
 		if ( !is_string( $value ) ) {
 			return '';
 		}
 
 		$value = trim( $value );
-
 		if ( $value === '' || strlen( $value ) > 1000 || preg_match( '/[\x00-\x1f<>"\'`{}\\\\]/', $value ) ) {
 			return '';
 		}
@@ -354,7 +481,7 @@ class ThemeSettings {
 	}
 
 	/** @return string[] */
-	private static function normalizeIdList( $value ): array {
+	private static function normalizeIdList( mixed $value ): array {
 		if ( !is_array( $value ) ) {
 			return [];
 		}
@@ -369,7 +496,7 @@ class ThemeSettings {
 		return array_values( $ids );
 	}
 
-	private static function toBool( $value, ?bool $default ): ?bool {
+	private static function toBool( mixed $value, ?bool $default ): ?bool {
 		if ( is_bool( $value ) ) {
 			return $value;
 		}
@@ -385,7 +512,7 @@ class ThemeSettings {
 		return $default;
 	}
 
-	private static function toPercent( $value, ?int $default ): ?int {
+	private static function toPercent( mixed $value, ?int $default ): ?int {
 		if ( !is_numeric( $value ) ) {
 			return $default;
 		}
@@ -405,8 +532,16 @@ class ThemeSettings {
 		return $this->revisionId;
 	}
 
+	/**
+	 * Auto renders the light colors and lets the browser switch to the dark ones.
+	 */
 	public function getDefaultMode(): string {
-		return $this->data['colorMode']['default'];
+		$mode = $this->data['colorMode']['default'];
+		return $mode === self::MODE_AUTO ? self::MODE_LIGHT : $mode;
+	}
+
+	public function isAutoMode(): bool {
+		return $this->data['colorMode']['default'] === self::MODE_AUTO;
 	}
 
 	public function isToggleEnabled(): bool {

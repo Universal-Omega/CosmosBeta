@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Components;
+namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Skins\CosmosBeta\ConfigNames;
+use MediaWiki\Skin\Cosmos\ConfigNames;
 use Telepedia\UserProfileV2\Avatar\UserProfileV2Avatar;
 use wAvatar;
 use function class_exists;
@@ -27,7 +27,11 @@ class BannerComponent {
 
 		$items = '';
 		foreach ( [ 'data-user-interface-preferences', 'data-user-page', 'data-user-menu' ] as $menu ) {
-			$items .= $portlets[$menu]['html-items'] ?? '';
+			foreach ( $portlets[$menu]['array-items'] ?? [] as $item ) {
+				if ( ( $item['name'] ?? '' ) !== 'adminlinks' ) {
+					$items .= $item['html-item'] ?? '';
+				}
+			}
 		}
 
 		return [
@@ -36,7 +40,29 @@ class BannerComponent {
 			'html-avatar' => $this->getAvatar( $user->getId() ),
 			'html-notifications' => $registered ? ( $portlets['data-notifications']['html-items'] ?? null ) : null,
 			'html-personal-items' => $items,
+			'data-talk-alert' => $registered ? $this->getTalkAlert( $portlets ) : null,
 		];
+	}
+
+	private function getTalkAlert( array $portlets ): ?array {
+		foreach ( $portlets['data-notifications']['array-items'] ?? [] as $item ) {
+			if ( ( $item['name'] ?? '' ) !== 'talk-alert' ) {
+				continue;
+			}
+
+			$link = $item['array-links'][0] ?? [];
+			$href = '';
+
+			foreach ( $link['array-attributes'] ?? [] as $attribute ) {
+				if ( $attribute['key'] === 'href' ) {
+					$href = (string)$attribute['value'];
+				}
+			}
+
+			return $href === '' ? null : [ 'href' => $href, 'text' => (string)( $link['text'] ?? '' ) ];
+		}
+
+		return null;
 	}
 
 	private function getAvatar( int $userId ): ?string {

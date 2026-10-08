@@ -1,10 +1,82 @@
-.skin-cosmos .oo-ui-windowManager-modal > .oo-ui-dialog,
-.skin-cosmos .ve-ui-overlay-global {
-	z-index: 101;
+.skin-cosmosbeta .oo-ui-windowManager-modal > .oo-ui-dialog,
+.skin-cosmosbeta .ve-ui-overlay-global {
+	z-index: 100001;
 }
 
 body > .oo-ui-windowManager,
 .oo-ui-defaultOverlay {
-	z-index: 101;
+	z-index: 100001;
 	font-size: 0.95em;
+}
+
+body .oo-ui-tabSelectWidget-framed {
+	border: 0;
+	background: var( --skin-cosmos-tabs-background );
+}
+
+body .oo-ui-tabSelectWidget-framed .oo-ui-tabOptionWidget.oo-ui-widget-enabled {
+	&:not( .oo-ui-optionWidget-selected ) {
+		color: var( --color-subtle );
+	}
+
+	&:hover {
+		background-color: var( --background-color-interactive );
+		color: var( --color-base );
+	}
+
+	&:active {
+		background-color: var( --background-color-interactive-subtle--active );
+	}
+
+	&.oo-ui-optionWidget-selected:hover {
+		background-color: var( --background-color-base );
+	}
+}
+
+.oo-ui-buttonElement-framed.oo-ui-widget-disabled > .oo-ui-buttonElement-button {
+	border-color: var( --border-color-subtle );
+	background-color: var( --background-color-interactive );
+	color: var( --color-disabled );
+}
+
+.oo-ui-menuSelectWidget .oo-ui-optionWidget {
+	background-color: transparent;
+	color: var( --color-base );
+
+	&.oo-ui-optionWidget-highlighted {
+		background-color: var( --background-color-interactive-subtle--hover );
+	}
+
+	&.oo-ui-optionWidget-selected {
+		background-color: var( --background-color-interactive );
+	}
+}
+
+.oo-ui-radioSelectWidget .oo-ui-radioOptionWidget.oo-ui-optionWidget-selected,
+.oo-ui-radioSelectWidget .oo-ui-radioOptionWidget.oo-ui-optionWidget-highlighted {
+	background-color: transparent;
+}
+
+.oo-ui-iconElement-icon:not( [ class*='oo-ui-image-' ] ):not( .oo-ui-checkboxInputWidget-checkIcon ),
+.oo-ui-indicatorElement-indicator:not( [ class*='oo-ui-image-' ] ) {
+	filter: invert( var( --skin-cosmos-invert ) );
+}
+
+.oo-ui-buttonElement-framed.oo-ui-flaggedElement-primary .oo-ui-iconElement-icon,
+.oo-ui-messageWidget .oo-ui-iconElement-icon {
+	filter: none;
+}
+
+.oo-ui-buttonElement-framed.oo-ui-flaggedElement-primary.oo-ui-flaggedElement-progressive {
+	> .oo-ui-buttonElement-button {
+		color: var( --skin-cosmos-link-contrast );
+	}
+
+	.oo-ui-iconElement-icon {
+		filter: invert( var( --skin-cosmos-link-contrast-invert ) );
+	}
+}
+
+.oo-ui-messageWidget a {
+	text-decoration: underline;
 }

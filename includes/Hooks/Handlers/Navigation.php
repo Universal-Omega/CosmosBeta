@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\IContextSource;
@@ -11,8 +11,9 @@ use MediaWiki\Hook\BeforeInitializeHook;
 use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Language\Hook\MessageCacheReplaceHook;
-use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Language\RawMessage;
+use MediaWiki\Skin\Cosmos\CosmosNavigation;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use function trim;
@@ -36,7 +37,7 @@ class Navigation implements
 		$context = $editPage->getContext();
 
 		if (
-			!$context->getSkin() instanceof SkinCosmosBeta ||
+			!$context->getSkin() instanceof SkinCosmos ||
 			!$content instanceof WikitextContent ||
 			!$this->isNavigationPage( $editPage->getTitle() )
 		) {
@@ -44,7 +45,6 @@ class Navigation implements
 		}
 
 		$pageText = trim( $content->getText() );
-
 		if ( $pageText === '' || $pageText === '-' ) {
 			return true;
 		}
@@ -57,7 +57,7 @@ class Navigation implements
 
 	/** @inheritDoc */
 	public function onBeforeInitialize( $title, $unused, $output, $user, $request, $mediaWiki ): void {
-		if ( $output->getSkin() instanceof SkinCosmosBeta && $this->isNavigationPage( $title ) ) {
+		if ( $output->getSkin() instanceof SkinCosmos && $this->isNavigationPage( $title ) ) {
 			$request->setVal( 'wteswitched', '1' );
 		}
 	}
@@ -74,31 +74,23 @@ class Navigation implements
 	}
 
 	private function buildPreview( IContextSource $context, bool $isConflict, string $pageText ): string {
-		$out = $context->getOutput();
-
-		$conflict = $isConflict ?
-			Html::warningBox( $context->msg( 'previewconflict' )->escaped(), 'mw-previewconflict' ) :
-			'';
-
 		$note = $context->msg( 'previewnote' )->plain() .
 			' <span class="mw-continue-editing">' .
 			'[[#editform|' .
 			$context->getLanguage()->getArrow() . ' ' .
 			$context->msg( 'continue-editing' )->text() . ']]</span>';
 
-		$tree = $this->navigation->buildTree( $context, $this->navigation->extract( $pageText ) );
-
-		$menu = $this->templateParser->processTemplate( 'Navigation', [ 'data-cosmos-navigation' => $tree ] );
-
-		return Html::rawElement( 'div', [ 'class' => 'previewnote' ],
-			Html::rawElement( 'h2', [ 'id' => 'mw-previewheader' ], $context->msg( 'preview' )->escaped() ) .
-			Html::warningBox( $out->parseAsInterface( $note ) ) . $conflict
-		) . Html::rawElement( 'header', [ 'class' => 'skin-cosmos-header cosmos-header' ],
-			Html::rawElement(
-				'nav',
-				[ 'class' => 'skin-cosmos-header__local-navigation cosmos-header__local-navigation skin-cosmos-navigation-preview navigation-preview' ],
-				$menu
-			)
+		$lines = $this->navigation->extract(
+			( new RawMessage( $pageText ) )->setContext( $context )->inContentLanguage()->text()
 		);
+
+		return $this->templateParser->processTemplate( 'NavigationPreview', [
+			'preview' => $context->msg( 'preview' )->text(),
+			'note' => Html::warningBox( $context->getOutput()->parseAsInterface( $note ) ),
+			'conflict' => $isConflict ?
+				Html::warningBox( $context->msg( 'previewconflict' )->escaped(), 'mw-previewconflict' ) :
+				'',
+			'data-cosmos-navigation' => $this->navigation->buildTree( $context, $lines ),
+		] );
 	}
 }

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Components;
+namespace MediaWiki\Skin\Cosmos\Components;
 
 use function array_merge;
 use function str_starts_with;
@@ -15,7 +15,6 @@ final class PortletReader {
 	 */
 	public static function getItems( array $portlets, array $names ): array {
 		$items = [];
-
 		foreach ( $names as $name ) {
 			foreach ( $portlets[$name]['array-items'] ?? [] as $item ) {
 				$id = (string)( $item['id'] ?? '' );

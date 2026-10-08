@@ -2,49 +2,103 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use CookieWarning\Decisions as CookieWarningDecisions;
 use CookieWarning\Hooks as CookieWarningHooks;
 use MediaWiki\Config\Config;
-use MediaWiki\Language\Language;
+use MediaWiki\Config\ServiceOptions;
+use MediaWiki\Language\LanguageCode;
 use MediaWiki\Languages\LanguageNameUtils;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
+use MediaWiki\Skin\Cosmos\Components\BannerComponent;
+use MediaWiki\Skin\Cosmos\Components\ChromeComponent;
+use MediaWiki\Skin\Cosmos\Components\CreatePageDialogComponent;
+use MediaWiki\Skin\Cosmos\Components\PageHeaderComponent;
+use MediaWiki\Skin\Cosmos\Components\WikiHeaderComponent;
+use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
+use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\SkinMustache;
-use MediaWiki\Skins\CosmosBeta\Components\BannerComponent;
-use MediaWiki\Skins\CosmosBeta\Components\ChromeComponent;
-use MediaWiki\Skins\CosmosBeta\Components\CreatePageDialogComponent;
-use MediaWiki\Skins\CosmosBeta\Components\PageHeaderComponent;
-use MediaWiki\Skins\CosmosBeta\Components\WikiHeaderComponent;
-use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\Options\UserOptionsManager;
 use UserProfilePage;
+use function array_merge;
 use function class_exists;
 use function hash;
 
-class SkinCosmosBeta extends SkinMustache {
+class SkinCosmos extends SkinMustache {
+
+	private const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::EnablePortableInfoboxEuropaTheme,
+		ConfigNames::SocialProfileAllowBio,
+		ConfigNames::SocialProfileModernTabs,
+		ConfigNames::SocialProfileRoundAvatar,
+		ConfigNames::SocialProfileShowEditCount,
+		ConfigNames::SocialProfileShowGroupTags,
+	];
 
 	public function __construct(
 		private readonly AltModules $altModules,
-		public readonly CosmosConfig $cosmosConfig,
+		private readonly CosmosConfig $cosmosConfig,
 		private readonly CosmosNavigation $navigation,
 		private readonly Config $cosmosOptions,
-		private readonly CosmosRailBuilder $railBuilder,
-		private readonly CosmosWordmarkLookup $wordmarkLookup,
-		private readonly Language $contentLanguage,
+		private readonly LanguageCode $contentLanguageCode,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly LanguageNameUtils $languageNameUtils,
 		private readonly PermissionManager $permissionManager,
+		private readonly RailBuilder $railBuilder,
+		private readonly ServiceOptions $serviceOptions,
 		private readonly SpecialPageFactory $specialPageFactory,
 		private readonly TitleFactory $titleFactory,
 		private readonly UserOptionsManager $userOptionsManager,
+		private readonly WordmarkLookup $wordmarkLookup,
 		private readonly ?CookieWarningDecisions $cookieWarningDecisions,
 		array $options,
 	) {
 		parent::__construct( $options );
+		$serviceOptions->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
+	}
+
+	public static function factory(
+		AltModules $altModules,
+		Config $cosmosOptions,
+		CosmosConfig $cosmosConfig,
+		CosmosNavigation $navigation,
+		RailBuilder $railBuilder,
+		WordmarkLookup $wordmarkLookup,
+		LanguageCode $contentLanguageCode,
+		ExtensionRegistry $extensionRegistry,
+		LanguageNameUtils $languageNameUtils,
+		PermissionManager $permissionManager,
+		SpecialPageFactory $specialPageFactory,
+		TitleFactory $titleFactory,
+		UserOptionsManager $userOptionsManager,
+		?CookieWarningDecisions $cookieWarningDecisions,
+		array $options
+	): self {
+		return new self(
+			$altModules,
+			$cosmosConfig,
+			$navigation,
+			$cosmosOptions,
+			$contentLanguageCode,
+			$extensionRegistry,
+			$languageNameUtils,
+			$permissionManager,
+			$railBuilder,
+			new ServiceOptions(
+				self::CONSTRUCTOR_OPTIONS,
+				$cosmosOptions
+			),
+			$specialPageFactory,
+			$titleFactory,
+			$userOptionsManager,
+			$wordmarkLookup,
+			$cookieWarningDecisions,
+			$options
+		);
 	}
 
 	/** @inheritDoc */
@@ -56,34 +110,53 @@ class SkinCosmosBeta extends SkinMustache {
 		$context = $this->getContext();
 		$mainPage = $data['link-mainpage'];
 
-		$banner = new BannerComponent( $context, $this->cosmosOptions, $this->extensionRegistry );
+		$banner = new BannerComponent(
+			$context,
+			$this->cosmosOptions,
+			$this->extensionRegistry
+		);
+
 		$header = new WikiHeaderComponent(
 			$context,
 			$this->getConfig(),
-			$this->permissionManager,
+			$this->cosmosConfig,
 			$this->extensionRegistry,
-			$this->wordmarkLookup,
-			$this->cosmosConfig
+			$this->permissionManager,
+			$this->wordmarkLookup
 		);
+
 		$pageHeader = new PageHeaderComponent(
 			$context,
-			$this->titleFactory,
+			$this->contentLanguageCode,
 			$this->languageNameUtils,
-			$this->contentLanguage
+			$this->titleFactory
 		);
+
 		$dialog = new CreatePageDialogComponent(
 			$context,
 			$this->cosmosOptions,
 			$this->specialPageFactory,
 			$this->titleFactory
 		);
-		$chrome = new ChromeComponent( $context, $this->cosmosConfig, $this->extensionRegistry );
 
-		$toolsInRail = $this->shouldPutToolsInRail();
+		$chrome = new ChromeComponent(
+			$context,
+			$this->cosmosConfig,
+			$this->extensionRegistry
+		);
+
+		$this->railBuilder->setSidebarModulesFromPortlets( $sidebar );
+		$toolsInRail = $this->railBuilder->shouldPutToolsInRail();
 		$this->railBuilder->setToolsModule( $toolsInRail, $toolsInRail ? $chrome->getToolItems( $sidebar ) : [] );
 
-		$tree = $this->navigation->getTree( $this, $this->getLanguage() );
+		$tree = $this->navigation->mergeSidebar(
+			$this->navigation->getTree( $this, $this->getLanguage() ),
+			array_merge( [ $sidebar['data-portlets-first'] ?? [] ], $sidebar['array-portlets-rest'] ?? [] )
+		);
+
 		$siteNotice = $data['html-site-notice'] ?? null;
+		// Core wraps the site notice in its container even when nothing is in it
+		$hasNotice = $siteNotice !== null && $siteNotice !== '<div id="siteNotice"></div>';
 		$search = $this->getSearchData( $data['data-search-box'] ?? [] );
 		$dismissable = $this->extensionRegistry->isLoaded( 'DismissableSiteNotice' );
 		$noticeClosed = $this->getRequest()->getCookie( 'CosmosSiteNoticeState' ) === 'closed';
@@ -101,9 +174,10 @@ class SkinCosmosBeta extends SkinMustache {
 			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar, $toolsInRail ),
 			'html-cosmos-rail' => $this->railBuilder->buildRail(),
 			'html-cosmos-cookiewarning' => $this->getCookieWarning(),
-			'is-cosmos-dismissable-notice' => $siteNotice !== null && $dismissable,
-			'is-cosmos-closable-notice' => $siteNotice !== null && !$dismissable && !$noticeClosed,
-			'cosmos-notice-hash' => $siteNotice !== null ? hash( 'crc32b', $siteNotice ) : null,
+			'is-cosmos-dismissable-notice' => $hasNotice && $dismissable,
+			'is-cosmos-closable-notice' => $hasNotice && !$dismissable && !$noticeClosed,
+			'is-cosmos-empty-notice' => !$hasNotice,
+			'cosmos-notice-hash' => $hasNotice ? hash( 'crc32b', $siteNotice ) : null,
 			'msg-cosmosbeta-tagline' => $this->msg( 'cosmosbeta-tagline' )->escaped(),
 		];
 	}
@@ -112,25 +186,24 @@ class SkinCosmosBeta extends SkinMustache {
 	public function getDefaultModules(): array {
 		$modules = parent::getDefaultModules();
 
-		$this->railBuilder->setToolsModule( $this->shouldPutToolsInRail() );
+		// Real modules are added when the page is built. All that matters here is whether any will exist.
+		$this->railBuilder
+			->setSidebarModulesFromSections( $this->buildSidebar() )
+			->setToolsModule( $this->railBuilder->shouldPutToolsInRail(), [] );
 
-		if ( !$this->railBuilder->isHidden() && $this->railBuilder->hasModules() ) {
+		if ( $this->railBuilder->hasModules() ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.rail';
+		}
+
+		if ( $this->cosmosConfig->getFooterSettings()['showIcons'] ) {
+			$modules['styles']['skin'][] = 'skins.cosmosbeta.footer.codex';
 		}
 
 		if ( $this->extensionRegistry->isLoaded( 'PortableInfobox' ) ) {
 			$modules['styles']['skin'][] = 'skins.cosmosbeta.portableinfobox';
-			$modules['styles']['skin'][] = $this->cosmosOptions->get( ConfigNames::EnablePortableInfoboxEuropaTheme ) ?
+			$modules['styles']['skin'][] = $this->serviceOptions->get( ConfigNames::EnablePortableInfoboxEuropaTheme ) ?
 				'skins.cosmosbeta.portableinfobox.europa' :
 				'skins.cosmosbeta.portableinfobox.default';
-		}
-
-		if (
-			LessUtil::isThemeDark( 'content-background-color' ) &&
-			$this->extensionRegistry->isLoaded( 'CodeMirror' ) &&
-			$this->extensionRegistry->isLoaded( 'VisualEditor' )
-		) {
-			$modules['styles']['skin'][] = 'skins.cosmosbeta.codemirror';
 		}
 
 		if ( $this->extensionRegistry->isLoaded( 'CodeEditor' ) ) {
@@ -150,19 +223,12 @@ class SkinCosmosBeta extends SkinMustache {
 		return $modules;
 	}
 
-	private function shouldPutToolsInRail(): bool {
-		$settings = $this->cosmosConfig->getToolbarSettings();
-
-		return $settings['enabled'] && $settings['style'] === 'rail' && !$this->railBuilder->isHidden();
-	}
-
 	private function getSearchData( array $search ): array {
-		$classes = 'searchButton skin-cosmos-search-button cosmos-search-button';
-
+		$classes = 'searchButton skin-cosmos-search-box__button cosmos-search-button';
 		return [
 			'html-input' => $this->makeSearchInput( [
 				'id' => 'searchInput',
-				'class' => 'skin-cosmos-search-input cosmos-search-input',
+				'class' => 'skin-cosmos-search-box__input cosmos-search-input',
 			] ),
 			'html-button-search' => $this->makeSearchButton( 'go', [
 				'id' => 'searchButton',
@@ -190,7 +256,7 @@ class SkinCosmosBeta extends SkinMustache {
 		];
 
 		foreach ( $map as $option => $module ) {
-			if ( $this->cosmosOptions->get( $option ) ) {
+			if ( $this->serviceOptions->get( $option ) ) {
 				$modules[] = $module;
 			}
 		}
@@ -203,22 +269,18 @@ class SkinCosmosBeta extends SkinMustache {
 	}
 
 	private function getCookieWarning(): ?string {
-		if ( !$this->extensionRegistry->isLoaded( 'CookieWarning' ) ) {
+		if ( $this->cookieWarningDecisions === null ) {
 			return null;
 		}
 
-		$hooks = $this->cookieWarningDecisions ?
-			new CookieWarningHooks(
-				$this->getConfig(),
-				$this->cookieWarningDecisions,
-				$this->userOptionsManager
-			) :
-			// @phan-suppress-next-line PhanParamTooFew
-			new CookieWarningHooks();
+		$hooks = new CookieWarningHooks(
+			$this->getConfig(),
+			$this->cookieWarningDecisions,
+			$this->userOptionsManager
+		);
 
 		$html = '';
 		$hooks->onSkinAfterContent( $html, $this );
-
 		return $html !== '' ? $html : null;
 	}
 }

@@ -1,0 +1,14 @@
+@import 'mediawiki.skin.variables.less';
+
+// The help link is an icon next to the title, so a long title never squeezes a word into a narrow column
+#mw-indicator-mw-helplink a {
+	display: inline-flex;
+	align-items: center;
+	font-size: 0;
+	line-height: 0;
+
+	.mw-helplink-icon {
+		padding-right: 0;
+		font-size: 16px;
+	}
+}

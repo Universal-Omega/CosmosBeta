@@ -2,30 +2,44 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Specials;
+namespace MediaWiki\Skin\Cosmos\Specials;
 
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinFactory;
-use MediaWiki\Skins\CosmosBeta\Components\PortletReader;
-use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemePresets;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\Components\PortletReader;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
+use MediaWiki\Skin\Cosmos\Rail\RailModuleInfo;
+use MediaWiki\Skin\Cosmos\Theme\ThemePresets;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use Throwable;
+use function array_diff;
+use function array_intersect;
+use function array_map;
+use function array_values;
+use function in_array;
 use function is_array;
 use function json_decode;
 use function json_encode;
+use function preg_replace;
+use function strip_tags;
+use function strtolower;
 use function trim;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
+use const NS_MAIN;
 
 class SpecialThemeDesigner extends SpecialPage {
+
+	private const array IMAGE_EXTENSIONS = [ 'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg' ];
 
 	private const array FALLBACK_TOOLBAR_ITEMS = [
 		'whatlinkshere',
@@ -40,6 +54,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	public function __construct(
 		private readonly CosmosConfig $config,
+		private readonly RailBuilder $railBuilder,
 		private readonly ThemeStore $store,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly SkinFactory $skinFactory,
@@ -49,6 +64,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		parent::__construct( 'CosmosBetaThemeDesigner' );
 	}
 
+	/** @inheritDoc */
 	public function getRestriction(): string {
 		return 'cosmosbeta-themedesigner';
 	}
@@ -60,6 +76,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	/** @inheritDoc */
 	public function execute( $subPage ): void {
+		$this->checkPermissions();
 		$this->setHeaders();
 		$this->addHelpLink( 'Skin:Cosmos' );
 
@@ -76,8 +93,8 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		$out->addWikiMsg( 'cosmosbeta-themedesigner-text' );
-		$out->addModules( 'skins.cosmosbeta.themedesigner' );
-		$out->addJsConfigVars( 'wgCosmosBetaThemeDesigner', $this->getClientData() );
+		$out->addModules( [ 'skins.cosmosbeta.themedesigner' ] );
+		$out->addJsConfigVars( 'wgCosmosThemeDesigner', $this->getClientData() );
 		$out->addHTML( $this->buildForm() );
 	}
 
@@ -85,6 +102,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		$out = $this->getOutput();
 		$request = $this->getRequest();
 
+		$this->checkPermissions();
 		$this->checkReadOnly();
 
 		if ( !$this->getContext()->getCsrfTokenSet()->matchTokenField( 'wpEditToken' ) ) {
@@ -93,7 +111,6 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		$revertTo = $request->getInt( 'wpRevertTo' );
-
 		if ( $revertTo > 0 ) {
 			$saved = $this->store->restore(
 				$revertTo,
@@ -107,16 +124,14 @@ class SpecialThemeDesigner extends SpecialPage {
 			}
 		} else {
 			$decoded = json_decode( $request->getText( 'wpThemeJson' ), true );
-
 			if ( !is_array( $decoded ) ) {
 				$out->addHTML( Html::errorBox( $this->msg( 'cosmosbeta-themedesigner-error-json' )->escaped() ) );
 				return;
 			}
 
 			$decoded = $this->applyConfigurationRules( $decoded );
-
 			$this->store->save(
-				new ThemeSettings( $decoded ),
+				new ThemeSettings( $decoded, 0 ),
 				$this->getUser(),
 				trim( $request->getText( 'wpComment' ) )
 			);
@@ -140,7 +155,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	private function buildForm(): string {
 		return $this->templateParser->processTemplate( 'ThemeDesigner', [
-			'form-id' => 'cosmosbeta-themedesigner-form',
+			'form-id' => 'skin-cosmos-themedesigner__form',
 			'action' => $this->getPageTitle()->getLocalURL(),
 			'html-token' => Html::hidden( 'wpEditToken', $this->getContext()->getCsrfTokenSet()->getToken()->toString() ),
 			'msg-nojs' => $this->msg( 'cosmosbeta-themedesigner-nojs' )->text(),
@@ -171,7 +186,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		$history = [];
-		foreach ( $this->store->getHistory() as $row ) {
+		foreach ( $this->store->getHistory( 30 ) as $row ) {
 			$history[] = [
 				'id' => $row['id'],
 				'user' => $row['user'],
@@ -180,8 +195,11 @@ class SpecialThemeDesigner extends SpecialPage {
 			];
 		}
 
+		// Reading the chrome builds the sidebar modules that the rail then lists
+		$chrome = $this->getChromeOptions();
+
 		return [
-			'canEdit' => true,
+			'canEdit' => $this->userCanExecute( $this->getUser() ),
 			'settings' => $current->toArray(),
 			'defaults' => ThemeSettings::getDefaults(),
 			'revisionId' => $current->getRevisionId(),
@@ -194,7 +212,38 @@ class SpecialThemeDesigner extends SpecialPage {
 				'contentOpacity' => $this->config->getContentOpacityLevel(),
 			],
 			'canHideFooterIcons' => $this->config->canHideFooterIcons(),
-		] + $this->getChromeOptions();
+			'upload' => $this->getUploadData(),
+			'namespaces' => $this->getNamespaceOptions(),
+			'railModules' => array_map(
+				static fn ( RailModuleInfo $module ): array => $module->toArray(),
+				$this->railBuilder->getAvailableModules()
+			),
+		] + $chrome;
+	}
+
+	private function getUploadData(): array {
+		$extensions = array_values( array_intersect(
+			array_map( 'strtolower', (array)$this->getConfig()->get( MainConfigNames::FileExtensions ) ),
+			self::IMAGE_EXTENSIONS
+		) );
+
+		return [
+			'enabled' => (bool)$this->getConfig()->get( MainConfigNames::EnableUploads ) &&
+				$this->getAuthority()->isAllowed( 'upload' ),
+			'extensions' => $extensions,
+		];
+	}
+
+	private function getNamespaceOptions(): array {
+		$options = [];
+		foreach ( $this->getLanguage()->getFormattedNamespaces() as $id => $name ) {
+			$options[] = [
+				'value' => (int)$id,
+				'label' => $id === NS_MAIN ? $this->msg( 'blanknamespace' )->text() : (string)$name,
+			];
+		}
+
+		return $options;
 	}
 
 	/**
@@ -248,7 +297,6 @@ class SpecialThemeDesigner extends SpecialPage {
 			foreach ( $data['data-footer'][$key]['array-items'] ?? [] as $item ) {
 				$name = (string)( $item['name'] ?? '' );
 				$label = trim( (string)preg_replace( '/\s+/', ' ', strip_tags( (string)( $item['html'] ?? '' ) ) ) );
-
 				if ( $name !== '' ) {
 					$links[$name] = [
 						'name' => $name,
@@ -261,7 +309,12 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		foreach ( $protected as $name ) {
-			$links[$name] ??= [ 'name' => $name, 'label' => $name, 'group' => 'places', 'protected' => true ];
+			$links[$name] ??= [
+				'name' => $name,
+				'label' => $name,
+				'group' => 'places',
+				'protected' => true,
+			];
 		}
 
 		return [

@@ -1,35 +1,35 @@
 <template>
-	<div class="skin-cosmos-td-layout">
-		<div class="skin-cosmos-td-panel">
+	<div class="skin-cosmos-themedesigner__layout">
+		<div class="skin-cosmos-themedesigner__panel">
 			<cdx-message v-if="!designer.canEdit" type="warning">
 				{{ msg( 'readonly' ) }}
 			</cdx-message>
 
-			<cdx-tabs v-model:active="activeTab" :framed="true">
+			<cdx-tabs v-model:active="activeTab" :framed="false">
 				<cdx-tab name="themes" :label="msg( 'tab-themes' )">
 					<p>{{ msg( 'presets-intro' ) }}</p>
-					<div class="skin-cosmos-td-presets">
+					<div class="skin-cosmos-themedesigner__presets">
 						<button
 							v-for="preset in designer.presets"
 							:key="preset.name"
 							type="button"
-							class="skin-cosmos-td-preset"
-							:class="{ 'is-active': state.presets[ preset.mode ] === preset.name }"
+							class="skin-cosmos-themedesigner__preset"
+							:class="{ 'skin-cosmos-is-active': state.presets[ preset.mode ] === preset.name }"
 							:disabled="!designer.canEdit"
 							@click="applyPreset( preset )"
 						>
-							<span class="skin-cosmos-td-preset-swatches">
+							<span class="skin-cosmos-themedesigner__preset-swatches">
 								<span
 									v-for="slot in swatchSlots"
 									:key="slot"
-									class="skin-cosmos-td-swatch"
-									:style="{ background: preset.colors[ slot ] }"
+									class="skin-cosmos-themedesigner__swatch"
+									:style="{ backgroundColor: preset.colors[ slot ] }"
 								></span>
 							</span>
-							<span class="skin-cosmos-td-preset-name">
+							<span class="skin-cosmos-themedesigner__preset-name">
 								{{ msg( 'preset-' + preset.name ) }}
 							</span>
-							<span class="skin-cosmos-td-preset-mode">
+							<span class="skin-cosmos-themedesigner__preset-mode">
 								{{ msg( 'mode-' + preset.mode ) }}
 							</span>
 						</button>
@@ -37,11 +37,12 @@
 				</cdx-tab>
 
 				<cdx-tab name="colors" :label="msg( 'tab-colors' )">
-					<div class="skin-cosmos-td-modes">
+					<div class="skin-cosmos-themedesigner__modes">
 						<span>{{ msg( 'editing' ) }}</span>
 						<cdx-button
 							v-for="mode in modes"
 							:key="mode"
+							type="button"
 							:action="editing === mode ? 'progressive' : 'default'"
 							:weight="editing === mode ? 'primary' : 'normal'"
 							@click="editing = mode"
@@ -63,13 +64,13 @@
 						<template #description>
 							{{ msg( 'color-' + slot + '-help' ) }}
 						</template>
-						<div class="skin-cosmos-td-colorinputs">
+						<div class="skin-cosmos-themedesigner__colorinputs">
 							<input
 								type="color"
 								:value="pickerValue( slot )"
 								:disabled="!designer.canEdit"
 								:aria-label="msg( 'color-' + slot )"
-								@input="setColor( slot, $event.target.value )"
+								@input="setPicked( slot, $event.target.value )"
 							>
 							<cdx-text-input
 								:model-value="colorText( slot )"
@@ -78,12 +79,27 @@
 								@update:model-value="setColor( slot, $event )"
 							></cdx-text-input>
 							<cdx-button
+								type="button"
 								weight="quiet"
 								:disabled="!designer.canEdit"
 								@click="resetColor( slot )"
 							>
 								{{ msg( 'color-reset' ) }}
 							</cdx-button>
+						</div>
+						<div class="skin-cosmos-themedesigner__range skin-cosmos-themedesigner__alpha">
+							<span>{{ msg( 'color-opacity' ) }}</span>
+							<input
+								type="range"
+								min="0"
+								max="100"
+								step="1"
+								:value="alphaValue( slot )"
+								:disabled="!designer.canEdit"
+								:aria-label="msg( 'color-opacity' )"
+								@input="setAlpha( slot, Number( $event.target.value ) )"
+							>
+							<output>{{ alphaValue( slot ) }}%</output>
 						</div>
 					</cdx-field>
 				</cdx-tab>
@@ -94,11 +110,13 @@
 						<template #label>
 							{{ msg( 'image-' + key ) }}
 						</template>
-						<cdx-text-input
+						<image-field
 							v-model="state.images[ key ]"
 							:placeholder="msg( 'image-default' )"
 							:disabled="!designer.canEdit"
-						></cdx-text-input>
+							:upload="designer.upload"
+							:messages="imageMessages"
+						></image-field>
 					</cdx-field>
 					<cdx-field>
 						<template #label>
@@ -143,21 +161,48 @@
 							:disabled="!designer.canEdit"
 						></cdx-select>
 					</cdx-field>
+					<cdx-field>
+						<template #label>
+							{{ msg( 'layout-button-style' ) }}
+						</template>
+						<template #help-text>
+							{{ msg( 'layout-button-style-help' ) }}
+						</template>
+						<cdx-select
+							v-model:selected="state.layout.buttonStyle"
+							:menu-items="buttonStyleItems"
+							:disabled="!designer.canEdit"
+						></cdx-select>
+					</cdx-field>
+					<cdx-field>
+						<cdx-toggle-switch
+							v-model="state.layout.headerBorder"
+							:disabled="!designer.canEdit"
+						>
+							{{ msg( 'layout-header-border' ) }}
+						</cdx-toggle-switch>
+						<template #help-text>
+							{{ msg( 'layout-header-border-help' ) }}
+						</template>
+					</cdx-field>
 					<cdx-field v-for="range in layoutRanges" :key="range.key">
 						<template #label>
 							{{ msg( range.label ) }}
 						</template>
-						<div class="skin-cosmos-td-range">
+						<template v-if="range.help" #help-text>
+							{{ msg( range.help ) }}
+						</template>
+						<div class="skin-cosmos-themedesigner__range">
 							<input
 								type="range"
 								min="0"
-								max="100"
+								:max="range.max"
 								step="1"
 								:value="range.get()"
 								:disabled="!designer.canEdit"
 								@input="range.set( Number( $event.target.value ) )"
 							>
-							<output>{{ range.get() }}%</output>
+							<output>{{ range.get() }}{{ range.unit }}</output>
 						</div>
 					</cdx-field>
 				</cdx-tab>
@@ -206,7 +251,7 @@
 						<template #label>
 							{{ msg( 'footer-opacity' ) }}
 						</template>
-						<div class="skin-cosmos-td-range">
+						<div class="skin-cosmos-themedesigner__range">
 							<input
 								type="range"
 								min="0"
@@ -248,52 +293,7 @@
 				</cdx-tab>
 
 				<cdx-tab name="rail" :label="msg( 'tab-rail' )">
-					<cdx-field>
-						<cdx-toggle-switch v-model="state.rail.enabled" :disabled="!designer.canEdit">
-							{{ msg( 'rail-enabled' ) }}
-						</cdx-toggle-switch>
-					</cdx-field>
-					<cdx-field>
-						<cdx-toggle-switch v-model="state.rail.hideForAnons" :disabled="!designer.canEdit">
-							{{ msg( 'rail-anons' ) }}
-						</cdx-toggle-switch>
-					</cdx-field>
-					<cdx-field>
-						<template #label>
-							{{ msg( 'rail-recentchanges' ) }}
-						</template>
-						<cdx-select
-							v-model:selected="state.rail.recentChanges"
-							:menu-items="recentChangesItems"
-							:disabled="!designer.canEdit"
-						></cdx-select>
-					</cdx-field>
-					<cdx-field>
-						<template #label>
-							{{ msg( 'rail-namespaces' ) }}
-						</template>
-						<template #help-text>
-							{{ msg( 'rail-namespaces-help' ) }}
-						</template>
-						<cdx-text-input
-							v-model="namespacesModel"
-							placeholder="-1, 8, 9"
-							:disabled="!designer.canEdit"
-						></cdx-text-input>
-					</cdx-field>
-					<cdx-field>
-						<template #label>
-							{{ msg( 'rail-pages' ) }}
-						</template>
-						<template #help-text>
-							{{ msg( 'rail-pages-help' ) }}
-						</template>
-						<cdx-text-area
-							v-model="pagesModel"
-							rows="3"
-							:disabled="!designer.canEdit"
-						></cdx-text-area>
-					</cdx-field>
+					<rail-tab v-model="state.rail" :toolbar="state.toolbar" :designer="designer"></rail-tab>
 				</cdx-tab>
 
 				<cdx-tab name="darkmode" :label="msg( 'tab-darkmode' )">
@@ -307,6 +307,9 @@
 						<template #label>
 							{{ msg( 'darkmode-default' ) }}
 						</template>
+						<template #help-text>
+							{{ msg( 'darkmode-auto-help' ) }}
+						</template>
 						<cdx-select
 							v-model:selected="state.colorMode.default"
 							:menu-items="modeItems"
@@ -317,7 +320,7 @@
 						{{ msg( 'darkmode-builtin' ) }}
 					</cdx-message>
 					<p>
-						<cdx-button :disabled="!designer.canEdit" @click="generateDark">
+						<cdx-button type="button" :disabled="!designer.canEdit" @click="generateDark">
 							{{ msg( 'darkmode-generate' ) }}
 						</cdx-button>
 					</p>
@@ -328,18 +331,19 @@
 					<p v-if="!designer.history.length">
 						{{ msg( 'history-empty' ) }}
 					</p>
-					<ul v-else class="skin-cosmos-td-history">
+					<ul v-else class="skin-cosmos-themedesigner__history">
 						<li v-for="row in designer.history" :key="row.id">
-							<span class="skin-cosmos-td-history-main">
+							<span class="skin-cosmos-themedesigner__history-main">
 								{{ row.time }} &middot; {{ row.user }}
 							</span>
-							<span v-if="row.comment" class="skin-cosmos-td-help">
+							<span v-if="row.comment" class="skin-cosmos-themedesigner__help">
 								{{ row.comment }}
 							</span>
-							<span v-if="row.id === designer.revisionId" class="skin-cosmos-td-badge">
+							<span v-if="row.id === designer.revisionId" class="skin-cosmos-themedesigner__badge">
 								{{ msg( 'history-live' ) }}
 							</span>
 							<cdx-button
+							type="button"
 								v-else-if="designer.canEdit"
 								weight="quiet"
 								action="progressive"
@@ -353,45 +357,45 @@
 			</cdx-tabs>
 		</div>
 
-		<div class="skin-cosmos-td-side">
-			<div class="skin-cosmos-td-preview" :style="preview.root" :aria-label="msg( 'preview' )">
-				<div class="skin-cosmos-td-pv-banner" :style="preview.banner">
+		<div class="skin-cosmos-themedesigner__side">
+			<div class="skin-cosmos-themedesigner__preview" :style="preview.root" :aria-label="msg( 'preview' )">
+				<div class="skin-cosmos-themedesigner__preview-banner" :style="preview.banner">
 					<span>{{ msg( 'preview-wordmark' ) }}</span>
 				</div>
-				<div class="skin-cosmos-td-pv-header" :style="preview.header">
+				<div class="skin-cosmos-themedesigner__preview-header" :style="preview.header">
 					<span>Menu&nbsp;&nbsp;Menu&nbsp;&nbsp;Menu</span>
 				</div>
-				<div class="skin-cosmos-td-pv-body">
-					<div class="skin-cosmos-td-pv-main" :style="preview.content">
-						<div class="skin-cosmos-td-pv-heading">
+				<div class="skin-cosmos-themedesigner__preview-body">
+					<div class="skin-cosmos-themedesigner__preview-main" :style="preview.content">
+						<div class="skin-cosmos-themedesigner__preview-heading">
 							{{ msg( 'preview-heading' ) }}
 						</div>
 						<div>{{ msg( 'preview-text' ) }}</div>
-						<div class="skin-cosmos-td-pv-link" :style="preview.link">
+						<div class="skin-cosmos-themedesigner__preview-link" :style="preview.link">
 							{{ msg( 'preview-link' ) }}
 						</div>
-						<div class="skin-cosmos-td-pv-button" :style="preview.button">
+						<div class="skin-cosmos-themedesigner__preview-button" :style="preview.button">
 							{{ msg( 'preview-button' ) }}
 						</div>
 					</div>
-					<div v-if="state.rail.enabled" class="skin-cosmos-td-pv-rail" :style="preview.content">
+					<div v-if="state.rail.enabled" class="skin-cosmos-themedesigner__preview-rail" :style="preview.content">
 						{{ msg( 'preview-rail' ) }}
 						<div
 							v-if="state.toolbar.enabled && state.toolbar.style === 'rail'"
-							class="skin-cosmos-td-pv-railtools"
+							class="skin-cosmos-themedesigner__preview-rail-tools"
 							:style="preview.toolbar"
 						>
 							{{ msg( 'preview-toolbar' ) }}
 						</div>
 					</div>
 				</div>
-				<div class="skin-cosmos-td-pv-footer" :style="preview.footer">
+				<div class="skin-cosmos-themedesigner__preview-footer" :style="preview.footer">
 					{{ msg( 'preview-footer' ) }}
 				</div>
 				<div
 					v-if="state.toolbar.enabled && ( state.toolbar.style !== 'rail' || !state.rail.enabled )"
-					class="skin-cosmos-td-pv-toolbar"
-					:class="'skin-cosmos-td-pv-toolbar--' + ( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
+					class="skin-cosmos-themedesigner__preview-toolbar"
+					:class="'skin-cosmos-themedesigner__preview-toolbar--' + ( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
 					:style="preview.toolbar"
 				>
 					{{ msg( 'preview-toolbar' ) }}
@@ -410,12 +414,14 @@ const {
 		CdxSelect,
 		CdxTab,
 		CdxTabs,
-		CdxTextArea,
 		CdxTextInput,
 		CdxToggleSwitch
 	} = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
 	{ computed, defineComponent, onMounted, reactive, ref, watch } = require( 'vue' ),
-	colors = require( './colors.js' );
+	colors = require( './colors.js' ),
+	ImageField = require( './ImageField.vue' ),
+	msg = require( './msg.js' ),
+	RailTab = require( './rail/RailTab.vue' );
 
 const MODES = [ 'light', 'dark' ];
 
@@ -437,12 +443,6 @@ function merge( base, extra ) {
 	return base;
 }
 
-function msg( key ) {
-	// Messages used here: cosmosbeta-themedesigner-*
-	// eslint-disable-next-line mediawiki/msg-doc
-	return mw.msg( 'cosmosbeta-themedesigner-' + key );
-}
-
 // @vue/component
 module.exports = exports = defineComponent( {
 	name: 'ThemeDesigner',
@@ -457,9 +457,10 @@ module.exports = exports = defineComponent( {
 		CdxSelect,
 		CdxTab,
 		CdxTabs,
-		CdxTextArea,
 		CdxTextInput,
-		CdxToggleSwitch
+		CdxToggleSwitch,
+		ImageField,
+		RailTab
 	},
 	props: {
 		designer: {
@@ -478,7 +479,7 @@ module.exports = exports = defineComponent( {
 	setup( props ) {
 		const state = reactive( clone( props.designer.settings ) ),
 			activeTab = ref( 'themes' ),
-			editing = ref( state.colorMode.default ),
+			editing = ref( state.colorMode.default === 'dark' ? 'dark' : 'light' ),
 			rawColors = reactive( {} ),
 			colorErrors = reactive( {} );
 
@@ -496,18 +497,18 @@ module.exports = exports = defineComponent( {
 				[ 'large', msg( 'layout-width-large' ) ],
 				[ 'full', msg( 'layout-width-full' ) ]
 			] ),
+			buttonStyleItems = items( [
+				[ 'default', msg( 'layout-button-style-default' ) ],
+				[ 'slim', msg( 'layout-button-style-slim' ) ],
+				[ 'pill', msg( 'layout-button-style-pill' ) ],
+				[ 'text', msg( 'layout-button-style-text' ) ]
+			] ),
 			toolbarStyleItems = items( [
 				[ 'floating', msg( 'toolbar-style-floating' ) ],
 				[ 'bar', msg( 'toolbar-style-bar' ) ],
 				[ 'rail', msg( 'toolbar-style-rail' ) ]
 			] ),
-			recentChangesItems = items( [
-				[ '', msg( 'rail-recentchanges-config' ) ],
-				[ 'off', msg( 'rail-recentchanges-off' ) ],
-				[ 'normal', msg( 'rail-recentchanges-normal' ) ],
-				[ 'sticky', msg( 'rail-recentchanges-sticky' ) ]
-			] ),
-			modeItems = items( MODES.map( ( mode ) => [ mode, msg( 'mode-' + mode ) ] ) );
+			modeItems = items( [ ...MODES, 'auto' ].map( ( mode ) => [ mode, msg( 'mode-' + mode ) ] ) );
 
 		const triModel = ( key ) => computed( {
 			get: () => state.images[ key ] === null ? '' : String( state.images[ key ] ),
@@ -519,25 +520,20 @@ module.exports = exports = defineComponent( {
 		const repeatModel = triModel( 'backgroundRepeat' ),
 			fixedModel = triModel( 'backgroundFixed' );
 
-		const namespacesModel = computed( {
-			get: () => state.rail.disabledNamespaces === null ? '' : state.rail.disabledNamespaces.join( ', ' ),
-			set: ( value ) => {
-				state.rail.disabledNamespaces = value.trim() === '' ? null :
-					value.split( /[\s,]+/ ).filter( ( part ) => /^-?\d+$/.test( part ) ).map( Number );
-			}
-		} );
-
-		const pagesModel = computed( {
-			get: () => state.rail.disabledPages === null ? '' : state.rail.disabledPages.join( '\n' ),
-			set: ( value ) => {
-				state.rail.disabledPages = value.trim() === '' ? null :
-					value.split( /\n+/ ).map( ( part ) => part.trim() ).filter( Boolean );
-			}
-		} );
+		const imageMessages = {
+			upload: msg( 'image-upload' ),
+			uploading: msg( 'image-uploading' ),
+			exists: msg( 'image-upload-exists' ),
+			failed: msg( 'image-upload-failed' ),
+			comment: msg( 'image-upload-comment' ),
+			noResults: msg( 'rail-no-results' )
+		};
 
 		const layoutRanges = [
 			{
 				key: 'content',
+				max: 100,
+				unit: '%',
 				label: 'layout-opacity',
 				get: () => state.layout.contentOpacity === null ? props.designer.config.contentOpacity : state.layout.contentOpacity,
 				set: ( value ) => {
@@ -545,19 +541,24 @@ module.exports = exports = defineComponent( {
 				}
 			},
 			{
-				key: 'banner',
-				label: 'layout-banner-icon-opacity',
-				get: () => state.layout.bannerIconOpacity,
+				key: 'header',
+				max: 100,
+				unit: '%',
+				label: 'layout-header-button-opacity',
+				get: () => state.layout.headerButtonOpacity,
 				set: ( value ) => {
-					state.layout.bannerIconOpacity = value;
+					state.layout.headerButtonOpacity = value;
 				}
 			},
 			{
-				key: 'header',
-				label: 'layout-header-icon-opacity',
-				get: () => state.layout.headerIconOpacity,
+				key: 'blur',
+				max: 40,
+				unit: 'px',
+				label: 'layout-backdrop-blur',
+				help: 'layout-backdrop-blur-help',
+				get: () => state.layout.backdropBlur,
 				set: ( value ) => {
-					state.layout.headerIconOpacity = value;
+					state.layout.backdropBlur = value;
 				}
 			}
 		];
@@ -572,6 +573,21 @@ module.exports = exports = defineComponent( {
 
 				return parsed ? colors.toHex( parsed ) : '#000000';
 			};
+
+		function setPicked( slot, hex ) {
+			const alpha = colors.parse( effectiveColor( editing.value, slot ) )?.a ?? 1,
+				picked = colors.parse( hex );
+
+			if ( !picked ) {
+				return;
+			}
+
+			picked.a = alpha;
+			delete rawColors[ rawKey( slot ) ];
+			colorErrors[ rawKey( slot ) ] = false;
+			state.palettes[ editing.value ][ slot ] = colors.toCanonical( picked );
+			state.presets[ editing.value ] = '';
+		}
 
 		function setColor( slot, value ) {
 			const key = rawKey( slot );
@@ -593,6 +609,26 @@ module.exports = exports = defineComponent( {
 
 			colorErrors[ key ] = false;
 			state.palettes[ editing.value ][ slot ] = normal;
+			state.presets[ editing.value ] = '';
+		}
+
+		function alphaValue( slot ) {
+			const parsed = colors.parse( effectiveColor( editing.value, slot ) );
+
+			return parsed ? Math.round( parsed.a * 100 ) : 100;
+		}
+
+		function setAlpha( slot, percent ) {
+			const parsed = colors.parse( effectiveColor( editing.value, slot ) );
+
+			if ( !parsed ) {
+				return;
+			}
+
+			parsed.a = percent / 100;
+			delete rawColors[ rawKey( slot ) ];
+			colorErrors[ rawKey( slot ) ] = false;
+			state.palettes[ editing.value ][ slot ] = colors.toCanonical( parsed );
 			state.presets[ editing.value ] = '';
 		}
 
@@ -641,6 +677,7 @@ module.exports = exports = defineComponent( {
 
 			return {
 				root: { background: color( 'body' ) },
+				blur: state.layout.backdropBlur > 0 ? { backdropFilter: 'blur(' + state.layout.backdropBlur + 'px)' } : {},
 				banner: on( 'banner' ),
 				header: on( 'header' ),
 				content: {
@@ -697,12 +734,11 @@ module.exports = exports = defineComponent( {
 			triStateItems,
 			widthItems,
 			toolbarStyleItems,
-			recentChangesItems,
 			modeItems,
 			repeatModel,
 			fixedModel,
-			namespacesModel,
-			pagesModel,
+			buttonStyleItems,
+			imageMessages,
 			layoutRanges,
 			preview,
 			msg,
@@ -710,6 +746,9 @@ module.exports = exports = defineComponent( {
 			hasColorError,
 			pickerValue,
 			setColor,
+			setPicked,
+			setAlpha,
+			alphaValue,
 			resetColor,
 			applyPreset,
 			generateDark,

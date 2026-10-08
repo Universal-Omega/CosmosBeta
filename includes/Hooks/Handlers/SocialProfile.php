@@ -2,16 +2,17 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Config\Config;
+use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Content\TextContent;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Sanitizer;
-use MediaWiki\Skins\CosmosBeta\ConfigNames;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Skin\Cosmos\ConfigNames;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
@@ -26,28 +27,57 @@ use const NS_USER;
 
 class SocialProfile {
 
+	private const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::SocialProfileAllowBio,
+		ConfigNames::SocialProfileFollowBioRedirects,
+		ConfigNames::SocialProfileNumberofGroupTags,
+		ConfigNames::SocialProfileShowEditCount,
+		ConfigNames::SocialProfileShowGroupTags,
+		ConfigNames::SocialProfileTagGroups,
+	];
+
 	public function __construct(
-		private readonly Config $config,
+		private readonly ServiceOptions $options,
 		private readonly TemplateParser $templateParser,
 		private readonly TitleFactory $titleFactory,
 		private readonly UserGroupManager $userGroupManager,
 		private readonly WikiPageFactory $wikiPageFactory,
 	) {
+		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
+
+	public static function factory(
+		Config $cosmosOptions,
+		TemplateParser $templateParser,
+		TitleFactory $titleFactory,
+		UserGroupManager $userGroupManager,
+		WikiPageFactory $wikiPageFactory
+	): self {
+		return new self(
+			new ServiceOptions(
+				self::CONSTRUCTOR_OPTIONS,
+				$cosmosOptions
+			),
+			$templateParser,
+			$titleFactory,
+			$userGroupManager,
+			$wikiPageFactory,
+		);
+	}
+
 
 	/** @inheritDoc */
 	public function onUserProfileGetProfileTitle( UserProfilePage $userProfilePage, string &$profileTitle ): void {
-		$showTags = (bool)$this->config->get( ConfigNames::SocialProfileShowGroupTags );
-		$showEdits = (bool)$this->config->get( ConfigNames::SocialProfileShowEditCount );
-		$allowBio = (bool)$this->config->get( ConfigNames::SocialProfileAllowBio );
+		$showTags = (bool)$this->options->get( ConfigNames::SocialProfileShowGroupTags );
+		$showEdits = (bool)$this->options->get( ConfigNames::SocialProfileShowEditCount );
+		$allowBio = (bool)$this->options->get( ConfigNames::SocialProfileAllowBio );
 
 		if ( !$showTags && !$showEdits && !$allowBio ) {
 			return;
 		}
 
 		$context = $userProfilePage->getContext();
-
-		if ( !$context->getSkin() instanceof SkinCosmosBeta ) {
+		if ( !$context->getSkin() instanceof SkinCosmos ) {
 			return;
 		}
 
@@ -73,16 +103,16 @@ class SocialProfile {
 	private function getUserGroupTags( IContextSource $context, User $owner ): array {
 		if ( $owner->getBlock() ) {
 			return [ [
-				'class' => 'tag-blocked',
+				'class' => 'skin-cosmos-profile__tag--blocked tag-blocked',
 				'text' => $context->msg( 'cosmosbeta-user-blocked' )->text(),
 			] ];
 		}
 
-		$max = (int)$this->config->get( ConfigNames::SocialProfileNumberofGroupTags );
+		$max = (int)$this->options->get( ConfigNames::SocialProfileNumberofGroupTags );
 		$groups = $this->userGroupManager->getUserGroups( $owner );
 		$tags = [];
 
-		foreach ( $this->config->get( ConfigNames::SocialProfileTagGroups ) as $group ) {
+		foreach ( $this->options->get( ConfigNames::SocialProfileTagGroups ) as $group ) {
 			if ( !in_array( $group, $groups, true ) || count( $tags ) >= $max ) {
 				continue;
 			}
@@ -90,7 +120,7 @@ class SocialProfile {
 			$message = $context->msg( "group-$group-member" );
 
 			$tags[] = [
-				'class' => 'tag-' . Sanitizer::escapeClass( $group ),
+				'class' => 'skin-cosmos-profile__tag--' . Sanitizer::escapeClass( $group ) . ' tag-' . Sanitizer::escapeClass( $group ),
 				'text' => ucfirst( $message->isDisabled() ? $group : $message->text() ),
 			];
 		}
@@ -100,7 +130,6 @@ class SocialProfile {
 
 	private function getUserBio( User $owner ): ?string {
 		$title = $this->titleFactory->newFromText( $owner->getName(), NS_USER )?->getSubpage( 'bio' );
-
 		if ( !$title || !$title->isKnown() ) {
 			return null;
 		}
@@ -108,7 +137,7 @@ class SocialProfile {
 		$content = $this->wikiPageFactory->newFromTitle( $title )->getContent();
 
 		if (
-			$this->config->get( ConfigNames::SocialProfileFollowBioRedirects ) &&
+			$this->options->get( ConfigNames::SocialProfileFollowBioRedirects ) &&
 			$title->isRedirect() &&
 			$content?->getRedirectTarget()?->isKnown() &&
 			$content->getRedirectTarget()->inNamespace( NS_USER )
