@@ -7,6 +7,7 @@ namespace MediaWiki\Skin\Cosmos;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\ResourceLoader\Context;
 use MediaWiki\ResourceLoader\SkinModule;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use Wikimedia\Minify\CSSMin;
 use function array_merge;
 use function array_values;
@@ -23,7 +24,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 	public function __construct(
 		array $options,
 		private readonly BackgroundLookup $backgroundLookup,
-		private readonly CosmosConfig $cosmosConfig,
+		private readonly EffectiveTheme $theme,
 		private readonly LessUtil $lessUtil,
 		private readonly WordmarkLookup $wordmarkLookup,
 	) {
@@ -36,7 +37,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		return new self(
 			$options,
 			$services->get( 'CosmosBetaBackgroundLookup' ),
-			$services->get( 'CosmosBetaConfig' ),
+			$services->get( 'CosmosBetaEffectiveTheme' ),
 			$services->get( 'CosmosBetaLessUtil' ),
 			$services->get( 'CosmosBetaWordmarkLookup' )
 		);
@@ -65,19 +66,19 @@ class CosmosResourceLoaderModule extends SkinModule {
 	protected function getLessVars( Context $context ): array {
 		$lessVars = parent::getLessVars( $context );
 
-		$mode = $this->isAlt ? $this->cosmosConfig->getAltMode() : $this->cosmosConfig->getDefaultMode();
+		$mode = $this->isAlt ? $this->theme->getAltMode() : $this->theme->getDefaultMode();
 
 		$mainBackground = $this->backgroundLookup->getMainBackgroundUrl();
 		$wikiHeaderBackground = $this->backgroundLookup->getWikiHeaderBackgroundUrl();
 
-		$contentBackgroundColor = $this->cosmosConfig->getColor( 'content', $mode );
+		$contentBackgroundColor = $this->theme->getColor( 'content', $mode );
 		$contentRgb = $this->resolveColor( $contentBackgroundColor );
 
-		$bannerColor = $this->cosmosConfig->getColor( 'banner', $mode );
+		$bannerColor = $this->theme->getColor( 'banner', $mode );
 		$lessVars['banner-background-color'] = $bannerColor;
 
 		[ $br, $bg, $bb, $ba ] = $this->resolveColor( $bannerColor );
-		$lessVars['banner-background-color-fallback'] = $this->getFallbackColor( $br, $bg, $bb, $ba, $this->cosmosConfig->getBackdropBlur() );
+		$lessVars['banner-background-color-fallback'] = $this->getFallbackColor( $br, $bg, $bb, $ba, $this->theme->getBackdropBlur() );
 
 		if ( $mainBackground ) {
 			$lessVars['main-background-image'] = CSSMin::buildUrlValue( $mainBackground );
@@ -91,27 +92,27 @@ class CosmosResourceLoaderModule extends SkinModule {
 			$lessVars['wiki-header-background-image'] = 0;
 		}
 
-		$lessVars['main-background-color'] = $this->cosmosConfig->getColor( 'body', $mode );
+		$lessVars['main-background-color'] = $this->theme->getColor( 'body', $mode );
 		$lessVars['content-background-color'] = $contentBackgroundColor;
-		$lessVars['main-background-image-size'] = $this->cosmosConfig->getBackgroundImageSize();
+		$lessVars['main-background-image-size'] = $this->theme->getBackgroundImageSize();
 
-		$contentWidth = $this->cosmosConfig->getContentWidth();
+		$contentWidth = $this->theme->getContentWidth();
 		$lessVars['content-width-1084'] = $contentWidth === 'auto' ? 'auto' : 1024 + $contentWidth . 'px';
 		$lessVars['content-width-1596'] = $contentWidth === 'auto' ? 'auto' : 1178 + $contentWidth . 'px';
 
-		$lessVars['link-color'] = $this->cosmosConfig->getColor( 'link', $mode );
+		$lessVars['link-color'] = $this->theme->getColor( 'link', $mode );
 		$linkIsDark = $this->lessUtil->isDark( 'link', $mode, LessUtil::CONTENT_THRESHOLD );
 		$lessVars['link-contrast-color'] = $linkIsDark ? '#fff' : '#202122';
 		$lessVars['link-contrast-invert'] = $linkIsDark ? 1 : 0;
-		$lessVars['button-background-color'] = $this->cosmosConfig->getColor( 'button', $mode );
+		$lessVars['button-background-color'] = $this->theme->getColor( 'button', $mode );
 
-		if ( $this->cosmosConfig->getBackgroundImageRepeat() ) {
+		if ( $this->theme->getBackgroundImageRepeat() ) {
 			$lessVars['main-background-image-repeat'] = 'repeat';
 		} else {
 			$lessVars['main-background-image-repeat'] = 'no-repeat';
 		}
 
-		if ( $this->cosmosConfig->getBackgroundImageFixed() ) {
+		if ( $this->theme->getBackgroundImageFixed() ) {
 			$lessVars['main-background-image-position'] = 'fixed';
 		} else {
 			$lessVars['main-background-image-position'] = 'absolute';
@@ -120,11 +121,11 @@ class CosmosResourceLoaderModule extends SkinModule {
 		// Convert content background to rgba for opacity.
 		[ $r, $g, $b, $contentAlpha ] = $contentRgb;
 
-		$contentOpacityLevelConfig = $this->cosmosConfig->getContentOpacityLevel();
-		$blur = $this->cosmosConfig->getBackdropBlur();
+		$contentOpacityLevelConfig = $this->theme->getContentOpacityLevel();
+		$blur = $this->theme->getBackdropBlur();
 		$lessVars['backdrop-blur'] = $blur . 'px';
 		$lessVars['backdrop-blur-enabled'] = $blur > 0 ? 1 : 0;
-		$buttonOpacity = $this->cosmosConfig->getHeaderButtonOpacity() / 100;
+		$buttonOpacity = $this->theme->getHeaderButtonOpacity() / 100;
 		$lessVars['header-button-background'] = "rgba(0, 30, 59, $buttonOpacity)";
 		$lessVars['header-button-background-hover'] = 'rgba(0, 30, 59, ' . min( 1, $buttonOpacity + 0.2 ) . ')';
 
@@ -132,9 +133,9 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['content-opacity-level'] = "rgba($r, $g, $b, $contentFinalAlpha)";
 		$lessVars['content-opacity-level-fallback'] = $this->getFallbackColor( $r, $g, $b, $contentFinalAlpha, $blur );
 
-		$footerBackgroundColor = $this->cosmosConfig->getColor( 'footer', $mode );
+		$footerBackgroundColor = $this->theme->getColor( 'footer', $mode );
 		[ $r, $g, $b, $footerAlpha ] = $this->resolveColor( $footerBackgroundColor );
-		$footerOpacity = round( $footerAlpha * $this->cosmosConfig->getFooterOpacity() / 100, 3 );
+		$footerOpacity = round( $footerAlpha * $this->theme->getFooterOpacity() / 100, 3 );
 		$lessVars['footer-background-color'] = "rgba($r, $g, $b, $footerOpacity)";
 		$lessVars['footer-background-color-fallback'] = $this->getFallbackColor( $r, $g, $b, $footerOpacity, $blur );
 
@@ -142,7 +143,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['footer-font-color1'] = $isFooterBackgroundColorDark ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.65)';
 		$lessVars['footer-font-color2'] = $isFooterBackgroundColorDark ? '#fff' : '#000';
 
-		$headerBackgroundColor = $this->cosmosConfig->getColor( 'header', $mode );
+		$headerBackgroundColor = $this->theme->getColor( 'header', $mode );
 		[ $r, $g, $b, $headerAlpha ] = $this->resolveColor( $headerBackgroundColor );
 		$colorName = $headerAlpha > 0 ? "rgba($r,$g,$b,$headerAlpha)" : 'transparent';
 		$halfAlpha = round( $headerAlpha * 0.5, 3 );
@@ -177,7 +178,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 
 	private function getToolbarFallback( string $color ): string {
 		[ $r, $g, $b, $a ] = $this->resolveColor( $color );
-		return $this->getFallbackColor( $r, $g, $b, (float)$a, $this->cosmosConfig->getBackdropBlur() );
+		return $this->getFallbackColor( $r, $g, $b, (float)$a, $this->theme->getBackdropBlur() );
 	}
 
 	/**
@@ -190,7 +191,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 	}
 
 	private function getToolbarVars( string $mode ): array {
-		$toolbarBackgroundColor = $this->cosmosConfig->getColor( 'toolbar', $mode );
+		$toolbarBackgroundColor = $this->theme->getColor( 'toolbar', $mode );
 		return [
 			'toolbar-background-color2' => $toolbarBackgroundColor,
 			'toolbar-background-color-fallback' => $this->getToolbarFallback( $toolbarBackgroundColor ),
