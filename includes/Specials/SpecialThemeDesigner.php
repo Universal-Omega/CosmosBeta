@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skin\Cosmos\Specials;
 
+use MediaWiki\Config\Config;
 use MediaWiki\Context\DerivativeContext;
 use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
@@ -11,14 +12,18 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\SkinFactory;
 use MediaWiki\Skin\Cosmos\Components\PortletReader;
-use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\ConfigNames;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Rail\RailModuleInfo;
+use MediaWiki\Skin\Cosmos\Rail\RailModuleType;
+use MediaWiki\Skin\Cosmos\Theme\ConfigDefaults;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\Cosmos\Theme\ThemePresets;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
+use MediaWiki\User\User;
 use Throwable;
 use function array_diff;
 use function array_intersect;
@@ -53,7 +58,9 @@ class SpecialThemeDesigner extends SpecialPage {
 	];
 
 	public function __construct(
-		private readonly CosmosConfig $config,
+		private readonly Config $cosmosOptions,
+		private readonly ConfigDefaults $configDefaults,
+		private readonly EffectiveTheme $theme,
 		private readonly RailBuilder $railBuilder,
 		private readonly ThemeStore $store,
 		private readonly ExtensionRegistry $extensionRegistry,
@@ -64,6 +71,10 @@ class SpecialThemeDesigner extends SpecialPage {
 		parent::__construct( 'CosmosBetaThemeDesigner' );
 	}
 
+	private function isPublicView(): bool {
+		return (bool)$this->cosmosOptions->get( ConfigNames::ThemeDesignerPublicView );
+	}
+
 	/** @inheritDoc */
 	public function getRestriction(): string {
 		return 'cosmosbeta-themedesigner';
@@ -72,6 +83,24 @@ class SpecialThemeDesigner extends SpecialPage {
 	/** @inheritDoc */
 	protected function getGroupName(): string {
 		return 'wiki';
+	}
+
+	/**
+	 * With public viewing on, anyone can open the designer. Publishing still needs the right.
+	 *
+	 * @inheritDoc
+	 */
+	public function userCanExecute( User $user ): bool {
+		return $this->isPublicView() || parent::userCanExecute( $user );
+	}
+
+	/** @inheritDoc */
+	public function isRestricted(): bool {
+		return !$this->isPublicView() && parent::isRestricted();
+	}
+
+	private function canEdit(): bool {
+		return $this->getAuthority()->isAllowed( $this->getRestriction() );
 	}
 
 	/** @inheritDoc */
@@ -102,7 +131,10 @@ class SpecialThemeDesigner extends SpecialPage {
 		$out = $this->getOutput();
 		$request = $this->getRequest();
 
-		$this->checkPermissions();
+		if ( !$this->canEdit() ) {
+			$this->displayRestrictionError();
+		}
+
 		$this->checkReadOnly();
 
 		if ( !$this->getContext()->getCsrfTokenSet()->matchTokenField( 'wpEditToken' ) ) {
@@ -143,10 +175,10 @@ class SpecialThemeDesigner extends SpecialPage {
 	private function applyConfigurationRules( array $data ): array {
 		$hidden = $data['footer']['hiddenLinks'] ?? [];
 		$data['footer']['hiddenLinks'] = is_array( $hidden ) ?
-			array_values( array_diff( $hidden, $this->config->getFooterProtectedLinks() ) ) :
+			array_values( array_diff( $hidden, $this->theme->getFooterProtectedLinks() ) ) :
 			[];
 
-		if ( !$this->config->canHideFooterIcons() ) {
+		if ( !$this->theme->canHideFooterIcons() ) {
 			$data['footer']['showIcons'] = true;
 		}
 
@@ -165,6 +197,7 @@ class SpecialThemeDesigner extends SpecialPage {
 				$this->store->getCurrent()->toArray(),
 				JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
 			),
+			'is-editable' => $this->canEdit(),
 			'msg-comment' => $this->msg( 'cosmosbeta-themedesigner-comment' )->text(),
 			'msg-publish' => $this->msg( 'cosmosbeta-themedesigner-publish' )->text(),
 		] );
@@ -176,7 +209,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		$fallbacks = [];
 		foreach ( ThemeSettings::MODES as $mode ) {
 			foreach ( ThemeSettings::COLOR_SLOTS as $slot ) {
-				$fallbacks[$mode][$slot] = $this->config->getFallbackColor( $slot, $mode );
+				$fallbacks[$mode][$slot] = $this->theme->getFallbackColor( $slot, $mode );
 			}
 		}
 
@@ -199,7 +232,9 @@ class SpecialThemeDesigner extends SpecialPage {
 		$chrome = $this->getChromeOptions();
 
 		return [
-			'canEdit' => $this->userCanExecute( $this->getUser() ),
+			'canEdit' => $this->canEdit(),
+			'themeOnly' => $this->configDefaults->isThemeDesignerOnly(),
+			'portableInfobox' => $this->extensionRegistry->isLoaded( 'PortableInfobox' ),
 			'settings' => $current->toArray(),
 			'defaults' => ThemeSettings::getDefaults(),
 			'revisionId' => $current->getRevisionId(),
@@ -207,11 +242,8 @@ class SpecialThemeDesigner extends SpecialPage {
 			'fallbacks' => $fallbacks,
 			'presets' => $presets,
 			'history' => $history,
-			'config' => [
-				'backgroundSize' => $this->config->getBackgroundImageSize(),
-				'contentOpacity' => $this->config->getContentOpacityLevel(),
-			],
-			'canHideFooterIcons' => $this->config->canHideFooterIcons(),
+			'effective' => $this->getEffectiveDefaults(),
+			'canHideFooterIcons' => $this->theme->canHideFooterIcons(),
 			'upload' => $this->getUploadData(),
 			'namespaces' => $this->getNamespaceOptions(),
 			'railModules' => array_map(
@@ -219,6 +251,43 @@ class SpecialThemeDesigner extends SpecialPage {
 				$this->railBuilder->getAvailableModules()
 			),
 		] + $chrome;
+	}
+
+	/**
+	 * What each setting is while the theme leaves it alone, for the designer to show and to reset to.
+	 */
+	private function getEffectiveDefaults(): array {
+		$defaults = $this->theme->getDefaults();
+
+		return [
+			'images' => [
+				'wordmark' => $defaults->wordmark,
+				'header' => $defaults->headerImage,
+				'background' => $defaults->backgroundImage,
+				'backgroundSize' => $defaults->backgroundSize,
+				'backgroundRepeat' => $defaults->backgroundRepeat,
+				'backgroundFixed' => $defaults->backgroundFixed,
+			],
+			'layout' => [
+				'contentWidth' => $defaults->contentWidth,
+				'contentOpacity' => $defaults->contentOpacity,
+			],
+			'extensions' => [
+				'portableInfoboxEuropa' => $defaults->europa,
+			],
+			'rail' => [
+				'disabledNamespaces' => $defaults->railDisabledNamespaces,
+				'disabledPages' => $defaults->railDisabledPages,
+				'recentChanges' => [
+					'enabled' => $defaults->recentChanges,
+					'type' => $defaults->recentChangesType->value,
+				],
+				'interface' => array_map(
+					static fn ( RailModuleType $type ): string => $type->value,
+					$defaults->interfaceModules
+				),
+			],
+		];
 	}
 
 	private function getUploadData(): array {
@@ -290,7 +359,7 @@ class SpecialThemeDesigner extends SpecialPage {
 			];
 		}
 
-		$protected = $this->config->getFooterProtectedLinks();
+		$protected = $this->theme->getFooterProtectedLinks();
 		$links = [];
 
 		foreach ( [ 'data-info' => 'info', 'data-places' => 'places' ] as $key => $group ) {
