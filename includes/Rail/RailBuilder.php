@@ -12,10 +12,11 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\Skin\Cosmos\ConfigNames;
 use MediaWiki\Skin\Cosmos\CosmosConfig;
-use MediaWiki\Skin\Cosmos\Hooks\CosmosHookRunner;
+use MediaWiki\Skin\Cosmos\Hooks\HookRunner;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserFactory;
+use MediaWiki\User\UserIdentityValue;
 use MediaWiki\Utils\MWTimestamp;
 use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IConnectionProvider;
@@ -29,6 +30,7 @@ use function implode;
 use function in_array;
 use function is_string;
 use function preg_replace;
+use function str_replace;
 use function strtolower;
 use function strtoupper;
 use function trim;
@@ -45,26 +47,26 @@ class RailBuilder {
 		MainConfigNames::ContentNamespaces,
 	];
 
-	public const string MODULE_RECENT_CHANGES = 'recentchanges';
-	public const string MODULE_PAGE_TOOLS = 'page-tools';
-
-	public const string ORIGIN_BUILT_IN = 'builtin';
-	public const string ORIGIN_INTERFACE = 'interface';
-	public const string ORIGIN_CUSTOM = 'custom';
-	public const string ORIGIN_HOOK = 'hook';
-	public const string ORIGIN_SIDEBAR = 'sidebar';
-
+	private const int RECENT_CHANGES_CACHE_SECONDS = 30;
+	private const int RECENT_CHANGES_CACHE_VERSION = 1;
 	private const int RECENT_CHANGES_LIMIT = 4;
 
-	/** @var array<string, array>|null Modules that show on this page, built on first use */
+	/** @var RailModule[]|null The modules that do not depend on the page being built, built on first use */
+	private ?array $baseModules = null;
+
+	/** @var RailModule[]|null The modules that show on this page, built on first use */
 	private ?array $modules = null;
+
+	/** @var RailModule[] */
 	private array $sidebarModules = [];
+
+	/** @var array<int, array{html-item: string}> */
 	private array $toolItems = [];
 	private bool $toolsInRail = false;
 
 	public function __construct(
 		private readonly CosmosConfig $cosmosConfig,
-		private readonly CosmosHookRunner $hookRunner,
+		private readonly HookRunner $hookRunner,
 		private readonly TemplateParser $templateParser,
 		private readonly IConnectionProvider $dbProvider,
 		private readonly LinkRenderer $linkRenderer,
@@ -81,6 +83,13 @@ class RailBuilder {
 		return 'sidebar-' . trim( (string)preg_replace( '/[^a-z0-9._-]+/', '-', strtolower( $name ) ), '-' );
 	}
 
+	public static function getRecentChangesCacheKey( WANObjectCache $cache ): string {
+		return $cache->makeKey( 'Cosmos', 'rail-recentchanges', self::RECENT_CHANGES_CACHE_VERSION );
+	}
+
+	/**
+	 * @param array<int, array{html-item: string}> $items
+	 */
 	public function setToolsModule( bool $enabled, array $items ): self {
 		$this->toolsInRail = $enabled;
 		$this->toolItems = $items;
@@ -96,14 +105,9 @@ class RailBuilder {
 	public function setSidebarModulesFromSections( array $sections ): self {
 		$names = $this->getSidebarNames();
 		$modules = [];
-
 		foreach ( $sections as $name => $items ) {
 			if ( $items && in_array( strtoupper( (string)$name ), $names, true ) ) {
-				$modules[] = [
-					'id' => self::getSidebarModuleId( (string)$name ),
-					'label' => (string)$name,
-					'items' => [],
-				];
+				$modules[] = $this->newSidebarModule( (string)$name, (string)$name, [] );
 			}
 		}
 
@@ -116,30 +120,17 @@ class RailBuilder {
 	 * @param array $sidebar The sidebar template data of the skin
 	 */
 	public function setSidebarModulesFromPortlets( array $sidebar ): self {
-		$names = $this->getSidebarNames();
 		$portlets = array_merge( [ $sidebar['data-portlets-first'] ?? null ], $sidebar['array-portlets-rest'] ?? [] );
 		$modules = [];
-
 		foreach ( $portlets as $portlet ) {
-			if ( !$portlet ) {
-				continue;
-			}
+			$name = $portlet ? $this->findSidebarName( $portlet ) : null;
+			$items = array_map(
+				static fn ( array $item ): array => [ 'html-item' => $item['html-item'] ?? '' ],
+				$portlet['array-items'] ?? []
+			);
 
-			$id = strtoupper( (string)preg_replace( '/^p-/i', '', (string)( $portlet['id'] ?? '' ) ) );
-			$label = strtoupper( trim( (string)( $portlet['label'] ?? '' ) ) );
-			$name = in_array( $id, $names, true ) ? $id : ( in_array( $label, $names, true ) ? $label : null );
-
-			$items = [];
-			foreach ( $portlet['array-items'] ?? [] as $item ) {
-				$items[] = [ 'html-item' => $item['html-item'] ?? '' ];
-			}
-
-			if ( $name !== null && $items ) {
-				$modules[] = [
-					'id' => self::getSidebarModuleId( $name ),
-					'label' => (string)( $portlet['label'] ?? '' ),
-					'items' => $items,
-				];
+			if ( $name !== null && $items !== [] ) {
+				$modules[] = $this->newSidebarModule( $name, (string)( $portlet['label'] ?? '' ), $items );
 			}
 		}
 
@@ -150,27 +141,18 @@ class RailBuilder {
 		$settings = $this->cosmosConfig->getToolbarSettings();
 		return $settings['enabled'] &&
 			$settings['style'] === 'rail' &&
-			$this->isModuleAllowed( self::MODULE_PAGE_TOOLS );
+			$this->isModuleAllowed( RailModule::ID_PAGE_TOOLS );
 	}
 
 	public function buildRail(): string {
-		$modules = [];
-		foreach ( $this->getModules() as $module ) {
-			$modules[] = [
-				'class' => $this->getModuleClasses( (array)( $module['class'] ?? 'custom-module' ) ),
-				'is-sticky' => $module['type'] === RailRules::TYPE_STICKY,
-				'header' => isset( $module['header'] ) ? $this->getHeader( $module['header'] ) : null,
-				'array-recentchanges' => $module['recentchanges'] ?? null,
-				'data-tools' => isset( $module['tools'] ) ? [ 'array-items' => $module['tools'] ] : null,
-				'html-body' => $module['body'] ?? '',
-			];
-		}
-
-		if ( !$modules ) {
+		$modules = $this->getModules();
+		if ( $modules === [] ) {
 			return '';
 		}
 
-		return $this->templateParser->processTemplate( 'Rail', [ 'array-modules' => $modules ] );
+		return $this->templateParser->processTemplate( 'Rail', [
+			'array-modules' => array_map( $this->getTemplateData( ... ), $modules ),
+		] );
 	}
 
 	public function hasModules(): bool {
@@ -198,40 +180,42 @@ class RailBuilder {
 	 * Lists every module the rail can show, so the theme designer can offer a control for each.
 	 * Sidebar modules are known once the skin has built its template data, so call this after that.
 	 *
-	 * @return array<int, array{id: string, origin: string, label: string}>
+	 * @return RailModuleInfo[]
 	 */
 	public function getAvailableModules(): array {
 		$modules = [
-			$this->describeModule( self::MODULE_RECENT_CHANGES, self::ORIGIN_BUILT_IN, '' ),
-			$this->describeModule( self::MODULE_PAGE_TOOLS, self::ORIGIN_BUILT_IN, '' ),
+			new RailModuleInfo( RailModule::ID_RECENT_CHANGES, RailModuleOrigin::BuiltIn, '' ),
+			new RailModuleInfo( RailModule::ID_PAGE_TOOLS, RailModuleOrigin::BuiltIn, '' ),
 		];
 
-		foreach ( array_keys( $this->getConfiguredInterfaceModules() ) as $message ) {
-			$modules[] = $this->describeModule( "interface-$message", self::ORIGIN_INTERFACE, (string)$message );
+		foreach ( array_keys( $this->getConfiguredInterfaceTypes() ) as $message ) {
+			$modules[] = new RailModuleInfo( "interface-$message", RailModuleOrigin::Interface, $message );
 		}
 
 		foreach ( $this->cosmosConfig->getCustomRailModules() as $custom ) {
-			$modules[] = $this->describeModule(
+			$modules[] = new RailModuleInfo(
 				"custom-{$custom['id']}",
-				self::ORIGIN_CUSTOM,
+				RailModuleOrigin::Custom,
 				$custom['header'] !== '' ? $custom['header'] : $custom['message']
 			);
 		}
 
-		$fromHooks = [];
+		$fromHooks = new RailModuleList();
 		$this->hookRunner->onCosmosRailBuilder( $fromHooks, $this->context->getSkin() );
-		foreach ( array_keys( $fromHooks ) as $id ) {
-			$modules[] = $this->describeModule( (string)$id, self::ORIGIN_HOOK, (string)$id );
+		foreach ( $fromHooks->getIds() as $id ) {
+			$modules[] = new RailModuleInfo( $id, RailModuleOrigin::Hook, $id );
 		}
 
-		foreach ( $this->sidebarModules as $sidebar ) {
-			$modules[] = $this->describeModule( $sidebar['id'], self::ORIGIN_SIDEBAR, $sidebar['label'] );
+		foreach ( $this->sidebarModules as $module ) {
+			$modules[] = new RailModuleInfo( $module->id, RailModuleOrigin::Sidebar, (string)$module->header );
 		}
 
 		return $modules;
 	}
 
-	/** @return array<string, array> */
+	/**
+	 * @return RailModule[]
+	 */
 	private function getModules(): array {
 		return $this->modules ??= ( $this->isHidden() ? [] : $this->resolveModules() );
 	}
@@ -239,49 +223,81 @@ class RailBuilder {
 	/**
 	 * Applies what the theme says about each module to the ones the wiki and extensions offer.
 	 *
-	 * @return array<string, array>
+	 * @return RailModule[]
 	 */
 	private function resolveModules(): array {
 		$modules = [];
-		foreach ( $this->collectModules() as $id => $module ) {
-			$id = (string)$id;
-			if ( !$this->isAllowed( $id ) ) {
+		foreach ( $this->collectModules() as $module ) {
+			if ( !$this->isAllowed( $module->id ) ) {
 				continue;
 			}
 
-			$type = $this->cosmosConfig->getRailRules( $id )->type ?? $module['type'] ?? null;
-			$module['type'] = in_array( $type, RailRules::TYPES, true ) ? $type : RailRules::TYPE_NORMAL;
-			$modules[$id] = $module;
+			$type = $this->cosmosConfig->getRailRules( $module->id )->type;
+			$modules[] = $type === null ? $module : $module->withType( $type );
 		}
 
 		return $modules;
 	}
 
-	/** @return array<string|int, array> */
+	/**
+	 * @return RailModule[]
+	 */
 	private function collectModules(): array {
-		$modules = [];
-		$this->addRecentChangesModule( $modules );
-		$this->addInterfaceModules( $modules );
-		$this->addCustomModules( $modules );
-		$this->hookRunner->onCosmosRailBuilder( $modules, $this->context->getSkin() );
-		$this->addSidebarModules( $modules );
-		$this->addPageToolsModule( $modules );
+		$modules = [ ...$this->getBaseModules(), ...$this->sidebarModules ];
+		if ( $this->toolsInRail ) {
+			$modules[] = RailModule::newWithTools(
+				RailModule::ID_PAGE_TOOLS,
+				RailModuleType::Normal,
+				'page-tools-module',
+				'cosmosbeta-rail-page-tools',
+				$this->toolItems
+			);
+		}
 
 		return $modules;
 	}
 
+	/**
+	 * The sidebar and the tools change while the skin builds the page, these do not.
+	 *
+	 * @return RailModule[]
+	 */
+	private function getBaseModules(): array {
+		if ( $this->baseModules !== null ) {
+			return $this->baseModules;
+		}
+
+		$list = new RailModuleList();
+		$builtIn = [
+			...$this->newRecentChangesModules(),
+			...$this->newInterfaceModules(),
+			...$this->newCustomModules(),
+		];
+
+		foreach ( $builtIn as $module ) {
+			$list->add( $module );
+		}
+
+		$this->hookRunner->onCosmosRailBuilder( $list, $this->context->getSkin() );
+		return $this->baseModules = $list->getAll();
+	}
+
 	private function isAllowed( string $id ): bool {
+		// Page tools in the rail are the only way to reach them, so by default they show on every page
+		$isEverywhere = $id === RailModule::ID_PAGE_TOOLS;
 		$settings = $this->cosmosConfig->getRailSettings();
 
 		return $this->cosmosConfig->getRailRules( $id )->isShownOn(
 			$this->context->getTitle(),
-			$settings['disabledNamespaces'] ?? $this->options->get( ConfigNames::RailDisabledNamespaces ),
-			$settings['disabledPages'] ?? $this->options->get( ConfigNames::RailDisabledPages )
+			$settings['disabledNamespaces'] ??
+				( $isEverywhere ? [] : $this->options->get( ConfigNames::RailDisabledNamespaces ) ),
+			$settings['disabledPages'] ??
+				( $isEverywhere ? [] : $this->options->get( ConfigNames::RailDisabledPages ) )
 		);
 	}
 
 	/**
-	 * @param array[] $modules Each with an id, a label and a list of html-item entries
+	 * @param RailModule[] $modules
 	 */
 	private function setSidebarModules( array $modules ): self {
 		$this->sidebarModules = $modules;
@@ -289,118 +305,151 @@ class RailBuilder {
 		return $this;
 	}
 
-	/** @return string[] */
+	/**
+	 * @return string[] The sections to show in the rail, in capitals
+	 */
 	private function getSidebarNames(): array {
 		return array_map( strtoupper( ... ), (array)$this->options->get( ConfigNames::RailSidebarPortlets ) );
 	}
 
-	private function describeModule( string $id, string $origin, string $label ): array {
-		return [ 'id' => $id, 'origin' => $origin, 'label' => $label ];
+	/**
+	 * Sections are told apart by the id of the portlet, or by its label when the id is not one of them.
+	 */
+	private function findSidebarName( array $portlet ): ?string {
+		$names = $this->getSidebarNames();
+		$id = strtoupper( (string)preg_replace( '/^p-/i', '', (string)( $portlet['id'] ?? '' ) ) );
+		$label = strtoupper( trim( (string)( $portlet['label'] ?? '' ) ) );
+
+		return match ( true ) {
+			in_array( $id, $names, true ) => $id,
+			in_array( $label, $names, true ) => $label,
+			default => null,
+		};
 	}
 
-	/** @return array<string, string|bool> Interface message to the type it is shown as */
-	private function getConfiguredInterfaceModules(): array {
-		$modules = $this->options->get( ConfigNames::EnabledRailModules )['interface'] ?? [];
-		return (array)( $modules[0] ?? $modules );
+	/**
+	 * @param array<int, array{html-item: string}> $items
+	 */
+	private function newSidebarModule( string $name, string $label, array $items ): RailModule {
+		return RailModule::newWithTools(
+			self::getSidebarModuleId( $name ),
+			RailModuleType::Normal,
+			'sidebar-module',
+			$label,
+			$items
+		);
 	}
 
-	private function addRecentChangesModule( array &$modules ): void {
-		$configured = $this->options->get( ConfigNames::EnabledRailModules )[self::MODULE_RECENT_CHANGES] ?? false;
-		$isEnabled = $this->cosmosConfig->getRailRules( self::MODULE_RECENT_CHANGES )->enabled ?? (bool)$configured;
-		if ( !$isEnabled || !$this->isAllowed( self::MODULE_RECENT_CHANGES ) ) {
-			return;
-		}
-
-		$entries = $this->getRecentChangeEntries();
-		if ( $entries === [] ) {
-			return;
-		}
-
-		$modules[self::MODULE_RECENT_CHANGES] = [
-			'class' => 'recentchanges-module',
-			'header' => 'recentchanges',
-			'type' => is_string( $configured ) ? $configured : RailRules::TYPE_NORMAL,
-			'recentchanges' => $entries,
-		];
+	/**
+	 * The wiki configuration is loose about types, so anything but a known type is normal.
+	 */
+	private function getConfiguredType( mixed $configured ): RailModuleType {
+		return ( is_string( $configured ) ? RailModuleType::tryFrom( $configured ) : null ) ?? RailModuleType::Normal;
 	}
 
-	private function addInterfaceModules( array &$modules ): void {
-		foreach ( $this->getConfiguredInterfaceModules() as $message => $type ) {
-			$module = $type ? $this->buildMessageModule( (string)$message, null, (string)$type ) : null;
-			if ( $module !== null ) {
-				$modules["interface-$message"] = $module;
+	/**
+	 * @return array<string, RailModuleType> The configured messages, by the type each is shown as
+	 */
+	private function getConfiguredInterfaceTypes(): array {
+		$configured = $this->options->get( ConfigNames::EnabledRailModules )['interface'] ?? [];
+		$types = [];
+		foreach ( (array)( $configured[0] ?? $configured ) as $message => $type ) {
+			if ( $type ) {
+				$types[(string)$message] = $this->getConfiguredType( $type );
 			}
 		}
+
+		return $types;
 	}
 
-	private function addCustomModules( array &$modules ): void {
+	/**
+	 * @return RailModule[]
+	 */
+	private function newInterfaceModules(): array {
+		$modules = [];
+		foreach ( $this->getConfiguredInterfaceTypes() as $message => $type ) {
+			$module = $this->newMessageModule( "interface-$message", $message, null, $type );
+			if ( $module !== null ) {
+				$modules[] = $module;
+			}
+		}
+
+		return $modules;
+	}
+
+	/**
+	 * @return RailModule[]
+	 */
+	private function newCustomModules(): array {
+		$modules = [];
 		foreach ( $this->cosmosConfig->getCustomRailModules() as $custom ) {
-			$module = $this->buildMessageModule(
+			$module = $this->newMessageModule(
+				"custom-{$custom['id']}",
 				$custom['message'],
 				$custom['header'] !== '' ? $custom['header'] : null,
-				RailRules::TYPE_NORMAL
+				RailModuleType::Normal
 			);
 
 			if ( $module !== null ) {
-				$modules["custom-{$custom['id']}"] = $module;
+				$modules[] = $module;
 			}
 		}
+
+		return $modules;
 	}
 
-	private function addSidebarModules( array &$modules ): void {
-		foreach ( $this->sidebarModules as $sidebar ) {
-			$modules[$sidebar['id']] = [
-				'class' => 'sidebar-module',
-				'header' => $sidebar['label'],
-				'tools' => $sidebar['items'],
-			];
-		}
-	}
-
-	private function addPageToolsModule( array &$modules ): void {
-		if ( $this->toolsInRail ) {
-			$modules[self::MODULE_PAGE_TOOLS] = [
-				'class' => 'page-tools-module',
-				'header' => 'cosmosbeta-rail-page-tools',
-				'tools' => $this->toolItems,
-			];
-		}
-	}
-
-	private function buildMessageModule( string $message, ?string $header, string $type ): ?array {
+	private function newMessageModule(
+		string $id,
+		string $message,
+		?string $header,
+		RailModuleType $type
+	): ?RailModule {
 		$text = $this->context->msg( $message );
 		if ( $text->isDisabled() ) {
 			return null;
 		}
 
-		$module = [
-			'body' => $text->parse(),
-			'class' => 'interface-module',
-			'type' => $type,
-		];
-
-		return $header === null ? $module : $module + [ 'header' => $header ];
+		return RailModule::newWithBody( $id, $type, 'interface-module', $header, $text->parse() );
 	}
 
-	/** @return array<int, array{html-page: string, html-user: string, time: string}> */
+	/**
+	 * Skips the query when the module is hidden on this page.
+	 *
+	 * @return RailModule[]
+	 */
+	private function newRecentChangesModules(): array {
+		$configured = $this->options->get( ConfigNames::EnabledRailModules )[RailModule::ID_RECENT_CHANGES] ?? false;
+		$rules = $this->cosmosConfig->getRailRules( RailModule::ID_RECENT_CHANGES );
+		$isEnabled = $rules->enabled ?? (bool)$configured;
+		if ( !$isEnabled || !$this->isAllowed( RailModule::ID_RECENT_CHANGES ) ) {
+			return [];
+		}
+
+		$entries = $this->getRecentChangeEntries();
+		return $entries === [] ?
+			[] :
+			[ RailModule::newWithRecentChanges( $this->getConfiguredType( $configured ), $entries ) ];
+	}
+
+	/**
+	 * @return array<int, array{html-page: string, html-user: string, time: string}>
+	 */
 	private function getRecentChangeEntries(): array {
 		$language = $this->context->getLanguage();
 		$entries = [];
-
 		foreach ( $this->getRecentChanges() as $change ) {
-			$performer = $change['performer'];
-			$target = $performer->isNamed() ?
-				new TitleValue( NS_USER, $performer->getTitleKey() ) :
+			$target = $change['named'] ?
+				new TitleValue( NS_USER, str_replace( ' ', '_', $change['name'] ) ) :
 				new TitleValue(
 					NS_SPECIAL,
-					$this->specialPageFactory->getLocalNameFor( 'Contributions', $performer->getName() )
+					$this->specialPageFactory->getLocalNameFor( 'Contributions', $change['name'] )
 				);
 
 			$entries[] = [
 				'html-page' => $this->linkRenderer->makeKnownLink(
-					new TitleValue( (int)$change['namespace'], $change['title'] )
+					new TitleValue( $change['namespace'], $change['title'] )
 				),
-				'html-user' => $this->linkRenderer->makeLink( $target, $performer->getName() ),
+				'html-user' => $this->linkRenderer->makeLink( $target, $change['name'] ),
 				'time' => htmlspecialchars(
 					$language->getHumanTimestamp( MWTimestamp::getInstance( $change['timestamp'] ) )
 				),
@@ -410,14 +459,21 @@ class RailBuilder {
 		return $entries;
 	}
 
+	/**
+	 * The names are cached with the rows. The cache is emptied when a user is renamed or hidden,
+	 * and when the visibility of a revision changes.
+	 *
+	 * @return array<int, array{name: string, named: bool, namespace: int, title: string, timestamp: string}>
+	 */
 	private function getRecentChanges(): array {
 		return $this->cache->getWithSetCallback(
-			$this->cache->makeKey( 'Cosmos', 'recentchanges', self::RECENT_CHANGES_LIMIT ),
-			30,
+			self::getRecentChangesCacheKey( $this->cache ),
+			self::RECENT_CHANGES_CACHE_SECONDS,
 			function (): array {
-				$res = $this->dbProvider->getReplicaDatabase()->newSelectQueryBuilder()
-					->select( [ 'rc_actor', 'rc_namespace', 'rc_title', 'rc_timestamp' ] )
+				$rows = $this->dbProvider->getReplicaDatabase()->newSelectQueryBuilder()
+					->select( [ 'actor_name', 'actor_user', 'rc_namespace', 'rc_title', 'rc_timestamp' ] )
 					->from( 'recentchanges' )
+					->join( 'actor', null, 'actor_id = rc_actor' )
 					->where( [
 						'rc_namespace' => $this->options->get( MainConfigNames::ContentNamespaces ),
 						'rc_source' => [ RecentChange::SRC_NEW, RecentChange::SRC_EDIT ],
@@ -430,12 +486,17 @@ class RailBuilder {
 					->fetchResultSet();
 
 				$changes = [];
-				foreach ( $res as $row ) {
+				foreach ( $rows as $row ) {
+					$performer = $this->userFactory->newFromUserIdentity(
+						new UserIdentityValue( (int)$row->actor_user, $row->actor_name )
+					);
+
 					$changes[] = [
-						'performer' => $this->userFactory->newFromActorId( (int)$row->rc_actor ),
-						'timestamp' => $row->rc_timestamp,
-						'namespace' => $row->rc_namespace,
+						'name' => $row->actor_name,
+						'named' => $performer->isNamed(),
+						'namespace' => (int)$row->rc_namespace,
 						'title' => $row->rc_title,
+						'timestamp' => $row->rc_timestamp,
 					];
 				}
 
@@ -444,14 +505,25 @@ class RailBuilder {
 		);
 	}
 
+	private function getTemplateData( RailModule $module ): array {
+		return [
+			'class' => $this->getClasses( $module->classes ),
+			'is-sticky' => $module->type === RailModuleType::Sticky,
+			'header' => $module->header === null ? null : $this->getHeader( $module->header ),
+			'array-recentchanges' => $module->recentChanges ?: null,
+			'data-tools' => $module->tools ? [ 'array-items' => $module->tools ] : null,
+			'html-body' => $module->body,
+		];
+	}
+
 	/**
 	 * @param string[] $classes
 	 */
-	private function getModuleClasses( array $classes ): string {
+	private function getClasses( array $classes ): string {
 		$all = [];
 		foreach ( $classes as $class ) {
 			$all[] = $class;
-			$all[] = "skin-cosmos-$class";
+			$all[] = 'skin-cosmos-rail__module--' . preg_replace( '/-module$/', '', $class );
 		}
 
 		return implode( ' ', array_unique( $all ) );
@@ -460,8 +532,8 @@ class RailBuilder {
 	/**
 	 * Headers are message keys, or plain text when no such message exists.
 	 */
-	private function getHeader( string $label ): string {
-		$message = $this->context->msg( $label );
-		return $message->exists() && !$message->isDisabled() ? $message->text() : $label;
+	private function getHeader( string $header ): string {
+		$message = $this->context->msg( $header );
+		return $message->exists() && !$message->isDisabled() ? $message->text() : $header;
 	}
 }

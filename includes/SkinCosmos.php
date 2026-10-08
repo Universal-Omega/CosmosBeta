@@ -224,11 +224,11 @@ class SkinCosmos extends SkinMustache {
 	}
 
 	private function getSearchData( array $search ): array {
-		$classes = 'searchButton skin-cosmos-search-button cosmos-search-button';
+		$classes = 'searchButton skin-cosmos-search-box__button cosmos-search-button';
 		return [
 			'html-input' => $this->makeSearchInput( [
 				'id' => 'searchInput',
-				'class' => 'skin-cosmos-search-input cosmos-search-input',
+				'class' => 'skin-cosmos-search-box__input cosmos-search-input',
 			] ),
 			'html-button-search' => $this->makeSearchButton( 'go', [
 				'id' => 'searchButton',

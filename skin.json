@@ -39,7 +39,7 @@
 					"wrapSiteNotice": true,
 					"clientPrefEnabled": true,
 					"bodyClasses": [
-						"skin-cosmos-search-vue"
+						"skin-cosmos-has-vue-search"
 					],
 					"menus": [
 						"associated-pages",
@@ -112,6 +112,12 @@
 				"SkinFactory",
 				"CosmosBetaTemplateParser",
 				"TitleFactory"
+			]
+		},
+		"CosmosBetaLegacyConverter": {
+			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialLegacyConverter",
+			"services": [
+				"CosmosBetaLegacyConverter"
 			]
 		},
 		"AdminDashboard": {
@@ -908,6 +914,12 @@
 		"personaltools": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\PersonalTools"
 		},
+		"railcache": {
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\RailCache",
+			"services": [
+				"MainWANObjectCache"
+			]
+		},
 		"socialprofile": {
 			"factory": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
@@ -926,11 +938,17 @@
 		"AlternateEditPreview": {
 			"handler": "navigation"
 		},
+		"ArticleRevisionVisibilitySet": {
+			"handler": "railcache"
+		},
 		"BeforeInitialize": {
 			"handler": "navigation"
 		},
 		"BeforePageDisplay": {
 			"handler": "colormode"
+		},
+		"BlockIpComplete": {
+			"handler": "railcache"
 		},
 		"GetDoubleUnderscoreIDs": {
 			"handler": "parser"
@@ -955,6 +973,9 @@
 		},
 		"ParserFirstCallInit": {
 			"handler": "parser"
+		},
+		"RenameUserComplete": {
+			"handler": "railcache"
 		},
 		"ResourceLoaderRegisterModules": {
 			"handler": "colormode"

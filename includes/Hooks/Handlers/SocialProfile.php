@@ -103,7 +103,7 @@ class SocialProfile {
 	private function getUserGroupTags( IContextSource $context, User $owner ): array {
 		if ( $owner->getBlock() ) {
 			return [ [
-				'class' => 'tag-blocked',
+				'class' => 'skin-cosmos-profile__tag--blocked tag-blocked',
 				'text' => $context->msg( 'cosmosbeta-user-blocked' )->text(),
 			] ];
 		}
@@ -120,7 +120,7 @@ class SocialProfile {
 			$message = $context->msg( "group-$group-member" );
 
 			$tags[] = [
-				'class' => 'tag-' . Sanitizer::escapeClass( $group ),
+				'class' => 'skin-cosmos-profile__tag--' . Sanitizer::escapeClass( $group ) . ' tag-' . Sanitizer::escapeClass( $group ),
 				'text' => ucfirst( $message->isDisabled() ? $group : $message->text() ),
 			];
 		}

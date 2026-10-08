@@ -6,6 +6,7 @@ $specialPageAliases = [];
 
 /** English (English) */
 $specialPageAliases['en'] = [
-	'AdminDashboard' => [ 'AdminDashboard', 'Admin dashboard' ],
+	'AdminDashboard' => [ 'AdminDashboard' ],
+	'CosmosBetaLegacyConverter' => [ 'CosmosBetaLegacyConverter'],
 	'CosmosBetaThemeDesigner' => [ 'CosmosBetaThemeDesigner' ],
 ];

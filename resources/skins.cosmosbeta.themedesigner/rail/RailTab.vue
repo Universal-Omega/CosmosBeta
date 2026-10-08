@@ -1,5 +1,5 @@
 <template>
-	<div class="skin-cosmos-td-rail">
+	<div class="skin-cosmos-themedesigner__rail">
 		<p>{{ msg( 'rail-intro' ) }}</p>
 
 		<cdx-field>
@@ -49,13 +49,13 @@
 			></page-lookup>
 		</cdx-field>
 
-		<h3 class="skin-cosmos-td-rail-heading">
+		<h3 class="skin-cosmos-themedesigner__rail-heading">
 			{{ msg( 'rail-modules' ) }}
 		</h3>
-		<p class="skin-cosmos-td-help">
+		<p class="skin-cosmos-themedesigner__help">
 			{{ msg( 'rail-modules-help' ) }}
 		</p>
-		<div class="skin-cosmos-td-rail-modules">
+		<div class="skin-cosmos-themedesigner__rail-modules">
 			<rail-module-card
 				v-for="entry in entries"
 				:key="entry.id"
@@ -68,7 +68,7 @@
 			></rail-module-card>
 		</div>
 
-		<h3 class="skin-cosmos-td-rail-heading">
+		<h3 class="skin-cosmos-themedesigner__rail-heading">
 			{{ msg( 'rail-custom-add' ) }}
 		</h3>
 		<cdx-field
@@ -119,6 +119,7 @@ const { CdxButton, CdxField, CdxTextInput, CdxToggleSwitch } = mw.loader.require
 
 const CUSTOM = 'custom',
 	CUSTOM_PREFIX = 'custom-',
+	PAGE_TOOLS = 'page-tools',
 	MESSAGE_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/;
 
 const getModuleId = ( custom ) => CUSTOM_PREFIX + custom.id;
@@ -140,6 +141,10 @@ module.exports = exports = defineComponent( {
 			type: Object,
 			required: true
 		},
+		toolbar: {
+			type: Object,
+			required: true
+		},
 		designer: {
 			type: Object,
 			required: true
@@ -154,9 +159,13 @@ module.exports = exports = defineComponent( {
 
 		const customModules = computed( () => rail.value.customModules );
 
+		// The page tools are a rail module only while the toolbar is set to the rail, saved or not
+		const toolsInRail = computed( () => props.toolbar.enabled && props.toolbar.style === 'rail' );
+
 		// Custom modules come from the form as they are added, the rest from the wiki
 		const entries = computed( () => [
-			...props.designer.railModules.filter( ( entry ) => entry.origin !== CUSTOM ),
+			...props.designer.railModules.filter( ( entry ) => entry.origin !== CUSTOM &&
+				( entry.id !== PAGE_TOOLS || toolsInRail.value ) ),
 			...customModules.value.map( ( custom ) => ( {
 				id: getModuleId( custom ),
 				origin: CUSTOM,

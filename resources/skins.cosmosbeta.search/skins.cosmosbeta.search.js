@@ -10,7 +10,7 @@ const
  * @return {void}
  */
 function initApp( searchBox ) {
-	const searchForm = searchBox.querySelector( '.skin-cosmos-search-box-form' ),
+	const searchForm = searchBox.querySelector( '.skin-cosmos-search-box__form' ),
 		titleInput = /** @type {HTMLInputElement|null} */ (
 			searchBox.querySelector( 'input[name=title]' )
 		),
@@ -33,7 +33,7 @@ function initApp( searchBox ) {
 			searchTitle: search.getAttribute( 'title' ),
 			searchPlaceholder: search.getAttribute( 'placeholder' ),
 			searchQuery: search.value,
-			autoExpandWidth: searchBox ? searchBox.classList.contains( 'skin-cosmos-search-box-auto-expand-width' ) : false
+			autoExpandWidth: searchBox ? searchBox.classList.contains( 'skin-cosmos-search-box--auto-expand-width' ) : false
 		// Pass additional config from server.
 		}, config )
 	)

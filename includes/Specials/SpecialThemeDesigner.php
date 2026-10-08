@@ -13,6 +13,7 @@ use MediaWiki\Skin\SkinFactory;
 use MediaWiki\Skin\Cosmos\Components\PortletReader;
 use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
+use MediaWiki\Skin\Cosmos\Rail\RailModuleInfo;
 use MediaWiki\Skin\Cosmos\Theme\ThemePresets;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
@@ -154,7 +155,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	private function buildForm(): string {
 		return $this->templateParser->processTemplate( 'ThemeDesigner', [
-			'form-id' => 'skin-cosmos-themedesigner-form',
+			'form-id' => 'skin-cosmos-themedesigner__form',
 			'action' => $this->getPageTitle()->getLocalURL(),
 			'html-token' => Html::hidden( 'wpEditToken', $this->getContext()->getCsrfTokenSet()->getToken()->toString() ),
 			'msg-nojs' => $this->msg( 'cosmosbeta-themedesigner-nojs' )->text(),
@@ -213,7 +214,10 @@ class SpecialThemeDesigner extends SpecialPage {
 			'canHideFooterIcons' => $this->config->canHideFooterIcons(),
 			'upload' => $this->getUploadData(),
 			'namespaces' => $this->getNamespaceOptions(),
-			'railModules' => $this->railBuilder->getAvailableModules(),
+			'railModules' => array_map(
+				static fn ( RailModuleInfo $module ): array => $module->toArray(),
+				$this->railBuilder->getAvailableModules()
+			),
 		] + $chrome;
 	}
 
