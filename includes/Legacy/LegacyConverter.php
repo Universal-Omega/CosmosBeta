@@ -177,6 +177,10 @@ final class LegacyConverter {
 				$out .= substr( $prelude, $last, $i + 1 - $last ) . $this->mapClass( $m[1] );
 				$i += strlen( $m[0] );
 				$last = $i;
+			} elseif ( $char === '#' && preg_match( '/\G#(-?[A-Za-z_][\w-]*)/', $prelude, $m, 0, $i ) ) {
+				$out .= substr( $prelude, $last, $i - $last ) . $this->mapId( $m[1] );
+				$i += strlen( $m[0] );
+				$last = $i;
 			} elseif ( $char === '[' && preg_match( '/\G\[\s*class\s*~=\s*([\'"]?)([^\'"\]\s]+)\1/', $prelude, $m, 0, $i ) ) {
 				$mapped = $this->mapClass( $m[2] );
 				$out .= substr( $prelude, $last, $i - $last ) . str_replace( $m[2], $mapped, $m[0] );
@@ -188,6 +192,18 @@ final class LegacyConverter {
 		}
 
 		return $out . substr( $prelude, $last );
+	}
+
+	private function mapId( string $id ): string {
+		$class = LegacySelectors::IDS[$id] ?? null;
+		if ( $class === null ) {
+			return "#$id";
+		}
+
+		$this->replacements["#$id"] = ( $this->replacements["#$id"] ?? 0 ) + 1;
+		$this->mappedTo["#$id"] = ".$class";
+
+		return ".$class";
 	}
 
 	private function mapClass( string $class ): string {
