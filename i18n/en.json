@@ -180,6 +180,7 @@
 	"cosmosbeta-themedesigner-font-file": "Upload a font file",
 	"cosmosbeta-themedesigner-font-file-help": "A WOFF2, WOFF, TTF or OTF file. Choose one that is already on the wiki or upload a new one.",
 	"cosmosbeta-themedesigner-font-file-label": "Font file",
+	"cosmosbeta-themedesigner-font-file-unavailable": "This wiki does not accept font files yet. An administrator has to add woff2, woff, ttf or otf to $wgFileExtensions first.",
 	"cosmosbeta-themedesigner-font-preset-arial": "Arial",
 	"cosmosbeta-themedesigner-font-preset-georgia": "Georgia (serif)",
 	"cosmosbeta-themedesigner-font-preset-monospace": "Monospace",
