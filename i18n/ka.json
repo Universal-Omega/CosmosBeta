@@ -34,9 +34,9 @@
 	"cosmosbeta-searchsuggest-containing": "იმ გვერდების მოძებნა, რომლებიც შეიცავენ <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>-ს",
 	"cosmosbeta-article-header-categories-in": "კატეგორიები:",
 	"cosmosbeta-article-header-categories-more": "და კიდევ $1",
-	"cosmosbeta-themedesigner-success": "Cosmos-ის კონფიგურაცია წარმატებით განახლდა.",
-	"cosmosbeta-themedesigner-text": "'''კოსმოსის''' იერსახის რედაქტირება",
-	"cosmosbetathemedesigner": "იერსახის დიზაინერი",
-	"right-cosmosbeta-themedesigner": "კოსმოსის იერსახის დიზანიერის გამოყენება",
-	"action-cosmosbeta-themedesigner": "კოსმოსის იერსახის დიზაინერის გამოყენება"
+	"cosmos-themedesigner-success": "Cosmos-ის კონფიგურაცია წარმატებით განახლდა.",
+	"cosmos-themedesigner-text": "'''კოსმოსის''' იერსახის რედაქტირება",
+	"cosmosthemedesigner": "იერსახის დიზაინერი",
+	"right-cosmos-themedesigner": "კოსმოსის იერსახის დიზანიერის გამოყენება",
+	"action-cosmos-themedesigner": "კოსმოსის იერსახის დიზაინერის გამოყენება"
 }

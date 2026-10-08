@@ -114,7 +114,7 @@
 </template>
 
 <script>
-const { CdxButton, CdxField, CdxTextInput, CdxToggleSwitch } = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+const { CdxButton, CdxField, CdxTextInput, CdxToggleSwitch } = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ computed, defineComponent, ref } = require( 'vue' ),
 	msg = require( '../msg.js' ),
 	NamespaceLookup = require( './NamespaceLookup.vue' ),

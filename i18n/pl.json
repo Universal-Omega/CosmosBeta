@@ -38,11 +38,11 @@
 	"cosmosbeta-searchsuggest-containing": "Szukaj stron zawierających <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "w:",
 	"cosmosbeta-article-header-categories-more": "i $1 więcej",
-	"cosmosbeta-themedesigner-success": "Pomyślnie zaktualizowano konfigurację skórki Kosmos.",
-	"cosmosbeta-themedesigner-text": "Dostosowywanie motywu skórki '''Kosmos'''.",
-	"cosmosbetathemedesigner": "Kreator motywu",
-	"right-cosmosbeta-themedesigner": "Dostęp do kreatora motywu skórki Kosmos",
-	"action-cosmosbeta-themedesigner": "używania kreatora motywu skórki Kosmos",
+	"cosmos-themedesigner-success": "Pomyślnie zaktualizowano konfigurację skórki Kosmos.",
+	"cosmos-themedesigner-text": "Dostosowywanie motywu skórki '''Kosmos'''.",
+	"cosmosthemedesigner": "Kreator motywu",
+	"right-cosmos-themedesigner": "Dostęp do kreatora motywu skórki Kosmos",
+	"action-cosmos-themedesigner": "używania kreatora motywu skórki Kosmos",
 	"cosmos.css": "/* Umieszczony tutaj kod CSS zostanie załadowany przez użytkowników korzystających ze skórki Kosmos */",
 	"cosmos.js": "/* Umieszczony tutaj kod JavaScript zostanie załadowany przez użytkowników korzystających ze skórki Kosmos */"
 }

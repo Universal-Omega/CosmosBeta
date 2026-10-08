@@ -41,9 +41,9 @@
 	"cosmosbeta-searchsuggest-containing": "Tìm trang có chứa <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "trong:",
 	"cosmosbeta-article-header-categories-more": "và $1 nữa",
-	"cosmosbeta-themedesigner-success": "Đã cập nhật cấu hình cho Cosmos thành công.",
-	"cosmosbeta-themedesigner-text": "Tùy chỉnh chủ đề cho giao diện '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Thiết kế chủ đề",
-	"right-cosmosbeta-themedesigner": "Sử dụng trình thiết kế chủ đề Cosmos",
-	"action-cosmosbeta-themedesigner": "sử dụng trình thiết kế chủ đề Cosmos"
+	"cosmos-themedesigner-success": "Đã cập nhật cấu hình cho Cosmos thành công.",
+	"cosmos-themedesigner-text": "Tùy chỉnh chủ đề cho giao diện '''Cosmos'''.",
+	"cosmosthemedesigner": "Thiết kế chủ đề",
+	"right-cosmos-themedesigner": "Sử dụng trình thiết kế chủ đề Cosmos",
+	"action-cosmos-themedesigner": "sử dụng trình thiết kế chủ đề Cosmos"
 }

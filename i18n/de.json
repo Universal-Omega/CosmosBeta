@@ -38,9 +38,9 @@
 	"cosmosbeta-searchsuggest-containing": "Suche nach Seiten, die <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong> enthalten",
 	"cosmosbeta-article-header-categories-in": "in:",
 	"cosmosbeta-article-header-categories-more": "und $1 weitere",
-	"cosmosbeta-themedesigner-success": "Konfiguration für Cosmos erfolgreich aktualisiert.",
-	"cosmosbeta-themedesigner-text": "Passe das Design für den '''Cosmos'''-Skin an.",
-	"cosmosbetathemedesigner": "Theme-Designer",
-	"right-cosmosbeta-themedesigner": "Cosmos ThemeDesigner verwenden",
-	"action-cosmosbeta-themedesigner": "Cosmos ThemeDesigner zu verwenden"
+	"cosmos-themedesigner-success": "Konfiguration für Cosmos erfolgreich aktualisiert.",
+	"cosmos-themedesigner-text": "Passe das Design für den '''Cosmos'''-Skin an.",
+	"cosmosthemedesigner": "Theme-Designer",
+	"right-cosmos-themedesigner": "Cosmos ThemeDesigner verwenden",
+	"action-cosmos-themedesigner": "Cosmos ThemeDesigner zu verwenden"
 }

@@ -39,11 +39,11 @@
 	"cosmosbeta-article-header-categories-in": "په:",
 	"cosmosbeta-article-header-categories-more-separator": "،&#32;",
 	"cosmosbeta-article-header-categories-more": "او $1 نور",
-	"cosmosbeta-themedesigner-success": "په بریالیتوب سره باندنۍ بڼه نړۍ ته واوښته.",
-	"cosmosbeta-themedesigner-text": "'''نړۍ''' پوښۍ ته د شاليد چمتو کول.",
-	"cosmosbetathemedesigner": "شاليد بڼه‌گر",
-	"right-cosmosbeta-themedesigner": "نړۍ شاليد‌بڼه‌گر وکاروئ",
-	"action-cosmosbeta-themedesigner": "نړۍ شاليد‌بڼه‌گر وکاروئ",
+	"cosmos-themedesigner-success": "په بریالیتوب سره باندنۍ بڼه نړۍ ته واوښته.",
+	"cosmos-themedesigner-text": "'''نړۍ''' پوښۍ ته د شاليد چمتو کول.",
+	"cosmosthemedesigner": "شاليد بڼه‌گر",
+	"right-cosmos-themedesigner": "نړۍ شاليد‌بڼه‌گر وکاروئ",
+	"action-cosmos-themedesigner": "نړۍ شاليد‌بڼه‌گر وکاروئ",
 	"cosmos.css": "/* دلته ټول سي‌اېس‌اېس به د کاينات پوښۍ کارنانو ته بار شي */",
 	"cosmos.js": "/* دلته ټول جاواسکريپټ به د کاينات پوښۍ کارنانو ته بار شي */"
 }

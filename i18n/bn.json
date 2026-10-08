@@ -45,11 +45,11 @@
 	"cosmosbeta-article-header-categories-in": "বিষয়:",
 	"cosmosbeta-article-header-categories-more-separator": ",&#32;",
 	"cosmosbeta-article-header-categories-more": "এবং আরও $1টি",
-	"cosmosbeta-themedesigner-success": "কসমসের কনফিগারেশন সফলভাবে হালনাগাদ করা হয়েছে।",
-	"cosmosbeta-themedesigner-text": "'''কসমস''' আবরণের জন্য থিম কাস্টমাইজ করুন।",
-	"cosmosbetathemedesigner": "থিম ডিজাইনার",
-	"right-cosmosbeta-themedesigner": "কসমস থিমডিজাইনার ব্যবহার",
-	"action-cosmosbeta-themedesigner": "কসমস থিমডিজাইনার ব্যবহার করুন",
+	"cosmos-themedesigner-success": "কসমসের কনফিগারেশন সফলভাবে হালনাগাদ করা হয়েছে।",
+	"cosmos-themedesigner-text": "'''কসমস''' আবরণের জন্য থিম কাস্টমাইজ করুন।",
+	"cosmosthemedesigner": "থিম ডিজাইনার",
+	"right-cosmos-themedesigner": "কসমস থিমডিজাইনার ব্যবহার",
+	"action-cosmos-themedesigner": "কসমস থিমডিজাইনার ব্যবহার করুন",
 	"cosmos.css": "/* এখানের সমস্ত সিএসএস কসমস স্কিন ব্যবহারকারীদের জন্য লোড হবে */",
 	"cosmos.js": "/* এখানের সকল জাভাস্ক্রিপ্ট কসমস আবরণ ব্যবহারকারীদের জন্য লোড হবে */"
 }

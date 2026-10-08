@@ -39,11 +39,11 @@
 	"cosmosbeta-article-header-categories-in": "v:",
 	"cosmosbeta-article-header-categories-more-separator": ",&#32;",
 	"cosmosbeta-article-header-categories-more": "in še $1",
-	"cosmosbeta-themedesigner-success": "Uspešno posodobljena konfiguracija za Cosmos.",
-	"cosmosbeta-themedesigner-text": "Prilagodite temo za preobleko '''Cosmos'''.",
-	"cosmosbetathemedesigner": "ThemeDesigner",
-	"right-cosmosbeta-themedesigner": "Uporaba orodja Cosmos ThemeDesigner",
-	"action-cosmosbeta-themedesigner": "uporabo orodja Cosmos ThemeDesigner",
+	"cosmos-themedesigner-success": "Uspešno posodobljena konfiguracija za Cosmos.",
+	"cosmos-themedesigner-text": "Prilagodite temo za preobleko '''Cosmos'''.",
+	"cosmosthemedesigner": "ThemeDesigner",
+	"right-cosmos-themedesigner": "Uporaba orodja Cosmos ThemeDesigner",
+	"action-cosmos-themedesigner": "uporabo orodja Cosmos ThemeDesigner",
 	"cosmos.css": "/* Vsa koda CSS tukaj se bo naložila za uporabnike preobleke Cosmos */",
 	"cosmos.js": "/* Vsa koda JavaScript tukaj se bo naložila za uporabnike preobleke Cosmos */"
 }

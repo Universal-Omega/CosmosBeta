@@ -78,7 +78,7 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	/** @inheritDoc */
 	public function getRestriction(): string {
-		return 'cosmosbeta-themedesigner';
+		return 'cosmos-themedesigner';
 	}
 
 	/** @inheritDoc */
@@ -119,11 +119,11 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		if ( $request->getCheck( 'saved' ) ) {
-			$out->addHTML( Html::successBox( $this->msg( 'cosmosbeta-themedesigner-success' )->escaped() ) );
+			$out->addHTML( Html::successBox( $this->msg( 'cosmos-themedesigner-success' )->escaped() ) );
 		}
 
-		$out->addWikiMsg( 'cosmosbeta-themedesigner-text' );
-		$out->addModules( [ 'skins.cosmosbeta.themedesigner' ] );
+		$out->addWikiMsg( 'cosmos-themedesigner-text' );
+		$out->addModules( [ 'skins.cosmos.themedesigner' ] );
 		$out->addJsConfigVars( 'wgCosmosThemeDesigner', $this->getClientData() );
 		$out->addHTML( $this->buildForm() );
 	}
@@ -139,7 +139,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		$this->checkReadOnly();
 
 		if ( !$this->getContext()->getCsrfTokenSet()->matchTokenField( 'wpEditToken' ) ) {
-			$out->addHTML( Html::errorBox( $this->msg( 'cosmosbeta-themedesigner-error-token' )->escaped() ) );
+			$out->addHTML( Html::errorBox( $this->msg( 'cosmos-themedesigner-error-token' )->escaped() ) );
 			return;
 		}
 
@@ -148,17 +148,17 @@ class SpecialThemeDesigner extends SpecialPage {
 			$saved = $this->store->restore(
 				$revertTo,
 				$this->getUser(),
-				$this->msg( 'cosmosbeta-themedesigner-restore-comment', $revertTo )->inContentLanguage()->text()
+				$this->msg( 'cosmos-themedesigner-restore-comment', $revertTo )->inContentLanguage()->text()
 			);
 
 			if ( $saved === null ) {
-				$out->addHTML( Html::errorBox( $this->msg( 'cosmosbeta-themedesigner-error-revision' )->escaped() ) );
+				$out->addHTML( Html::errorBox( $this->msg( 'cosmos-themedesigner-error-revision' )->escaped() ) );
 				return;
 			}
 		} else {
 			$decoded = json_decode( $request->getText( 'wpThemeJson' ), true );
 			if ( !is_array( $decoded ) ) {
-				$out->addHTML( Html::errorBox( $this->msg( 'cosmosbeta-themedesigner-error-json' )->escaped() ) );
+				$out->addHTML( Html::errorBox( $this->msg( 'cosmos-themedesigner-error-json' )->escaped() ) );
 				return;
 			}
 
@@ -191,16 +191,16 @@ class SpecialThemeDesigner extends SpecialPage {
 			'form-id' => 'skin-cosmos-themedesigner__form',
 			'action' => $this->getPageTitle()->getLocalURL(),
 			'html-token' => Html::hidden( 'wpEditToken', $this->getContext()->getCsrfTokenSet()->getToken()->toString() ),
-			'msg-nojs' => $this->msg( 'cosmosbeta-themedesigner-nojs' )->text(),
-			'msg-advanced' => $this->msg( 'cosmosbeta-themedesigner-advanced' )->text(),
-			'msg-advanced-help' => $this->msg( 'cosmosbeta-themedesigner-advanced-help' )->text(),
+			'msg-nojs' => $this->msg( 'cosmos-themedesigner-nojs' )->text(),
+			'msg-advanced' => $this->msg( 'cosmos-themedesigner-advanced' )->text(),
+			'msg-advanced-help' => $this->msg( 'cosmos-themedesigner-advanced-help' )->text(),
 			'json' => json_encode(
 				$this->store->getCurrent()->toArray(),
 				JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
 			),
 			'is-editable' => $this->canEdit(),
-			'msg-comment' => $this->msg( 'cosmosbeta-themedesigner-comment' )->text(),
-			'msg-publish' => $this->msg( 'cosmosbeta-themedesigner-publish' )->text(),
+			'msg-comment' => $this->msg( 'cosmos-themedesigner-comment' )->text(),
+			'msg-publish' => $this->msg( 'cosmos-themedesigner-publish' )->text(),
 		] );
 	}
 

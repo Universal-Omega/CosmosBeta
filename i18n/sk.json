@@ -39,11 +39,11 @@
 	"cosmosbeta-article-header-categories-in": "v:",
 	"cosmosbeta-article-header-categories-more-separator": ",&#32;",
 	"cosmosbeta-article-header-categories-more": "a $1 ďalších",
-	"cosmosbeta-themedesigner-success": "Konfigurácia pre Cosmos bola úspešne aktualizovaná.",
-	"cosmosbeta-themedesigner-text": "Prispôsobte si tému pre vzhľad '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Návrhár tém",
-	"right-cosmosbeta-themedesigner": "Používať Cosmos ThemeDesigner",
-	"action-cosmosbeta-themedesigner": "používať Cosmos ThemeDesigner",
+	"cosmos-themedesigner-success": "Konfigurácia pre Cosmos bola úspešne aktualizovaná.",
+	"cosmos-themedesigner-text": "Prispôsobte si tému pre vzhľad '''Cosmos'''.",
+	"cosmosthemedesigner": "Návrhár tém",
+	"right-cosmos-themedesigner": "Používať Cosmos ThemeDesigner",
+	"action-cosmos-themedesigner": "používať Cosmos ThemeDesigner",
 	"cosmos.css": "/* CSS umiestnené tu sa načíta používateľom témy vzhľadu Cosmos */",
 	"cosmos.js": "/* JavaScript umiestnený tu sa načíta používateľom témy vzhľadu Cosmos */"
 }

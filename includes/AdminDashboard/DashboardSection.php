@@ -11,6 +11,6 @@ enum DashboardSection: string {
 	case Content = 'content';
 
 	public function getMessageKey(): string {
-		return "cosmosbeta-admindashboard-section-{$this->value}";
+		return "cosmos-admindashboard-section-{$this->value}";
 	}
 }

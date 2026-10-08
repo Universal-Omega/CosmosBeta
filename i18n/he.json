@@ -41,9 +41,9 @@
 	"cosmosbeta-searchsuggest-containing": "חיפוש דפים שמכילים <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "שייך ל־:",
 	"cosmosbeta-article-header-categories-more": "ועוד $1",
-	"cosmosbeta-themedesigner-success": "התצורה של קוסמוס עודכנה בהצלחה.",
-	"cosmosbeta-themedesigner-text": "התאמה אישית של ערכת הנושא עבור עיצוב '''Cosmos'''.",
-	"cosmosbetathemedesigner": "מעצב נושאים",
-	"right-cosmosbeta-themedesigner": "שימוש במעצב ערכות העיצוב של קוסמוס",
-	"action-cosmosbeta-themedesigner": "להשתמש במעצב ערכות העיצוב של קוסמוס"
+	"cosmos-themedesigner-success": "התצורה של קוסמוס עודכנה בהצלחה.",
+	"cosmos-themedesigner-text": "התאמה אישית של ערכת הנושא עבור עיצוב '''Cosmos'''.",
+	"cosmosthemedesigner": "מעצב נושאים",
+	"right-cosmos-themedesigner": "שימוש במעצב ערכות העיצוב של קוסמוס",
+	"action-cosmos-themedesigner": "להשתמש במעצב ערכות העיצוב של קוסמוס"
 }

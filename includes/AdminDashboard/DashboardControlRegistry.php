@@ -119,7 +119,7 @@ final readonly class DashboardControlRegistry {
 	}
 
 	private function external( string $id, DashboardSection $section, MessageLocalizer $localizer ): ?DashboardControl {
-		$url = trim( $localizer->msg( "cosmosbeta-admindashboard-control-$id-url" )->inContentLanguage()->plain() );
+		$url = trim( $localizer->msg( "cosmos-admindashboard-control-$id-url" )->inContentLanguage()->plain() );
 		if ( !preg_match( '#^https?://#i', $url ) ) {
 			return null;
 		}

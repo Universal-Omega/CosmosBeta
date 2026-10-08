@@ -38,11 +38,11 @@
 	"cosmosbeta-searchsuggest-containing": "<strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong> ичинде болгъан бетлени изле",
 	"cosmosbeta-article-header-categories-in": "ичинде:",
 	"cosmosbeta-article-header-categories-more": "эмда $1 аслам",
-	"cosmosbeta-themedesigner-success": "Cosmos юсюн конфигурация джетишимли джангыртылды.",
-	"cosmosbeta-themedesigner-text": "'''Cosmos''' скин ючюн джасау теманы джарашдырыу.",
-	"cosmosbetathemedesigner": "Тема дизайнер",
-	"right-cosmosbeta-themedesigner": "Cosmos тема дизайнер хайырлан",
-	"action-cosmosbeta-themedesigner": "Cosmos тема дизайнер хайырлан",
+	"cosmos-themedesigner-success": "Cosmos юсюн конфигурация джетишимли джангыртылды.",
+	"cosmos-themedesigner-text": "'''Cosmos''' скин ючюн джасау теманы джарашдырыу.",
+	"cosmosthemedesigner": "Тема дизайнер",
+	"right-cosmos-themedesigner": "Cosmos тема дизайнер хайырлан",
+	"action-cosmos-themedesigner": "Cosmos тема дизайнер хайырлан",
 	"cosmos.css": "/* Мында орнатылгъан бютеу CSS код Космос джасау теманы хайырланыучулары ючюн джюкленникди */",
 	"cosmos.js": "/* Мында орнатылгъан бютеу JavaScript код Космос джасау теманы хайырланыучулары ючюн джюкленникди */"
 }

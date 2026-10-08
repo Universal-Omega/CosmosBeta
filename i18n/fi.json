@@ -33,7 +33,7 @@
 	"cosmosbeta-user-blocked": "Estetty",
 	"cosmosbeta-search-loader": "Ladataan hakuehdotuksia",
 	"cosmosbeta-article-header-categories-more": "ja $1 lisää",
-	"cosmosbeta-themedesigner-text": "Mukauta teema ulkoasulle '''Cosmos'''.",
-	"right-cosmosbeta-themedesigner": "Käyttää Cosmos ThemeDesigneria",
-	"action-cosmosbeta-themedesigner": "käyttää Cosmos ThemeDesigneria"
+	"cosmos-themedesigner-text": "Mukauta teema ulkoasulle '''Cosmos'''.",
+	"right-cosmos-themedesigner": "Käyttää Cosmos ThemeDesigneria",
+	"action-cosmos-themedesigner": "käyttää Cosmos ThemeDesigneria"
 }

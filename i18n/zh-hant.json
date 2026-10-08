@@ -39,9 +39,9 @@
 	"cosmosbeta-searchsuggest-containing": "搜尋包含 <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong> 的頁面",
 	"cosmosbeta-article-header-categories-in": "在：",
 	"cosmosbeta-article-header-categories-more": "以及另外 $1 個分類",
-	"cosmosbeta-themedesigner-success": "已成功更新Cosmos的配置。",
-	"cosmosbeta-themedesigner-text": "自訂用於 '''Cosmos''' 外觀的主題。",
-	"cosmosbetathemedesigner": "主題設計器",
-	"right-cosmosbeta-themedesigner": "使用Cosmos主題設計器",
-	"action-cosmosbeta-themedesigner": "使用Cosmos主題設計器"
+	"cosmos-themedesigner-success": "已成功更新Cosmos的配置。",
+	"cosmos-themedesigner-text": "自訂用於 '''Cosmos''' 外觀的主題。",
+	"cosmosthemedesigner": "主題設計器",
+	"right-cosmos-themedesigner": "使用Cosmos主題設計器",
+	"action-cosmos-themedesigner": "使用Cosmos主題設計器"
 }

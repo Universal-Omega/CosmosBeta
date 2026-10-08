@@ -17,10 +17,10 @@ final readonly class DashboardControl {
 	}
 
 	public function getLabelKey(): string {
-		return "cosmosbeta-admindashboard-control-{$this->id}-label";
+		return "cosmos-admindashboard-control-{$this->id}-label";
 	}
 
 	public function getDescriptionKey(): string {
-		return "cosmosbeta-admindashboard-control-{$this->id}-description";
+		return "cosmos-admindashboard-control-{$this->id}-description";
 	}
 }

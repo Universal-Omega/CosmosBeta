@@ -44,9 +44,9 @@
 	"cosmosbeta-searchsuggest-containing": "搜索包含<strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>的页面",
 	"cosmosbeta-article-header-categories-in": "分类：",
 	"cosmosbeta-article-header-categories-more": "以及另外$1个分类",
-	"cosmosbeta-themedesigner-success": "已成功更新Cosmos的配置。",
-	"cosmosbeta-themedesigner-text": "为'''Cosmos'''皮肤自定义主题。",
-	"cosmosbetathemedesigner": "主题设计器",
-	"right-cosmosbeta-themedesigner": "使用Cosmos主题设计器",
-	"action-cosmosbeta-themedesigner": "使用Cosmos主题设计器"
+	"cosmos-themedesigner-success": "已成功更新Cosmos的配置。",
+	"cosmos-themedesigner-text": "为'''Cosmos'''皮肤自定义主题。",
+	"cosmosthemedesigner": "主题设计器",
+	"right-cosmos-themedesigner": "使用Cosmos主题设计器",
+	"action-cosmos-themedesigner": "使用Cosmos主题设计器"
 }

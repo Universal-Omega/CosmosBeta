@@ -78,9 +78,9 @@ class ConfigNames {
 
 	public const string SocialProfileTagGroups = 'CosmosBetaSocialProfileTagGroups';
 
-	public const string ThemeDesignerOnly = 'CosmosBetaThemeDesignerOnly';
+	public const string ThemeDesignerOnly = 'CosmosThemeDesignerOnly';
 
-	public const string ThemeDesignerPublicView = 'CosmosBetaThemeDesignerPublicView';
+	public const string ThemeDesignerPublicView = 'CosmosThemeDesignerPublicView';
 
 	public const string ToolbarBackgroundColor = 'CosmosBetaToolbarBackgroundColor';
 

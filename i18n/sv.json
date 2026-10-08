@@ -38,11 +38,11 @@
 	"cosmosbeta-searchsuggest-containing": "Sök efter sidor som innehåller <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "i:",
 	"cosmosbeta-article-header-categories-more": "och $1 till",
-	"cosmosbeta-themedesigner-success": "Uppdaterade konfigurationen för Cosmos.",
-	"cosmosbeta-themedesigner-text": "Anpassa temat för utseendet '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Temadesigner",
-	"right-cosmosbeta-themedesigner": "Använd temadesignern för Cosmos",
-	"action-cosmosbeta-themedesigner": "använda temadesignern för Cosmos",
+	"cosmos-themedesigner-success": "Uppdaterade konfigurationen för Cosmos.",
+	"cosmos-themedesigner-text": "Anpassa temat för utseendet '''Cosmos'''.",
+	"cosmosthemedesigner": "Temadesigner",
+	"right-cosmos-themedesigner": "Använd temadesignern för Cosmos",
+	"action-cosmos-themedesigner": "använda temadesignern för Cosmos",
 	"cosmos.css": "/* All CSS här kommer att läsas in för de som använder utseendet Cosmos */",
 	"cosmos.js": "/* All JavaScript här kommer att läsas in för alla som använder utseendet Cosmos */"
 }

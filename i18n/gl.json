@@ -37,11 +37,11 @@
 	"cosmosbeta-searchsuggest-containing": "Procurar as páxinas que conteñan «<strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>»",
 	"cosmosbeta-article-header-categories-in": "en:",
 	"cosmosbeta-article-header-categories-more": "e $1 máis",
-	"cosmosbeta-themedesigner-success": "Actualizouse correctamente a configuración de Cosmos.",
-	"cosmosbeta-themedesigner-text": "Personalizar o tema para o aspecto '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Deseñador de temas",
-	"right-cosmosbeta-themedesigner": "Usar o deseñador de temas de Cosmos",
-	"action-cosmosbeta-themedesigner": "usar o deseñador de temas de Cosmos",
+	"cosmos-themedesigner-success": "Actualizouse correctamente a configuración de Cosmos.",
+	"cosmos-themedesigner-text": "Personalizar o tema para o aspecto '''Cosmos'''.",
+	"cosmosthemedesigner": "Deseñador de temas",
+	"right-cosmos-themedesigner": "Usar o deseñador de temas de Cosmos",
+	"action-cosmos-themedesigner": "usar o deseñador de temas de Cosmos",
 	"cosmos.css": "/* O CSS colocado aquí afectará aos usuarios da aparencia Cosmos */",
 	"cosmos.js": "/* O código JavaScript colocado aquí cargarase para os usuarios que utilicen a aparencia Cosmos */"
 }

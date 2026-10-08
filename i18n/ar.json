@@ -40,11 +40,11 @@
 	"cosmosbeta-searchsuggest-containing": "ابحث عن الصفحات التي تحتوي على <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "في:",
 	"cosmosbeta-article-header-categories-more": "و $1 آخر",
-	"cosmosbeta-themedesigner-success": "تم تحديث التكوين بنجاح لـ Cosmos.",
-	"cosmosbeta-themedesigner-text": "تخصيص المظهر لجلد \"\" Cosmos \"\".",
-	"cosmosbetathemedesigner": "مصمم المظهر",
-	"right-cosmosbeta-themedesigner": "استخدم Cosmos ThemeDesigner",
-	"action-cosmosbeta-themedesigner": "استخدم Cosmos ThemeDesigner",
+	"cosmos-themedesigner-success": "تم تحديث التكوين بنجاح لـ Cosmos.",
+	"cosmos-themedesigner-text": "تخصيص المظهر لجلد \"\" Cosmos \"\".",
+	"cosmosthemedesigner": "مصمم المظهر",
+	"right-cosmos-themedesigner": "استخدم Cosmos ThemeDesigner",
+	"action-cosmos-themedesigner": "استخدم Cosmos ThemeDesigner",
 	"cosmos.css": "/ * سيتم تحميل جميع CSS هنا لمستخدمي مظهر Cosmos * /",
 	"cosmos.js": "/ * سيتم تحميل جميع JavaScript هنا لمستخدمي مظهر Cosmos * /"
 }

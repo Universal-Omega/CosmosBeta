@@ -38,11 +38,11 @@
 	"cosmosbeta-searchsuggest-containing": "Cirche le pàggene ca tènene <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "in:",
 	"cosmosbeta-article-header-categories-more": "e otre $1",
-	"cosmosbeta-themedesigner-success": "Configurazione aggiornate pe Cosmos.",
-	"cosmosbeta-themedesigner-text": "Personalizze 'u teme pu skin '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Progettiste d'u teme",
-	"right-cosmosbeta-themedesigner": "Ause Cosmos ThemeDesigner",
-	"action-cosmosbeta-themedesigner": "ause Cosmos ThemeDesigner",
+	"cosmos-themedesigner-success": "Configurazione aggiornate pe Cosmos.",
+	"cosmos-themedesigner-text": "Personalizze 'u teme pu skin '''Cosmos'''.",
+	"cosmosthemedesigner": "Progettiste d'u teme",
+	"right-cosmos-themedesigner": "Ause Cosmos ThemeDesigner",
+	"action-cosmos-themedesigner": "ause Cosmos ThemeDesigner",
 	"cosmos.css": "/* Tutte le CSS aqquà avène carecate pe le utinde ca ausane 'a masckere Cosmos */",
 	"cosmos.js": "/* Tutte le JavaScript aqquà avène carecate pe le utinde ca ausane 'a masckere Cosmos */"
 }

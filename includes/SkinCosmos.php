@@ -197,7 +197,7 @@ class SkinCosmos extends SkinMustache {
 		}
 
 		if ( $this->theme->getFooterSettings()['showIcons'] ) {
-			$modules['styles']['skin'][] = 'skins.cosmosbeta.footer.codex';
+			$modules['styles']['skin'][] = 'skins.cosmos.footer.codex';
 		}
 
 		if ( $this->extensionRegistry->isLoaded( 'PortableInfobox' ) ) {

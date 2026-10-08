@@ -43,11 +43,11 @@
 	"cosmosbeta-searchsuggest-containing": "Знайдіть сторінки, що містять <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "в:",
 	"cosmosbeta-article-header-categories-more": "і ще $1",
-	"cosmosbeta-themedesigner-success": "Конфігурацію Cosmos успішно оновлено.",
-	"cosmosbeta-themedesigner-text": "Налаштуйте тему для скіна '''Космос'''.",
-	"cosmosbetathemedesigner": "Конструктор тем",
-	"right-cosmosbeta-themedesigner": "Використання конструктору тем Cosmos",
-	"action-cosmosbeta-themedesigner": "використання конструктору тем Cosmos",
+	"cosmos-themedesigner-success": "Конфігурацію Cosmos успішно оновлено.",
+	"cosmos-themedesigner-text": "Налаштуйте тему для скіна '''Космос'''.",
+	"cosmosthemedesigner": "Конструктор тем",
+	"right-cosmos-themedesigner": "Використання конструктору тем Cosmos",
+	"action-cosmos-themedesigner": "використання конструктору тем Cosmos",
 	"cosmos.css": "/* Усі CSS тут будуть завантажені для користувачів скіна Cosmos */",
 	"cosmos.js": "/* Усі JavaScript тут будуть завантажені для користувачів скіна Cosmos */"
 }

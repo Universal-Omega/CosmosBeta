@@ -44,11 +44,11 @@
 	"cosmosbeta-article-header-categories-in": "şurada:",
 	"cosmosbeta-article-header-categories-more-separator": ",&#32;",
 	"cosmosbeta-article-header-categories-more": "ve $1 daha",
-	"cosmosbeta-themedesigner-success": "Cosmos için yapılandırma başarıyla güncellendi.",
-	"cosmosbeta-themedesigner-text": "'''Cosmos''' görünümü için temayı özelleştirin.",
-	"cosmosbetathemedesigner": "Tema Tasarımcısı",
-	"right-cosmosbeta-themedesigner": "Cosmos ThemeDesigner kullan",
-	"action-cosmosbeta-themedesigner": "Cosmos ThemeDesigner kullanmaya",
+	"cosmos-themedesigner-success": "Cosmos için yapılandırma başarıyla güncellendi.",
+	"cosmos-themedesigner-text": "'''Cosmos''' görünümü için temayı özelleştirin.",
+	"cosmosthemedesigner": "Tema Tasarımcısı",
+	"right-cosmos-themedesigner": "Cosmos ThemeDesigner kullan",
+	"action-cosmos-themedesigner": "Cosmos ThemeDesigner kullanmaya",
 	"cosmos.css": "/* All CSS here will be loaded for users of the Cosmos skin */",
 	"cosmos.js": "/* All JavaScript here will be loaded for users of the Cosmos skin */"
 }

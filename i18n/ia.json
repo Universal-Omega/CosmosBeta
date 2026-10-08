@@ -37,11 +37,11 @@
 	"cosmosbeta-searchsuggest-containing": "Cercar paginas que contine <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "in:",
 	"cosmosbeta-article-header-categories-more": "e $1 alteres",
-	"cosmosbeta-themedesigner-success": "Le configuration de Cosmos ha essite actualisate.",
-	"cosmosbeta-themedesigner-text": "Personalisar le thema pro le apparentia '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Designator de themas",
-	"right-cosmosbeta-themedesigner": "Usar le designator de themas de Cosmos",
-	"action-cosmosbeta-themedesigner": "usar le designator de themas de Cosmos",
+	"cosmos-themedesigner-success": "Le configuration de Cosmos ha essite actualisate.",
+	"cosmos-themedesigner-text": "Personalisar le thema pro le apparentia '''Cosmos'''.",
+	"cosmosthemedesigner": "Designator de themas",
+	"right-cosmos-themedesigner": "Usar le designator de themas de Cosmos",
+	"action-cosmos-themedesigner": "usar le designator de themas de Cosmos",
 	"cosmos.css": "/* Le codice CSS placiate essera cargate pro le usatores del apparentia Cosmos */",
 	"cosmos.js": "/* Le codice JavaScript placiate hic essera cargate pro le usatores del apparentia Cosmos */"
 }

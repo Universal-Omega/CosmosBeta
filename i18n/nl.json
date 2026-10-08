@@ -40,9 +40,9 @@
 	"cosmosbeta-searchsuggest-containing": "Zoek naar pagina's die <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong> bevatten",
 	"cosmosbeta-article-header-categories-in": "in:",
 	"cosmosbeta-article-header-categories-more": "en $1 meer",
-	"cosmosbeta-themedesigner-success": "De instellingen van Cosmos zijn bijgewerkt.",
-	"cosmosbeta-themedesigner-text": "Het ontwerp van de vormgeving '''Cosmos''' aanpassen.",
-	"cosmosbetathemedesigner": "Thema-ontwerper",
-	"right-cosmosbeta-themedesigner": "Cosmos ThemeDesigner gebruiken",
-	"action-cosmosbeta-themedesigner": "Cosmos ThemeDesigner te gebruiken"
+	"cosmos-themedesigner-success": "De instellingen van Cosmos zijn bijgewerkt.",
+	"cosmos-themedesigner-text": "Het ontwerp van de vormgeving '''Cosmos''' aanpassen.",
+	"cosmosthemedesigner": "Thema-ontwerper",
+	"right-cosmos-themedesigner": "Cosmos ThemeDesigner gebruiken",
+	"action-cosmos-themedesigner": "Cosmos ThemeDesigner te gebruiken"
 }

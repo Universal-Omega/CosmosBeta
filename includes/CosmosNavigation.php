@@ -348,7 +348,7 @@ class CosmosNavigation {
 	 */
 	public function getAllowedIcons(): array {
 		$modules = $this->extensionRegistry->getAttribute( 'ResourceModules' );
-		return $modules['skins.cosmosbeta.icons']['icons'] ?? [];
+		return $modules['skins.cosmos.icons']['icons'] ?? [];
 	}
 
 	private function isSkippedLine( string $name ): bool {

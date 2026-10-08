@@ -32,9 +32,9 @@
 	"cosmosbeta-searchsuggest-containing": "Listra pa página ku ta kontene <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "den:",
 	"cosmosbeta-article-header-categories-more": "i $1 mas",
-	"cosmosbeta-themedesigner-success": "E konfigurashon di Cosmos a wòrdu aktualisá.",
-	"cosmosbeta-themedesigner-text": "Personalisá e aparensia pa diseño '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Diseñador di Aparensia",
-	"right-cosmosbeta-themedesigner": "Usa Diseño di Aparensia di Cosmos",
-	"action-cosmosbeta-themedesigner": "Usa Diseño di Aparensia di Cosmos"
+	"cosmos-themedesigner-success": "E konfigurashon di Cosmos a wòrdu aktualisá.",
+	"cosmos-themedesigner-text": "Personalisá e aparensia pa diseño '''Cosmos'''.",
+	"cosmosthemedesigner": "Diseñador di Aparensia",
+	"right-cosmos-themedesigner": "Usa Diseño di Aparensia di Cosmos",
+	"action-cosmos-themedesigner": "Usa Diseño di Aparensia di Cosmos"
 }

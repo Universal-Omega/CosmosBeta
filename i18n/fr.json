@@ -44,11 +44,11 @@
 	"cosmosbeta-article-header-categories-in": "dans :",
 	"cosmosbeta-article-header-categories-more-separator": ",&#32;",
 	"cosmosbeta-article-header-categories-more": "et $1 de plus",
-	"cosmosbeta-themedesigner-success": "Configuration bien mise à jour pour Cosmos.",
-	"cosmosbeta-themedesigner-text": "Personnaliser le thème de l’habillage '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Concepteur de thème",
-	"right-cosmosbeta-themedesigner": "Utiliser le concepteur de thème de Cosmos",
-	"action-cosmosbeta-themedesigner": "utiliser le concepteur de thème de Cosmos",
+	"cosmos-themedesigner-success": "Configuration bien mise à jour pour Cosmos.",
+	"cosmos-themedesigner-text": "Personnaliser le thème de l’habillage '''Cosmos'''.",
+	"cosmosthemedesigner": "Concepteur de thème",
+	"right-cosmos-themedesigner": "Utiliser le concepteur de thème de Cosmos",
+	"action-cosmos-themedesigner": "utiliser le concepteur de thème de Cosmos",
 	"cosmos.css": "/* Tout CSS placé ici sera chargé avec les pages accédées par les utilisateurs de l’habillage Cosmos */",
 	"cosmos.js": "/* Tout code JavaScript placé ici sera chargé avec les pages accédées par les utilisateurs de l’habillage Cosmos */"
 }

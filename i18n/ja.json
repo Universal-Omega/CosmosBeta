@@ -35,7 +35,7 @@
 	"cosmosbeta-newfiles": "新しいファイル",
 	"cosmosbeta-user-blocked": "ブロック済み",
 	"cosmosbeta-search-loader": "検索候補を読み込んでいます",
-	"cosmosbeta-themedesigner-text": "'''Cosmos''' 外装のテーマをカスタマイズします。",
-	"cosmosbetathemedesigner": "テーマデザイナー",
+	"cosmos-themedesigner-text": "'''Cosmos''' 外装のテーマをカスタマイズします。",
+	"cosmosthemedesigner": "テーマデザイナー",
 	"cosmos.js": "/* ここにあるすべてのJavaScriptは、コスモス外装を使用している利用者に対して読み込まれます */"
 }

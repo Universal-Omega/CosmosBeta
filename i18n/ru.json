@@ -48,11 +48,11 @@
 	"cosmosbeta-searchsuggest-containing": "Поиск страниц, содержащих <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "в:",
 	"cosmosbeta-article-header-categories-more": "и {{PLURAL:$1|$1 другая|$1 других}}",
-	"cosmosbeta-themedesigner-success": "Конфигурация Cosmos успешно обновлена.",
-	"cosmosbeta-themedesigner-text": "Настройка темы для оформления '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Дизайнер тем",
-	"right-cosmosbeta-themedesigner": "Использовать дизайнер тем Cosmos",
-	"action-cosmosbeta-themedesigner": "использовать дизайнер тем Cosmos",
+	"cosmos-themedesigner-success": "Конфигурация Cosmos успешно обновлена.",
+	"cosmos-themedesigner-text": "Настройка темы для оформления '''Cosmos'''.",
+	"cosmosthemedesigner": "Дизайнер тем",
+	"right-cosmos-themedesigner": "Использовать дизайнер тем Cosmos",
+	"action-cosmos-themedesigner": "использовать дизайнер тем Cosmos",
 	"cosmos.css": "/* Весь размещённый здесь код CSS будет загружен для пользователей темы оформления Cosmos */",
 	"cosmos.js": "/* Весь размещённый здесь код JavaScript будет загружен для пользователей темы оформления Cosmos */"
 }

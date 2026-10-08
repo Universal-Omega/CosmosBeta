@@ -80,7 +80,7 @@
 </template>
 
 <script>
-const { CdxAccordion, CdxButton, CdxField, CdxSelect, CdxToggleSwitch } = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
+const { CdxAccordion, CdxButton, CdxField, CdxSelect, CdxToggleSwitch } = mw.loader.require( 'skins.cosmos.themedesigner.codex' ),
 	{ computed, defineComponent } = require( 'vue' ),
 	msg = require( '../msg.js' ),
 	NamespaceLookup = require( './NamespaceLookup.vue' ),

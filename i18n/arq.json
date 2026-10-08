@@ -37,9 +37,9 @@
 	"cosmosbeta-searchsuggest-containing": "ابحث على الصفحات اللي تحوي <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "في:",
 	"cosmosbeta-article-header-categories-more": "و $1 آخر",
-	"cosmosbeta-themedesigner-success": "الإعدادات تاع Cosmos تحدثت بنجاح.",
-	"cosmosbeta-themedesigner-text": "خصص الثيم لتصميم '''Cosmos'''.",
-	"cosmosbetathemedesigner": "مصمم المظهر",
-	"right-cosmosbeta-themedesigner": "استعمل Cosmos ThemeDesigner",
-	"action-cosmosbeta-themedesigner": "استخدم Cosmos ThemeDesigner"
+	"cosmos-themedesigner-success": "الإعدادات تاع Cosmos تحدثت بنجاح.",
+	"cosmos-themedesigner-text": "خصص الثيم لتصميم '''Cosmos'''.",
+	"cosmosthemedesigner": "مصمم المظهر",
+	"right-cosmos-themedesigner": "استعمل Cosmos ThemeDesigner",
+	"action-cosmos-themedesigner": "استخدم Cosmos ThemeDesigner"
 }

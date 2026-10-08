@@ -40,11 +40,11 @@
 	"cosmosbeta-searchsuggest-containing": "Procurar pelas páginas contendo <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "em:",
 	"cosmosbeta-article-header-categories-more": "e mais $1",
-	"cosmosbeta-themedesigner-success": "Configuração atualizada com sucesso para Cosmos.",
-	"cosmosbeta-themedesigner-text": "Personalize o tema do visual ‘’'Cosmos'‘’.",
-	"cosmosbetathemedesigner": "Designer de tema",
-	"right-cosmosbeta-themedesigner": "Usar o designer de tema de Cosmos",
-	"action-cosmosbeta-themedesigner": "usar o designer de tema de Cosmos",
+	"cosmos-themedesigner-success": "Configuração atualizada com sucesso para Cosmos.",
+	"cosmos-themedesigner-text": "Personalize o tema do visual ‘’'Cosmos'‘’.",
+	"cosmosthemedesigner": "Designer de tema",
+	"right-cosmos-themedesigner": "Usar o designer de tema de Cosmos",
+	"action-cosmos-themedesigner": "usar o designer de tema de Cosmos",
 	"cosmos.css": "/* Todo o CSS aqui será carregado para os usuários da skin Cosmos */",
 	"cosmos.js": "/* Todo o JavaScript aqui será carregado para os usuários da skin Cosmos */"
 }

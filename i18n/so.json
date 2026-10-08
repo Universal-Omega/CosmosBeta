@@ -37,9 +37,9 @@
 	"cosmosbeta-searchsuggest-containing": "Raadi bogagga ay ku jiraan <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "ee:",
 	"cosmosbeta-article-header-categories-more": "iyo $1 dheeraad",
-	"cosmosbeta-themedesigner-success": "Qaabaynta Cosmos si guul leh ayaa loo cusboonaysiiyay.",
-	"cosmosbeta-themedesigner-text": "Habee mawduuca maqaarka '''Cosmos'''.",
-	"cosmosbetathemedesigner": "Naqshadeeyaha mawduuca",
-	"right-cosmosbeta-themedesigner": "Isticmaal Cosmos ThemeDesigner",
-	"action-cosmosbeta-themedesigner": "Isticmaal Cosmos ThemeDesigner"
+	"cosmos-themedesigner-success": "Qaabaynta Cosmos si guul leh ayaa loo cusboonaysiiyay.",
+	"cosmos-themedesigner-text": "Habee mawduuca maqaarka '''Cosmos'''.",
+	"cosmosthemedesigner": "Naqshadeeyaha mawduuca",
+	"right-cosmos-themedesigner": "Isticmaal Cosmos ThemeDesigner",
+	"action-cosmos-themedesigner": "Isticmaal Cosmos ThemeDesigner"
 }

@@ -38,11 +38,11 @@
 	"cosmosbeta-searchsuggest-containing": "Пребарај страници кои го содржат <strong class=\"cdx-typeahead-search__search-footer__query\">$1</strong>",
 	"cosmosbeta-article-header-categories-in": "во:",
 	"cosmosbeta-article-header-categories-more": "и уште $1",
-	"cosmosbeta-themedesigner-success": "Успешнно ја подновивте поставеноста на Космос.",
-	"cosmosbeta-themedesigner-text": "Прилагодување на изгледот на рувото '''Космос'''.",
-	"cosmosbetathemedesigner": "Уредник на изглед",
-	"right-cosmosbeta-themedesigner": "Користи Уредник на изглед за „Космос“",
-	"action-cosmosbeta-themedesigner": "користење на уредникот за изглед на „Космос“",
+	"cosmos-themedesigner-success": "Успешнно ја подновивте поставеноста на Космос.",
+	"cosmos-themedesigner-text": "Прилагодување на изгледот на рувото '''Космос'''.",
+	"cosmosthemedesigner": "Уредник на изглед",
+	"right-cosmos-themedesigner": "Користи Уредник на изглед за „Космос“",
+	"action-cosmos-themedesigner": "користење на уредникот за изглед на „Космос“",
 	"cosmos.css": "/* Тука поставениот CSS се однесува на корисниците на рувото „Космос“ */",
 	"cosmos.js": "/* Сиот тука поставен JavaScript ќе им се вчитува на корисниците што го користат рувото „Космос“ */"
 }

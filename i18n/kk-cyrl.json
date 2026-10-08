@@ -35,9 +35,9 @@
 	"cosmosbeta-searchsuggest-containing": "<strong class=\"cdx-typeahead-search__search-footer__query\">\"$1\"</strong> бар беттерді іздеу",
 	"cosmosbeta-article-header-categories-in": "Санаттар:",
 	"cosmosbeta-article-header-categories-more": "... тағы $1",
-	"cosmosbeta-themedesigner-success": "Cosmos конфигурациясы сәтті жаңартылды.",
-	"cosmosbeta-themedesigner-text": "'''Cosmos''' скиніне арналған тақырыпты теңшеңіз.",
-	"cosmosbetathemedesigner": "Тақырып құрушы",
-	"right-cosmosbeta-themedesigner": "Cosmos тақырып құрушысын пайдалану",
-	"action-cosmosbeta-themedesigner": "Cosmos тақырып құрушысын пайдалану"
+	"cosmos-themedesigner-success": "Cosmos конфигурациясы сәтті жаңартылды.",
+	"cosmos-themedesigner-text": "'''Cosmos''' скиніне арналған тақырыпты теңшеңіз.",
+	"cosmosthemedesigner": "Тақырып құрушы",
+	"right-cosmos-themedesigner": "Cosmos тақырып құрушысын пайдалану",
+	"action-cosmos-themedesigner": "Cosmos тақырып құрушысын пайдалану"
 }
