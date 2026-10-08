@@ -2,18 +2,22 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\MainConfigNames;
-use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\Rail\RailRules;
+use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
+use function array_diff;
+use function array_values;
 
 class CosmosConfig {
 
 	public const array CONSTRUCTOR_OPTIONS = [
+		ConfigNames::AllowFooterIconHiding,
 		ConfigNames::BackgroundImage,
 		ConfigNames::BackgroundImageFixed,
 		ConfigNames::BackgroundImageRepeat,
@@ -24,6 +28,7 @@ class CosmosConfig {
 		ConfigNames::ContentOpacityLevel,
 		ConfigNames::ContentWidth,
 		ConfigNames::FooterBackgroundColor,
+		ConfigNames::FooterProtectedLinks,
 		ConfigNames::LinkColor,
 		ConfigNames::MainBackgroundColor,
 		ConfigNames::ToolbarBackgroundColor,
@@ -45,9 +50,9 @@ class CosmosConfig {
 	];
 
 	public function __construct(
-		private readonly ServiceOptions $options,
-		private readonly ThemeStore $themeStore,
 		private readonly ColorModeResolver $colorModeResolver,
+		private readonly ThemeStore $themeStore,
+		private readonly ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
@@ -58,6 +63,14 @@ class CosmosConfig {
 
 	public function getDefaultMode(): string {
 		return $this->getTheme()->getDefaultMode();
+	}
+
+	public function isAutoColorMode(): bool {
+		return $this->getTheme()->isAutoMode();
+	}
+
+	public function hasColorModePreference(): bool {
+		return $this->colorModeResolver->hasPreference( RequestContext::getMain()->getUser() );
 	}
 
 	public function getAltMode(): string {
@@ -72,9 +85,7 @@ class CosmosConfig {
 		return $this->colorModeResolver->getRenderMode( RequestContext::getMain()->getUser() );
 	}
 
-	public function getColor( string $slot, ?string $mode = null ): string {
-		$mode ??= $this->getRenderMode();
-
+	public function getColor( string $slot, string $mode ): string {
 		return $this->getTheme()->getColor( $mode, $slot ) ?? $this->getFallbackColor( $slot, $mode );
 	}
 
@@ -137,6 +148,22 @@ class CosmosConfig {
 			$this->options->get( ConfigNames::ContentOpacityLevel ) );
 	}
 
+	public function getHeaderButtonOpacity(): int {
+		return (int)$this->getTheme()->getSection( 'layout' )['headerButtonOpacity'];
+	}
+
+	public function getBackdropBlur(): int {
+		return (int)$this->getTheme()->getSection( 'layout' )['backdropBlur'];
+	}
+
+	public function hasHeaderBorder(): bool {
+		return (bool)$this->getTheme()->getSection( 'layout' )['headerBorder'];
+	}
+
+	public function getButtonStyle(): string {
+		return (string)$this->getTheme()->getSection( 'layout' )['buttonStyle'];
+	}
+
 	public function getFooterOpacity(): int {
 		return (int)$this->getTheme()->getSection( 'footer' )['opacity'];
 	}
@@ -146,10 +173,34 @@ class CosmosConfig {
 	}
 
 	public function getFooterSettings(): array {
-		return $this->getTheme()->getSection( 'footer' );
+		$settings = $this->getTheme()->getSection( 'footer' );
+		$settings['hiddenLinks'] = array_values(
+			array_diff( $settings['hiddenLinks'], $this->getFooterProtectedLinks() )
+		);
+
+		$settings['showIcons'] = $settings['showIcons'] || !$this->canHideFooterIcons();
+		return $settings;
+	}
+
+	/** @return string[] */
+	public function getFooterProtectedLinks(): array {
+		return (array)$this->options->get( ConfigNames::FooterProtectedLinks );
+	}
+
+	public function canHideFooterIcons(): bool {
+		return (bool)$this->options->get( ConfigNames::AllowFooterIconHiding );
 	}
 
 	public function getRailSettings(): array {
 		return $this->getTheme()->getSection( 'rail' );
+	}
+
+	public function getRailRules( string $moduleId ): RailRules {
+		return RailRules::newFromArray( $this->getRailSettings()['modules'][$moduleId] ?? [] );
+	}
+
+	/** @return array<int, array{id: string, message: string, header: string}> */
+	public function getCustomRailModules(): array {
+		return $this->getRailSettings()['customModules'];
 	}
 }

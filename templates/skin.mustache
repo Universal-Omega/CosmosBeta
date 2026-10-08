@@ -1,16 +1,16 @@
 {{> Banner}}
 {{#data-cosmos-dialog}}{{> CreatePageDialog}}{{/data-cosmos-dialog}}
-<div id="mw-content-container" class="ts-container">
-	<div id="mw-content-block" class="ts-inner">
+<div id="mw-content-container" class="ts-container skin-cosmos-container">
+	<div id="mw-content-block" class="ts-inner skin-cosmos-container__inner">
 		<div id="mw-content-wrapper">
 			{{#data-cosmos-header}}{{> WikiHeader}}{{/data-cosmos-header}}
 			<section id="mw-content">
-				<div id="content" class="skin-cosmos-pageAligned cosmos-pageAligned mw-body">
+				<div id="content" class="skin-cosmos-page-aligned cosmos-pageAligned mw-body">
 					<a id="top"></a>
 					<header id="cosmos-page-header">
 						{{#data-cosmos-page-header}}{{> PageHeader}}{{/data-cosmos-page-header}}
 					</header>
-					<div class="skin-cosmos-articleContainer cosmos-articleContainer" id="bodyContent">
+					<div class="skin-cosmos-article-container cosmos-articleContainer" id="bodyContent">
 						<article id="cosmos-pageBody-content">
 							{{#html-subtitle}}<div id="cosmos-pageContent-subtitle">{{{.}}}</div>{{/html-subtitle}}
 							{{#html-undelete-link}}<div id="cosmos-pageContent-undelete">{{{.}}}</div>{{/html-undelete-link}}

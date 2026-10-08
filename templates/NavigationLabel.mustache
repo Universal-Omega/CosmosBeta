@@ -1,7 +1,8 @@
 <div class="skin-cosmos-nav__label wds-tabs__tab-label{{#has-children}} skin-cosmos-menu__toggle wds-dropdown__toggle{{/has-children}}" id="p-{{id}}-label">
 	<a href="{{href}}"{{#rel-nofollow}} rel="nofollow"{{/rel-nofollow}}>
-		{{#is-explore}}<span class="skin-cosmos-icon skin-cosmos-icon-map" id="cosmos-icons-explore" aria-hidden="true"></span>{{/is-explore}}
-		<span{{#is-explore}} style="padding-top: 2px;"{{/is-explore}}>{{text}}</span>
-		{{#has-children}}<span class="skin-cosmos-icon skin-cosmos-icon-expand skin-cosmos-menu__chevron wds-dropdown__toggle-chevron" aria-hidden="true"></span>{{/has-children}}
+		{{#is-explore}}<span class="skin-cosmos-icon skin-cosmos-icon-{{#icon}}{{.}}{{/icon}}{{^icon}}globe{{/icon}} skin-cosmos-nav__icon wds-icon" id="cosmos-icons-explore" aria-hidden="true"></span>{{/is-explore}}
+		{{^is-explore}}{{#icon}}<span class="skin-cosmos-icon skin-cosmos-icon-{{.}} skin-cosmos-nav__icon" aria-hidden="true"></span>{{/icon}}{{/is-explore}}
+		<span>{{text}}</span>
+		{{#has-children}}<span class="skin-cosmos-icon skin-cosmos-icon-expand skin-cosmos-menu__chevron wds-dropdown__toggle-chevron wds-icon wds-icon-tiny" aria-hidden="true"></span>{{/has-children}}
 	</a>
 </div>

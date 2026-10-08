@@ -2,18 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Maintenance;
+namespace MediaWiki\Skin\Cosmos\Maintenance;
 
 use MediaWiki\MainConfigNames;
 use MediaWiki\Maintenance\LoggedUpdateMaintenance;
 use MediaWiki\Maintenance\LoggedUpdateOutcome;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use MediaWiki\User\User;
 use function file_get_contents;
 use function is_array;
 use function is_file;
 use function json_decode;
+use const MW_INSTALL_PATH;
 
 class ImportLegacyTheme extends LoggedUpdateMaintenance {
 
@@ -27,7 +28,7 @@ class ImportLegacyTheme extends LoggedUpdateMaintenance {
 	}
 
 	protected function getUpdateKey(): string {
-		return __CLASS__;
+		return self::class;
 	}
 
 	private function initServices(): void {
@@ -36,7 +37,6 @@ class ImportLegacyTheme extends LoggedUpdateMaintenance {
 
 	protected function doDBUpdates(): LoggedUpdateOutcome {
 		$this->initServices();
-
 		if ( $this->themeStore->getCurrent()->getRevisionId() !== 0 ) {
 			$this->output( "A theme is already stored, nothing to import.\n" );
 			return LoggedUpdateOutcome::COMPLETE;
@@ -61,12 +61,11 @@ class ImportLegacyTheme extends LoggedUpdateMaintenance {
 
 		$this->themeStore->save(
 			ThemeSettings::newFromLegacy( $values ),
-			User::newSystemUser( 'CosmosBeta ThemeDesigner', [ 'steal' => true ] ),
+			User::newSystemUser( 'Cosmos ThemeDesigner', [ 'steal' => true ] ),
 			'Imported from a theme file'
 		);
 
 		$this->output( "Imported the theme file.\n" );
-
 		return LoggedUpdateOutcome::COMPLETE;
 	}
 }

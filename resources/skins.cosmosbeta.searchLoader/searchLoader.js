@@ -10,7 +10,7 @@
 
 const /** @type {CosmosResourceLoaderVirtualConfig} */
 	config = require( /** @type {string} */ ( './config.json' ) ),
-	SEARCH_LOADING_CLASS = 'search-form__loader';
+	SEARCH_LOADING_CLASSES = [ 'skin-cosmos-search-form__loader', 'search-form__loader' ];
 
 /**
  * Loads the search module via `mw.loader.using` on the element's
@@ -28,34 +28,6 @@ function loadSearchModule( element, moduleName, afterLoadFn ) {
 		mw.loader.using( moduleName, afterLoadFn );
 
 		element.removeEventListener( 'focus', requestSearchModule );
-
-		if ( $( window ).width() < 851 ) {
-			$( '#cosmos-banner-userOptions' ).hide();
-			$( '.skin-cosmos-mobile-menu-button' ).hide();
-		}
-
-		function onFocusOut() {
-			$( '#cosmos-banner-userOptions' ).show();
-			$( '.skin-cosmos-mobile-menu-button' ).show();
-			$( '.cdx-button' ).css( { visibility: 'hidden', width: '46px' } );
-		}
-
-		function onFocus() {
-			$( '#cosmos-banner-userOptions' ).hide();
-			$( '.skin-cosmos-mobile-menu-button' ).hide();
-			$( '.cdx-button' ).css( { visibility: 'visible', width: 'auto' } );
-		}
-
-		if ( $( window ).width() < 851 ) {
-			var inputCheck = setInterval( () => {
-				if ( document.getElementsByClassName( 'cdx-text-input__input' )[ 0 ] !== undefined ) {
-					clearInterval( inputCheck );
-
-					document.getElementsByClassName( 'cdx-text-input__input' )[ 0 ].addEventListener( 'focus', onFocus );
-					document.getElementsByClassName( 'cdx-text-input__input' )[ 0 ].addEventListener( 'focusout', onFocusOut );
-				}
-			}, 100 );
-		}
 	}
 
 	if ( document.activeElement === element ) {
@@ -91,13 +63,13 @@ function renderSearchLoadingIndicator( event ) {
 	}
 
 	if ( event.type === 'input' ) {
-		form.classList.add( SEARCH_LOADING_CLASS );
+		form.classList.add( ...SEARCH_LOADING_CLASSES );
 
 	} else if ( event.type === 'focusout' ) {
-		form.classList.remove( SEARCH_LOADING_CLASS );
+		form.classList.remove( ...SEARCH_LOADING_CLASSES );
 
 	} else if ( event.type === 'focusin' && input.value.trim() ) {
-		form.classList.add( SEARCH_LOADING_CLASS );
+		form.classList.add( ...SEARCH_LOADING_CLASSES );
 	}
 }
 
@@ -119,7 +91,7 @@ function setLoadingIndicatorListeners( element, attach, eventCallback ) {
 	} );
 
 	if ( !attach ) {
-		element.classList.remove( SEARCH_LOADING_CLASS );
+		element.classList.remove( ...SEARCH_LOADING_CLASSES );
 	}
 }
 
@@ -149,7 +121,7 @@ function initSearchLoader( document ) {
 	 */
 	if ( mw.loader.getState( 'skins.cosmosbeta.search' ) === null ) {
 		document.body.classList.remove(
-			'skin-cosmos-search-vue'
+			'skin-cosmos-has-vue-search'
 		);
 		return;
 	}
@@ -185,4 +157,31 @@ function initSearchLoader( document ) {
 	} );
 }
 
+/**
+ * Keeps the banner compact on narrow screens. While the search box has focus the other
+ * banner items make room for it, and they come back as soon as focus leaves.
+ */
+function initSearchFocusState() {
+	const banner = document.getElementById( 'cosmos-banner' );
+
+	if ( !banner ) {
+		return;
+	}
+
+	const isInSearch = ( node ) => !!( node && node.closest && node.closest( '#p-search' ) );
+
+	document.addEventListener( 'focusin', ( event ) => {
+		if ( $( window ).width() < 851 && isInSearch( event.target ) ) {
+			banner.classList.add( 'skin-cosmos-is-search-active' );
+		}
+	} );
+
+	document.addEventListener( 'focusout', ( event ) => {
+		if ( !isInSearch( event.relatedTarget ) ) {
+			banner.classList.remove( 'skin-cosmos-is-search-active' );
+		}
+	} );
+}
+
+initSearchFocusState();
 initSearchLoader( document );

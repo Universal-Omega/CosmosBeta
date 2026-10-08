@@ -2,10 +2,8 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
-use LogicException;
-use MediaWiki\MediaWikiServices;
 use function array_slice;
 use function count;
 use function ctype_xdigit;
@@ -25,118 +23,94 @@ use function strlen;
 use function strtolower;
 use function substr;
 use function trim;
+use const PREG_SPLIT_NO_EMPTY;
 
 class LessUtil {
-	private static array $cosmosSettings = [];
+
+	// Content switches to light text at the point where both colors read the same.
+	public const float CONTENT_THRESHOLD = 0.179;
+
+	// Chrome like the header and banner prefers light text a bit longer.
+	public const float CHROME_THRESHOLD = 0.3;
+
+	public function __construct(
+		private readonly CosmosConfig $cosmosConfig,
+	) {
+	}
 
 	/**
-	 * Gets theme settings from Config class
-	 *
-	 * @param string|null $mode Color mode, defaults to the mode rendered for this request
+	 * Whether light text reads better on a theme color, judged by what is actually seen.
+	 * Colors with an alpha, or with an opacity setting like the content and footer ones,
+	 * are blended with what sits behind them before they are compared.
 	 */
-	public static function getCosmosSettings( ?string $mode = null ): array {
-		$themeSettings = MediaWikiServices::getInstance()->get( 'CosmosBetaConfig' );
-		$mode ??= $themeSettings->getRenderMode();
-
-		if ( empty( static::$cosmosSettings[$mode] ) ) {
-			$settings = [
-				'banner-background-color' => 'banner',
-				'header-background-color' => 'header',
-				'content-background-color' => 'content',
-				'button-background-color' => 'button',
-				'toolbar-background-color' => 'toolbar',
-				'footer-background-color' => 'footer',
-				'link-color' => 'link',
-			];
-
-			foreach ( $settings as $name => $slot ) {
-				static::$cosmosSettings[$mode][$name] = trim(
-					self::sanitizeColor( $themeSettings->getColor( $slot, $mode ) )
-				);
-			}
-		}
-
-		return static::$cosmosSettings[$mode];
+	public function isDark( string $slot, string $mode, float $threshold ): bool {
+		$visible = $this->getVisibleColor( $slot, $mode );
+		return $visible === null || self::isColorDark( $visible['r'], $visible['g'], $visible['b'], $threshold );
 	}
 
-	public static function sanitizeColor( string $color ): string {
-		$color = trim( strtolower( $color ) );
+	/**
+	 * @return array{r: int, g: int, b: int}|null The color as seen, null when nothing is seen
+	 */
+	private function getVisibleColor( string $slot, string $mode ): ?array {
+		$color = self::parseColor( $this->cosmosConfig->getColor( $slot, $mode ) );
+		$alpha = $color === null ? 0.0 : (float)$color['a'] * $this->getOpacity( $slot );
+		if ( $color !== null && $alpha >= 1.0 ) {
+			return [ 'r' => $color['r'], 'g' => $color['g'], 'b' => $color['b'] ];
+		}
 
-		return $color;
+		// Buttons sit on the content, everything else sits on the page background.
+		$backdrop = match ( $slot ) {
+			'body' => null,
+			'button' => $this->getVisibleColor( 'content', $mode ),
+			default => $this->getVisibleColor( 'body', $mode ),
+		};
+
+		if ( $backdrop === null ) {
+			return $color !== null && $alpha > 0.0 ?
+				[ 'r' => $color['r'], 'g' => $color['g'], 'b' => $color['b'] ] :
+				null;
+		}
+
+		return $color === null ? $backdrop : self::blend( $color, $alpha, $backdrop );
 	}
 
-	public static function isThemeDark( string $background, ?array $cosmosSettings = null ): bool {
-		if ( empty( $cosmosSettings ) ) {
-			$cosmosSettings = self::getCosmosSettings();
-		}
-
-		$backgroundColor = $cosmosSettings[$background];
-
-		$parsed = self::parseColor( $backgroundColor );
-		if ( $parsed === null || $parsed['a'] == 0 ) {
-			return true;
-		}
-
-		// convert RGB to HSL
-		[ $hue, $saturation, $lightness ] = self::rgb2hsl( $backgroundColor );
-
-		$isDark = ( $lightness < 0.5 );
-
-		return $isDark;
+	/** Opacity setting of a theme color on top of the alpha of the color itself */
+	private function getOpacity( string $slot ): float {
+		return match ( $slot ) {
+			'content' => $this->cosmosConfig->getContentOpacityLevel() / 100,
+			'footer' => $this->cosmosConfig->getFooterOpacity() / 100,
+			default => 1.0,
+		};
 	}
 
-	private static function rgb2hsl( string $rgbhex ): array {
-		$parsed = self::parseColor( $rgbhex ) ?? [ 'r' => 0, 'g' => 0, 'b' => 0 ];
-		$rgb = [ $parsed['r'], $parsed['g'], $parsed['b'] ];
-
-		$clrR = ( !empty( $rgb[0] ) ? ( $rgb[0] / 255 ) : 0 );
-		$clrG = ( !empty( $rgb[1] ) ? ( $rgb[1] / 255 ) : 0 );
-		$clrB = ( !empty( $rgb[2] ) ? ( $rgb[2] / 255 ) : 0 );
-
-		$clrMin = min( $clrR, $clrG, $clrB );
-		$clrMax = max( $clrR, $clrG, $clrB );
-		$deltaMax = $clrMax - $clrMin;
-
-		$L = ( $clrMax + $clrMin ) / 2;
-
-		if ( $deltaMax == 0 ) {
-			$H = 0;
-			$S = 0;
-		} else {
-			if ( $L < 0.5 ) {
-				$S = $deltaMax / ( $clrMax + $clrMin );
-			} else {
-				$S = $deltaMax / ( 2 - $clrMax - $clrMin );
-			}
-
-			$deltaR = ( ( ( $clrMax - $clrR ) / 6 ) + ( $deltaMax / 2 ) ) / $deltaMax;
-			$deltaG = ( ( ( $clrMax - $clrG ) / 6 ) + ( $deltaMax / 2 ) ) / $deltaMax;
-			$deltaB = ( ( ( $clrMax - $clrB ) / 6 ) + ( $deltaMax / 2 ) ) / $deltaMax;
-
-			if ( $clrR == $clrMax ) {
-				$H = $deltaB - $deltaG;
-			} elseif ( $clrG == $clrMax ) {
-				$H = ( 1 / 3 ) + $deltaR - $deltaB;
-			} elseif ( $clrB == $clrMax ) {
-				$H = ( 2 / 3 ) + $deltaG - $deltaR;
-			} else {
-				throw new LogicException( 'Unreachable' );
-			}
-
-			if ( $H < 0 ) {
-				$H += 1;
-			}
-
-			if ( $H > 1 ) {
-				$H -= 1;
-			}
-		}
-
+	/**
+	 * @param array{r: int, g: int, b: int} $color
+	 * @param array{r: int, g: int, b: int} $backdrop
+	 * @return array{r: int, g: int, b: int} The color laid over the backdrop
+	 */
+	public static function blend( array $color, float $alpha, array $backdrop ): array {
+		$alpha = max( 0.0, min( 1.0, $alpha ) );
 		return [
-			$H,
-			$S,
-			$L
+			'r' => (int)round( $color['r'] * $alpha + $backdrop['r'] * ( 1 - $alpha ) ),
+			'g' => (int)round( $color['g'] * $alpha + $backdrop['g'] * ( 1 - $alpha ) ),
+			'b' => (int)round( $color['b'] * $alpha + $backdrop['b'] * ( 1 - $alpha ) ),
 		];
+	}
+
+	/** Whether white text reads better than black text on an opaque color */
+	public static function isColorDark( int $red, int $green, int $blue, float $threshold ): bool {
+		return self::getLuminance( $red, $green, $blue ) < $threshold;
+	}
+
+	/** Relative luminance as defined by WCAG, 0 for black and 1 for white */
+	private static function getLuminance( int $red, int $green, int $blue ): float {
+		$channels = [];
+		foreach ( [ $red, $green, $blue ] as $value ) {
+			$value /= 255;
+			$channels[] = $value <= 0.03928 ? $value / 12.92 : ( ( $value + 0.055 ) / 1.055 ) ** 2.4;
+		}
+
+		return 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];
 	}
 
 	public static function colorNameToHex( string $colorName ): string {
@@ -288,11 +262,10 @@ class LessUtil {
 			'white' => '#ffffff',
 			'whitesmoke' => '#f5f5f5',
 			'yellow' => '#ffff00',
-			'yellowgreen' => '#9acd32'
+			'yellowgreen' => '#9acd32',
 		];
 
 		$key = strtolower( trim( $colorName ) );
-
 		return $colors[$key] ?? $colorName;
 	}
 
@@ -304,7 +277,6 @@ class LessUtil {
 	 */
 	public static function parseColor( string $color ): ?array {
 		$color = strtolower( trim( $color ) );
-
 		if ( $color === 'transparent' ) {
 			return [ 'r' => 0, 'g' => 0, 'b' => 0, 'a' => 0.0 ];
 		}
@@ -315,7 +287,6 @@ class LessUtil {
 
 		if ( $color !== '' && $color[0] === '#' ) {
 			$hex = substr( $color, 1 );
-
 			if ( !ctype_xdigit( $hex ) || !in_array( strlen( $hex ), [ 3, 4, 6, 8 ], true ) ) {
 				return null;
 			}
@@ -375,18 +346,17 @@ class LessUtil {
 	public static function hexToRgb( string $hex ): array {
 		$hex = str_replace( '#', '', $hex );
 		$length = strlen( $hex );
-
-		if ( $length == 6 ) {
+		if ( $length === 6 ) {
 			$rgb = [
 				'r' => hexdec( substr( $hex, 0, 2 ) ),
 				'g' => hexdec( substr( $hex, 2, 2 ) ),
-				'b' => hexdec( substr( $hex, 4, 2 ) )
+				'b' => hexdec( substr( $hex, 4, 2 ) ),
 			];
-		} elseif ( $length == 3 ) {
+		} elseif ( $length === 3 ) {
 			$rgb = [
 				'r' => hexdec( str_repeat( substr( $hex, 0, 1 ), 2 ) ),
 				'g' => hexdec( str_repeat( substr( $hex, 1, 1 ), 2 ) ),
-				'b' => hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) )
+				'b' => hexdec( str_repeat( substr( $hex, 2, 1 ), 2 ) ),
 			];
 		} else {
 			$rgb = [ 'r' => 0, 'g' => 0, 'b' => 0 ];

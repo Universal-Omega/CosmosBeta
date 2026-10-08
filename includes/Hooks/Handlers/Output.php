@@ -2,15 +2,16 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Output\Hook\OutputPageBodyAttributesHook;
 use MediaWiki\Output\Hook\OutputPageParserOutputHook;
 use MediaWiki\Parser\Sanitizer;
 use MediaWiki\ResourceLoader\Context;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\LessUtil;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\Skin\Hook\SkinPageReadyConfigHook;
-use MediaWiki\Skins\CosmosBeta\LessUtil;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
 use function implode;
 
 class Output implements
@@ -19,19 +20,42 @@ class Output implements
 	SkinPageReadyConfigHook
 {
 
+	public function __construct(
+		private readonly CosmosConfig $config,
+		private readonly LessUtil $lessUtil,
+	) {
+	}
+
 	/** @inheritDoc */
 	public function onOutputPageBodyAttributes( $out, $skin, &$bodyAttrs ): void {
-		if ( !$skin instanceof SkinCosmosBeta ) {
+		if ( !$skin instanceof SkinCosmos ) {
 			return;
 		}
 
+		$user = $skin->getUser();
+		$isNamed = $user->isNamed();
+		$isDark = $this->lessUtil->isDark(
+			'content',
+			$this->config->getRenderMode(),
+			LessUtil::CONTENT_THRESHOLD
+		);
+
 		$classes = [
-			$skin->getUser()->isRegistered() ? 'user-logged' : 'user-anon',
-			LessUtil::isThemeDark( 'content-background-color' ) ? 'theme-dark' : 'theme-light',
+			$isNamed ? 'user-logged skin-cosmos-user-logged' : 'user-anon skin-cosmos-user-anon',
+			$isDark ? 'theme-dark skin-cosmos-theme-dark' : 'theme-light skin-cosmos-theme-light',
 		];
 
+		if ( $this->config->hasHeaderBorder() ) {
+			$classes[] = 'skin-cosmos-has-header-border';
+		}
+
+		$buttonStyle = $this->config->getButtonStyle();
+		if ( $buttonStyle !== 'default' ) {
+			$classes[] = "skin-cosmos-buttons--$buttonStyle";
+		}
+
 		if ( $out->getTitle()->isMainPage() ) {
-			$classes[] = 'mainpage';
+			$classes[] = 'mainpage skin-cosmos-is-main-page';
 		}
 
 		$additional = $out->getProperty( 'additionalBodyClass' );

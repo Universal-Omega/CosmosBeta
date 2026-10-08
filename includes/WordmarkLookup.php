@@ -2,18 +2,19 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\FileRepo\File\File;
 use MediaWiki\FileRepo\RepoGroup;
 use MediaWiki\Title\TitleFactory;
 use function preg_match;
+use const NS_FILE;
 
-class CosmosWordmarkLookup {
+class WordmarkLookup {
 
 	public function __construct(
-		private readonly TitleFactory $titleFactory,
 		private readonly RepoGroup $repoGroup,
+		private readonly TitleFactory $titleFactory,
 		private readonly string $wordmark,
 	) {
 	}
@@ -25,7 +26,6 @@ class CosmosWordmarkLookup {
 
 		if ( !$this->isWordmarkUrl() ) {
 			$file = $this->getWordmarkFile();
-
 			if ( $file && $file->exists() ) {
 				return $file->getUrl();
 			}
@@ -40,7 +40,6 @@ class CosmosWordmarkLookup {
 
 	public function getWordmarkFile(): ?File {
 		$title = $this->titleFactory->makeTitle( NS_FILE, $this->wordmark );
-
 		return $this->repoGroup->findFile( $title ) ?: null;
 	}
 }

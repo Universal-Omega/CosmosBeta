@@ -2,15 +2,18 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
+use AdminLinksHook;
 use ALItem;
 use ALRow;
 use ALSection;
 use ALTree;
+use function wfMessage;
 
-class AdminLinks {
+class AdminLinks implements AdminLinksHook {
 
+	/** @inheritDoc */
 	public function onAdminLinks( ALTree &$adminLinksTree ): void {
 		$section = new ALSection( wfMessage( 'skinname-cosmosbeta' )->text() );
 		$row = new ALRow( 'cosmosbeta' );

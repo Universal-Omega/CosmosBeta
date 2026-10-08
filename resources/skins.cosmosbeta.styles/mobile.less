@@ -1,8 +1,7 @@
 .skin-cosmos-header__sitename a,
-.skin-cosmos-header__local-navigation,
+.skin-cosmos-header__navigation,
 .skin-cosmos-header__wordmark,
-#cosmos-search-buttonContainer,
-.skin-cosmos-header-button.skin-cosmos-is-secondary.skin-cosmos-menu__toggle {
+#cosmos-search-buttonContainer {
 	display: none;
 }
 
@@ -93,10 +92,10 @@ div.thumb {
 	border-radius: 4px;
 	box-shadow: 0 8px 16px 0 rgba( 0, 0, 0, 0.3 );
 
-	&__tab {
+	&__item {
 		margin: 0 9px;
 
-		&-label {
+		.skin-cosmos-nav__label {
 			border-bottom: 1px solid #eee;
 		}
 	}
@@ -129,21 +128,21 @@ div.thumb {
 	color: #000;
 }
 
-.skin-cosmos-mobile-menu-button {
+.skin-cosmos-mobile-menu__button {
 	font-size: 18px;
 	font-weight: bold;
 	transform: scale( 1.4, 1 );
 }
 
-.skin-cosmos-mobile-navigation {
+.skin-cosmos-mobile-menu {
 	display: flex;
 }
 
-.skin-cosmos-button.skin-cosmos-button-primary.skin-cosmos-mobile-menu-button {
+.skin-cosmos-button.skin-cosmos-button--primary.skin-cosmos-mobile-menu__button {
 	background: transparent;
 }
 
-.skin-cosmos-menu__content .skin-cosmos-list.skin-cosmos-list--linked > li:hover > a:not( .skin-cosmos-header-button ) {
+.skin-cosmos-menu__content .skin-cosmos-list.skin-cosmos-list--linked > li:hover > a:not( .skin-cosmos-header__button ) {
 	color: #088488;
 }
 
@@ -155,4 +154,91 @@ div.thumb {
 	-moz-column-count: 1 !important;
 	-webkit-column-count: 1 !important;
 	column-count: 1 !important;
+}
+
+#p-search .cdx-button {
+	display: none;
+}
+
+#cosmos-banner.skin-cosmos-is-search-active {
+	#cosmos-banner-userOptions,
+	.skin-cosmos-mobile-menu__button {
+		display: none;
+	}
+
+	#p-search .cdx-button {
+		display: inline-flex;
+	}
+}
+
+.skin-cosmos-navigation-preview {
+	margin: 1em 0;
+	border: 1px solid var( --skin-cosmos-border-color );
+	background-color: var( --skin-cosmos-content-background );
+	border-radius: 4px;
+
+	.skin-cosmos-header__navigation {
+		display: block;
+		height: auto;
+		padding: 0;
+	}
+
+	.skin-cosmos-nav {
+		position: static !important;
+		display: block;
+		max-height: none;
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	.skin-cosmos-nav__item .skin-cosmos-nav__label {
+		border-bottom-color: var( --skin-cosmos-border-color );
+	}
+
+
+	.skin-cosmos-menu__content a {
+		color: var( --skin-cosmos-link-color );
+	}
+}
+
+#mw-content .skin-cosmos-navigation-preview .skin-cosmos-nav__label,
+#mw-content .skin-cosmos-navigation-preview .skin-cosmos-nav__label a,
+#mw-content .skin-cosmos-navigation-preview .skin-cosmos-nav__label span {
+	color: var( --skin-cosmos-font-color );
+}
+
+@media ( max-width: 560px ) {
+	#cosmos-header-articleHeader {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	#firstHeading {
+		justify-content: center;
+		text-align: center;
+	}
+
+	#cosmos-articleHeader-actions {
+		justify-content: center;
+	}
+}
+
+/* Smaller default and rounded buttons, the slim and text styles have their own sizes */
+body:not( .skin-cosmos-buttons--slim ):not( .skin-cosmos-buttons--text ) #cosmos-articleHeader-actions {
+	.skin-cosmos-button {
+		height: 20px;
+		padding: 5px 12px;
+		font-size: 12px;
+	}
+
+	.skin-cosmos-button__icon {
+		width: 16px;
+		height: 16px;
+		margin: 0 4px 0 -2px;
+	}
+
+	#cosmos-actionsList-button {
+		padding: 5px 8px;
+	}
 }

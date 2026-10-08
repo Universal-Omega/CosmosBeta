@@ -2,7 +2,7 @@
 -- Source: sql/tables.json
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
-CREATE TABLE /*_*/cosmosbeta_theme (
+CREATE TABLE /*_*/cosmos_theme (
   cth_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   cth_timestamp BLOB NOT NULL,
   cth_actor BIGINT UNSIGNED NOT NULL,
@@ -12,6 +12,6 @@ CREATE TABLE /*_*/cosmosbeta_theme (
   cth_data BLOB NOT NULL
 );
 
-CREATE INDEX cth_timestamp ON /*_*/cosmosbeta_theme (cth_timestamp);
+CREATE INDEX cth_timestamp ON /*_*/cosmos_theme (cth_timestamp);
 
-CREATE INDEX cth_actor ON /*_*/cosmosbeta_theme (cth_actor);
+CREATE INDEX cth_actor ON /*_*/cosmos_theme (cth_actor);

@@ -23,7 +23,7 @@
 }
 
 @media only screen and ( min-width: 1024px ) {
-	.skin-cosmos-articleContainer {
+	.skin-cosmos-article-container {
 		position: relative;
 		display: -webkit-box;
 		display: -moz-box;
@@ -55,7 +55,7 @@
 	width: 300px;
 }
 
-.skin-cosmos-rail .module {
+.skin-cosmos-rail .skin-cosmos-rail__module {
 	position: relative;
 	padding: 20px 15px 15px;
 	margin-bottom: 30px;
@@ -69,7 +69,7 @@
 	background: transparent;
 }
 
-.skin-cosmos-rail-inner {
+.skin-cosmos-rail__inner {
 	width: 100%;
 }
 
@@ -93,7 +93,7 @@
 }
 
 @media only screen and ( max-width: 1023px ) {
-	.skin-cosmos-rail .module {
+	.skin-cosmos-rail .skin-cosmos-rail__module {
 		position: static;
 		display: inline-block;
 		width: 330px;
@@ -103,7 +103,7 @@
 	}
 }
 
-.skin-cosmos-rail .module h2 {
+.skin-cosmos-rail .skin-cosmos-rail__module h2 {
 	padding-left: 2px;
 	border: 0;
 	margin-top: 0;
@@ -112,38 +112,38 @@
 	font-weight: bold;
 }
 
-.skin-cosmos-rail .module h3,
-.skin-cosmos-rail .module h4,
-.skin-cosmos-rail .module h5,
-.skin-cosmos-rail .module h6 {
+.skin-cosmos-rail .skin-cosmos-rail__module h3,
+.skin-cosmos-rail .skin-cosmos-rail__module h4,
+.skin-cosmos-rail .skin-cosmos-rail__module h5,
+.skin-cosmos-rail .skin-cosmos-rail__module h6 {
 	padding-top: 0;
 	padding-bottom: 0;
 }
 
-.skin-cosmos-rail .module p {
+.skin-cosmos-rail .skin-cosmos-rail__module p {
 	padding: 0;
 	margin: 0;
 	line-height: 21px;
 }
 
-.skin-cosmos-rail .module b {
+.skin-cosmos-rail .skin-cosmos-rail__module b {
 	font-weight: bold;
 }
 
 @media only screen and ( min-width: 1024px ) {
-	.skin-cosmos-rail .rail-sticky-module {
+	.skin-cosmos-rail .skin-cosmos-rail__module--sticky {
 		position: static;
 		position: -webkit-sticky;
 		position: sticky;
 		z-index: 1;
 	}
 
-	.skin-cosmos-rail .skin-cosmos-rail-inner.loaded .rail-sticky-module {
+	.skin-cosmos-rail .skin-cosmos-rail__inner.loaded .skin-cosmos-rail__module--sticky {
 		top: 65px;
 	}
 }
 
-.skin-cosmos-rail .recentchanges-module li {
+.skin-cosmos-rail .skin-cosmos-rail__module--recentchanges li {
 	padding-bottom: 10px;
 	font-size: 14px;
 	list-style: none;
