@@ -87,8 +87,8 @@ return [
 	'CosmosBetaEffectiveTheme' => static function ( MediaWikiServices $services ): EffectiveTheme {
 		return new EffectiveTheme(
 			$services->get( 'CosmosBetaColorModeResolver' ),
-			$services->get( 'CosmosBetaThemeStore' ),
 			$services->get( 'CosmosBetaThemeDefaults' ),
+			$services->get( 'CosmosBetaThemeStore' ),
 			new ServiceOptions(
 				EffectiveTheme::CONSTRUCTOR_OPTIONS,
 				$services->get( 'CosmosBetaOptions' )
