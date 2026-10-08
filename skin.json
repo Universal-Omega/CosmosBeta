@@ -693,7 +693,7 @@
 		}
 	},
 	"config": {
-		"CosmosBetaAllowFooterIconHiding": {
+		"CosmosAllowFooterIconHiding": {
 			"value": true,
 			"description": "Whether the theme designer may hide the footer icons."
 		},
@@ -761,7 +761,7 @@
 			"value": "#c0c0c0",
 			"description": "Changes the background color of the footer"
 		},
-		"CosmosBetaFooterProtectedLinks": {
+		"CosmosFooterProtectedLinks": {
 			"value": [
 				"about",
 				"copyright",
@@ -855,7 +855,7 @@
 		},
 		"CosmosThemeDesignerOnly": {
 			"value": false,
-			"description": "If true the theme designer is the only place the theme is set. The other theme variables (colors, images, content width and opacity, background options, the rail defaults, and the Europa infobox theme) are ignored, and the designer starts from built in defaults. Run maintenance/run.php CosmosBeta:ImportConfigTheme first to keep the current look."
+			"description": "If true the theme designer is the only place the theme is set. The other theme variables (colors, images, content width and opacity, background options, the rail defaults, and the Europa infobox theme) are ignored, and the designer starts from built in defaults. Run maintenance/run.php Cosmos:ImportConfigTheme first to keep the current look."
 		},
 		"CosmosThemeDesignerPublicView": {
 			"value": false,
