@@ -12,7 +12,6 @@ use MediaWiki\Skin\Cosmos\AdminDashboard\AdminDashboardStats;
 use MediaWiki\Skin\Cosmos\AdminDashboard\AdvancedSectionBuilder;
 use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControlRegistry;
 use MediaWiki\Skin\Cosmos\BackgroundLookup;
-use MediaWiki\Skin\Cosmos\CosmosConfig;
 use MediaWiki\Skin\Cosmos\CosmosNavigation;
 use MediaWiki\Skin\Cosmos\Hooks\HookRunner;
 use MediaWiki\Skin\Cosmos\Legacy\LegacyConverter;
@@ -20,6 +19,9 @@ use MediaWiki\Skin\Cosmos\LessUtil;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
+use MediaWiki\Skin\Cosmos\Theme\ConfigDefaults;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
+use MediaWiki\Skin\Cosmos\Theme\ThemeDefaults;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use MediaWiki\Skin\Cosmos\WordmarkLookup;
 
@@ -57,12 +59,12 @@ return [
 	},
 
 	'CosmosBetaBackgroundLookup' => static function ( MediaWikiServices $services ): BackgroundLookup {
-		$config = $services->get( 'CosmosBetaConfig' );
+		$theme = $services->get( 'CosmosBetaEffectiveTheme' );
 		return new BackgroundLookup(
 			$services->getRepoGroup(),
 			$services->getTitleFactory(),
-			$config->getBackgroundImage(),
-			$config->getWikiHeaderBackgroundImage()
+			$theme->getBackgroundImage(),
+			$theme->getWikiHeaderBackgroundImage()
 		);
 	},
 
@@ -73,12 +75,22 @@ return [
 		);
 	},
 
-	'CosmosBetaConfig' => static function ( MediaWikiServices $services ): CosmosConfig {
-		return new CosmosConfig(
+	'CosmosBetaConfigDefaults' => static function ( MediaWikiServices $services ): ConfigDefaults {
+		return new ConfigDefaults(
+			new ServiceOptions(
+				ConfigDefaults::CONSTRUCTOR_OPTIONS,
+				$services->get( 'CosmosBetaOptions' )
+			)
+		);
+	},
+
+	'CosmosBetaEffectiveTheme' => static function ( MediaWikiServices $services ): EffectiveTheme {
+		return new EffectiveTheme(
 			$services->get( 'CosmosBetaColorModeResolver' ),
 			$services->get( 'CosmosBetaThemeStore' ),
+			$services->get( 'CosmosBetaThemeDefaults' ),
 			new ServiceOptions(
-				CosmosConfig::CONSTRUCTOR_OPTIONS,
+				EffectiveTheme::CONSTRUCTOR_OPTIONS,
 				$services->get( 'CosmosBetaOptions' )
 			)
 		);
@@ -93,7 +105,7 @@ return [
 	},
 
 	'CosmosBetaLessUtil' => static function ( MediaWikiServices $services ): LessUtil {
-		return new LessUtil( $services->get( 'CosmosBetaConfig' ) );
+		return new LessUtil( $services->get( 'CosmosBetaEffectiveTheme' ) );
 	},
 
 	'CosmosBetaNavigation' => static function ( MediaWikiServices $services ): CosmosNavigation {
@@ -116,7 +128,7 @@ return [
 
 	'CosmosBetaRailBuilder' => static function ( MediaWikiServices $services ): RailBuilder {
 		return new RailBuilder(
-			$services->get( 'CosmosBetaConfig' ),
+			$services->get( 'CosmosBetaEffectiveTheme' ),
 			$services->get( 'CosmosBetaHookRunner' ),
 			$services->get( 'CosmosBetaTemplateParser' ),
 			$services->getConnectionProvider(),
@@ -138,6 +150,11 @@ return [
 		return $parser;
 	},
 
+	'CosmosBetaThemeDefaults' => static function ( MediaWikiServices $services ): ThemeDefaults {
+		$configDefaults = $services->get( 'CosmosBetaConfigDefaults' );
+		return $configDefaults->isThemeDesignerOnly() ? new ThemeDefaults() : $configDefaults->getDefaults();
+	},
+
 	'CosmosBetaThemeStore' => static function ( MediaWikiServices $services ): ThemeStore {
 		return new ThemeStore(
 			$services->getActorNormalization(),
@@ -151,7 +168,7 @@ return [
 		return new WordmarkLookup(
 			$services->getRepoGroup(),
 			$services->getTitleFactory(),
-			$services->get( 'CosmosBetaConfig' )->getWordmark()
+			$services->get( 'CosmosBetaEffectiveTheme' )->getWordmark()
 		);
 	},
 ];
