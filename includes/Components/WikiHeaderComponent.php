@@ -10,8 +10,8 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SiteStats\SiteStats;
+use MediaWiki\Skin\Cosmos\Lookup\WordmarkLookup;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
-use MediaWiki\Skin\Cosmos\WordmarkLookup;
 use MediaWiki\SpecialPage\SpecialPage;
 use function ucwords;
 
