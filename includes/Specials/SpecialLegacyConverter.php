@@ -6,6 +6,7 @@ namespace MediaWiki\Skin\Cosmos\Specials;
 
 use MediaWiki\Html\Html;
 use MediaWiki\HTMLForm\HTMLForm;
+use MediaWiki\MainConfigNames;
 use MediaWiki\Message\Message;
 use MediaWiki\Skin\Cosmos\Legacy\LegacyConversionResult;
 use MediaWiki\Skin\Cosmos\Legacy\LegacyConverter;
@@ -19,7 +20,7 @@ class SpecialLegacyConverter extends SpecialPage {
 	public function __construct(
 		private readonly LegacyConverter $converter,
 	) {
-		parent::__construct( 'CosmosBetaLegacyConverter' );
+		parent::__construct( 'CosmosLegacyConverter' );
 	}
 
 	/** @inheritDoc */
@@ -64,9 +65,9 @@ class SpecialLegacyConverter extends SpecialPage {
 		}
 	}
 
-	private function convert( array $data ): bool|Message {
+	private function convert( array $data ): false|Message {
 		$source = (string)$data['source'];
-		$limit = (int)$this->getConfig()->get( 'MaxArticleSize' ) * 1024;
+		$limit = (int)$this->getConfig()->get( MainConfigNames::MaxArticleSize ) * 1024;
 
 		if ( strlen( $source ) > $limit ) {
 			return $this->msg( 'cosmosbeta-legacyconverter-toolarge' );
