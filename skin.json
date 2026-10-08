@@ -17,8 +17,8 @@
 			"services": [
 				"CosmosBetaAltModules",
 				"CosmosBetaOptions",
-				"CosmosBetaEffectiveTheme",
 				"CosmosBetaNavigation",
+				"CosmosBetaEffectiveTheme",
 				"CosmosBetaRailBuilder",
 				"CosmosBetaWordmarkLookup",
 				"ContentLanguageCode",
