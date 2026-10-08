@@ -7,6 +7,7 @@ namespace MediaWiki\Skin\Cosmos;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\MainConfigNames;
+use MediaWiki\Skin\Cosmos\Rail\RailRules;
 use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
@@ -192,5 +193,14 @@ class CosmosConfig {
 
 	public function getRailSettings(): array {
 		return $this->getTheme()->getSection( 'rail' );
+	}
+
+	public function getRailRules( string $moduleId ): RailRules {
+		return RailRules::newFromArray( $this->getRailSettings()['modules'][$moduleId] ?? [] );
+	}
+
+	/** @return array<int, array{id: string, message: string, header: string}> */
+	public function getCustomRailModules(): array {
+		return $this->getRailSettings()['customModules'];
 	}
 }

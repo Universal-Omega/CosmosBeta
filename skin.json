@@ -39,7 +39,7 @@
 					"wrapSiteNotice": true,
 					"clientPrefEnabled": true,
 					"bodyClasses": [
-						"skin-cosmos-search-vue"
+						"skin-cosmos-has-vue-search"
 					],
 					"menus": [
 						"associated-pages",
@@ -106,11 +106,18 @@
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialThemeDesigner",
 			"services": [
 				"CosmosBetaConfig",
+				"CosmosBetaRailBuilder",
 				"CosmosBetaThemeStore",
 				"ExtensionRegistry",
 				"SkinFactory",
 				"CosmosBetaTemplateParser",
 				"TitleFactory"
+			]
+		},
+		"CosmosBetaLegacyConverter": {
+			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialLegacyConverter",
+			"services": [
+				"CosmosBetaLegacyConverter"
 			]
 		},
 		"AdminDashboard": {
@@ -395,7 +402,14 @@
 				"resources/skins.cosmosbeta.themedesigner/init.js",
 				"resources/skins.cosmosbeta.themedesigner/App.vue",
 				"resources/skins.cosmosbeta.themedesigner/ImageField.vue",
-				"resources/skins.cosmosbeta.themedesigner/colors.js"
+				"resources/skins.cosmosbeta.themedesigner/colors.js",
+				"resources/skins.cosmosbeta.themedesigner/msg.js",
+				"resources/skins.cosmosbeta.themedesigner/rail/NamespaceLookup.vue",
+				"resources/skins.cosmosbeta.themedesigner/rail/PageLookup.vue",
+				"resources/skins.cosmosbeta.themedesigner/rail/RailModuleCard.vue",
+				"resources/skins.cosmosbeta.themedesigner/rail/RailTab.vue",
+				"resources/skins.cosmosbeta.themedesigner/rail/rules.js",
+				"resources/skins.cosmosbeta.themedesigner/rail/useChipList.js"
 			],
 			"styles": [
 				"resources/skins.cosmosbeta.themedesigner/themedesigner.less"
@@ -503,20 +517,46 @@
 				"cosmosbeta-themedesigner-protected",
 				"cosmosbeta-themedesigner-publish",
 				"cosmosbeta-themedesigner-rail-anons",
+				"cosmosbeta-themedesigner-rail-custom-add",
+				"cosmosbeta-themedesigner-rail-custom-add-button",
+				"cosmosbeta-themedesigner-rail-custom-exists",
+				"cosmosbeta-themedesigner-rail-custom-header",
+				"cosmosbeta-themedesigner-rail-custom-invalid",
+				"cosmosbeta-themedesigner-rail-custom-message",
+				"cosmosbeta-themedesigner-rail-custom-message-help",
+				"cosmosbeta-themedesigner-rail-custom-remove",
+				"cosmosbeta-themedesigner-rail-display-hide",
+				"cosmosbeta-themedesigner-rail-display-inherit",
+				"cosmosbeta-themedesigner-rail-display-show",
 				"cosmosbeta-themedesigner-rail-enabled",
+				"cosmosbeta-themedesigner-rail-intro",
+				"cosmosbeta-themedesigner-rail-module-display",
+				"cosmosbeta-themedesigner-rail-module-namespaces",
+				"cosmosbeta-themedesigner-rail-module-page-tools",
+				"cosmosbeta-themedesigner-rail-module-pages",
+				"cosmosbeta-themedesigner-rail-module-places",
+				"cosmosbeta-themedesigner-rail-module-places-help",
+				"cosmosbeta-themedesigner-rail-module-recentchanges",
+				"cosmosbeta-themedesigner-rail-module-type",
+				"cosmosbeta-themedesigner-rail-modules",
+				"cosmosbeta-themedesigner-rail-modules-help",
 				"cosmosbeta-themedesigner-rail-namespaces",
 				"cosmosbeta-themedesigner-rail-namespaces-help",
 				"cosmosbeta-themedesigner-rail-namespaces-placeholder",
 				"cosmosbeta-themedesigner-rail-no-results",
+				"cosmosbeta-themedesigner-rail-origin-builtin",
+				"cosmosbeta-themedesigner-rail-origin-custom",
+				"cosmosbeta-themedesigner-rail-origin-hook",
+				"cosmosbeta-themedesigner-rail-origin-interface",
+				"cosmosbeta-themedesigner-rail-origin-sidebar",
 				"cosmosbeta-themedesigner-rail-pages",
 				"cosmosbeta-themedesigner-rail-pages-help",
 				"cosmosbeta-themedesigner-rail-pages-mainpage",
 				"cosmosbeta-themedesigner-rail-pages-placeholder",
-				"cosmosbeta-themedesigner-rail-recentchanges",
-				"cosmosbeta-themedesigner-rail-recentchanges-config",
-				"cosmosbeta-themedesigner-rail-recentchanges-normal",
-				"cosmosbeta-themedesigner-rail-recentchanges-off",
-				"cosmosbeta-themedesigner-rail-recentchanges-sticky",
+				"cosmosbeta-themedesigner-rail-summary-places",
+				"cosmosbeta-themedesigner-rail-type-inherit",
+				"cosmosbeta-themedesigner-rail-type-normal",
+				"cosmosbeta-themedesigner-rail-type-sticky",
 				"cosmosbeta-themedesigner-readonly",
 				"cosmosbeta-themedesigner-restore-comment",
 				"cosmosbeta-themedesigner-success",
@@ -874,6 +914,12 @@
 		"personaltools": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\PersonalTools"
 		},
+		"railcache": {
+			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\RailCache",
+			"services": [
+				"MainWANObjectCache"
+			]
+		},
 		"socialprofile": {
 			"factory": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
@@ -892,11 +938,17 @@
 		"AlternateEditPreview": {
 			"handler": "navigation"
 		},
+		"ArticleRevisionVisibilitySet": {
+			"handler": "railcache"
+		},
 		"BeforeInitialize": {
 			"handler": "navigation"
 		},
 		"BeforePageDisplay": {
 			"handler": "colormode"
+		},
+		"BlockIpComplete": {
+			"handler": "railcache"
 		},
 		"GetDoubleUnderscoreIDs": {
 			"handler": "parser"
@@ -921,6 +973,9 @@
 		},
 		"ParserFirstCallInit": {
 			"handler": "parser"
+		},
+		"RenameUserComplete": {
+			"handler": "railcache"
 		},
 		"ResourceLoaderRegisterModules": {
 			"handler": "colormode"

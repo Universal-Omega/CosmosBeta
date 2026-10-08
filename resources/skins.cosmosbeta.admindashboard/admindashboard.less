@@ -4,18 +4,18 @@
 @admindashboard-control-min-width: 15rem;
 @admindashboard-stats-width: 19rem;
 
-.skin-cosmos-admindashboard-icon( @id, @icon ) {
-	.skin-cosmos-admindashboard__icon--@{id} {
+.skin-cosmos-admin-dashboard__icon( @id, @icon ) {
+	.skin-cosmos-admin-dashboard__icon--@{id} {
 		.cdx-mixin-css-icon( @icon, currentcolor, @admindashboard-icon-size, false, center, middle );
 	}
 }
 
-.skin-cosmos-admindashboard {
+.skin-cosmos-admin-dashboard {
 	container-type: inline-size;
 	margin-top: @spacing-100;
 }
 
-.skin-cosmos-admindashboard__layout {
+.skin-cosmos-admin-dashboard__layout {
 	display: grid;
 	gap: @spacing-200;
 	grid-template-columns: minmax( 0, 1fr );
@@ -26,13 +26,13 @@
 	}
 }
 
-.skin-cosmos-admindashboard__main {
+.skin-cosmos-admin-dashboard__main {
 	display: grid;
 	gap: @spacing-200;
 	min-width: 0;
 }
 
-.skin-cosmos-admindashboard__heading {
+.skin-cosmos-admin-dashboard__heading {
 	margin: 0 0 @spacing-75;
 	color: @color-emphasized;
 	font-family: inherit;
@@ -41,7 +41,7 @@
 	line-height: @line-height-small;
 }
 
-.skin-cosmos-admindashboard__controls {
+.skin-cosmos-admin-dashboard__controls {
 	display: grid;
 	gap: @spacing-75;
 	grid-template-columns: repeat( auto-fill, minmax( @admindashboard-control-min-width, 1fr ) );
@@ -50,12 +50,12 @@
 	list-style: none;
 }
 
-.skin-cosmos-admindashboard__control {
+.skin-cosmos-admin-dashboard__control {
 	display: flex;
 	margin: 0;
 }
 
-.skin-cosmos-admindashboard__link {
+.skin-cosmos-admin-dashboard__link {
 	display: flex;
 	flex: 1;
 	align-items: center;
@@ -89,7 +89,7 @@
 	}
 }
 
-.skin-cosmos-admindashboard__badge {
+.skin-cosmos-admin-dashboard__badge {
 	display: flex;
 	flex: none;
 	align-items: center;
@@ -100,31 +100,31 @@
 	color: @color-progressive;
 }
 
-.skin-cosmos-admindashboard__icon {
+.skin-cosmos-admin-dashboard__icon {
 	display: block;
 }
 
-.skin-cosmos-admindashboard__text {
+.skin-cosmos-admin-dashboard__text {
 	display: flex;
 	min-width: 0;
 	flex-direction: column;
 	gap: @spacing-12;
 }
 
-.skin-cosmos-admindashboard__label {
+.skin-cosmos-admin-dashboard__label {
 	color: @color-emphasized;
 	font-weight: @font-weight-bold;
 	line-height: @line-height-small;
 	overflow-wrap: anywhere;
 }
 
-.skin-cosmos-admindashboard__description {
+.skin-cosmos-admin-dashboard__description {
 	color: @color-subtle;
 	font-size: @font-size-small;
 	line-height: @line-height-x-small;
 }
 
-.skin-cosmos-admindashboard__pages {
+.skin-cosmos-admin-dashboard__pages {
 	padding: 0;
 	margin: 0;
 	column-gap: @spacing-200;
@@ -132,7 +132,7 @@
 	list-style: none;
 }
 
-.skin-cosmos-admindashboard__page {
+.skin-cosmos-admin-dashboard__page {
 	break-inside: avoid;
 	margin: 0;
 
@@ -142,11 +142,11 @@
 	}
 }
 
-.skin-cosmos-admindashboard__page--restricted a {
+.skin-cosmos-admin-dashboard__page--restricted a {
 	font-style: italic;
 }
 
-.skin-cosmos-admindashboard__stats {
+.skin-cosmos-admin-dashboard__stats {
 	display: grid;
 	gap: @spacing-100;
 	grid-template-columns: minmax( 0, 1fr );
@@ -156,19 +156,19 @@
 	border-radius: @border-radius-base;
 	background-color: @background-color-interactive-subtle;
 
-	.skin-cosmos-admindashboard__heading {
+	.skin-cosmos-admin-dashboard__heading {
 		margin: 0;
 	}
 }
 
-.skin-cosmos-admindashboard__totals {
+.skin-cosmos-admin-dashboard__totals {
 	display: grid;
 	gap: @spacing-50;
 	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
 	margin: 0;
 }
 
-.skin-cosmos-admindashboard__total {
+.skin-cosmos-admin-dashboard__total {
 	padding: @spacing-50 @spacing-75;
 	border-radius: @border-radius-base;
 	background-color: @background-color-base;
@@ -188,7 +188,7 @@
 	}
 }
 
-.skin-cosmos-admindashboard__activity {
+.skin-cosmos-admin-dashboard__activity {
 	margin: 0;
 
 	.cdx-table__table-wrapper {
@@ -211,25 +211,25 @@
 	}
 }
 
-.skin-cosmos-admindashboard-icon( themedesigner, @cdx-icon-palette );
-.skin-cosmos-admindashboard-icon( recentchanges, @cdx-icon-recent-changes );
-.skin-cosmos-admindashboard-icon( navigation, @cdx-icon-menu );
-.skin-cosmos-admindashboard-icon( tagline, @cdx-icon-edit );
-.skin-cosmos-admindashboard-icon( css, @cdx-icon-layout );
-.skin-cosmos-admindashboard-icon( js, @cdx-icon-code );
-.skin-cosmos-admindashboard-icon( managewiki, @cdx-icon-settings );
-.skin-cosmos-admindashboard-icon( analytics, @cdx-icon-chart );
-.skin-cosmos-admindashboard-icon( listusers, @cdx-icon-user-group );
-.skin-cosmos-admindashboard-icon( userrights, @cdx-icon-user-rights );
-.skin-cosmos-admindashboard-icon( block, @cdx-icon-block );
-.skin-cosmos-admindashboard-icon( sitenotice, @cdx-icon-speech-bubbles );
-.skin-cosmos-admindashboard-icon( help, @cdx-icon-help );
-.skin-cosmos-admindashboard-icon( categories, @cdx-icon-tag );
-.skin-cosmos-admindashboard-icon( addpage, @cdx-icon-article-add );
-.skin-cosmos-admindashboard-icon( upload, @cdx-icon-upload );
-.skin-cosmos-admindashboard-icon( multipleupload, @cdx-icon-image-add );
-.skin-cosmos-admindashboard-icon( video, @cdx-icon-play );
-.skin-cosmos-admindashboard-icon( blog, @cdx-icon-article );
-.skin-cosmos-admindashboard-icon( allpages, @cdx-icon-book );
-.skin-cosmos-admindashboard-icon( newpages, @cdx-icon-articles );
-.skin-cosmos-admindashboard-icon( listfiles, @cdx-icon-image-gallery );
+.skin-cosmos-admin-dashboard__icon( themedesigner, @cdx-icon-palette );
+.skin-cosmos-admin-dashboard__icon( recentchanges, @cdx-icon-recent-changes );
+.skin-cosmos-admin-dashboard__icon( navigation, @cdx-icon-menu );
+.skin-cosmos-admin-dashboard__icon( tagline, @cdx-icon-edit );
+.skin-cosmos-admin-dashboard__icon( css, @cdx-icon-layout );
+.skin-cosmos-admin-dashboard__icon( js, @cdx-icon-code );
+.skin-cosmos-admin-dashboard__icon( managewiki, @cdx-icon-settings );
+.skin-cosmos-admin-dashboard__icon( analytics, @cdx-icon-chart );
+.skin-cosmos-admin-dashboard__icon( listusers, @cdx-icon-user-group );
+.skin-cosmos-admin-dashboard__icon( userrights, @cdx-icon-user-rights );
+.skin-cosmos-admin-dashboard__icon( block, @cdx-icon-block );
+.skin-cosmos-admin-dashboard__icon( sitenotice, @cdx-icon-speech-bubbles );
+.skin-cosmos-admin-dashboard__icon( help, @cdx-icon-help );
+.skin-cosmos-admin-dashboard__icon( categories, @cdx-icon-tag );
+.skin-cosmos-admin-dashboard__icon( addpage, @cdx-icon-article-add );
+.skin-cosmos-admin-dashboard__icon( upload, @cdx-icon-upload );
+.skin-cosmos-admin-dashboard__icon( multipleupload, @cdx-icon-image-add );
+.skin-cosmos-admin-dashboard__icon( video, @cdx-icon-play );
+.skin-cosmos-admin-dashboard__icon( blog, @cdx-icon-article );
+.skin-cosmos-admin-dashboard__icon( allpages, @cdx-icon-book );
+.skin-cosmos-admin-dashboard__icon( newpages, @cdx-icon-articles );
+.skin-cosmos-admin-dashboard__icon( listfiles, @cdx-icon-image-gallery );
