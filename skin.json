@@ -15,12 +15,12 @@
 			"displayname": "CosmosBeta",
 			"factory": "MediaWiki\\Skin\\Cosmos\\SkinCosmos::factory",
 			"services": [
-				"CosmosBetaAltModules",
-				"CosmosBetaOptions",
-				"CosmosBetaNavigation",
-				"CosmosBetaEffectiveTheme",
-				"CosmosBetaRailBuilder",
-				"CosmosBetaWordmarkLookup",
+				"Cosmos.AltModules",
+				"Cosmos.Config",
+				"Cosmos.EffectiveTheme",
+				"Cosmos.Navigation",
+				"Cosmos.RailBuilder",
+				"Cosmos.WordmarkLookup",
 				"ContentLanguageCode",
 				"ExtensionRegistry",
 				"LanguageNameUtils",
@@ -105,30 +105,30 @@
 		"CosmosBetaThemeDesigner": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialThemeDesigner",
 			"services": [
-				"CosmosBetaOptions",
-				"CosmosBetaConfigDefaults",
-				"CosmosBetaEffectiveTheme",
-				"CosmosBetaRailBuilder",
-				"CosmosBetaThemeStore",
+				"Cosmos.Config",
+				"Cosmos.ConfigDefaults",
+				"Cosmos.EffectiveTheme",
+				"Cosmos.RailBuilder",
+				"Cosmos.ThemeStore",
 				"ExtensionRegistry",
 				"SkinFactory",
-				"CosmosBetaTemplateParser",
+				"Cosmos.TemplateParser",
 				"TitleFactory"
 			]
 		},
 		"CosmosBetaLegacyConverter": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialLegacyConverter",
 			"services": [
-				"CosmosBetaLegacyConverter"
+				"Cosmos.LegacyConverter"
 			]
 		},
 		"AdminDashboard": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialAdminDashboard",
 			"services": [
-				"CosmosBetaAdminDashboardStats",
-				"CosmosBetaAdvancedSectionBuilder",
-				"CosmosBetaAdminDashboardControls",
-				"CosmosBetaTemplateParser"
+				"Cosmos.AdminDashboardControls",
+				"Cosmos.AdminDashboardStats",
+				"Cosmos.AdvancedSectionBuilder",
+				"Cosmos.TemplateParser"
 			]
 		}
 	},
@@ -903,14 +903,14 @@
 		"colormode": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\ColorMode",
 			"services": [
-				"CosmosBetaAltModules",
-				"CosmosBetaEffectiveTheme"
+				"Cosmos.AltModules",
+				"Cosmos.EffectiveTheme"
 			]
 		},
 		"themecache": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\ThemeCache",
 			"services": [
-				"CosmosBetaThemeStore"
+				"Cosmos.ThemeStore"
 			]
 		},
 		"installer": {
@@ -919,16 +919,16 @@
 		"navigation": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Navigation",
 			"services": [
-				"CosmosBetaNavigation",
-				"CosmosBetaTemplateParser",
+				"Cosmos.Navigation",
+				"Cosmos.TemplateParser",
 				"TitleFactory"
 			]
 		},
 		"output": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Output",
 			"services": [
-				"CosmosBetaEffectiveTheme",
-				"CosmosBetaLessUtil"
+				"Cosmos.EffectiveTheme",
+				"Cosmos.LessUtil"
 			]
 		},
 		"parser": {
@@ -946,8 +946,8 @@
 		"socialprofile": {
 			"factory": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\SocialProfile::factory",
 			"services": [
-				"CosmosBetaOptions",
-				"CosmosBetaTemplateParser",
+				"Cosmos.Config",
+				"Cosmos.TemplateParser",
 				"TitleFactory",
 				"UserGroupManager",
 				"WikiPageFactory"
