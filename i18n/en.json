@@ -187,6 +187,8 @@
 	"cosmosbeta-themedesigner-font-preset-system": "System font",
 	"cosmosbeta-themedesigner-font-preset-times": "Times New Roman (serif)",
 	"cosmosbeta-themedesigner-font-preset-verdana": "Verdana",
+	"cosmosbeta-themedesigner-font-preview": "The quick brown fox jumps over the lazy dog. 0123456789",
+	"cosmosbeta-themedesigner-font-sample": "Aa",
 	"cosmosbeta-themedesigner-footer-hidden": "Hide these footer links",
 	"cosmosbeta-themedesigner-footer-hidden-help": "These are the footer links that exist on this wiki.",
 	"cosmosbeta-themedesigner-footer-icons": "Show footer icons",
