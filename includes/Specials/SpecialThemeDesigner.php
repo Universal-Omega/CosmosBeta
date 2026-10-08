@@ -69,7 +69,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		private readonly TemplateParser $templateParser,
 		private readonly TitleFactory $titleFactory,
 	) {
-		parent::__construct( 'CosmosBetaThemeDesigner' );
+		parent::__construct( 'CosmosThemeDesigner' );
 	}
 
 	private function isPublicView(): bool {
