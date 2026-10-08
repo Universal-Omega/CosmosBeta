@@ -17,7 +17,7 @@
 			"services": [
 				"CosmosBetaAltModules",
 				"CosmosBetaOptions",
-				"CosmosBetaConfig",
+				"CosmosBetaEffectiveTheme",
 				"CosmosBetaNavigation",
 				"CosmosBetaRailBuilder",
 				"CosmosBetaWordmarkLookup",
@@ -105,7 +105,9 @@
 		"CosmosBetaThemeDesigner": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Specials\\SpecialThemeDesigner",
 			"services": [
-				"CosmosBetaConfig",
+				"CosmosBetaConfigDefaults",
+				"CosmosBetaEffectiveTheme",
+				"CosmosBetaOptions",
 				"CosmosBetaRailBuilder",
 				"CosmosBetaThemeStore",
 				"ExtensionRegistry",
@@ -402,8 +404,10 @@
 				"resources/skins.cosmosbeta.themedesigner/init.js",
 				"resources/skins.cosmosbeta.themedesigner/App.vue",
 				"resources/skins.cosmosbeta.themedesigner/ImageField.vue",
+				"resources/skins.cosmosbeta.themedesigner/ResetButton.vue",
 				"resources/skins.cosmosbeta.themedesigner/colors.js",
 				"resources/skins.cosmosbeta.themedesigner/msg.js",
+				"resources/skins.cosmosbeta.themedesigner/reset.js",
 				"resources/skins.cosmosbeta.themedesigner/rail/NamespaceLookup.vue",
 				"resources/skins.cosmosbeta.themedesigner/rail/PageLookup.vue",
 				"resources/skins.cosmosbeta.themedesigner/rail/RailModuleCard.vue",
@@ -433,7 +437,6 @@
 				"cosmosbeta-themedesigner-color-link",
 				"cosmosbeta-themedesigner-color-link-help",
 				"cosmosbeta-themedesigner-color-opacity",
-				"cosmosbeta-themedesigner-color-reset",
 				"cosmosbeta-themedesigner-color-toolbar",
 				"cosmosbeta-themedesigner-color-toolbar-help",
 				"cosmosbeta-themedesigner-colors-intro",
@@ -450,6 +453,8 @@
 				"cosmosbeta-themedesigner-error-permission",
 				"cosmosbeta-themedesigner-error-revision",
 				"cosmosbeta-themedesigner-error-token",
+				"cosmosbeta-themedesigner-europa",
+				"cosmosbeta-themedesigner-europa-help",
 				"cosmosbeta-themedesigner-footer-hidden",
 				"cosmosbeta-themedesigner-footer-hidden-help",
 				"cosmosbeta-themedesigner-footer-icons",
@@ -472,7 +477,6 @@
 				"cosmosbeta-themedesigner-image-uploading",
 				"cosmosbeta-themedesigner-image-wordmark",
 				"cosmosbeta-themedesigner-images-intro",
-				"cosmosbeta-themedesigner-inherit",
 				"cosmosbeta-themedesigner-layout-backdrop-blur",
 				"cosmosbeta-themedesigner-layout-backdrop-blur-help",
 				"cosmosbeta-themedesigner-layout-button-style",
@@ -492,7 +496,6 @@
 				"cosmosbeta-themedesigner-mode-auto",
 				"cosmosbeta-themedesigner-mode-dark",
 				"cosmosbeta-themedesigner-mode-light",
-				"cosmosbeta-themedesigner-no",
 				"cosmosbeta-themedesigner-nojs",
 				"cosmosbeta-themedesigner-preset-applied",
 				"cosmosbeta-themedesigner-preset-cosmos-dark",
@@ -526,7 +529,6 @@
 				"cosmosbeta-themedesigner-rail-custom-message-help",
 				"cosmosbeta-themedesigner-rail-custom-remove",
 				"cosmosbeta-themedesigner-rail-display-hide",
-				"cosmosbeta-themedesigner-rail-display-inherit",
 				"cosmosbeta-themedesigner-rail-display-show",
 				"cosmosbeta-themedesigner-rail-enabled",
 				"cosmosbeta-themedesigner-rail-intro",
@@ -554,10 +556,14 @@
 				"cosmosbeta-themedesigner-rail-pages-mainpage",
 				"cosmosbeta-themedesigner-rail-pages-placeholder",
 				"cosmosbeta-themedesigner-rail-summary-places",
-				"cosmosbeta-themedesigner-rail-type-inherit",
 				"cosmosbeta-themedesigner-rail-type-normal",
 				"cosmosbeta-themedesigner-rail-type-sticky",
 				"cosmosbeta-themedesigner-readonly",
+				"cosmosbeta-themedesigner-reset",
+				"cosmosbeta-themedesigner-reset-all",
+				"cosmosbeta-themedesigner-reset-all-confirm",
+				"cosmosbeta-themedesigner-reset-colors",
+				"cosmosbeta-themedesigner-reset-module",
 				"cosmosbeta-themedesigner-restore-comment",
 				"cosmosbeta-themedesigner-success",
 				"cosmosbeta-themedesigner-swatches",
@@ -570,15 +576,16 @@
 				"cosmosbeta-themedesigner-tab-rail",
 				"cosmosbeta-themedesigner-tab-themes",
 				"cosmosbeta-themedesigner-text",
+				"cosmosbeta-themedesigner-theme-only",
 				"cosmosbeta-themedesigner-toolbar-enabled",
 				"cosmosbeta-themedesigner-toolbar-hidden",
 				"cosmosbeta-themedesigner-toolbar-hidden-help",
+				"cosmosbeta-themedesigner-toolbar-rail-off",
 				"cosmosbeta-themedesigner-toolbar-style",
 				"cosmosbeta-themedesigner-toolbar-style-bar",
 				"cosmosbeta-themedesigner-toolbar-style-floating",
 				"cosmosbeta-themedesigner-toolbar-style-help",
-				"cosmosbeta-themedesigner-toolbar-style-rail",
-				"cosmosbeta-themedesigner-yes"
+				"cosmosbeta-themedesigner-toolbar-style-rail"
 			]
 		},
 		"skins.cosmosbeta.icons": {
@@ -838,6 +845,14 @@
 			],
 			"description": "Array of usergroups to show on SocialProfile pages if the user has them"
 		},
+		"CosmosBetaThemeDesignerOnly": {
+			"value": false,
+			"description": "If true the theme designer is the only place the theme is set. The other theme variables (colors, images, content width and opacity, background options, the rail defaults, and the Europa infobox theme) are ignored, and the designer starts from built in defaults. Run maintenance/run.php CosmosBeta:ImportConfigTheme first to keep the current look."
+		},
+		"CosmosBetaThemeDesignerPublicView": {
+			"value": false,
+			"description": "If true anyone can open the theme designer. People without the cosmosbeta-themedesigner right see it read only, and publishing fails for them."
+		},
 		"CosmosBetaToolbarBackgroundColor": {
 			"value": "#000000",
 			"description": "Changes the background color of the toolbar"
@@ -880,7 +895,7 @@
 		"colormode": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\ColorMode",
 			"services": [
-				"CosmosBetaConfig",
+				"CosmosBetaEffectiveTheme",
 				"CosmosBetaAltModules"
 			]
 		},
@@ -904,7 +919,7 @@
 		"output": {
 			"class": "MediaWiki\\Skin\\Cosmos\\Hooks\\Handlers\\Output",
 			"services": [
-				"CosmosBetaConfig",
+				"CosmosBetaEffectiveTheme",
 				"CosmosBetaLessUtil"
 			]
 		},
