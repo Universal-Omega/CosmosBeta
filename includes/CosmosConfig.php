@@ -2,14 +2,15 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
 use MediaWiki\MainConfigNames;
-use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeStore;
+use MediaWiki\Skin\Cosmos\Rail\RailRules;
+use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
 use function array_diff;
 use function array_values;
 
@@ -49,9 +50,9 @@ class CosmosConfig {
 	];
 
 	public function __construct(
-		private readonly ServiceOptions $options,
-		private readonly ThemeStore $themeStore,
 		private readonly ColorModeResolver $colorModeResolver,
+		private readonly ThemeStore $themeStore,
+		private readonly ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
@@ -155,8 +156,12 @@ class CosmosConfig {
 		return (int)$this->getTheme()->getSection( 'layout' )['backdropBlur'];
 	}
 
-	public function hasSlimButtons(): bool {
-		return (bool)$this->getTheme()->getSection( 'layout' )['slimButtons'];
+	public function hasHeaderBorder(): bool {
+		return (bool)$this->getTheme()->getSection( 'layout' )['headerBorder'];
+	}
+
+	public function getButtonStyle(): string {
+		return (string)$this->getTheme()->getSection( 'layout' )['buttonStyle'];
 	}
 
 	public function getFooterOpacity(): int {
@@ -169,18 +174,15 @@ class CosmosConfig {
 
 	public function getFooterSettings(): array {
 		$settings = $this->getTheme()->getSection( 'footer' );
-
 		$settings['hiddenLinks'] = array_values(
 			array_diff( $settings['hiddenLinks'], $this->getFooterProtectedLinks() )
 		);
-		$settings['showIcons'] = $settings['showIcons'] || !$this->canHideFooterIcons();
 
+		$settings['showIcons'] = $settings['showIcons'] || !$this->canHideFooterIcons();
 		return $settings;
 	}
 
-	/**
-	 * @return string[]
-	 */
+	/** @return string[] */
 	public function getFooterProtectedLinks(): array {
 		return (array)$this->options->get( ConfigNames::FooterProtectedLinks );
 	}
@@ -191,5 +193,14 @@ class CosmosConfig {
 
 	public function getRailSettings(): array {
 		return $this->getTheme()->getSection( 'rail' );
+	}
+
+	public function getRailRules( string $moduleId ): RailRules {
+		return RailRules::newFromArray( $this->getRailSettings()['modules'][$moduleId] ?? [] );
+	}
+
+	/** @return array<int, array{id: string, message: string, header: string}> */
+	public function getCustomRailModules(): array {
+		return $this->getRailSettings()['customModules'];
 	}
 }

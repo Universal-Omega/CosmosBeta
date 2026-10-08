@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta;
+namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\FileRepo\File\File;
 use MediaWiki\FileRepo\RepoGroup;
@@ -10,11 +10,11 @@ use MediaWiki\Title\TitleFactory;
 use function preg_match;
 use const NS_FILE;
 
-class CosmosBackgroundLookup {
+class BackgroundLookup {
 
 	public function __construct(
-		private readonly TitleFactory $titleFactory,
 		private readonly RepoGroup $repoGroup,
+		private readonly TitleFactory $titleFactory,
 		private readonly string $main,
 		private readonly string $wikiHeader,
 	) {

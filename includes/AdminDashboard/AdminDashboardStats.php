@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\AdminDashboard;
+namespace MediaWiki\Skin\Cosmos\AdminDashboard;
 
 use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\SiteStats\SiteStats;
@@ -17,18 +17,17 @@ use function range;
 final readonly class AdminDashboardStats {
 
 	private const int DAYS = 7;
-
 	private const int SECONDS_PER_DAY = 86400;
 
 	public function __construct(
-		private WANObjectCache $cache,
 		private IConnectionProvider $dbProvider,
+		private WANObjectCache $cache,
 	) {
 	}
 
 	public function getStats(): DashboardStats {
 		$activity = $this->cache->getWithSetCallback(
-			$this->cache->makeKey( 'CosmosBeta', 'admindashboard', 'activity', self::DAYS ),
+			$this->cache->makeKey( 'Cosmos', 'admindashboard', 'activity', self::DAYS ),
 			WANObjectCache::TTL_HOUR,
 			$this->fetchActivity( ... )
 		);
@@ -95,7 +94,6 @@ final readonly class AdminDashboardStats {
 	 */
 	private function getDays(): array {
 		$now = (int)ConvertibleTimestamp::time();
-
 		return array_map(
 			static fn ( int $offset ): string => gmdate( 'Ymd', $now - $offset * self::SECONDS_PER_DAY ),
 			range( 0, self::DAYS - 1 )

@@ -2,14 +2,14 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\AdminDashboard;
+namespace MediaWiki\Skin\Cosmos\AdminDashboard;
 
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\MessageLocalizer;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
+use MediaWiki\Skin\Cosmos\CosmosNavigation;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
@@ -28,9 +28,9 @@ final readonly class DashboardControlRegistry {
 	public function __construct(
 		private ExtensionRegistry $extensionRegistry,
 		private PermissionManager $permissionManager,
-		private ServiceOptions $options,
 		private SpecialPageFactory $specialPageFactory,
 		private TitleFactory $titleFactory,
+		private ServiceOptions $options,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
@@ -64,7 +64,14 @@ final readonly class DashboardControlRegistry {
 			$this->external( 'help', $community, $localizer ),
 
 			$this->special( 'categories', $content, 'Categories', $user ),
-			$canCreate ? new DashboardControl( 'addpage', $content, '#create-article', opensCreateDialog: true ) : null,
+			$canCreate ? new DashboardControl(
+				id: 'addpage',
+				section: $content,
+				url: '#create-article',
+				specialPage: null,
+				opensCreateDialog: true,
+				isExternal: false,
+			) : null,
 			$this->options->get( MainConfigNames::EnableUploads ) ?
 				$this->special( 'upload', $content, 'Upload', $user ) :
 				null,
@@ -81,31 +88,49 @@ final readonly class DashboardControlRegistry {
 
 	private function special( string $id, DashboardSection $section, string $name, User $user ): ?DashboardControl {
 		$page = $this->specialPageFactory->getPage( $name );
-
 		if ( !$page || !$page->userCanExecute( $user ) ) {
 			return null;
 		}
 
-		return new DashboardControl( $id, $section, $page->getPageTitle()->getFullURL(), specialPage: $name );
+		return new DashboardControl(
+			id: $id,
+			section: $section,
+			url: $page->getPageTitle()->getFullURL(),
+			specialPage: $name,
+			opensCreateDialog: false,
+			isExternal: false,
+		);
 	}
 
 	private function interfacePage( string $id, DashboardSection $section, string $text, User $user ): ?DashboardControl {
 		$title = $this->titleFactory->makeTitleSafe( NS_MEDIAWIKI, $text );
-
 		if ( !$title || !$this->permissionManager->userCan( 'edit', $user, $title ) ) {
 			return null;
 		}
 
-		return new DashboardControl( $id, $section, $title->getFullURL( [ 'action' => 'edit' ] ) );
+		return new DashboardControl(
+			id: $id,
+			section: $section,
+			url: $title->getFullURL( [ 'action' => 'edit' ] ),
+			specialPage: null,
+			opensCreateDialog: false,
+			isExternal: false,
+		);
 	}
 
 	private function external( string $id, DashboardSection $section, MessageLocalizer $localizer ): ?DashboardControl {
 		$url = trim( $localizer->msg( "cosmosbeta-admindashboard-control-$id-url" )->inContentLanguage()->plain() );
-
 		if ( !preg_match( '#^https?://#i', $url ) ) {
 			return null;
 		}
 
-		return new DashboardControl( $id, $section, $url, isExternal: true );
+		return new DashboardControl(
+			id: $id,
+			section: $section,
+			url: $url,
+			specialPage: null,
+			opensCreateDialog: false,
+			isExternal: true,
+		);
 	}
 }

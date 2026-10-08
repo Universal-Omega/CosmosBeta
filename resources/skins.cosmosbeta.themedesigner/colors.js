@@ -170,14 +170,24 @@
 	 * @param {string} value
 	 * @return {boolean}
 	 */
-	function isDark( value ) {
+	function isDark( value, threshold ) {
 		const color = parse( value );
 
-		return !color || color.a <= 0 || toHsl( color ).l < 0.5;
+		if ( !color || color.a <= 0 ) {
+			return true;
+		}
+
+		const linear = [ color.r, color.g, color.b ].map( ( channel ) => {
+			const value = channel / 255;
+
+			return value <= 0.03928 ? value / 12.92 : Math.pow( ( value + 0.055 ) / 1.055, 2.4 );
+		} );
+
+		return 0.2126 * linear[ 0 ] + 0.7152 * linear[ 1 ] + 0.0722 * linear[ 2 ] < ( threshold || 0.179 );
 	}
 
 	function readableOn( value ) {
-		return isDark( value ) ? '#fff' : '#000';
+		return isDark( value, 0.3 ) ? '#fff' : '#000';
 	}
 
 	function contentTextOn( value ) {

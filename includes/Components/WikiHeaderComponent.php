@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Components;
+namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
@@ -10,8 +10,8 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SiteStats\SiteStats;
-use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\CosmosWordmarkLookup;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\WordmarkLookup;
 use MediaWiki\SpecialPage\SpecialPage;
 use function ucwords;
 
@@ -20,10 +20,10 @@ class WikiHeaderComponent {
 	public function __construct(
 		private readonly IContextSource $context,
 		private readonly Config $config,
-		private readonly PermissionManager $permissionManager,
-		private readonly ExtensionRegistry $extensionRegistry,
-		private readonly CosmosWordmarkLookup $wordmarkLookup,
 		private readonly CosmosConfig $cosmosConfig,
+		private readonly ExtensionRegistry $extensionRegistry,
+		private readonly PermissionManager $permissionManager,
+		private readonly WordmarkLookup $wordmarkLookup,
 	) {
 	}
 
@@ -41,7 +41,7 @@ class WikiHeaderComponent {
 			'counter-label' => $this->context->msg( 'cosmosbeta-counter-label' )->numParams( $articles )->escaped(),
 		];
 
-		return $canRead ? $data + $this->getButtons( $user->isAnon() ) : $data;
+		return $canRead ? $data + $this->getButtons( !$user->isNamed() ) : $data;
 	}
 
 	private function getButtons( bool $isAnon ): array {
@@ -94,7 +94,7 @@ class WikiHeaderComponent {
 			'has-colormode' => $hasColorMode,
 			'colormode-icon' => $mode === 'dark' ? 'bright' : 'moon',
 			'colormode-text' => $this->context->msg( "cosmosbeta-colormode-switch-$mode" )->text(),
-			'colormode-url' => $user->isRegistered() ?
+			'colormode-url' => $user->isNamed() ?
 				SpecialPage::getTitleFor( 'Preferences' )->getLocalURL() . '#mw-prefsection-rendering' :
 				'#',
 			'has-more-image' => $canUpload,

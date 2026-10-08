@@ -70,14 +70,16 @@
 	background-color: #808080;
 }
 
-.ve-ui-mwSaveDialog .oo-ui-window-frame {
-	width: 60%;
-	height: 60%;
-}
+@media ( min-width: 851px ) {
+	.ve-ui-mwSaveDialog .oo-ui-window-frame {
+		width: 60%;
+		height: 60%;
+	}
 
-.ve-activated .oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-active > .oo-ui-window-frame {
-	max-width: 60%;
-	max-height: 60%;
+	.ve-activated .oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-active > .oo-ui-window-frame {
+		max-width: 60%;
+		max-height: 60%;
+	}
 }
 
 .ve-ui-toolbar:not( .ve-ui-toolbar-floating ) .oo-ui-toolbar-bar {

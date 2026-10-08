@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
@@ -11,8 +11,8 @@ use MediaWiki\Context\IContextSource;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Parser\Sanitizer;
-use MediaWiki\Skins\CosmosBeta\ConfigNames;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Skin\Cosmos\ConfigNames;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
@@ -77,8 +77,7 @@ class SocialProfile {
 		}
 
 		$context = $userProfilePage->getContext();
-
-		if ( !$context->getSkin() instanceof SkinCosmosBeta ) {
+		if ( !$context->getSkin() instanceof SkinCosmos ) {
 			return;
 		}
 
@@ -104,7 +103,7 @@ class SocialProfile {
 	private function getUserGroupTags( IContextSource $context, User $owner ): array {
 		if ( $owner->getBlock() ) {
 			return [ [
-				'class' => 'tag-blocked',
+				'class' => 'skin-cosmos-profile__tag--blocked tag-blocked',
 				'text' => $context->msg( 'cosmosbeta-user-blocked' )->text(),
 			] ];
 		}
@@ -121,7 +120,7 @@ class SocialProfile {
 			$message = $context->msg( "group-$group-member" );
 
 			$tags[] = [
-				'class' => 'tag-' . Sanitizer::escapeClass( $group ),
+				'class' => 'skin-cosmos-profile__tag--' . Sanitizer::escapeClass( $group ) . ' tag-' . Sanitizer::escapeClass( $group ),
 				'text' => ucfirst( $message->isDisabled() ? $group : $message->text() ),
 			];
 		}
@@ -131,7 +130,6 @@ class SocialProfile {
 
 	private function getUserBio( User $owner ): ?string {
 		$title = $this->titleFactory->newFromText( $owner->getName(), NS_USER )?->getSubpage( 'bio' );
-
 		if ( !$title || !$title->isKnown() ) {
 			return null;
 		}

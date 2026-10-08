@@ -2,12 +2,12 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Components;
+namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Config\Config;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Skins\CosmosBeta\ConfigNames;
+use MediaWiki\Skin\Cosmos\ConfigNames;
 use Telepedia\UserProfileV2\Avatar\UserProfileV2Avatar;
 use wAvatar;
 use function class_exists;

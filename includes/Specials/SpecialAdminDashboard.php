@@ -2,23 +2,25 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Specials;
+namespace MediaWiki\Skin\Cosmos\Specials;
 
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Message\Message;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdminDashboardStats;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\AdvancedSectionBuilder;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardControl;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardControlRegistry;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardSection;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardStats;
-use MediaWiki\Skins\CosmosBeta\AdminDashboard\DashboardTab;
+use MediaWiki\Skin\Cosmos\AdminDashboard\AdminDashboardStats;
+use MediaWiki\Skin\Cosmos\AdminDashboard\AdvancedSectionBuilder;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControl;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControlRegistry;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardSection;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardStats;
+use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardTab;
 use MediaWiki\SpecialPage\SpecialPage;
 use function array_filter;
 use function array_keys;
 use function array_map;
 use function array_values;
 use function count;
+use function strrpos;
+use function substr;
 
 class SpecialAdminDashboard extends SpecialPage {
 
@@ -56,7 +58,8 @@ class SpecialAdminDashboard extends SpecialPage {
 
 	/** @inheritDoc */
 	public function getShortDescription( string $path = '' ): string {
-		$tab = DashboardTab::fromSubPage( $path );
+		$slash = strrpos( $path, '/' );
+		$tab = DashboardTab::fromSubPage( $slash === false ? $path : substr( $path, $slash + 1 ) );
 		return $tab ? $this->msg( $tab->getMessageKey() )->text() : '';
 	}
 
@@ -105,10 +108,8 @@ class SpecialAdminDashboard extends SpecialPage {
 	 */
 	private function getSections( array $controls ): array {
 		$sections = [];
-
 		foreach ( DashboardSection::cases() as $section ) {
 			$items = array_filter( $controls, static fn ( DashboardControl $control ): bool => $control->section === $section );
-
 			if ( !$items ) {
 				continue;
 			}
@@ -146,7 +147,6 @@ class SpecialAdminDashboard extends SpecialPage {
 		$groups = [];
 		foreach ( $this->advancedSectionBuilder->build( $this->getContext(), $excluded ) as $group => $pages ) {
 			$message = $this->msg( "specialpages-group-$group" );
-
 			$groups[] = [
 				'id' => $group,
 				'title' => $message->exists() ? $message->text() : $group,

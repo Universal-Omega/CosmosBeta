@@ -2,12 +2,13 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks;
+namespace MediaWiki\Skin\Cosmos\Hooks;
 
 use MediaWiki\HookContainer\HookContainer;
+use MediaWiki\Skin\Cosmos\Rail\RailModuleList;
 use MediaWiki\Skin\Skin;
 
-class CosmosHookRunner implements CosmosRailBuilderHook {
+class HookRunner implements CosmosRailBuilderHook {
 
 	public function __construct(
 		private readonly HookContainer $container,
@@ -15,10 +16,10 @@ class CosmosHookRunner implements CosmosRailBuilderHook {
 	}
 
 	/** @inheritDoc */
-	public function onCosmosRailBuilder( array &$modules, Skin $skin ): void {
+	public function onCosmosRailBuilder( RailModuleList $modules, Skin $skin ): void {
 		$this->container->run(
-			'CosmosBetaRailBuilder',
-			[ &$modules, $skin ],
+			'CosmosRailBuilder',
+			[ $modules, $skin ],
 			[ 'abortable' => false ]
 		);
 	}
