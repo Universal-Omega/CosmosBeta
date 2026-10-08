@@ -10,7 +10,7 @@ use MediaWiki\MainConfigNames;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\SiteStats\SiteStats;
-use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\Cosmos\WordmarkLookup;
 use MediaWiki\SpecialPage\SpecialPage;
 use function ucwords;
@@ -20,7 +20,7 @@ class WikiHeaderComponent {
 	public function __construct(
 		private readonly IContextSource $context,
 		private readonly Config $config,
-		private readonly CosmosConfig $cosmosConfig,
+		private readonly EffectiveTheme $theme,
 		private readonly ExtensionRegistry $extensionRegistry,
 		private readonly PermissionManager $permissionManager,
 		private readonly WordmarkLookup $wordmarkLookup,
@@ -71,8 +71,8 @@ class WikiHeaderComponent {
 		}
 
 		$onlyRead = !$canEdit && !$canCreate;
-		$hasColorMode = $this->cosmosConfig->isColorModeToggleEnabled();
-		$mode = $this->cosmosConfig->getRenderMode();
+		$hasColorMode = $this->theme->isColorModeToggleEnabled();
+		$mode = $this->theme->getRenderMode();
 		$hasMore = ( !$isAnon && ( $canUpload || $canAddVideo ) ) ||
 			( ( $canUpload || $canAddVideo ) && $onlyRead );
 
