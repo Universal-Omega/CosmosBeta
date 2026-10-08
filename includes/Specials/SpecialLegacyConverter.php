@@ -16,7 +16,9 @@ class SpecialLegacyConverter extends SpecialPage {
 
 	private ?LegacyConversionResult $result = null;
 
-	public function __construct( private readonly LegacyConverter $converter ) {
+	public function __construct(
+		private readonly LegacyConverter $converter,
+	) {
 		parent::__construct( 'CosmosBetaLegacyConverter' );
 	}
 
@@ -35,7 +37,7 @@ class SpecialLegacyConverter extends SpecialPage {
 		$this->setHeaders();
 		$this->getOutput()->addWikiMsg( 'cosmosbeta-legacyconverter-intro' );
 
-		HTMLForm::create( [
+		$form = new HTMLForm( [
 			'type' => [
 				'type' => 'radio',
 				'label-message' => 'cosmosbeta-legacyconverter-type',
@@ -52,8 +54,8 @@ class SpecialLegacyConverter extends SpecialPage {
 				'required' => true,
 				'spellcheck' => false,
 			],
-		], $this->getContext(), 'cosmosbeta-legacyconverter' )
-			->setSubmitTextMsg( 'cosmosbeta-legacyconverter-submit' )
+		], $this->getContext(), 'cosmosbeta-legacyconverter' );
+		$form->setSubmitTextMsg( 'cosmosbeta-legacyconverter-submit' )
 			->setSubmitCallback( $this->convert( ... ) )
 			->show();
 
