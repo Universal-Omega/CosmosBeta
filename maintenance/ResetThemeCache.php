@@ -22,8 +22,8 @@ class ResetThemeCache extends Maintenance {
 
 	private function initServices(): void {
 		$services = $this->getServiceContainer();
-		$this->navigation = $services->get( 'CosmosBetaNavigation' );
-		$this->themeStore = $services->get( 'CosmosBetaThemeStore' );
+		$this->navigation = $services->get( 'Cosmos.Navigation' );
+		$this->themeStore = $services->get( 'Cosmos.ThemeStore' );
 	}
 
 	public function execute(): void {
