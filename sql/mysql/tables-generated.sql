@@ -2,7 +2,7 @@
 -- Source: sql/tables.json
 -- Do not modify this file directly.
 -- See https://www.mediawiki.org/wiki/Manual:Schema_changes
-CREATE TABLE /*_*/cosmosbeta_theme (
+CREATE TABLE /*_*/cosmos_theme (
   cth_id INT UNSIGNED AUTO_INCREMENT NOT NULL,
   cth_timestamp BINARY(14) NOT NULL,
   cth_actor BIGINT UNSIGNED NOT NULL,

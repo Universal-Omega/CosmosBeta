@@ -2,10 +2,10 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
-use MediaWiki\Skins\CosmosBeta\Maintenance\ImportLegacyTheme;
+use MediaWiki\Skin\Cosmos\Maintenance\ImportLegacyTheme;
 
 class Installer implements LoadExtensionSchemaUpdatesHook {
 
@@ -17,7 +17,7 @@ class Installer implements LoadExtensionSchemaUpdatesHook {
 		$dir = __DIR__ . '/../../../sql';
 		$type = $updater->getDB()->getType();
 
-		$updater->addExtensionTable( 'cosmosbeta_theme', "$dir/$type/tables-generated.sql" );
+		$updater->addExtensionTable( 'cosmos_theme', "$dir/$type/tables-generated.sql" );
 		$updater->addPostDatabaseUpdateMaintenance( ImportLegacyTheme::class );
 	}
 }

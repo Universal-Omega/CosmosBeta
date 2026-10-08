@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\IContextSource;
@@ -12,8 +12,8 @@ use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\Language\Hook\MessageCacheReplaceHook;
 use MediaWiki\Language\RawMessage;
-use MediaWiki\Skins\CosmosBeta\CosmosNavigation;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
+use MediaWiki\Skin\Cosmos\CosmosNavigation;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
 use function trim;
@@ -37,7 +37,7 @@ class Navigation implements
 		$context = $editPage->getContext();
 
 		if (
-			!$context->getSkin() instanceof SkinCosmosBeta ||
+			!$context->getSkin() instanceof SkinCosmos ||
 			!$content instanceof WikitextContent ||
 			!$this->isNavigationPage( $editPage->getTitle() )
 		) {
@@ -45,7 +45,6 @@ class Navigation implements
 		}
 
 		$pageText = trim( $content->getText() );
-
 		if ( $pageText === '' || $pageText === '-' ) {
 			return true;
 		}
@@ -58,7 +57,7 @@ class Navigation implements
 
 	/** @inheritDoc */
 	public function onBeforeInitialize( $title, $unused, $output, $user, $request, $mediaWiki ): void {
-		if ( $output->getSkin() instanceof SkinCosmosBeta && $this->isNavigationPage( $title ) ) {
+		if ( $output->getSkin() instanceof SkinCosmos && $this->isNavigationPage( $title ) ) {
 			$request->setVal( 'wteswitched', '1' );
 		}
 	}

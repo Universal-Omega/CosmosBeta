@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace MediaWiki\Skins\CosmosBeta\Hooks\Handlers;
+namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
 use MediaWiki\Html\Html;
 use MediaWiki\MainConfigNames;
@@ -10,11 +10,11 @@ use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Preferences\Hook\GetPreferencesHook;
 use MediaWiki\ResourceLoader\Hook\ResourceLoaderRegisterModulesHook;
 use MediaWiki\ResourceLoader\ResourceLoader;
-use MediaWiki\Skins\CosmosBeta\CosmosConfig;
-use MediaWiki\Skins\CosmosBeta\SkinCosmosBeta;
-use MediaWiki\Skins\CosmosBeta\Theme\AltModules;
-use MediaWiki\Skins\CosmosBeta\Theme\ColorModeResolver;
-use MediaWiki\Skins\CosmosBeta\Theme\ThemeSettings;
+use MediaWiki\Skin\Cosmos\CosmosConfig;
+use MediaWiki\Skin\Cosmos\SkinCosmos;
+use MediaWiki\Skin\Cosmos\Theme\AltModules;
+use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
+use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use function array_merge;
 use function array_unique;
 use function wfAppendQuery;
@@ -57,12 +57,12 @@ class ColorMode implements
 
 	/** @inheritDoc */
 	public function onBeforePageDisplay( $out, $skin ): void {
-		if ( !$skin instanceof SkinCosmosBeta ) {
+		if ( !$skin instanceof SkinCosmos ) {
 			return;
 		}
 
 		$mode = $this->config->getRenderMode();
-		$out->addHtmlClasses( "skin-cosmos-colormode-$mode" );
+		$out->addHtmlClasses( "skin-cosmos-colormode--$mode" );
 
 		$auto = $this->config->isAutoColorMode() && !$this->config->hasColorModePreference();
 
@@ -71,12 +71,19 @@ class ColorMode implements
 			'skin-theme-clientpref-night' :
 			'skin-theme-clientpref-day' ) );
 		$toggle = $this->config->isColorModeToggleEnabled();
+		$bodyColors = $this->getBodyColors();
+
+		$out->addHeadItem( 'skin-cosmos-canvas', Html::inlineStyle(
+			$this->getCanvasRule( $bodyColors[$mode], $mode ) .
+			( $auto ? '@media (prefers-color-scheme:dark){' .
+				$this->getCanvasRule( $bodyColors[ThemeSettings::MODE_DARK], ThemeSettings::MODE_DARK ) . '}' : '' )
+		) );
 
 		if ( !$toggle && !$auto ) {
 			return;
 		}
 
-		$registered = $out->getUser()->isRegistered();
+		$registered = $out->getUser()->isNamed();
 		$altModules = [];
 
 		if ( $auto || !$registered ) {
@@ -110,21 +117,24 @@ class ColorMode implements
 				'media' => '(prefers-color-scheme: dark)',
 				'href' => $url,
 			] );
-			$out->addHtmlClasses( 'skin-cosmos-colormode-auto' );
+			$out->addHtmlClasses( 'skin-cosmos-colormode--auto' );
 		}
 
 		if ( !$registered && $toggle ) {
 			$rendered = $mode === ThemeSettings::MODE_DARK ? 'night' : 'day';
+			$other = ColorModeResolver::getOpposite( $mode );
 			$script = '(function(){var d=document.documentElement,' .
 				'm=d.className.match(/skin-theme-clientpref-(day|night|os)/);' .
 				'if(!m||m[1]==="os"){return}' .
 				'var l=document.getElementById("skin-cosmos-auto-dark");' .
 				'if(l){l.parentNode.removeChild(l)}' .
 				'if(m[1]!=="' . $rendered . '"){' .
-				'd.className+=" skin-cosmos-colormode-pending";' .
-				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode-pending","")},2500)}' .
+				'd.style.backgroundColor=' . json_encode( $bodyColors[$other] ) . ';' .
+				'd.style.colorScheme="' . ( $other === ThemeSettings::MODE_DARK ? 'dark' : 'light' ) . '";' .
+				'd.className+=" skin-cosmos-colormode--pending";' .
+				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode--pending","")},2500)}' .
 				'}());';
-			$headItems .= Html::inlineStyle( 'html.skin-cosmos-colormode-pending body{opacity:0}' ) .
+			$headItems .= Html::inlineStyle( 'html.skin-cosmos-colormode--pending body{opacity:0}' ) .
 				Html::inlineScript( $script, $out->getCSP()->getNonce() );
 		}
 
@@ -132,7 +142,7 @@ class ColorMode implements
 			$out->addHeadItem( 'skin-cosmos-colormode', $headItems );
 		}
 
-		$out->addJsConfigVars( 'wgCosmosBetaColorMode', [
+		$out->addJsConfigVars( 'wgCosmosColorMode', [
 			'render' => $mode,
 			'default' => $this->config->getDefaultMode(),
 			'auto' => $auto,
@@ -141,6 +151,21 @@ class ColorMode implements
 			'registered' => $registered,
 			'altModules' => $altModules,
 			'option' => ColorModeResolver::OPTION,
+			'bodyColors' => $bodyColors,
 		] );
+	}
+
+	/** @return array<string,string> Page background of each mode, safe to print into CSS */
+	private function getBodyColors(): array {
+		$colors = [];
+		foreach ( ThemeSettings::MODES as $name ) {
+			$colors[$name] = ThemeSettings::normalizeColor( $this->config->getColor( 'body', $name ) ) ?? 'transparent';
+		}
+
+		return $colors;
+	}
+
+	private function getCanvasRule( string $color, string $mode ): string {
+		return "html{background-color:$color;" . ( $mode === ThemeSettings::MODE_DARK ? 'color-scheme:dark;' : '' ) . '}';
 	}
 }
