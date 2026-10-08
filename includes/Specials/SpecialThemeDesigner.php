@@ -18,6 +18,7 @@ use MediaWiki\Skin\Cosmos\Rail\RailModuleInfo;
 use MediaWiki\Skin\Cosmos\Rail\RailModuleType;
 use MediaWiki\Skin\Cosmos\Theme\ConfigDefaults;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
+use MediaWiki\Skin\Cosmos\Theme\ThemeFont;
 use MediaWiki\Skin\Cosmos\Theme\ThemePresets;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
@@ -245,6 +246,7 @@ class SpecialThemeDesigner extends SpecialPage {
 			'effective' => $this->getEffectiveDefaults(),
 			'canHideFooterIcons' => $this->theme->canHideFooterIcons(),
 			'upload' => $this->getUploadData(),
+			'fontPresets' => ThemeFont::PRESETS,
 			'namespaces' => $this->getNamespaceOptions(),
 			'railModules' => array_map(
 				static fn ( RailModuleInfo $module ): array => $module->toArray(),
@@ -271,6 +273,7 @@ class SpecialThemeDesigner extends SpecialPage {
 			'layout' => [
 				'contentWidth' => $defaults->contentWidth,
 				'contentOpacity' => $defaults->contentOpacity,
+				'fontFamily' => $defaults->fontFamily,
 			],
 			'extensions' => [
 				'portableInfoboxEuropa' => $defaults->europa,
@@ -291,15 +294,13 @@ class SpecialThemeDesigner extends SpecialPage {
 	}
 
 	private function getUploadData(): array {
-		$extensions = array_values( array_intersect(
-			array_map( 'strtolower', (array)$this->getConfig()->get( MainConfigNames::FileExtensions ) ),
-			self::IMAGE_EXTENSIONS
-		) );
+		$allowed = array_map( 'strtolower', (array)$this->getConfig()->get( MainConfigNames::FileExtensions ) );
 
 		return [
 			'enabled' => (bool)$this->getConfig()->get( MainConfigNames::EnableUploads ) &&
 				$this->getAuthority()->isAllowed( 'upload' ),
-			'extensions' => $extensions,
+			'extensions' => array_values( array_intersect( $allowed, self::IMAGE_EXTENSIONS ) ),
+			'fontExtensions' => array_values( array_intersect( $allowed, ThemeFont::EXTENSIONS ) ),
 		];
 	}
 
