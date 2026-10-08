@@ -124,13 +124,13 @@
 						<template #label>
 							{{ msg( 'image-' + key ) }}
 						</template>
-						<image-field
+						<file-field
 							v-model="state.images[ key ]"
 							:placeholder="designer.effective.images[ key ] || msg( 'image-default' )"
 							:disabled="!designer.canEdit"
 							:upload="designer.upload"
-							:messages="imageMessages"
-						></image-field>
+							:messages="fileMessages"
+						></file-field>
 						<reset-button :path="'images/' + key"></reset-button>
 					</cdx-field>
 					<cdx-field>
@@ -169,6 +169,46 @@
 							:disabled="!designer.canEdit"
 						></cdx-select>
 						<reset-button path="layout/contentWidth"></reset-button>
+					</cdx-field>
+					<cdx-field>
+						<template #label>
+							{{ msg( 'layout-font' ) }}
+						</template>
+						<template #help-text>
+							{{ msg( 'layout-font-help' ) }}
+						</template>
+						<cdx-select
+							v-model:selected="fontChoice"
+							:menu-items="fontItems"
+							:disabled="!designer.canEdit"
+						></cdx-select>
+						<reset-button path="layout/font"></reset-button>
+					</cdx-field>
+					<cdx-field v-if="state.layout.font.type === 'file'">
+						<template #label>
+							{{ msg( 'font-file-label' ) }}
+						</template>
+						<template #help-text>
+							{{ msg( 'font-file-help' ) }}
+						</template>
+						<file-field
+							v-model="state.layout.font.value"
+							:disabled="!designer.canEdit"
+							:upload="fontUpload"
+							:messages="fileMessages"
+						></file-field>
+					</cdx-field>
+					<cdx-field v-else-if="state.layout.font.type === 'custom'">
+						<template #label>
+							{{ msg( 'font-custom-label' ) }}
+						</template>
+						<template #help-text>
+							{{ msg( 'font-custom-help' ) }}
+						</template>
+						<cdx-text-input
+							v-model="state.layout.font.value"
+							:disabled="!designer.canEdit"
+						></cdx-text-input>
 					</cdx-field>
 					<cdx-field>
 						<template #label>
@@ -451,7 +491,7 @@ const {
 	} = mw.loader.require( 'skins.cosmosbeta.themedesigner.codex' ),
 	{ computed, defineComponent, onMounted, reactive, ref, watch } = require( 'vue' ),
 	colors = require( './colors.js' ),
-	ImageField = require( './ImageField.vue' ),
+	FileField = require( './FileField.vue' ),
 	msg = require( './msg.js' ),
 	RailTab = require( './rail/RailTab.vue' ),
 	ResetButton = require( './ResetButton.vue' ),
@@ -493,7 +533,7 @@ module.exports = exports = defineComponent( {
 		CdxTabs,
 		CdxTextInput,
 		CdxToggleSwitch,
-		ImageField,
+		FileField,
 		RailTab,
 		ResetButton
 	},
@@ -569,14 +609,50 @@ module.exports = exports = defineComponent( {
 		// Page tools in the rail have nowhere to show once the rail is off
 		const toolsLost = computed( () => state.toolbar.enabled && state.toolbar.style === 'rail' && !state.rail.enabled );
 
-		const imageMessages = {
-			upload: msg( 'image-upload' ),
-			uploading: msg( 'image-uploading' ),
-			exists: msg( 'image-upload-exists' ),
-			failed: msg( 'image-upload-failed' ),
-			comment: msg( 'image-upload-comment' ),
+		const fileMessages = {
+			upload: msg( 'file-upload' ),
+			uploading: msg( 'file-uploading' ),
+			exists: msg( 'file-upload-exists' ),
+			failed: msg( 'file-upload-failed' ),
+			comment: msg( 'file-upload-comment' ),
 			noResults: msg( 'rail-no-results' )
 		};
+
+		const fontUpload = {
+			enabled: props.designer.upload.enabled,
+			extensions: props.designer.upload.fontExtensions
+		};
+
+		const fontItems = items( [
+			[ 'default', msg( 'font-default' ) ],
+			...Object.keys( props.designer.fontPresets ).map( ( key ) => [ 'preset:' + key, msg( 'font-preset-' + key ) ] ),
+			...( fontUpload.extensions.length || state.layout.font.type === 'file' ? [ [ 'file', msg( 'font-file' ) ] ] : [] ),
+			[ 'custom', msg( 'font-custom' ) ]
+		] );
+
+		// The font is a type and a value, the menu mixes the presets in with the types
+		const fontChoice = computed( {
+			get: () => {
+				const { type, value } = state.layout.font;
+
+				return type === 'preset' ? 'preset:' + value : type || 'default';
+			},
+			set: ( choice ) => {
+				const [ type, value = '' ] = choice.split( ':' );
+
+				state.layout.font = type === 'default' ? { type: '', value: '' } : { type, value };
+			}
+		} );
+
+		const fontStack = computed( () => {
+			const { type, value } = state.layout.font;
+
+			if ( type === 'preset' ) {
+				return props.designer.fontPresets[ value ];
+			}
+
+			return type === 'custom' && value !== '' ? value : effective.layout.fontFamily;
+		} );
 
 		const layoutRanges = [
 			{
@@ -730,7 +806,7 @@ module.exports = exports = defineComponent( {
 				on = ( slot ) => ( { background: color( slot ), color: colors.readableOn( color( slot ) ) } );
 
 			return {
-				root: { background: color( 'body' ) },
+				root: { background: color( 'body' ), fontFamily: fontStack.value },
 				blur: state.layout.backdropBlur > 0 ? { backdropFilter: 'blur(' + state.layout.backdropBlur + 'px)' } : {},
 				banner: on( 'banner' ),
 				header: on( 'header' ),
@@ -795,7 +871,10 @@ module.exports = exports = defineComponent( {
 			europaModel,
 			toolsLost,
 			buttonStyleItems,
-			imageMessages,
+			fileMessages,
+			fontChoice,
+			fontItems,
+			fontUpload,
 			layoutRanges,
 			preview,
 			msg,
