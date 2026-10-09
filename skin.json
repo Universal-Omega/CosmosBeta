@@ -85,6 +85,9 @@
 		"MediaWiki\\Skin\\Cosmos\\": "includes/",
 		"MediaWiki\\Skin\\Cosmos\\Maintenance\\": "maintenance/"
 	},
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Skin\\Cosmos\\Tests\\": "tests/phpunit/"
+	},
 	"ServiceWiringFiles": [
 		"includes/ServiceWiring.php"
 	],
