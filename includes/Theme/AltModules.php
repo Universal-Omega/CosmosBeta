@@ -13,7 +13,7 @@ use function str_starts_with;
  */
 class AltModules {
 
-	public const string SUFFIX = '.alt';
+	private const string SUFFIX = '.alt';
 
 	private ?array $definitions = null;
 
