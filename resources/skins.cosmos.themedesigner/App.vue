@@ -17,7 +17,10 @@
 							:key="preset.name"
 							type="button"
 							class="skin-cosmos-themedesigner__preset"
-							:class="{ 'skin-cosmos-is-active': state.presets[ preset.mode ] === preset.name }"
+							:class="{
+								'skin-cosmos-is-active':
+									state.presets[ preset.mode ] === preset.name
+							}"
 							:disabled="!designer.canEdit"
 							@click="applyPreset( preset )"
 						>
@@ -101,7 +104,9 @@
 								@reset="clearColorInput( slot )"
 							></reset-button>
 						</div>
-						<div class="skin-cosmos-themedesigner__range skin-cosmos-themedesigner__alpha">
+						<div
+							class="skin-cosmos-themedesigner__range
+								skin-cosmos-themedesigner__alpha">
 							<span>{{ msg( 'color-opacity' ) }}</span>
 							<input
 								type="range"
@@ -126,7 +131,9 @@
 						</template>
 						<file-field
 							v-model="state.images[ key ]"
-							:placeholder="designer.effective.images[ key ] || msg( 'image-default' )"
+							:placeholder="
+								designer.effective.images[ key ] || msg( 'image-default' )
+							"
 							:disabled="!designer.canEdit"
 							:upload="designer.upload"
 							:messages="fileMessages"
@@ -185,7 +192,9 @@
 						></font-picker>
 						<reset-button path="layout/font"></reset-button>
 					</cdx-field>
-					<cdx-message v-if="state.layout.font.type === 'file' && !fontUpload.extensions.length" type="warning">
+					<cdx-message
+						v-if="state.layout.font.type === 'file' && !fontUpload.extensions.length"
+						type="warning">
 						{{ msg( 'font-file-unavailable' ) }}
 					</cdx-message>
 					<cdx-field v-else-if="state.layout.font.type === 'file'">
@@ -336,7 +345,10 @@
 							<reset-button path="footer/opacity"></reset-button>
 						</div>
 					</cdx-field>
-					<cdx-field :help-text="designer.canHideFooterIcons ? '' : msg( 'footer-icons-locked' )">
+					<cdx-field
+						:help-text="designer.canHideFooterIcons ?
+							'' :
+							msg( 'footer-icons-locked' )">
 						<cdx-toggle-switch
 							v-model="state.footer.showIcons"
 							:disabled="!designer.canEdit || !designer.canHideFooterIcons"
@@ -367,13 +379,18 @@
 				</cdx-tab>
 
 				<cdx-tab name="rail" :label="msg( 'tab-rail' )">
-					<rail-tab v-model="state.rail" :toolbar="state.toolbar" :designer="designer"></rail-tab>
+					<rail-tab
+						v-model="state.rail"
+						:toolbar="state.toolbar"
+						:designer="designer"></rail-tab>
 				</cdx-tab>
 
 				<cdx-tab name="darkmode" :label="msg( 'tab-darkmode' )">
 					<p>{{ msg( 'darkmode-intro' ) }}</p>
 					<cdx-field>
-						<cdx-toggle-switch v-model="state.colorMode.toggle" :disabled="!designer.canEdit">
+						<cdx-toggle-switch
+							v-model="state.colorMode.toggle"
+							:disabled="!designer.canEdit">
 							{{ msg( 'darkmode-toggle' ) }}
 						</cdx-toggle-switch>
 						<reset-button path="colorMode/toggle"></reset-button>
@@ -396,7 +413,10 @@
 						{{ msg( 'darkmode-builtin' ) }}
 					</cdx-message>
 					<p>
-						<cdx-button type="button" :disabled="!designer.canEdit" @click="generateDark">
+						<cdx-button
+							type="button"
+							:disabled="!designer.canEdit"
+							@click="generateDark">
 							{{ msg( 'darkmode-generate' ) }}
 						</cdx-button>
 					</p>
@@ -415,12 +435,14 @@
 							<span v-if="row.comment" class="skin-cosmos-themedesigner__help">
 								{{ row.comment }}
 							</span>
-							<span v-if="row.id === designer.revisionId" class="skin-cosmos-themedesigner__badge">
+							<span
+								v-if="row.id === designer.revisionId"
+								class="skin-cosmos-themedesigner__badge">
 								{{ msg( 'history-live' ) }}
 							</span>
 							<cdx-button
-							type="button"
 								v-else-if="designer.canEdit"
+								type="button"
 								weight="quiet"
 								action="progressive"
 								@click="restore( row.id )"
@@ -434,7 +456,10 @@
 		</div>
 
 		<div class="skin-cosmos-themedesigner__side">
-			<div class="skin-cosmos-themedesigner__preview" :style="preview.root" :aria-label="msg( 'preview' )">
+			<div
+				class="skin-cosmos-themedesigner__preview"
+				:style="preview.root"
+				:aria-label="msg( 'preview' )">
 				<div class="skin-cosmos-themedesigner__preview-banner" :style="preview.banner">
 					<span>{{ msg( 'preview-wordmark' ) }}</span>
 				</div>
@@ -450,11 +475,16 @@
 						<div class="skin-cosmos-themedesigner__preview-link" :style="preview.link">
 							{{ msg( 'preview-link' ) }}
 						</div>
-						<div class="skin-cosmos-themedesigner__preview-button" :style="preview.button">
+						<div
+							class="skin-cosmos-themedesigner__preview-button"
+							:style="preview.button">
 							{{ msg( 'preview-button' ) }}
 						</div>
 					</div>
-					<div v-if="state.rail.enabled" class="skin-cosmos-themedesigner__preview-rail" :style="preview.content">
+					<div
+						v-if="state.rail.enabled"
+						class="skin-cosmos-themedesigner__preview-rail"
+						:style="preview.content">
 						{{ msg( 'preview-rail' ) }}
 						<div
 							v-if="state.toolbar.enabled && state.toolbar.style === 'rail'"
@@ -471,7 +501,8 @@
 				<div
 					v-if="state.toolbar.enabled && state.toolbar.style !== 'rail'"
 					class="skin-cosmos-themedesigner__preview-toolbar"
-					:class="'skin-cosmos-themedesigner__preview-toolbar--' + ( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
+					:class="'skin-cosmos-themedesigner__preview-toolbar--' +
+						( state.toolbar.style === 'floating' ? 'floating' : 'bar' )"
 					:style="preview.toolbar"
 				>
 					{{ msg( 'preview-toolbar' ) }}
@@ -507,6 +538,11 @@ const MODES = [ 'light', 'dark' ];
 
 function clone( value ) {
 	return JSON.parse( JSON.stringify( value ) );
+}
+
+// The supported browsers do not all have the nullish coalescing operator
+function coalesce( ...values ) {
+	return values.find( ( value ) => value !== null && value !== undefined );
 }
 
 function isObject( value ) {
@@ -599,7 +635,7 @@ module.exports = exports = defineComponent( {
 		} );
 
 		const flagModel = ( section, key, fallback ) => computed( {
-			get: () => state[ section ][ key ] ?? fallback,
+			get: () => coalesce( state[ section ][ key ], fallback ),
 			set: ( value ) => {
 				state[ section ][ key ] = value;
 			}
@@ -630,7 +666,11 @@ module.exports = exports = defineComponent( {
 			extensions: props.designer.upload.fontExtensions
 		};
 
-		const fontStack = computed( () => getFontStack( state.layout.font, props.designer.fontPresets, effective.layout.fontFamily ) );
+		const fontStack = computed( () => getFontStack(
+			state.layout.font,
+			props.designer.fontPresets,
+			effective.layout.fontFamily
+		) );
 
 		const layoutRanges = [
 			{
@@ -639,7 +679,9 @@ module.exports = exports = defineComponent( {
 				unit: '%',
 				label: 'layout-opacity',
 				path: 'layout/contentOpacity',
-				get: () => state.layout.contentOpacity === null ? effective.layout.contentOpacity : state.layout.contentOpacity,
+				get: () => state.layout.contentOpacity === null ?
+					effective.layout.contentOpacity :
+					state.layout.contentOpacity,
 				set: ( value ) => {
 					state.layout.contentOpacity = value;
 				}
@@ -669,10 +711,15 @@ module.exports = exports = defineComponent( {
 			}
 		];
 
-		const effectiveColor = ( mode, slot ) => state.palettes[ mode ][ slot ] || props.designer.fallbacks[ mode ][ slot ],
+		const effectiveColor = ( mode, slot ) => state.palettes[ mode ][ slot ] ||
+			props.designer.fallbacks[ mode ][ slot ],
 			rawKey = ( slot ) => editing.value + ':' + slot;
 
-		const colorText = ( slot ) => rawColors[ rawKey( slot ) ] ?? state.palettes[ editing.value ][ slot ] ?? '',
+		const colorText = ( slot ) => coalesce(
+				rawColors[ rawKey( slot ) ],
+				state.palettes[ editing.value ][ slot ],
+				''
+			),
 			hasColorError = ( slot ) => !!colorErrors[ rawKey( slot ) ],
 			pickerValue = ( slot ) => {
 				const parsed = colors.parse( effectiveColor( editing.value, slot ) );
@@ -681,7 +728,8 @@ module.exports = exports = defineComponent( {
 			};
 
 		function setPicked( slot, hex ) {
-			const alpha = colors.parse( effectiveColor( editing.value, slot ) )?.a ?? 1,
+			const current = colors.parse( effectiveColor( editing.value, slot ) ),
+				alpha = coalesce( current && current.a, 1 ),
 				picked = colors.parse( hex );
 
 			if ( !picked ) {
@@ -781,7 +829,10 @@ module.exports = exports = defineComponent( {
 				opacity = ( state.layout.contentOpacity === null ?
 					effective.layout.contentOpacity :
 					state.layout.contentOpacity ) / 100,
-				on = ( slot ) => ( { background: color( slot ), color: colors.readableOn( color( slot ) ) } );
+				on = ( slot ) => ( {
+					background: color( slot ),
+					color: colors.readableOn( color( slot ) )
+				} );
 
 			return {
 				root: { background: color( 'body' ), fontFamily: fontStack.value },
@@ -824,7 +875,9 @@ module.exports = exports = defineComponent( {
 		}
 
 		watch( state, () => {
-			props.jsonField.value = JSON.stringify( state, null, '\t' );
+			const field = props.jsonField;
+
+			field.value = JSON.stringify( state, null, '\t' );
 		}, { deep: true, immediate: true } );
 
 		onMounted( () => {
