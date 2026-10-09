@@ -17,6 +17,7 @@ use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use function array_merge;
 use function array_unique;
+use function json_encode;
 use function wfAppendQuery;
 
 class ColorMode implements
@@ -36,7 +37,10 @@ class ColorMode implements
 		$rl->register( $this->altModules->getDefinitions() );
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 * @suppress PhanUnusedPublicMethodParameter
+	 */
 	public function onGetPreferences( $user, &$preferences ): void {
 		if ( !$this->theme->isColorModeToggleEnabled() ) {
 			return;
@@ -101,7 +105,6 @@ class ColorMode implements
 		}
 
 		$headItems = '';
-		$script = '';
 
 		if ( $auto && $altModules !== [] ) {
 			// The dark styles only apply when the browser asks for a dark color scheme
@@ -135,7 +138,7 @@ class ColorMode implements
 				'setTimeout(function(){d.className=d.className.replace(" skin-cosmos-colormode--pending","")},2500)}' .
 				'}());';
 			$headItems .= Html::inlineStyle( 'html.skin-cosmos-colormode--pending body{opacity:0}' ) .
-				Html::inlineScript( $script, $out->getCSP()->getNonce() );
+				Html::inlineScript( $script, $out->getCSP()->getNonce() ?: null );
 		}
 
 		if ( $headItems !== '' ) {
@@ -155,7 +158,9 @@ class ColorMode implements
 		] );
 	}
 
-	/** @return array<string,string> Page background of each mode, safe to print into CSS */
+	/**
+	 * @return non-empty-array<string, string> Page background of each mode, safe to print into CSS
+	 */
 	private function getBodyColors(): array {
 		$colors = [];
 		foreach ( ThemeSettings::MODES as $name ) {
@@ -166,6 +171,7 @@ class ColorMode implements
 	}
 
 	private function getCanvasRule( string $color, string $mode ): string {
-		return "html{background-color:$color;" . ( $mode === ThemeSettings::MODE_DARK ? 'color-scheme:dark;' : '' ) . '}';
+		$scheme = $mode === ThemeSettings::MODE_DARK ? 'color-scheme:dark;' : '';
+		return "html{background-color:$color;$scheme}";
 	}
 }
