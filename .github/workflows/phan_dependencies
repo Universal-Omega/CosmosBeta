@@ -1,0 +1,9 @@
+AdminLinks:
+  branch: auto
+  repo: auto
+CookieWarning:
+  branch: auto
+  repo: auto
+SocialProfile:
+  branch: master
+  repo: auto
