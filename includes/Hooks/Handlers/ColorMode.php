@@ -15,6 +15,7 @@ use MediaWiki\Skin\Cosmos\Theme\AltModules;
 use MediaWiki\Skin\Cosmos\Theme\ColorModeResolver;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
+use MediaWiki\User\User;
 use function array_merge;
 use function array_unique;
 use function json_encode;
@@ -39,7 +40,7 @@ class ColorMode implements
 
 	/**
 	 * @inheritDoc
-	 * @suppress PhanUnusedPublicMethodParameter
+	 * @param User $user @phan-unused-param
 	 */
 	public function onGetPreferences( $user, &$preferences ): void {
 		if ( !$this->theme->isColorModeToggleEnabled() ) {
