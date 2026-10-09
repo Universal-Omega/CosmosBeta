@@ -41,6 +41,9 @@ class RestoreTheme extends Maintenance {
 		}
 
 		$user = User::newSystemUser( 'Cosmos ThemeDesigner', [ 'steal' => true ] );
+		if ( $user === null ) {
+			$this->fatalError( 'The Cosmos ThemeDesigner system user could not be created.' );
+		}
 		if ( $this->themeStore->restore( $revision, $user, "Restored revision $revision" ) === null ) {
 			$this->fatalError( "Revision $revision does not exist." );
 		}
