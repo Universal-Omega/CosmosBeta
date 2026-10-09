@@ -105,7 +105,6 @@ class ColorMode implements
 		}
 
 		$headItems = '';
-
 		if ( $auto && $altModules !== [] ) {
 			// The dark styles only apply when the browser asks for a dark color scheme
 			$url = wfAppendQuery( $out->getConfig()->get( MainConfigNames::LoadScript ), [
