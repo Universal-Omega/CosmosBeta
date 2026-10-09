@@ -49,11 +49,6 @@ class Output implements
 			$classes[] = 'skin-cosmos-has-header-border';
 		}
 
-		$buttonStyle = $this->theme->getButtonStyle();
-		if ( $buttonStyle !== 'default' ) {
-			$classes[] = "skin-cosmos-buttons--$buttonStyle";
-		}
-
 		if ( $out->getTitle()?->isMainPage() ) {
 			$classes[] = 'mainpage skin-cosmos-is-main-page';
 		}
