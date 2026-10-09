@@ -19,10 +19,7 @@ class ChromeComponent {
 	) {
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	public function getFooterData( array $footer ): array {
 		$settings = $this->theme->getFooterSettings();
 		return [
@@ -94,10 +91,7 @@ class ChromeComponent {
 		return $links;
 	}
 
-	/**
-	 * @return list<array<string, mixed>>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return list<array<string, mixed>> */
 	private function getIcons( array $items ): array {
 		$icons = [];
 		foreach ( $items as $item ) {
