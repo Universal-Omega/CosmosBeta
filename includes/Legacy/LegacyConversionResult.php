@@ -23,6 +23,6 @@ final readonly class LegacyConversionResult {
 	}
 
 	public function getTotal(): int {
-		return array_sum( $this->replacements );
+		return (int)array_sum( $this->replacements );
 	}
 }
