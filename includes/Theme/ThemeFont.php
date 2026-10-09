@@ -55,8 +55,8 @@ final readonly class ThemeFont {
 	private const int MAX_FAMILIES = 8;
 
 	public function __construct(
-		public string $type = '',
-		public string $value = '',
+		public string $type,
+		public string $value,
 	) {
 	}
 
@@ -65,7 +65,7 @@ final readonly class ThemeFont {
 	 */
 	public static function newFromArray( mixed $data ): self {
 		if ( !is_array( $data ) || !is_string( $data['value'] ?? null ) ) {
-			return new self();
+			return new self( type: '', value: '' );
 		}
 
 		$value = match ( $data['type'] ?? null ) {
@@ -75,7 +75,7 @@ final readonly class ThemeFont {
 			default => '',
 		};
 
-		return $value === '' ? new self() : new self( $data['type'], $value );
+		return $value === '' ? new self( type: '', value: '' ) : new self( $data['type'], $value );
 	}
 
 	/** @return array{type: string, value: string} */
