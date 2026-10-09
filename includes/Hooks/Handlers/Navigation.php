@@ -55,22 +55,35 @@ class Navigation implements
 		return false;
 	}
 
-	/** @inheritDoc */
-	public function onBeforeInitialize( $title, $unused, $output, $user, $request, $mediaWiki ): void {
+	/**
+	 * @inheritDoc
+	 * @suppress PhanUnusedPublicMethodParameter
+	 */
+	public function onBeforeInitialize(
+		$title,
+		// @phan-suppress-next-line PhanParamNameIndicatingUnused
+		$unused,
+		$output,
+		$user,
+		$request,
+		$mediaWiki
+	): void {
 		if ( $output->getSkin() instanceof SkinCosmos && $this->isNavigationPage( $title ) ) {
 			$request->setVal( 'wteswitched', '1' );
 		}
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 * @suppress PhanUnusedPublicMethodParameter
+	 */
 	public function onMessageCacheReplace( $title, $text ): void {
 		$this->navigation->purge();
 	}
 
 	private function isNavigationPage( Title $title ): bool {
-		return $title->equals(
-			$this->titleFactory->newFromText( CosmosNavigation::MESSAGE, NS_MEDIAWIKI )
-		);
+		$navigation = $this->titleFactory->newFromText( CosmosNavigation::MESSAGE, NS_MEDIAWIKI );
+		return $navigation !== null && $title->equals( $navigation );
 	}
 
 	private function buildPreview( IContextSource $context, bool $isConflict, string $pageText ): string {
