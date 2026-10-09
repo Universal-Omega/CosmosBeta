@@ -45,10 +45,10 @@ class ThemeSettings {
 
 	public const string MODE_LIGHT = 'light';
 	public const string MODE_DARK = 'dark';
-	public const string MODE_AUTO = 'auto';
+	private const string MODE_AUTO = 'auto';
 
 	public const array MODES = [ self::MODE_LIGHT, self::MODE_DARK ];
-	public const array DEFAULT_MODES = [ self::MODE_LIGHT, self::MODE_DARK, self::MODE_AUTO ];
+	private const array DEFAULT_MODES = [ self::MODE_LIGHT, self::MODE_DARK, self::MODE_AUTO ];
 
 	public const array COLOR_SLOTS = [
 		'banner',
@@ -83,10 +83,10 @@ class ThemeSettings {
 		'toolbar' => '#000000',
 	];
 
-	public const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
-	public const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
-	public const array BUTTON_STYLES = [ 'default', 'slim', 'pill', 'text' ];
-	public const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
+	private const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
+	private const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
+	private const array BUTTON_STYLES = [ 'default', 'slim', 'pill', 'text' ];
+	private const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
 
 	private const int MAX_LIST_ITEMS = 100;
 	private const int MAX_RAIL_MODULES = 50;
@@ -207,7 +207,7 @@ class ThemeSettings {
 		];
 	}
 
-	public static function normalize( array $raw ): array {
+	private static function normalize( array $raw ): array {
 		$data = self::getDefaults();
 		$mode = $raw['colorMode'] ?? [];
 		if ( is_array( $mode ) ) {
@@ -479,7 +479,7 @@ class ThemeSettings {
 	/**
 	 * Accepts a file name or a http(s) URL.
 	 */
-	public static function normalizeImage( mixed $value ): string {
+	private static function normalizeImage( mixed $value ): string {
 		if ( !is_string( $value ) ) {
 			return '';
 		}
