@@ -90,7 +90,7 @@ class LessUtil {
 	 * @param array{r: int, g: int, b: int} $backdrop
 	 * @return array{r: int, g: int, b: int} The color laid over the backdrop
 	 */
-	public static function blend( array $color, float $alpha, array $backdrop ): array {
+	private static function blend( array $color, float $alpha, array $backdrop ): array {
 		$alpha = max( 0.0, min( 1.0, $alpha ) );
 		return [
 			'r' => (int)round( $color['r'] * $alpha + $backdrop['r'] * ( 1 - $alpha ) ),
@@ -100,7 +100,7 @@ class LessUtil {
 	}
 
 	/** Whether white text reads better than black text on an opaque color */
-	public static function isColorDark( int $red, int $green, int $blue, float $threshold ): bool {
+	private static function isColorDark( int $red, int $green, int $blue, float $threshold ): bool {
 		return self::getLuminance( $red, $green, $blue ) < $threshold;
 	}
 
@@ -115,7 +115,7 @@ class LessUtil {
 		return 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];
 	}
 
-	public static function colorNameToHex( string $colorName ): string {
+	private static function colorNameToHex( string $colorName ): string {
 		// standard 147 HTML color names
 		$colors = [
 			'aliceblue' => '#f0f8ff',
