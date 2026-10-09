@@ -798,8 +798,10 @@
 			],
 			"description": "List of pages to disable the rail in."
 		},
-		"CosmosBetaRailSidebarPortlets": {
+		"CosmosRailSidebarPortlets": {
 			"value": [
+				"CATEGORY-SIDEBAR",
+				"GROUP-SIDEBAR",
 				"USER-SIDEBAR"
 			],
 			"description": "Names of sidebar sections, such as the one from the DynamicSidebar extension, that are shown as rail modules instead of in the top navigation."
