@@ -265,10 +265,7 @@ class CosmosNavigation {
 		return $nodes;
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function parseLine( MessageLocalizer $localizer, string $line ): array {
 		$icon = null;
 		if ( preg_match( self::ICON_PATTERN, $line, $matches ) ) {
