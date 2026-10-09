@@ -11,8 +11,8 @@
 }
 
 .skin-cosmos-admin-dashboard {
-	container-type: inline-size;
 	margin-top: @spacing-100;
+	container-type: inline-size;
 }
 
 .skin-cosmos-admin-dashboard__layout {
@@ -20,16 +20,17 @@
 	gap: @spacing-200;
 	grid-template-columns: minmax( 0, 1fr );
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	@container ( min-width: 48rem ) {
-		grid-template-columns: minmax( 0, 1fr ) @admindashboard-stats-width;
 		align-items: start;
+		grid-template-columns: minmax( 0, 1fr ) @admindashboard-stats-width;
 	}
 }
 
 .skin-cosmos-admin-dashboard__main {
 	display: grid;
-	gap: @spacing-200;
 	min-width: 0;
+	gap: @spacing-200;
 }
 
 .skin-cosmos-admin-dashboard__heading {
@@ -43,10 +44,10 @@
 
 .skin-cosmos-admin-dashboard__controls {
 	display: grid;
-	gap: @spacing-75;
-	grid-template-columns: repeat( auto-fill, minmax( @admindashboard-control-min-width, 1fr ) );
 	padding: 0;
 	margin: 0;
+	gap: @spacing-75;
+	grid-template-columns: repeat( auto-fill, minmax( @admindashboard-control-min-width, 1fr ) );
 	list-style: none;
 }
 
@@ -55,6 +56,7 @@
 	margin: 0;
 }
 
+// stylelint-disable-next-line plugin/no-unsupported-browser-features
 .skin-cosmos-admin-dashboard__link {
 	display: flex;
 	flex: 1;
@@ -70,6 +72,7 @@
 	transition-property: background-color, border-color, box-shadow;
 	transition-timing-function: @transition-timing-function-system;
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	&:hover,
 	&:focus-visible {
 		border-color: @border-color-interactive;
@@ -78,6 +81,7 @@
 		text-decoration: none;
 	}
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	&:focus-visible {
 		border-color: @border-color-progressive--focus;
 		box-shadow: @box-shadow-inset-small @box-shadow-color-progressive--focus;
@@ -104,6 +108,7 @@
 	display: block;
 }
 
+// stylelint-disable-next-line plugin/no-unsupported-browser-features
 .skin-cosmos-admin-dashboard__text {
 	display: flex;
 	min-width: 0;
@@ -133,8 +138,8 @@
 }
 
 .skin-cosmos-admin-dashboard__page {
-	break-inside: avoid;
 	margin: 0;
+	break-inside: avoid;
 
 	a {
 		display: block;
@@ -148,13 +153,13 @@
 
 .skin-cosmos-admin-dashboard__stats {
 	display: grid;
-	gap: @spacing-100;
-	grid-template-columns: minmax( 0, 1fr );
 	min-width: 0;
 	padding: @spacing-100;
 	border: @border-subtle;
 	border-radius: @border-radius-base;
 	background-color: @background-color-interactive-subtle;
+	gap: @spacing-100;
+	grid-template-columns: minmax( 0, 1fr );
 
 	.skin-cosmos-admin-dashboard__heading {
 		margin: 0;
@@ -163,9 +168,9 @@
 
 .skin-cosmos-admin-dashboard__totals {
 	display: grid;
+	margin: 0;
 	gap: @spacing-50;
 	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
-	margin: 0;
 }
 
 .skin-cosmos-admin-dashboard__total {
