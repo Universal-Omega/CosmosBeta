@@ -161,6 +161,10 @@ class EffectiveTheme {
 		return $this->getTheme()->getSection( 'toolbar' );
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	public function getFooterSettings(): array {
 		$settings = $this->getTheme()->getSection( 'footer' );
 		$settings['hiddenLinks'] = array_values(
