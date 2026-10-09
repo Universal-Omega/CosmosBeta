@@ -9,7 +9,8 @@ class ThemePresets {
 	/**
 	 * Built in palettes. Each one is meant for a single color mode.
 	 *
-	 * @return array[]
+	 * @return array<string, array<string, mixed>>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	public static function getAll(): array {
 		return [
