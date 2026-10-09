@@ -1,11 +1,14 @@
+// stylelint-disable no-duplicate-selectors
 @import 'mediawiki.skin.variables.less';
 @import 'mediawiki.skin.codex-design-tokens/theme-wikimedia-ui-mixin-dark.less';
 
 .skin-cosmos-font-face( @source ) when not( @source = 0 ) {
 	@font-face {
+		font-display: swap;
+		// stylelint-disable at-rule-descriptor-value-no-unknown
 		font-family: @font-file-family;
 		src: @source;
-		font-display: swap;
+		// stylelint-enable at-rule-descriptor-value-no-unknown
 	}
 }
 
@@ -237,11 +240,11 @@ body a:focus {
 	min-width: 200px;
 	padding: 7px 0;
 	border: 1px solid #ccc;
+	border-radius: 4px;
 	margin: 0;
 	background-color: #fff;
-	border-radius: 4px;
 	box-shadow: 0 8px 16px 0 rgba( 0, 0, 0, 0.3 );
-	font-size: 14px;
+	font-size: 0.875rem;
 
 	> ul,
 	> ul > li,
@@ -308,10 +311,10 @@ body > #mw-content-container {
 	height: 36px;
 	padding: 5px 20px;
 	border: 0;
+	border-radius: 0;
 	margin: 0;
 	-webkit-appearance: none;
 	background: @banner-search-background;
-	border-radius: 0;
 	box-shadow: none;
 	color: @banner-font-color;
 	outline: 0;
@@ -340,8 +343,8 @@ body > #mw-content-container {
 	.cdx-search-input--has-end-button,
 	#simpleSearch {
 		border: 0;
-		background-color: transparent;
 		border-radius: 0;
+		background-color: transparent;
 	}
 
 	.cdx-text-input,
@@ -432,14 +435,15 @@ body > #mw-content-container {
 		border-radius: 16px;
 	}
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	&:has( > img[ src*='/default.png' ] ) {
 		position: relative;
 		display: flex;
+		overflow: hidden;
 		width: 34px;
 		height: 34px;
-		align-self: center;
 		flex: none;
-		overflow: hidden;
+		align-self: center;
 		border-radius: 50%;
 
 		&::after {
@@ -456,8 +460,8 @@ body > #mw-content-container {
 			height: 34px;
 			padding: 0;
 			border: 0;
-			background-color: fade( @banner-font-color, 15% );
 			border-radius: 50%;
+			background-color: fade( @banner-font-color, 15% );
 			filter: invert( @banner-icon-invert );
 			object-fit: cover;
 			transform: scale( 1.3 );
@@ -469,7 +473,7 @@ body > #mw-content-container {
 	display: block;
 	margin-top: 4px;
 	color: @banner-font-color;
-	font-size: 20px;
+	font-size: 1.25rem;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -552,9 +556,9 @@ body > #mw-content-container {
 	&:hover {
 		>.skin-cosmos-banner-option__button {
 			display: inline-flex;
-			place-items: center center;
 			margin-top: 0;
 			margin-bottom: 0;
+			place-items: center center;
 			stroke: @banner-font-color;
 			stroke-width: 2px;
 			transition: 0.4s;
@@ -581,8 +585,8 @@ body > #mw-content-container {
 .skin-cosmos-banner-option__icon {
 	display: flex;
 	height: 28px;
-	place-items: center center;
 	fill: none;
+	place-items: center center;
 	stroke: @banner-font-color;
 	stroke-width: 2px;
 }
@@ -620,7 +624,7 @@ body > #mw-content-container {
 	padding: 0;
 	margin: 0;
 	background-color: @banner-background-color;
-	font-size: 15px;
+	font-size: 0.9375rem;
 }
 
 #cosmos-banner-content {
@@ -690,8 +694,8 @@ body > .suggestions {
 
 .skin-cosmos-buttons--slim #cosmos-articleHeader-actions {
 	.skin-cosmos-button {
-		box-sizing: border-box;
 		height: 32px;
+		box-sizing: border-box;
 		justify-content: center;
 		padding: 0 14px;
 		gap: 6px;
@@ -747,6 +751,7 @@ body > .suggestions {
 		order: 1;
 	}
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	> a ~ a,
 	> a ~ .skin-cosmos-dropdown,
 	> .skin-cosmos-dropdown:has( ~ a ) {
@@ -767,16 +772,16 @@ body > .suggestions {
 	}
 
 	.skin-cosmos-button {
-		box-sizing: border-box;
 		height: auto;
 		min-height: 0;
+		box-sizing: border-box;
 		padding: 4px 6px;
 		border: 0;
+		border-radius: 3px;
 		margin-right: 0;
 		background-color: transparent;
-		border-radius: 3px;
 		color: @link-color;
-		font-size: 11px;
+		font-size: 0.6875rem;
 		letter-spacing: 0.02em;
 		line-height: 1.15;
 		stroke: @link-color;
@@ -836,9 +841,10 @@ body > .suggestions {
 }
 
 .skin-cosmos-associated-tabs {
+	border-bottom: 1px solid var( --skin-cosmos-border-color );
 	margin: 0 0 20px;
 	overflow-x: auto;
-	border-bottom: 1px solid var( --skin-cosmos-border-color );
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	scrollbar-width: none;
 
 	&::-webkit-scrollbar {
@@ -861,8 +867,8 @@ body > .suggestions {
 		display: block;
 		padding: 8px 16px;
 		border: 1px solid transparent;
-		border-bottom: 0;
 		border-radius: 4px 4px 0 0;
+		border-bottom: 0;
 		color: var( --skin-cosmos-muted-color );
 		font-weight: bold;
 		white-space: nowrap;
@@ -900,7 +906,7 @@ body > .suggestions {
 	border: 1px solid transparent;
 	border-radius: 4px;
 	cursor: pointer;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: bold;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -926,6 +932,7 @@ body > .suggestions {
 	border-radius: 4px;
 }
 
+// stylelint-disable-next-line plugin/no-unsupported-browser-features
 #firstHeading {
 	display: flex;
 	flex-wrap: wrap;
@@ -938,14 +945,15 @@ body > .suggestions {
 		overflow-wrap: anywhere;
 	}
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	.mw-indicators {
 		display: flex;
 		flex: none;
 		flex-wrap: wrap;
 		align-items: center;
 		padding: 0;
+		font-size: 0.9375rem;
 		gap: 4px 12px;
-		font-size: 15px;
 	}
 }
 
@@ -982,15 +990,15 @@ body > .suggestions {
 	padding: 7px 18px;
 	border-width: 1px;
 	border-style: solid;
+	border-radius: 3px;
 	margin: 0;
 	-webkit-appearance: none;
 	background: 0 0;
-	border-radius: 3px;
 	cursor: default;
-	font-size: 12px;
+	font-size: 0.75rem;
 	font-weight: 600;
 	letter-spacing: 0.15px;
-	line-height: 16px;
+	line-height: 1rem;
 	outline: 0;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -1053,7 +1061,7 @@ body > .suggestions {
 				.skin-cosmos-list.skin-cosmos-list--linked {
 					>li {
 						>a {
-							font-size: 12px;
+							font-size: 0.75rem;
 						}
 					}
 				}
@@ -1063,8 +1071,8 @@ body > .suggestions {
 				display: none;
 				padding: 7px 0;
 				border: 1px solid #ccc;
-				background-color: #fff;
 				border-radius: 4px;
+				background-color: #fff;
 			}
 			margin-right: 0;
 
@@ -1142,8 +1150,8 @@ body > .suggestions {
 	min-width: 70%;
 	padding: 7px 0;
 	border: 1px solid #ccc;
-	background-color: #fff;
 	border-radius: 4px;
+	background-color: #fff;
 	transform: translateX( -50% );
 
 	&:not( .skin-cosmos-is-unscrollable ) {
@@ -1246,9 +1254,9 @@ button.skin-cosmos-header__button {
 		}
 		height: auto;
 		padding: 7px 12px;
+		border-radius: 0;
 		margin-right: -1px;
 		margin-left: auto;
-		border-radius: 0;
 
 		&:first-child {
 			border-bottom-left-radius: 3px;
@@ -1425,15 +1433,15 @@ button.skin-cosmos-header__button {
 
 .skin-cosmos-dialog__title {
 	padding: 24px 24px 0;
-	font-size: 24px;
+	font-size: 1.5rem;
 	font-weight: bold;
-	line-height: 28px;
+	line-height: 1.75rem;
 }
 
 .skin-cosmos-dialog__content {
 	padding: 24px;
-	font-size: 16px;
-	line-height: 24px;
+	font-size: 1rem;
+	line-height: 1.5rem;
 }
 
 .skin-cosmos-dialog__actions {
@@ -1493,8 +1501,9 @@ button.skin-cosmos-header__button {
 	border-bottom: 1px solid @border-color;
 	background-color: transparent;
 	color: @font-color;
-	font-size: 16px;
+	font-size: 1rem;
 	line-height: 1em;
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	resize: none;
 
 	&:focus {
@@ -1509,7 +1518,7 @@ button.skin-cosmos-header__button {
 
 	>li {
 		padding: 11px 0;
-		font-size: 14px;
+		font-size: 0.875rem;
 		font-weight: normal;
 		line-height: 1em;
 	}
@@ -1587,7 +1596,7 @@ button.skin-cosmos-header__button {
 	flex-shrink: 0;
 	margin: 0;
 	cursor: default;
-	line-height: 14px;
+	line-height: 0.875rem;
 
 	.skin-cosmos-menu__content {
 		left: -7px;
@@ -1600,7 +1609,7 @@ button.skin-cosmos-header__button {
 	align-items: center;
 	padding: 11px 0;
 	margin: 0 9px;
-	font-size: 12px;
+	font-size: 0.75rem;
 	font-weight: bold;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -1631,9 +1640,9 @@ button.skin-cosmos-header__button {
 		left: 6px;
 		width: 34px;
 		height: 14px;
+		border-radius: 8px;
 		margin: 0;
 		background-color: #878c8d;
-		border-radius: 8px;
 		content: '';
 		outline: 0;
 		transform: translateY( -50% );
@@ -1646,9 +1655,9 @@ button.skin-cosmos-header__button {
 		width: 20px;
 		min-width: 20px;
 		height: 20px;
+		border-radius: 50%;
 		margin: 0;
 		background-color: #fff;
-		border-radius: 50%;
 		box-shadow: 0 3px 1px -2px rgba( 0, 0, 0, 0.14 ), 0 2px 2px 0 rgba( 0, 0, 0, 0.098 ), 0 1px 5px 0 rgba( 0, 0, 0, 0.084 );
 		content: '';
 		outline: 0;
@@ -1657,7 +1666,7 @@ button.skin-cosmos-header__button {
 	position: relative;
 	padding: 7px 5px 7px 52px;
 	cursor: pointer;
-	font-size: 16px;
+	font-size: 1rem;
 
 	&:empty {
 		padding-left: 45px;
@@ -1869,7 +1878,7 @@ button.skin-cosmos-header__button {
 	overflow: hidden;
 	flex: 1;
 	margin: 25px 0 0 18px;
-	font-size: 28px;
+	font-size: 1.75rem;
 	font-weight: 600;
 	line-height: 1;
 
@@ -1886,14 +1895,14 @@ button.skin-cosmos-header__button {
 
 .skin-cosmos-header__counter-value {
 	display: block;
-	font-size: 24px;
+	font-size: 1.5rem;
 	line-height: 1;
 }
 
 .skin-cosmos-header__counter-label {
 	display: block;
 	margin-top: 3px;
-	font-size: 12px;
+	font-size: 0.75rem;
 	line-height: 1;
 	text-transform: uppercase;
 }
@@ -2019,8 +2028,8 @@ body #mw-teleport-target {
 
 .skin-cosmos-modal__close {
 	color: #aaa;
-	float: right;
 	cursor: pointer;
+	float: right;
 	line-height: 0;
 
 	.skin-cosmos-icon {
@@ -2047,7 +2056,7 @@ body pre {
 	border: 1px solid @border-color;
 	background-color: mix( @content-background-color, @code-background-color, 90% );
 	color: @alt-font-color;
-	line-height: 14px;
+	line-height: 0.875rem;
 	word-break: break-all;
 }
 
@@ -2080,7 +2089,7 @@ body code {
 }
 
 .skin-cosmos-plain-links() {
-	a:not( .new ):where( :not( .cdx-button, .mw-ui-button, .oo-ui-buttonElement-button, .oo-ui-tool-link ) ) {
+	a:not( .new ):where( :not( .cdx-button ):not( .mw-ui-button ):not( .oo-ui-buttonElement-button ):not( .oo-ui-tool-link ) ) {
 		color: @link-color;
 		text-decoration: none;
 	}
@@ -2114,16 +2123,16 @@ body code {
 	> h4,
 	> h5,
 	> h6 {
+		overflow: visible;
 		padding: 0;
 		border: 0;
 		margin-block: 0;
-		overflow: visible;
 	}
 }
 
 #mw-content .toctitle h2 {
 	border-bottom: 0;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: bold;
 }
 
@@ -2194,6 +2203,7 @@ body code {
 	}
 
 	.toctogglecheckbox {
+		// stylelint-disable-next-line declaration-no-important
 		display: none !important;
 	}
 }
@@ -2219,7 +2229,7 @@ body #mw-content-text {
 		border: 0;
 		margin: 0;
 		color: @alt-font-color;
-		font-size: 36px;
+		font-size: 2.25rem;
 		font-weight: bold;
 		line-height: 1;
 		opacity: 0.9;
@@ -2252,7 +2262,7 @@ h3 {
 }
 
 h4 {
-	font-size: 14px;
+	font-size: 0.875rem;
 	line-height: 1.5;
 }
 
@@ -2351,8 +2361,8 @@ body {
 
 #cosmos-footerIcons-list {
 	display: flex;
-	align-items: center;
 	flex-wrap: wrap;
+	align-items: center;
 	margin: 0 0 -15px 0;
 	direction: rtl;
 	list-style: none;
@@ -2383,6 +2393,7 @@ body {
 #cosmos-page-header {
 	padding: 20px 0 0 0;
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	&:has( > .skin-cosmos-associated-tabs ) {
 		padding-top: 12px;
 	}
@@ -2398,7 +2409,7 @@ body {
 	display: flex;
 	width: fit-content;
 	align-items: flex-start;
-	font-size: 12px;
+	font-size: 0.75rem;
 
 	&__label {
 		padding-right: 4px;
@@ -2422,11 +2433,9 @@ body {
 
 	&__links {
 		font-style: italic;
-		line-height: 16px;
-		overflow-wrap: break-word;
+		line-height: 1rem;
+		overflow-wrap: anywhere;
 		-ms-word-break: break-all;
-		word-break: break-word;
-		word-wrap: break-word;
 
 		> :last-child {
 			display: inline-block;
@@ -2505,7 +2514,7 @@ body h6 {
 
 @toolbar-background-color1: mix(@toolbar-background-color2, @toolbar-background-color-mix, 25%);
 
-#cosmos-toolbar [class*='oo-ui-icon-'],
+#cosmos-toolbar [ class*='oo-ui-icon-' ],
 #cosmos-toolbar .oo-ui-iconElement-icon,
 #cosmos-toolbar .mw-ui-icon::before,
 #cosmos-toolbar img,
@@ -2520,7 +2529,6 @@ body h6 {
 }
 
 #cosmos-toolbar {
-	box-sizing: border-box;
 	position: sticky;
 	z-index: 399;
 	right: 9px;
@@ -2530,14 +2538,15 @@ body h6 {
 	max-width: 50%;
 	height: auto;
 	min-height: 25px;
+	box-sizing: border-box;
 	align-items: center;
 	padding: 5px;
+	border-radius: 20px;
 	margin: 0;
 	background-image: -moz-linear-gradient( left, @toolbar-background-color1 0, @toolbar-background-color2 50%, @toolbar-background-color1 100% );
 	background-image: -webkit-gradient( linear, 0% 0%, 100% 0%, color-stop( 0, @toolbar-background-color1 ), color-stop( 50%, @toolbar-background-color2 ), color-stop( 100%, @toolbar-background-color1 ) );
 	background-image: -o-linear-gradient( left, @toolbar-background-color1 0, @toolbar-background-color2 50%, @toolbar-background-color1 100% );
 	background-image: -ms-linear-gradient( left, @toolbar-background-color1 0, @toolbar-background-color2 50%, @toolbar-background-color1 100% );
-	border-radius: 20px;
 	box-shadow: 0 0 10px 0 @content-background-color;
 	float: right;
 }
@@ -2565,7 +2574,7 @@ body h6 {
 	align-items: center;
 	padding-left: 5px;
 	-webkit-box-align: center;
-	font-size: 12px;
+	font-size: 0.75rem;
 }
 
 .skin-cosmos-toolbar__list,
@@ -2616,6 +2625,7 @@ body h6 {
 		margin-top: 0;
 	}
 
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	#mw-content-text .mw-parser-output > p:first-child:has( > br:only-child ) {
 		display: none;
 	}
@@ -2652,10 +2662,10 @@ body .postedit::after {
 	bottom: 1.5px;
 	.cdx-mixin-css-icon-background-image( @cdx-icon-close, ~'#@{notice-close-button-color}' );
 	background-image: none;
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
 	-webkit-mask-position: center;
 	mask-position: center;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
 	-webkit-mask-size: contain;
 	mask-size: contain;
 }
@@ -2776,12 +2786,12 @@ div.thumbinner {
 		height: 100%;
 		background-color: currentcolor;
 		content: '';
-		mask-position: center;
-		mask-repeat: no-repeat;
-		mask-size: contain;
 		-webkit-mask-position: center;
+		mask-position: center;
 		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
 		-webkit-mask-size: contain;
+		mask-size: contain;
 	}
 }
 
@@ -2839,9 +2849,9 @@ div.thumbinner {
 		> a:only-child {
 			display: block;
 			padding: 12px 18px;
+			border-radius: 4px 4px 0 0;
 			margin: 0;
 			background-color: #fc3;
-			border-radius: 4px 4px 0 0;
 			color: #202122;
 			font-weight: bold;
 			line-height: 1.3;
@@ -2877,6 +2887,7 @@ div.thumbinner {
 	margin-right: 4px;
 }
 
+// stylelint-disable-next-line plugin/no-unsupported-browser-features
 .skin-cosmos-colormode__toggle a {
 	display: flex;
 	align-items: center;
