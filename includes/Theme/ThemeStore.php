@@ -53,7 +53,6 @@ class ThemeStore {
 				$this->getCacheKey(),
 				WANObjectCache::TTL_DAY,
 				/** @param mixed $oldValue @phan-unused-param */
-				// @phan-suppress-next-line PhanPluginMoreSpecificActualReturnType
 				function ( mixed $oldValue, int &$ttl, array &$setOpts ): array {
 					$dbr = $this->dbProvider->getReplicaDatabase();
 					$setOpts += Database::getCacheSetOptions( $dbr );
