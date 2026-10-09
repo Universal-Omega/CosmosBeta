@@ -21,6 +21,7 @@ class BannerComponent {
 	) {
 	}
 
+	/** @return array<string, mixed> */
 	public function getTemplateData( array $portlets ): array {
 		$user = $this->context->getUser();
 		$registered = $user->isRegistered();
@@ -44,6 +45,7 @@ class BannerComponent {
 		];
 	}
 
+	/** @return ?array<string, string> */
 	private function getTalkAlert( array $portlets ): ?array {
 		foreach ( $portlets['data-notifications']['array-items'] ?? [] as $item ) {
 			if ( ( $item['name'] ?? '' ) !== 'talk-alert' ) {
