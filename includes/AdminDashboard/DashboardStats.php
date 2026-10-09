@@ -10,6 +10,12 @@ use function array_sum;
 final readonly class DashboardStats {
 
 	/**
+	 * @param int $articles
+	 * @param int $pages
+	 * @param int $edits
+	 * @param int $files
+	 * @param int $users
+	 * @param int $activeUsers
 	 * @param DailyActivity[] $days Newest day first
 	 */
 	public function __construct(
@@ -24,14 +30,14 @@ final readonly class DashboardStats {
 	}
 
 	public function getWeeklyEdits(): int {
-		return array_sum( array_column( $this->days, 'edits' ) );
+		return (int)array_sum( array_column( $this->days, 'edits' ) );
 	}
 
 	public function getWeeklyNewPages(): int {
-		return array_sum( array_column( $this->days, 'newPages' ) );
+		return (int)array_sum( array_column( $this->days, 'newPages' ) );
 	}
 
 	public function getWeeklyUploads(): int {
-		return array_sum( array_column( $this->days, 'uploads' ) );
+		return (int)array_sum( array_column( $this->days, 'uploads' ) );
 	}
 }
