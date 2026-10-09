@@ -35,7 +35,7 @@ class SpecialLegacyConverter extends SpecialPage {
 
 	/**
 	 * @inheritDoc
-	 * @suppress PhanUnusedPublicMethodParameter
+	 * @param mixed $subPage @phan-unused-param
 	 */
 	public function execute( $subPage ): void {
 		$this->setHeaders();
