@@ -11,6 +11,10 @@ use MediaWiki\Skin\Cosmos\ConfigNames;
 
 class ResourceLoaderCallbacks {
 
+	/**
+	 * @return array<string, mixed>
+	 * @suppress PhanUnusedPublicNoOverrideMethodParameter
+	 */
 	public static function getCosmosResourceLoaderConfig( Context $context, Config $config ): array {
 		return [
 			'wgCosmosSearchHost' => $config->get( ConfigNames::SearchHost ),
@@ -18,6 +22,7 @@ class ResourceLoaderCallbacks {
 		];
 	}
 
+	/** @suppress PhanUnusedPublicNoOverrideMethodParameter */
 	public static function getCosmosSearchResourceLoaderConfig( Context $context, Config $config ): array {
 		return [
 			'wgCosmosSearchDescriptionSource' => $config->get( ConfigNames::SearchDescriptionSource ),
