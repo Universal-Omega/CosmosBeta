@@ -134,13 +134,11 @@ class SpecialThemeDesigner extends SpecialPage {
 	private function handlePost(): void {
 		$out = $this->getOutput();
 		$request = $this->getRequest();
-
 		if ( !$this->canEdit() ) {
 			$this->displayRestrictionError();
 		}
 
 		$this->checkReadOnly();
-
 		if ( !$this->getContext()->getCsrfTokenSet()->matchTokenField( 'wpEditToken' ) ) {
 			$out->addHTML( Html::errorBox( $this->msg( 'cosmos-themedesigner-error-token' )->escaped() ) );
 			return;
@@ -176,10 +174,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		$out->redirect( $this->getPageTitle()->getFullURL( [ 'saved' => 1 ] ) );
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function applyConfigurationRules( array $data ): array {
 		$hidden = $data['footer']['hiddenLinks'] ?? [];
 		$data['footer']['hiddenLinks'] = is_array( $hidden ) ?
@@ -267,7 +262,6 @@ class SpecialThemeDesigner extends SpecialPage {
 	 * What each setting is while the theme leaves it alone, for the designer to show and to reset to.
 	 *
 	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	private function getEffectiveDefaults(): array {
 		$defaults = $this->theme->getDefaults();
@@ -303,10 +297,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		];
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function getUploadData(): array {
 		$allowed = array_map( 'strtolower', (array)$this->getConfig()->get( MainConfigNames::FileExtensions ) );
 		return [
@@ -317,10 +308,7 @@ class SpecialThemeDesigner extends SpecialPage {
 		];
 	}
 
-	/**
-	 * @return list<array<string, mixed>>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return list<array<string, mixed>> */
 	private function getNamespaceOptions(): array {
 		$options = [];
 		foreach ( $this->getLanguage()->getFormattedNamespaces() as $id => $name ) {
@@ -337,7 +325,6 @@ class SpecialThemeDesigner extends SpecialPage {
 	 * Reads the page tools and footer links that this wiki really has, from the skin itself.
 	 *
 	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	private function getChromeOptions(): array {
 		$data = [];
