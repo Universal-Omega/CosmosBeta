@@ -141,9 +141,9 @@ body .skin-cosmos-footer__icons-item a.cdx-button {
 	box-sizing: border-box;
 	align-items: center;
 	justify-content: center;
-	padding: 5px 15px;
-	border: 1px solid #a2a9b1;
-	border-radius: 2px;
+	padding: @spacing-30 15px;
+	border: @border-width-base solid #a2a9b1;
+	border-radius: @border-radius-base;
 	background-color: #f8f9fa;
 	color: #202122;
 
@@ -197,7 +197,7 @@ body a:focus {
 
 .skin-cosmos-search-box__form {
 	display: flex;
-	width: 100%;
+	width: @size-full;
 	align-items: center;
 }
 
@@ -205,7 +205,7 @@ body a:focus {
 	display: flex;
 	min-width: 120px;
 	flex: 1 1 0;
-	margin: 0 8px;
+	margin: 0 @spacing-50;
 }
 
 #cosmos-actionsList-list {
@@ -217,7 +217,7 @@ body a:focus {
 
 	a {
 		display: block;
-		padding: 12px 16px;
+		padding: @spacing-75 @spacing-100;
 		color: #000;
 		text-decoration: none;
 
@@ -239,12 +239,12 @@ body a:focus {
 	display: none;
 	min-width: 200px;
 	padding: 7px 0;
-	border: 1px solid #ccc;
+	border: @border-width-base solid #ccc;
 	border-radius: 4px;
 	margin: 0;
 	background-color: #fff;
 	box-shadow: 0 8px 16px 0 rgba( 0, 0, 0, 0.3 );
-	font-size: 0.875rem;
+	font-size: @font-size-small;
 
 	> ul,
 	> ul > li,
@@ -259,7 +259,7 @@ body a:focus {
 				padding: 11px 9px;
 				margin: 0 9px;
 				color: #39424d;
-				font-weight: bold;
+				font-weight: @font-weight-bold;
 				text-decoration: none;
 			}
 		}
@@ -292,7 +292,7 @@ body a:focus {
 	position: relative;
 	z-index: 1;
 	min-height: 250px;
-	padding: 10px 40px;
+	padding: @spacing-65 @spacing-250;
 	border: 0;
 	word-wrap: break-word;
 }
@@ -302,14 +302,14 @@ body > #mw-content-container {
 }
 
 #searchform {
-	width: 100%;
+	width: @size-full;
 }
 
 #searchform input {
 	left: auto;
-	width: 100%;
+	width: @size-full;
 	height: 36px;
-	padding: 5px 20px;
+	padding: @spacing-30 @spacing-125;
 	border: 0;
 	border-radius: 0;
 	margin: 0;
@@ -318,7 +318,7 @@ body > #mw-content-container {
 	box-shadow: none;
 	color: @banner-font-color;
 	outline: 0;
-	transition: background 250ms ease;
+	transition: background @transition-duration-medium @transition-timing-function-system;
 
 	&:focus {
 		background: @banner-search-focus-background;
@@ -335,7 +335,7 @@ body > #mw-content-container {
 	.skin-cosmos-typeahead-search,
 	#simpleSearch {
 		display: flex;
-		width: 100%;
+		width: @size-full;
 		align-items: center;
 	}
 
@@ -385,14 +385,14 @@ body > #mw-content-container {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
-	height: 100%;
+	width: @size-full;
+	height: @size-full;
 	padding: 0;
 	border: 0;
 	margin: 0;
 	background: transparent;
 	color: transparent;
-	transition: background 250ms ease;
+	transition: background @transition-duration-medium @transition-timing-function-system;
 
 	&:hover {
 		background: @banner-search-button-hover-background;
@@ -406,7 +406,7 @@ body > #mw-content-container {
 #cosmos-banner-userOptions {
 	display: flex;
 	align-items: center;
-	margin: 0 4px 0 2px;
+	margin: 0 @spacing-25 0 @spacing-12;
 }
 
 #cosmos-messages-list {
@@ -414,24 +414,24 @@ body > #mw-content-container {
 }
 
 .skin-cosmos-article-proposals {
-	width: 100%;
+	width: @size-full;
 	padding: 0;
 	margin: 0.3em 0 0 1.6em;
 	list-style: none;
 }
 
 .skin-cosmos-article-proposals li {
-	width: 50%;
+	width: @size-half;
 	float: left;
 }
 
 #cosmos-userButton-avatar {
-	margin-right: 10px;
+	margin-right: @spacing-65;
 
 	>img {
 		width: 30px;
 		height: 30px;
-		border: 2px solid @banner-font-color;
+		border: @border-width-thick solid @banner-font-color;
 		border-radius: 16px;
 	}
 
@@ -444,12 +444,12 @@ body > #mw-content-container {
 		height: 34px;
 		flex: none;
 		align-self: center;
-		border-radius: 50%;
+		border-radius: @border-radius-circle;
 
 		&::after {
 			position: absolute;
-			border: 2px solid @banner-font-color;
-			border-radius: 50%;
+			border: @border-width-thick solid @banner-font-color;
+			border-radius: @border-radius-circle;
 			content: '';
 			inset: 0;
 			pointer-events: none;
@@ -460,7 +460,7 @@ body > #mw-content-container {
 			height: 34px;
 			padding: 0;
 			border: 0;
-			border-radius: 50%;
+			border-radius: @border-radius-circle;
 			background-color: fade( @banner-font-color, 15% );
 			filter: invert( @banner-icon-invert );
 			object-fit: cover;
@@ -471,9 +471,9 @@ body > #mw-content-container {
 
 .skin-cosmos-personal-tools__user-label {
 	display: block;
-	margin-top: 4px;
+	margin-top: @spacing-25;
 	color: @banner-font-color;
-	font-size: 1.25rem;
+	font-size: @font-size-x-large;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -503,7 +503,7 @@ body > #mw-content-container {
 	stroke-width: 2px;
 
 	&:hover {
-		border: 1px solid @border-color;
+		border: @border-width-base solid @border-color;
 		opacity: 0.8;
 		transition: 0.4s;
 	}
@@ -513,7 +513,7 @@ body > #mw-content-container {
 	position: relative;
 
 	&__icon {
-		transition: transform 250ms ease;
+		transition: transform @transition-duration-medium @transition-timing-function-system;
 	}
 
 	&.skin-cosmos-is-open {
@@ -551,7 +551,7 @@ body > #mw-content-container {
 
 .skin-cosmos-banner-option {
 	display: flex;
-	height: 100%;
+	height: @size-full;
 
 	&:hover {
 		>.skin-cosmos-banner-option__button {
@@ -601,7 +601,7 @@ body > #mw-content-container {
 }
 
 .skin-cosmos-empty-list-message {
-	padding: 10px 10px 10px 15px;
+	padding: @spacing-65 @spacing-65 @spacing-65 15px;
 	font-style: italic;
 }
 
@@ -619,7 +619,7 @@ body > #mw-content-container {
 	z-index: 1000;
 	top: 0;
 	left: 0;
-	width: 100%;
+	width: @size-full;
 	height: 55px;
 	padding: 0;
 	margin: 0;
@@ -629,9 +629,9 @@ body > #mw-content-container {
 
 #cosmos-banner-content {
 	display: flex;
-	height: 100%;
+	height: @size-full;
 	justify-content: space-between;
-	margin: 0 6px;
+	margin: 0 @spacing-35;
 }
 
 body > .suggestions .suggestions-results {
@@ -684,27 +684,27 @@ body > .suggestions {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	padding: 5px 0;
+	padding: @spacing-30 0;
 
 	.skin-cosmos-button {
-		height: 24px;
-		margin-right: 5px;
+		height: @size-150;
+		margin-right: @spacing-30;
 	}
 }
 
 .skin-cosmos-buttons--slim #cosmos-articleHeader-actions {
 	.skin-cosmos-button {
-		height: 32px;
+		height: @size-200;
 		box-sizing: border-box;
 		justify-content: center;
 		padding: 0 14px;
-		gap: 6px;
+		gap: @spacing-35;
 		line-height: 1;
 	}
 
 	.skin-cosmos-button__icon {
-		width: 16px;
-		height: 16px;
+		width: @size-100;
+		height: @size-100;
 		margin: 0 0 0 -2px;
 	}
 
@@ -713,7 +713,7 @@ body > .suggestions {
 	}
 
 	#cosmos-actionsList-button {
-		padding: 0 8px;
+		padding: 0 @spacing-50;
 	}
 }
 
@@ -741,7 +741,7 @@ body > .suggestions {
 }
 
 .skin-cosmos-buttons--text #cosmos-articleHeader-actions {
-	gap: 4px 0;
+	gap: @spacing-25 0;
 
 	> a {
 		display: flex;
@@ -756,8 +756,8 @@ body > .suggestions {
 	> a ~ .skin-cosmos-dropdown,
 	> .skin-cosmos-dropdown:has( ~ a ) {
 		position: relative;
-		padding-left: 10px;
-		margin-left: 10px;
+		padding-left: @spacing-65;
+		margin-left: @spacing-65;
 
 		// Short dividers, so they do not stretch the full height of the row.
 		&::before {
@@ -765,7 +765,7 @@ body > .suggestions {
 			top: 50%;
 			left: 0;
 			height: 14px;
-			border-left: 1px solid fade( @link-color, 40% );
+			border-left: @border-width-base solid fade( @link-color, 40% );
 			content: '';
 			transform: translateY( -50% );
 		}
@@ -775,7 +775,7 @@ body > .suggestions {
 		height: auto;
 		min-height: 0;
 		box-sizing: border-box;
-		padding: 4px 6px;
+		padding: @spacing-25 @spacing-35;
 		border: 0;
 		border-radius: 3px;
 		margin-right: 0;
@@ -794,10 +794,10 @@ body > .suggestions {
 
 	.skin-cosmos-button__icon,
 	.skin-cosmos-dropdown__icon .skin-cosmos-icon {
-		width: 16px;
-		min-width: 16px;
-		height: 16px;
-		margin: 0 6px 0 0;
+		width: @size-100;
+		min-width: @size-100;
+		height: @size-100;
+		margin: 0 @spacing-35 0 0;
 
 		&::before {
 			background-color: currentcolor;
@@ -813,7 +813,7 @@ body > .suggestions {
 	}
 
 	#cosmos-actionsList-button {
-		padding: 4px 2px;
+		padding: @spacing-25 @spacing-12;
 		border-radius: 3px;
 	}
 
@@ -841,8 +841,8 @@ body > .suggestions {
 }
 
 .skin-cosmos-associated-tabs {
-	border-bottom: 1px solid var( --skin-cosmos-border-color );
-	margin: 0 0 20px;
+	border-bottom: @border-width-base solid var( --skin-cosmos-border-color );
+	margin: 0 0 @spacing-125;
 	overflow-x: auto;
 	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	scrollbar-width: none;
@@ -865,12 +865,12 @@ body > .suggestions {
 
 	a {
 		display: block;
-		padding: 8px 16px;
-		border: 1px solid transparent;
+		padding: @spacing-50 @spacing-100;
+		border: @border-width-base solid transparent;
 		border-radius: 4px 4px 0 0;
 		border-bottom: 0;
 		color: var( --skin-cosmos-muted-color );
-		font-weight: bold;
+		font-weight: @font-weight-bold;
 		white-space: nowrap;
 
 		&:hover {
@@ -891,7 +891,7 @@ body > .suggestions {
 	color: @button-font-color;
 	stroke: @button-font-color;
 	stroke-width: 2px;
-	transition: filter 250ms ease;
+	transition: filter @transition-duration-medium @transition-timing-function-system;
 
 	&:hover {
 		filter: brightness( 110% );
@@ -902,12 +902,12 @@ body > .suggestions {
 	display: flex;
 	align-content: center;
 	align-items: center;
-	padding: 8px 16px;
-	border: 1px solid transparent;
+	padding: @spacing-50 @spacing-100;
+	border: @border-width-base solid transparent;
 	border-radius: 4px;
 	cursor: pointer;
-	font-size: 0.875rem;
-	font-weight: bold;
+	font-size: @font-size-small;
+	font-weight: @font-weight-bold;
 	text-decoration: none;
 	text-transform: uppercase;
 	-webkit-touch-callout: none;
@@ -919,8 +919,8 @@ body > .suggestions {
 
 	> svg {
 		width: auto;
-		height: 20px;
-		margin-right: 8px;
+		height: @size-125;
+		margin-right: @spacing-50;
 	}
 }
 
@@ -937,7 +937,7 @@ body > .suggestions {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	padding: 10px 0;
+	padding: @spacing-65 0;
 	column-gap: 15px;
 
 	#cosmos-title-text {
@@ -953,7 +953,7 @@ body > .suggestions {
 		align-items: center;
 		padding: 0;
 		font-size: 0.9375rem;
-		gap: 4px 12px;
+		gap: @spacing-25 @spacing-75;
 	}
 }
 
@@ -988,15 +988,15 @@ body > .suggestions {
 	align-items: center;
 	justify-content: center;
 	padding: 7px 18px;
-	border-width: 1px;
+	border-width: @border-width-base;
 	border-style: solid;
 	border-radius: 3px;
 	margin: 0;
 	-webkit-appearance: none;
 	background: 0 0;
 	cursor: default;
-	font-size: 0.75rem;
-	font-weight: 600;
+	font-size: @font-size-x-small;
+	font-weight: @font-weight-semi-bold;
 	letter-spacing: 0.15px;
 	line-height: 1rem;
 	outline: 0;
@@ -1032,18 +1032,18 @@ body > .suggestions {
 
 		&:not( :only-child ) {
 			&:first-child {
-				margin-right: 6px;
+				margin-right: @spacing-35;
 			}
 
 			&:last-child {
-				margin-left: 6px;
+				margin-left: @spacing-35;
 			}
 		}
 	}
 
 	.skin-cosmos-list {
 		color: #1a1a1a;
-		font-weight: normal;
+		font-weight: @font-weight-normal;
 		letter-spacing: normal;
 		text-align: left;
 		text-transform: none;
@@ -1061,7 +1061,7 @@ body > .suggestions {
 				.skin-cosmos-list.skin-cosmos-list--linked {
 					>li {
 						>a {
-							font-size: 0.75rem;
+							font-size: @font-size-x-small;
 						}
 					}
 				}
@@ -1070,7 +1070,7 @@ body > .suggestions {
 				left: 100%;
 				display: none;
 				padding: 7px 0;
-				border: 1px solid #ccc;
+				border: @border-width-base solid #ccc;
 				border-radius: 4px;
 				background-color: #fff;
 			}
@@ -1149,7 +1149,7 @@ body > .suggestions {
 	display: none;
 	min-width: 70%;
 	padding: 7px 0;
-	border: 1px solid #ccc;
+	border: @border-width-base solid #ccc;
 	border-radius: 4px;
 	background-color: #fff;
 	transform: translateX( -50% );
@@ -1245,15 +1245,15 @@ button.skin-cosmos-header__button {
 	>.skin-cosmos-header__button {
 		&:not( .skin-cosmos-is-secondary ) {
 			&:not( :last-child ) {
-				border-right: 1px solid #fff;
+				border-right: @border-width-base solid #fff;
 			}
 
 			&:not( :first-child ) {
-				border-left: 1px solid #fff;
+				border-left: @border-width-base solid #fff;
 			}
 		}
 		height: auto;
-		padding: 7px 12px;
+		padding: 7px @spacing-75;
 		border-radius: 0;
 		margin-right: -1px;
 		margin-left: auto;
@@ -1276,13 +1276,13 @@ button.skin-cosmos-header__button {
 	>.skin-cosmos-menu {
 		&:not( :last-child ) {
 			.skin-cosmos-header__button {
-				border-right: 1px solid #fff;
+				border-right: @border-width-base solid #fff;
 			}
 		}
 
 		&:not( :first-child ) {
 			.skin-cosmos-header__button {
-				border-left: 1px solid #fff;
+				border-left: @border-width-base solid #fff;
 			}
 		}
 
@@ -1306,7 +1306,7 @@ button.skin-cosmos-header__button {
 .skin-cosmos-menu {
 	position: relative;
 	display: flex;
-	height: 100%;
+	height: @size-full;
 
 	&::after {
 		position: absolute;
@@ -1432,24 +1432,24 @@ button.skin-cosmos-header__button {
 }
 
 .skin-cosmos-dialog__title {
-	padding: 24px 24px 0;
-	font-size: 1.5rem;
-	font-weight: bold;
-	line-height: 1.75rem;
+	padding: @spacing-150 @spacing-150 0;
+	font-size: @font-size-xx-large;
+	font-weight: @font-weight-bold;
+	line-height: @line-height-large;
 }
 
 .skin-cosmos-dialog__content {
-	padding: 24px;
-	font-size: 1rem;
+	padding: @spacing-150;
+	font-size: @font-size-medium;
 	line-height: 1.5rem;
 }
 
 .skin-cosmos-dialog__actions {
 	display: flex;
-	height: 40px;
+	height: @size-250;
 	justify-content: flex-end;
-	padding: 5px 0 8px;
-	border-top: 1px solid @border-color;
+	padding: @spacing-30 0 @spacing-50;
+	border-top: @border-width-base solid @border-color;
 }
 
 .skin-cosmos-header__navigation {
@@ -1475,9 +1475,9 @@ button.skin-cosmos-header__button {
 }
 
 .skin-cosmos-icon {
-	width: 24px;
-	min-width: 24px;
-	height: 24px;
+	width: @size-150;
+	min-width: @size-150;
+	height: @size-150;
 	fill: currentcolor;
 }
 
@@ -1488,20 +1488,20 @@ button.skin-cosmos-header__button {
 }
 
 .skin-cosmos-icon--tiny {
-	width: 12px;
-	min-width: 12px;
-	height: 12px;
+	width: @size-75;
+	min-width: @size-75;
+	height: @size-75;
 }
 
 .skin-cosmos-field__input {
-	width: 100%;
+	width: @size-full;
 	box-sizing: border-box;
-	padding: 0 0 2px;
+	padding: 0 0 @spacing-12;
 	border: 0;
-	border-bottom: 1px solid @border-color;
+	border-bottom: @border-width-base solid @border-color;
 	background-color: transparent;
 	color: @font-color;
-	font-size: 1rem;
+	font-size: @font-size-medium;
 	line-height: 1em;
 	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	resize: none;
@@ -1518,15 +1518,15 @@ button.skin-cosmos-header__button {
 
 	>li {
 		padding: 11px 0;
-		font-size: 0.875rem;
-		font-weight: normal;
+		font-size: @font-size-small;
+		font-weight: @font-weight-normal;
 		line-height: 1em;
 	}
 }
 
 .skin-cosmos-list.skin-cosmos-list--bold {
 	>li {
-		font-weight: bold;
+		font-weight: @font-weight-bold;
 	}
 }
 
@@ -1592,7 +1592,7 @@ button.skin-cosmos-header__button {
 .skin-cosmos-nav__item {
 	position: relative;
 	display: block;
-	height: 100%;
+	height: @size-full;
 	flex-shrink: 0;
 	margin: 0;
 	cursor: default;
@@ -1609,28 +1609,28 @@ button.skin-cosmos-header__button {
 	align-items: center;
 	padding: 11px 0;
 	margin: 0 9px;
-	font-size: 0.75rem;
-	font-weight: bold;
+	font-size: @font-size-x-small;
+	font-weight: @font-weight-bold;
 	text-decoration: none;
 	text-transform: uppercase;
 	white-space: nowrap;
 
 	>a {
 		display: flex;
-		height: 100%;
+		height: @size-full;
 		align-items: center;
 		text-decoration: none;
 	}
 
 	&:not( :first-child ) {
 		&:not( :only-child ) {
-			margin-left: 4px;
+			margin-left: @spacing-25;
 		}
 	}
 }
 
 .skin-cosmos-nav__item.skin-cosmos-is-current {
-	transition: box-shadow 0.1s;
+	transition: box-shadow @transition-duration-base;
 }
 
 .skin-cosmos-toggle__label {
@@ -1652,10 +1652,10 @@ button.skin-cosmos-header__button {
 		position: absolute;
 		top: 50%;
 		left: 5px;
-		width: 20px;
-		min-width: 20px;
-		height: 20px;
-		border-radius: 50%;
+		width: @size-125;
+		min-width: @size-125;
+		height: @size-125;
+		border-radius: @border-radius-circle;
 		margin: 0;
 		background-color: #fff;
 		box-shadow: 0 3px 1px -2px rgba( 0, 0, 0, 0.14 ), 0 2px 2px 0 rgba( 0, 0, 0, 0.098 ), 0 1px 5px 0 rgba( 0, 0, 0, 0.084 );
@@ -1664,9 +1664,9 @@ button.skin-cosmos-header__button {
 		transform: translateY( -50% );
 	}
 	position: relative;
-	padding: 7px 5px 7px 52px;
+	padding: 7px @spacing-30 7px 52px;
 	cursor: pointer;
-	font-size: 1rem;
+	font-size: @font-size-medium;
 
 	&:empty {
 		padding-left: 45px;
@@ -1691,8 +1691,8 @@ button.skin-cosmos-header__button {
 		position: absolute;
 		z-index: -1;
 		display: block;
-		width: 100%;
-		height: 100%;
+		width: @size-full;
+		height: @size-full;
 		background: @header-background-color;
 		content: '';
 	}
@@ -1858,14 +1858,14 @@ button.skin-cosmos-header__button {
 	width: auto;
 	max-width: 250px;
 	height: 65px;
-	margin: 20px 0 20px 20px;
+	margin: @spacing-125 0 @spacing-125 @spacing-125;
 	float: left;
 
 	img {
 		width: auto;
-		max-width: 100%;
+		max-width: @size-full;
 		height: auto;
-		max-height: 100%;
+		max-height: @size-full;
 	}
 }
 
@@ -1878,8 +1878,8 @@ button.skin-cosmos-header__button {
 	overflow: hidden;
 	flex: 1;
 	margin: 25px 0 0 18px;
-	font-size: 1.75rem;
-	font-weight: 600;
+	font-size: @font-size-xxx-large;
+	font-weight: @font-weight-semi-bold;
 	line-height: 1;
 
 	a {
@@ -1888,27 +1888,27 @@ button.skin-cosmos-header__button {
 }
 
 .skin-cosmos-header__counter {
-	margin: 17px 0 20px 20px;
-	font-weight: 600;
+	margin: 17px 0 @spacing-125 @spacing-125;
+	font-weight: @font-weight-semi-bold;
 	text-align: right;
 }
 
 .skin-cosmos-header__counter-value {
 	display: block;
-	font-size: 1.5rem;
+	font-size: @font-size-xx-large;
 	line-height: 1;
 }
 
 .skin-cosmos-header__counter-label {
 	display: block;
 	margin-top: 3px;
-	font-size: 0.75rem;
+	font-size: @font-size-x-small;
 	line-height: 1;
 	text-transform: uppercase;
 }
 
 .skin-cosmos-header__buttons {
-	margin: 20px 20px auto 15px;
+	margin: @spacing-125 @spacing-125 auto 15px;
 
 	.skin-cosmos-menu__toggle {
 		padding: 7px 3px;
@@ -1922,8 +1922,8 @@ button.skin-cosmos-header__button {
 	left: 0;
 	display: none;
 	overflow: auto;
-	width: 100%;
-	height: 100%;
+	width: @size-full;
+	height: @size-full;
 	background-color: rgba( 0, 0, 0, 0.8 );
 }
 
@@ -1936,8 +1936,8 @@ body #mw-teleport-target {
 	width: auto;
 	min-width: 280px;
 	max-width: 640px;
-	padding: 20px;
-	border: 1px solid @border-color;
+	padding: @spacing-125;
+	border: @border-width-base solid @border-color;
 	margin: auto;
 	background-color: @content-background-color;
 	color: @font-color;
@@ -2033,8 +2033,8 @@ body #mw-teleport-target {
 	line-height: 0;
 
 	.skin-cosmos-icon {
-		width: 24px;
-		height: 24px;
+		width: @size-150;
+		height: @size-150;
 	}
 
 	&:hover {
@@ -2052,8 +2052,8 @@ body #mw-teleport-target {
 
 body pre {
 	overflow: auto;
-	padding: 12px;
-	border: 1px solid @border-color;
+	padding: @spacing-75;
+	border: @border-width-base solid @border-color;
 	background-color: mix( @content-background-color, @code-background-color, 90% );
 	color: @alt-font-color;
 	line-height: 0.875rem;
@@ -2061,7 +2061,7 @@ body pre {
 }
 
 body code {
-	border: 1px solid @border-color;
+	border: @border-width-base solid @border-color;
 	background-color: mix( @content-background-color, @code-background-color, 70% );
 	color: @alt-font-color;
 }
@@ -2080,10 +2080,10 @@ body code {
 	color: @font-color;
 
 	table {
-		width: 100%;
+		width: @size-full;
 
 		td {
-			width: 50%;
+			width: @size-half;
 		}
 	}
 }
@@ -2102,19 +2102,19 @@ body code {
 
 #mw-content h2 {
 	overflow: hidden;
-	padding-bottom: 4px;
-	border-bottom: solid 1px @border-color;
-	font-weight: normal;
+	padding-bottom: @spacing-25;
+	border-bottom: solid @border-width-base @border-color;
+	font-weight: @font-weight-normal;
 }
 
 #mw-content .mw-heading {
 	overflow: hidden;
-	padding-bottom: 4px;
+	padding-bottom: @spacing-25;
 	margin-bottom: 0.6em;
 
 	&.mw-heading1,
 	&.mw-heading2 {
-		border-bottom: solid 1px @border-color;
+		border-bottom: solid @border-width-base @border-color;
 	}
 
 	> h1,
@@ -2132,13 +2132,13 @@ body code {
 
 #mw-content .toctitle h2 {
 	border-bottom: 0;
-	font-size: 0.875rem;
-	font-weight: bold;
+	font-size: @font-size-small;
+	font-weight: @font-weight-bold;
 }
 
 #mw-content .toc > ul {
-	padding: 10px;
-	border-top: solid 1px @border-color;
+	padding: @spacing-65;
+	border-top: solid @border-width-base @border-color;
 	margin: 0;
 }
 
@@ -2165,21 +2165,21 @@ body code {
 .skin-cosmosbeta .toc {
 	display: table;
 	padding: 0;
-	border: 1px solid @border-color;
+	border: @border-width-base solid @border-color;
 	margin: 1em 0;
 	background-color: @toc-background-color;
 
 	.toctitle {
 		position: relative;
-		padding: 8px 16px;
+		padding: @spacing-50 @spacing-100;
 
 		.toctogglespan {
 			position: absolute;
 			top: 0;
 			right: 0;
 			left: 0;
-			height: 100%;
-			transition: background 250ms ease;
+			height: @size-full;
+			transition: background @transition-duration-medium @transition-timing-function-system;
 
 			&::before,
 			&::after {
@@ -2192,7 +2192,7 @@ body code {
 
 			.toctogglelabel {
 				display: block;
-				height: 100%;
+				height: @size-full;
 				font-size: 0;
 			}
 		}
@@ -2230,7 +2230,7 @@ body #mw-content-text {
 		margin: 0;
 		color: @alt-font-color;
 		font-size: 2.25rem;
-		font-weight: bold;
+		font-weight: @font-weight-bold;
 		line-height: 1;
 		opacity: 0.9;
 		word-wrap: break-word;
@@ -2240,7 +2240,7 @@ body #mw-content-text {
 h1 {
 	display: block;
 	font-size: 2em;
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 	margin-block: 0.67em 0.67em;
 	margin-inline: 0 0;
 }
@@ -2248,7 +2248,7 @@ h1 {
 h2 {
 	display: block;
 	font-size: 1.5em;
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 	margin-block: 0.83em 0.83em;
 	margin-inline: 0 0;
 }
@@ -2256,20 +2256,20 @@ h2 {
 h3 {
 	display: block;
 	font-size: 1.17em;
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 	margin-block: 1em 1em;
 	margin-inline: 0 0;
 }
 
 h4 {
-	font-size: 0.875rem;
+	font-size: @font-size-small;
 	line-height: 1.5;
 }
 
 h5 {
 	display: block;
 	font-size: 0.83em;
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 	margin-block: 1.67em 1.67em;
 	margin-inline: 0 0;
 }
@@ -2277,7 +2277,7 @@ h5 {
 h6 {
 	display: block;
 	font-size: 0.67em;
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 	margin-block: 2.33em 2.33em;
 	margin-inline: 0 0;
 }
@@ -2303,9 +2303,9 @@ body {
 }
 
 #catlinks {
-	padding: 10px;
+	padding: @spacing-65;
 	padding-top: 1em;
-	border: 1px solid @border-color;
+	border: @border-width-base solid @border-color;
 	margin-top: 2em;
 	margin-bottom: 2em;
 	clear: both;
@@ -2314,7 +2314,7 @@ body {
 }
 
 #cosmos-footer-footerContent {
-	padding: 0 20px 10px 20px;
+	padding: 0 @spacing-125 @spacing-65 @spacing-125;
 }
 
 #cosmos-footerContent-footerLinks {
@@ -2343,7 +2343,7 @@ body {
 #footer-places {
 	>li {
 		display: inline;
-		padding: 0 0 5px 0;
+		padding: 0 0 @spacing-30 0;
 
 		&:not( :first-child ) {
 			&::before {
@@ -2384,18 +2384,18 @@ body {
 }
 
 #cosmos-footer {
-	width: 100%;
+	width: @size-full;
 	border: 0;
 	margin: 0;
 	background-color: @footer-background-color;
 }
 
 #cosmos-page-header {
-	padding: 20px 0 0 0;
+	padding: @spacing-125 0 0 0;
 
 	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	&:has( > .skin-cosmos-associated-tabs ) {
-		padding-top: 12px;
+		padding-top: @spacing-75;
 	}
 }
 
@@ -2407,19 +2407,19 @@ body {
 	display: -ms-flexbox;
 	display: -webkit-flex;
 	display: flex;
-	width: fit-content;
+	width: @size-content-fit;
 	align-items: flex-start;
-	font-size: 0.75rem;
+	font-size: @font-size-x-small;
 
 	&__label {
-		padding-right: 4px;
-		font-weight: 600;
+		padding-right: @spacing-25;
+		font-weight: @font-weight-semi-bold;
 		white-space: nowrap;
 	}
 
 	&__menu {
 		z-index: 99999;
-		padding-bottom: 12px;
+		padding-bottom: @spacing-75;
 
 		&-content {
 			font-style: normal;
@@ -2439,7 +2439,7 @@ body {
 
 		> :last-child {
 			display: inline-block;
-			padding-bottom: 10px;
+			padding-bottom: @spacing-65;
 		}
 	}
 }
@@ -2477,7 +2477,7 @@ body {
 }
 
 .skin-cosmos-has-header-border #cosmos-header-articleHeader {
-	padding-bottom: 4px;
+	padding-bottom: @spacing-25;
 	border-bottom: 1.5px solid @border-color;
 	margin-bottom: 0;
 }
@@ -2485,7 +2485,7 @@ body {
 #catlinks {
 	li {
 		&:not( :nth-of-type( 1 ) ) {
-			border-left: 1px solid @font-color;
+			border-left: @border-width-base solid @font-color;
 		}
 	}
 }
@@ -2534,13 +2534,13 @@ body h6 {
 	right: 9px;
 	bottom: 9px;
 	display: flex;
-	width: fit-content;
-	max-width: 50%;
+	width: @size-content-fit;
+	max-width: @size-half;
 	height: auto;
 	min-height: 25px;
 	box-sizing: border-box;
 	align-items: center;
-	padding: 5px;
+	padding: @spacing-30;
 	border-radius: 20px;
 	margin: 0;
 	background-image: -moz-linear-gradient( left, @toolbar-background-color1 0, @toolbar-background-color2 50%, @toolbar-background-color1 100% );
@@ -2553,7 +2553,7 @@ body h6 {
 
 #cosmos-toolbar.skin-cosmos-toolbar--bar {
 	position: static;
-	width: 100%;
+	width: @size-full;
 	max-width: none;
 	border-radius: 0;
 	box-shadow: none;
@@ -2572,9 +2572,9 @@ body h6 {
 	display: -webkit-box;
 	display: flex;
 	align-items: center;
-	padding-left: 5px;
+	padding-left: @spacing-30;
 	-webkit-box-align: center;
-	font-size: 0.75rem;
+	font-size: @font-size-x-small;
 }
 
 .skin-cosmos-toolbar__list,
@@ -2585,8 +2585,8 @@ body h6 {
 	text-align: center;
 
 	li {
-		padding: 1px 8px 0;
-		margin: 2px 0;
+		padding: @spacing-6 @spacing-50 0;
+		margin: @spacing-12 0;
 	}
 
 	li,
@@ -2599,7 +2599,7 @@ body h6 {
 		}
 
 		&:not( :last-of-type ) {
-			border-right: 1px solid @toolbar-font-color;
+			border-right: @border-width-base solid @toolbar-font-color;
 		}
 	}
 }
@@ -2607,7 +2607,7 @@ body h6 {
 #cosmos-content-siteNotice {
 	min-height: 36px;
 	padding: 15px 15px 15px 15px;
-	border: 1px solid @button-font-color;
+	border: @border-width-base solid @button-font-color;
 	margin: 0 15px 15px 15px;
 	background-color: @button-background-color;
 	color: @button-font-color;
@@ -2646,7 +2646,7 @@ body:not( .mw-special-Preferences ) #cosmos-pageBody-content {
 }
 
 .skin-cosmos-header__button .skin-cosmos-icon-articleAdd {
-	margin-right: 5px;
+	margin-right: @spacing-30;
 }
 
 .skin-cosmos-header__button.skin-cosmos-is-flush .skin-cosmos-icon-articleAdd {
@@ -2682,7 +2682,7 @@ body .postedit-container {
 
 .skin-cosmos-dropdown__list #ca-wikilove a {
 	width: auto;
-	padding: 12px 16px;
+	padding: @spacing-75 @spacing-100;
 	margin-bottom: 0;
 	background-image: none;
 	text-indent: 0;
@@ -2694,9 +2694,9 @@ body .postedit-container {
 }
 
 .flaggedrevs-unreviewed {
-	padding: 5px;
-	border: 1px solid @alt-font-color;
-	margin-top: 10px;
+	padding: @spacing-30;
+	border: @border-width-base solid @alt-font-color;
+	margin-top: @spacing-65;
 	background-color: transparent;
 	color: @font-color;
 }
@@ -2748,7 +2748,7 @@ table.mw-interwikitable.body td.mw-interwikitable-local-yes {
 }
 
 .skin-cosmos-rail .skin-cosmos-rail__module h3 {
-	border-bottom: 3px solid @rail-header-bottom-border;
+	border-bottom: 1.5px solid @rail-header-bottom-border;
 }
 
 div.thumbinner {
@@ -2756,10 +2756,10 @@ div.thumbinner {
 	border: 0;
 
 	.thumbcaption {
-		padding: 10px;
-		border-right: 1px solid @border-color;
-		border-bottom: 1px solid @border-color;
-		border-left: 1px solid @border-color;
+		padding: @spacing-65;
+		border-right: @border-width-base solid @border-color;
+		border-bottom: @border-width-base solid @border-color;
+		border-left: @border-width-base solid @border-color;
 		color: #3a3a3a;
 	}
 }
@@ -2774,16 +2774,16 @@ div.thumbinner {
 
 .skin-cosmos-icon {
 	display: inline-flex;
-	width: 20px;
-	height: 20px;
+	width: @size-125;
+	height: @size-125;
 	flex: none;
 	aspect-ratio: 1 / 1;
 	vertical-align: middle;
 
 	&::before {
 		display: block;
-		width: 100%;
-		height: 100%;
+		width: @size-full;
+		height: @size-full;
 		background-color: currentcolor;
 		content: '';
 		-webkit-mask-position: center;
@@ -2803,8 +2803,8 @@ div.thumbinner {
 .skin-cosmos-icon--tiny,
 .skin-cosmos-menu__chevron,
 .skin-cosmos-submenu__chevron {
-	width: 12px;
-	height: 12px;
+	width: @size-75;
+	height: @size-75;
 }
 
 .skin-cosmos-banner-option__icon .skin-cosmos-icon {
@@ -2813,9 +2813,9 @@ div.thumbinner {
 }
 
 .skin-cosmos-button__icon {
-	width: 20px;
-	height: 20px;
-	margin: 0 5px 0 -2px;
+	width: @size-125;
+	height: @size-125;
+	margin: 0 @spacing-30 0 -2px;
 }
 
 .skin-cosmos-button__icon.skin-cosmos-icon-close {
@@ -2844,16 +2844,16 @@ div.thumbinner {
 		display: block;
 		padding: 0;
 		// The list has padding at the top, so the notice reaches the top edge of the menu
-		margin: -7px 0 6px;
+		margin: -7px 0 @spacing-35;
 
 		> a:only-child {
 			display: block;
-			padding: 12px 18px;
+			padding: @spacing-75 18px;
 			border-radius: 4px 4px 0 0;
 			margin: 0;
 			background-color: #fc3;
 			color: #202122;
-			font-weight: bold;
+			font-weight: @font-weight-bold;
 			line-height: 1.3;
 		}
 	}
@@ -2882,16 +2882,16 @@ div.thumbinner {
 }
 
 .skin-cosmos-nav__icon {
-	width: 16px;
-	height: 16px;
-	margin-right: 4px;
+	width: @size-100;
+	height: @size-100;
+	margin-right: @spacing-25;
 }
 
 // stylelint-disable-next-line plugin/no-unsupported-browser-features
 .skin-cosmos-colormode__toggle a {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: @spacing-50;
 }
 
 .skin-cosmos-rail__tools {
@@ -2900,7 +2900,7 @@ div.thumbinner {
 	list-style: none;
 
 	li {
-		padding: 4px 0;
+		padding: @spacing-25 0;
 	}
 }
 
@@ -2927,8 +2927,8 @@ div.thumbinner {
 }
 
 .skin-cosmos-banner-option__dropdown-icon .skin-cosmos-icon {
-	width: 12px;
-	height: 12px;
+	width: @size-75;
+	height: @size-75;
 }
 
 .skin-cosmos-button__icon.skin-cosmos-icon-edit::before {
