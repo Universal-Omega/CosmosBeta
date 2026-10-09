@@ -14,9 +14,9 @@
 
 	.pi-secondary-font {
 		margin-top: 0;
-		font-size: 12px;
+		font-size: 0.75rem;
 		font-weight: bold;
-		line-height: 18px;
+		line-height: 1.125rem;
 	}
 
 	.pi-header,
@@ -26,8 +26,8 @@
 	}
 
 	.pi-title {
-		font-size: 18px;
-		line-height: 28px;
+		font-size: 1.125rem;
+		line-height: 1.75rem;
 	}
 
 	.pi-data-label {
@@ -48,7 +48,7 @@
 		}
 
 		li {
-			line-height: 19px;
+			line-height: 1.1875rem;
 		}
 	}
 
@@ -72,7 +72,7 @@
 
 .pi-caption {
 	color: mix( @content-background-color, @alt-font-color, 50% );
-	font-size: 12px;
+	font-size: 0.75rem;
 	font-style: italic;
 	-webkit-hyphens: auto;
 	-moz-hyphens: auto;
@@ -123,13 +123,13 @@
 
 .pi-data-value {
 	padding-left: 0;
-	font-size: 12px;
+	font-size: 0.75rem;
 	-webkit-hyphens: auto;
 	-moz-hyphens: auto;
 	-ms-hyphens: auto;
 	hyphens: auto;
-	line-height: 18px;
-	word-break: break-word;
+	line-height: 1.125rem;
+	overflow-wrap: anywhere;
 
 	&:not( :first-child ) {
 		-webkit-flex-basis: 180px;
@@ -241,6 +241,7 @@
 	position: relative;
 	padding-right: 25px;
 
+	// stylelint-disable-next-line no-duplicate-selectors
 	&::after {
 		position: absolute;
 		top: 50%;
