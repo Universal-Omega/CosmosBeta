@@ -10,7 +10,6 @@ use MediaWiki\Html\Html;
 use MediaWiki\Html\TemplateParser;
 use MediaWiki\MainConfigNames;
 use MediaWiki\Registration\ExtensionRegistry;
-use MediaWiki\Skin\SkinFactory;
 use MediaWiki\Skin\Cosmos\Components\PortletReader;
 use MediaWiki\Skin\Cosmos\ConfigNames;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
@@ -22,6 +21,7 @@ use MediaWiki\Skin\Cosmos\Theme\ThemeFont;
 use MediaWiki\Skin\Cosmos\Theme\ThemePresets;
 use MediaWiki\Skin\Cosmos\Theme\ThemeSettings;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
+use MediaWiki\Skin\SkinFactory;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\User\User;
@@ -34,9 +34,9 @@ use function in_array;
 use function is_array;
 use function json_decode;
 use function json_encode;
+use function mb_strimwidth;
 use function preg_replace;
 use function strip_tags;
-use function strtolower;
 use function trim;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
@@ -104,7 +104,10 @@ class SpecialThemeDesigner extends SpecialPage {
 		return $this->getAuthority()->isAllowed( $this->getRestriction() );
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 * @suppress PhanUnusedPublicMethodParameter
+	 */
 	public function execute( $subPage ): void {
 		$this->checkPermissions();
 		$this->setHeaders();
@@ -173,6 +176,10 @@ class SpecialThemeDesigner extends SpecialPage {
 		$out->redirect( $this->getPageTitle()->getFullURL( [ 'saved' => 1 ] ) );
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	private function applyConfigurationRules( array $data ): array {
 		$hidden = $data['footer']['hiddenLinks'] ?? [];
 		$data['footer']['hiddenLinks'] = is_array( $hidden ) ?
@@ -190,7 +197,10 @@ class SpecialThemeDesigner extends SpecialPage {
 		return $this->templateParser->processTemplate( 'ThemeDesigner', [
 			'form-id' => 'skin-cosmos-themedesigner__form',
 			'action' => $this->getPageTitle()->getLocalURL(),
-			'html-token' => Html::hidden( 'wpEditToken', $this->getContext()->getCsrfTokenSet()->getToken()->toString() ),
+			'html-token' => Html::hidden(
+				'wpEditToken',
+				$this->getContext()->getCsrfTokenSet()->getToken()->toString()
+			),
 			'msg-nojs' => $this->msg( 'cosmos-themedesigner-nojs' )->text(),
 			'msg-advanced' => $this->msg( 'cosmos-themedesigner-advanced' )->text(),
 			'msg-advanced-help' => $this->msg( 'cosmos-themedesigner-advanced-help' )->text(),
@@ -206,7 +216,6 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	private function getClientData(): array {
 		$current = $this->store->getCurrent();
-
 		$fallbacks = [];
 		foreach ( ThemeSettings::MODES as $mode ) {
 			foreach ( ThemeSettings::COLOR_SLOTS as $slot ) {
@@ -231,7 +240,6 @@ class SpecialThemeDesigner extends SpecialPage {
 
 		// Reading the chrome builds the sidebar modules that the rail then lists
 		$chrome = $this->getChromeOptions();
-
 		return [
 			'canEdit' => $this->canEdit(),
 			'themeOnly' => $this->configDefaults->isThemeDesignerOnly(),
@@ -257,10 +265,12 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	/**
 	 * What each setting is while the theme leaves it alone, for the designer to show and to reset to.
+	 *
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	private function getEffectiveDefaults(): array {
 		$defaults = $this->theme->getDefaults();
-
 		return [
 			'images' => [
 				'wordmark' => $defaults->wordmark,
@@ -293,9 +303,12 @@ class SpecialThemeDesigner extends SpecialPage {
 		];
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	private function getUploadData(): array {
 		$allowed = array_map( 'strtolower', (array)$this->getConfig()->get( MainConfigNames::FileExtensions ) );
-
 		return [
 			'enabled' => (bool)$this->getConfig()->get( MainConfigNames::EnableUploads ) &&
 				$this->getAuthority()->isAllowed( 'upload' ),
@@ -304,6 +317,10 @@ class SpecialThemeDesigner extends SpecialPage {
 		];
 	}
 
+	/**
+	 * @return list<array<string, mixed>>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	private function getNamespaceOptions(): array {
 		$options = [];
 		foreach ( $this->getLanguage()->getFormattedNamespaces() as $id => $name ) {
@@ -318,10 +335,12 @@ class SpecialThemeDesigner extends SpecialPage {
 
 	/**
 	 * Reads the page tools and footer links that this wiki really has, from the skin itself.
+	 *
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	private function getChromeOptions(): array {
 		$data = [];
-
 		try {
 			$mainPage = $this->titleFactory->newMainPage();
 			$context = new DerivativeContext( $this->getContext() );
@@ -336,7 +355,8 @@ class SpecialThemeDesigner extends SpecialPage {
 		}
 
 		$tools = [];
-		foreach ( PortletReader::findPortlet( $data['data-portlets-sidebar'] ?? [], 'p-tb' )['array-items'] ?? [] as $item ) {
+		$toolbox = PortletReader::findPortlet( $data['data-portlets-sidebar'] ?? [], 'p-tb' );
+		foreach ( $toolbox['array-items'] ?? [] as $item ) {
 			$name = (string)( $item['name'] ?? '' );
 
 			if ( $name !== '' ) {
@@ -362,7 +382,6 @@ class SpecialThemeDesigner extends SpecialPage {
 
 		$protected = $this->theme->getFooterProtectedLinks();
 		$links = [];
-
 		foreach ( [ 'data-info' => 'info', 'data-places' => 'places' ] as $key => $group ) {
 			foreach ( $data['data-footer'][$key]['array-items'] ?? [] as $item ) {
 				$name = (string)( $item['name'] ?? '' );
