@@ -12,6 +12,8 @@ final class PortletReader {
 
 	/**
 	 * Flattens the items of the given portlets into one list keyed by action name.
+	 *
+	 * @return array<string, array<string, mixed>>
 	 */
 	public static function getItems( array $portlets, array $names ): array {
 		$items = [];
@@ -43,7 +45,8 @@ final class PortletReader {
 	}
 
 	public static function findPortlet( array $sidebar, string $id ): ?array {
-		foreach ( array_merge( [ $sidebar['data-portlets-first'] ?? null ], $sidebar['array-portlets-rest'] ?? [] ) as $portlet ) {
+		$portlets = array_merge( [ $sidebar['data-portlets-first'] ?? null ], $sidebar['array-portlets-rest'] ?? [] );
+		foreach ( $portlets as $portlet ) {
 			if ( ( $portlet['id'] ?? null ) === $id ) {
 				return $portlet;
 			}
