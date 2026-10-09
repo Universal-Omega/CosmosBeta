@@ -346,7 +346,6 @@ class LessUtil {
 
 	/**
 	 * @return array<string,mixed> Values for the r, g, and b keys
-	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	public static function hexToRgb( string $hex ): array {
 		$hex = str_replace( '#', '', $hex );
