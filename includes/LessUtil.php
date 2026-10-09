@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skin\Cosmos;
 
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
-
 use function array_slice;
 use function count;
 use function ctype_xdigit;
@@ -87,6 +86,7 @@ class LessUtil {
 
 	/**
 	 * @param array{r: int, g: int, b: int} $color
+	 * @param float $alpha
 	 * @param array{r: int, g: int, b: int} $backdrop
 	 * @return array{r: int, g: int, b: int} The color laid over the backdrop
 	 */
@@ -275,7 +275,7 @@ class LessUtil {
 	 * Parses a CSS color into channels. Supports hex, rgb(), rgba(),
 	 * color names and transparent. Returns null for anything else.
 	 *
-	 * @return array|null r, g, b as 0 to 255 and a as 0 to 1
+	 * @return ?array<string,mixed> r, g, b as 0 to 255 and a as 0 to 1
 	 */
 	public static function parseColor( string $color ): ?array {
 		$color = strtolower( trim( $color ) );
@@ -311,7 +311,7 @@ class LessUtil {
 			return null;
 		}
 
-		$parts = preg_split( '/[\s,\/]+/', trim( $matches[1] ), -1, PREG_SPLIT_NO_EMPTY );
+		$parts = preg_split( '/[\s,\/]+/', trim( $matches[1] ), -1, PREG_SPLIT_NO_EMPTY ) ?: [];
 		if ( count( $parts ) < 3 || count( $parts ) > 4 ) {
 			return null;
 		}
@@ -325,8 +325,8 @@ class LessUtil {
 				return null;
 			}
 
-			$value = $isPercent ? (float)$number * 2.55 : (float)$number;
-			$channels[] = (int)round( max( 0, min( 255, $value ) ) );
+			$level = $isPercent ? (float)$number * 2.55 : (float)$number;
+			$channels[] = (int)round( max( 0.0, min( 255.0, $level ) ) );
 		}
 
 		$alpha = 1.0;
@@ -344,7 +344,10 @@ class LessUtil {
 		return [ 'r' => $channels[0], 'g' => $channels[1], 'b' => $channels[2], 'a' => $alpha ];
 	}
 
-	/** @return array with r, g, and b keys */
+	/**
+	 * @return array<string,mixed> Values for the r, g, and b keys
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	public static function hexToRgb( string $hex ): array {
 		$hex = str_replace( '#', '', $hex );
 		$length = strlen( $hex );
