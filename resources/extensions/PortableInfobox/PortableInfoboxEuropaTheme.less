@@ -16,7 +16,7 @@
 	.pi-caption {
 		color: mix( @font-color, @alt-font-color, 70% );
 		font-style: normal;
-		line-height: 18px;
+		line-height: 1.125rem;
 	}
 
 	.pi-collapse .pi-header::after,
@@ -45,7 +45,7 @@
 
 		li {
 			padding-bottom: 8px;
-			line-height: 18px;
+			line-height: 1.125rem;
 
 			&:last-child {
 				padding-bottom: 0;
@@ -73,12 +73,12 @@
 	}
 
 	.pi-header {
-		font-size: 16px;
+		font-size: 1rem;
 	}
 
 	.pi-header,
 	.pi-media-collection-tabs {
-		line-height: 20px;
+		line-height: 1.25rem;
 	}
 
 	.pi-header,
@@ -157,6 +157,7 @@
 	}
 
 	// need to have both (pi-data-label & pi-smart-data-label) classes in selector to override stacked layout padding (pi-layout-stacked)
+	// stylelint-disable-next-line no-duplicate-selectors
 	.pi-data-label {
 		&.pi-smart-data-label {
 			padding: 10px 14px 6px;
@@ -186,14 +187,14 @@
 	.pi-tab-link {
 		border: 0;
 		margin: 0;
-		font-size: 14px;
+		font-size: 0.875rem;
 	}
 
 	.pi-title {
 		padding-top: 14px;
-		font-size: 20px;
+		font-size: 1.25rem;
 		font-weight: bold;
-		line-height: 24px;
+		line-height: 1.5rem;
 	}
 }
 
