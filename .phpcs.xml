@@ -2,6 +2,12 @@
 <ruleset>
 	<file>.</file>
 	<rule ref="./vendor/mediawiki/mediawiki-codesniffer/MediaWiki" />
+	<rule ref="MediaWiki.Arrays.TrailingComma">
+		<properties>
+			<property name="singleLine" value="false" />
+			<property name="multiLine" value="true" />
+		</properties>
+	</rule>
 	<rule ref="Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma">
 		<severity>5</severity>
 	</rule>

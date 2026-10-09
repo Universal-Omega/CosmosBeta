@@ -1,10 +1,8 @@
-/* global jQuery, mediaWiki */
-
 ( function ( $, mw ) {
-	let modal = document.getElementById( 'createPageModal' ),
+	const modal = document.getElementById( 'createPageModal' ),
 		triggers = document.querySelectorAll( '#createpage, [data-skin-cosmos-create-page]' ),
-		span = document.getElementsByClassName( 'skin-cosmos-modal__close' )[ 0 ],
-		$top = 0;
+		span = document.getElementsByClassName( 'skin-cosmos-modal__close' )[ 0 ];
+	let $top = 0;
 
 	if ( modal && triggers.length ) {
 		const closeModal = function () {
@@ -60,6 +58,7 @@
 
 	$( document ).on( 'click', '.skin-cosmos-dropdown__button', function () {
 		const $dropdown = $( this ).closest( '.skin-cosmos-dropdown' ),
+			// eslint-disable-next-line no-jquery/no-class-state
 			willOpen = !$dropdown.hasClass( 'skin-cosmos-is-open' );
 
 		$( '.skin-cosmos-dropdown' ).removeClass( 'skin-cosmos-is-open' );
@@ -74,7 +73,8 @@
 			if ( willOpen ) {
 				const rect = list.getBoundingClientRect(),
 					margin = 8,
-					shift = Math.max( margin - rect.left, 0 ) - Math.max( rect.right - ( window.innerWidth - margin ), 0 );
+					shift = Math.max( margin - rect.left, 0 ) -
+						Math.max( rect.right - ( window.innerWidth - margin ), 0 );
 
 				if ( shift !== 0 ) {
 					list.style.transform = 'translateX( ' + shift + 'px )';
@@ -94,6 +94,7 @@
 			return;
 		}
 
+		// eslint-disable-next-line no-jquery/no-class-state
 		const willOpen = !$menu.hasClass( 'skin-cosmos-is-open' );
 
 		if ( $( this ).find( 'a[href="#"]' ).length || $( this ).is( 'a[href="#"]' ) ) {
@@ -156,4 +157,4 @@
 			mw.config.set( 'wgVisualEditorConfig', visualEditorConfig );
 		}
 	} );
-}( jQuery, mediaWiki ) );
+}( jQuery, mw ) );

@@ -1,3 +1,5 @@
+@import 'mediawiki.skin.variables.less';
+
 @media screen {
 	.ve-active {
 		// Hide action button when VE is active
@@ -49,19 +51,19 @@
 }
 
 .ve-activated #cosmos-pageBody-content {
-	width: 100%;
+	width: @size-full;
 }
 
 .ve-activated .ve-ui-mwNoticesPopupTool-item .warningbox {
 	padding: 0.5em 1em;
-	border: 1px solid;
+	border: @border-width-base solid;
 	margin-bottom: 1em;
 	background: none;
 }
 
 .ve-ui-mwNoticesPopupTool-item .warningbox {
 	padding: 0.5em 1em;
-	border: 1px solid;
+	border: @border-width-base solid;
 	margin-bottom: 1em;
 	background: none;
 }

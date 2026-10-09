@@ -1,5 +1,3 @@
-/* global mw, jQuery */
-
 ( function ( mw, $ ) {
 	const config = mw.config.get( 'wgCosmosColorMode' );
 
@@ -29,7 +27,14 @@
 	}
 
 	function applyMode( mode ) {
-		root.classList.remove( 'skin-cosmos-colormode--light', 'skin-cosmos-colormode--dark', 'skin-cosmos-colormode--pending' );
+		root.classList.remove(
+			'skin-cosmos-colormode--light',
+			'skin-cosmos-colormode--dark',
+			'skin-cosmos-colormode--pending'
+		);
+		// The following classes are used here:
+		// * skin-cosmos-colormode--light
+		// * skin-cosmos-colormode--dark
 		root.classList.add( 'skin-cosmos-colormode--' + mode );
 		root.style.backgroundColor = config.bodyColors[ mode ];
 		root.style.colorScheme = mode === 'dark' ? 'dark' : 'light';
@@ -44,13 +49,20 @@
 			label = mw.msg( 'cosmos-colormode-switch-' + mode );
 
 		$item.attr( { title: label, 'aria-label': label } );
-		root.className = root.className.replace( /skin-theme-clientpref-\w+/, 'skin-theme-clientpref-' + ( mode === 'dark' ? 'night' : 'day' ) );
+		// The following classes are used here:
+		// * skin-theme-clientpref-night
+		// * skin-theme-clientpref-day
+		root.className = root.className.replace(
+			/skin-theme-clientpref-\w+/,
+			'skin-theme-clientpref-' + ( mode === 'dark' ? 'night' : 'day' )
+		);
 		$item.find( '.skin-cosmos-icon' )
 			.removeClass( 'skin-cosmos-icon-moon skin-cosmos-icon-bright' )
 			.addClass( mode === 'dark' ? 'skin-cosmos-icon-bright' : 'skin-cosmos-icon-moon' );
 	}
 
-	// The alternative stylesheets are style only modules, so they are loaded the way load.php serves styles.
+	// The alternative stylesheets are style only modules.
+	// So they are loaded the way load.php serves styles.
 	function loadAltStyles() {
 		return new Promise( ( resolve, reject ) => {
 			if ( !config.altModules.length ) {
@@ -99,7 +111,7 @@
 	}
 
 	$( () => {
-		$( '#m-colormode' ).on( 'click', function ( event ) {
+		$( '#m-colormode' ).on( 'click', ( event ) => {
 			event.preventDefault();
 
 			const next = getCurrentMode() === 'dark' ? 'light' : 'dark';
@@ -125,4 +137,4 @@
 			root.classList.remove( 'skin-cosmos-colormode--pending' );
 		}
 	} );
-}( mediaWiki, jQuery ) );
+}( mw, jQuery ) );

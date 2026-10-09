@@ -24,8 +24,8 @@ class ConfigDefaults {
 		ConfigNames::ContentBackgroundColor,
 		ConfigNames::ContentOpacityLevel,
 		ConfigNames::ContentWidth,
-		ConfigNames::EnablePortableInfoboxEuropaTheme,
 		ConfigNames::EnabledRailModules,
+		ConfigNames::EnablePortableInfoboxEuropaTheme,
 		ConfigNames::FooterBackgroundColor,
 		ConfigNames::LinkColor,
 		ConfigNames::MainBackgroundColor,
@@ -91,6 +91,7 @@ class ConfigDefaults {
 			backgroundFixed: (bool)$this->options->get( ConfigNames::BackgroundImageFixed ),
 			contentWidth: (string)$this->options->get( ConfigNames::ContentWidth ),
 			contentOpacity: (int)$this->options->get( ConfigNames::ContentOpacityLevel ),
+			fontFamily: ThemeDefaults::FONT_FAMILY,
 			europa: (bool)$this->options->get( ConfigNames::EnablePortableInfoboxEuropaTheme ),
 			railDisabledNamespaces: array_map(
 				intval( ... ),

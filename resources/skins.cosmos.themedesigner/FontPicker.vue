@@ -16,7 +16,9 @@
 				:disabled="disabled"
 				@click="select( choice.id )"
 			>
-				<span class="skin-cosmos-themedesigner__font-sample" :style="{ fontFamily: choice.stack }">
+				<span
+					class="skin-cosmos-themedesigner__font-sample"
+					:style="{ fontFamily: choice.stack }">
 					{{ msg( 'font-sample' ) }}
 				</span>
 				<span class="skin-cosmos-themedesigner__font-name">
@@ -98,7 +100,12 @@ module.exports = exports = defineComponent( {
 			{ immediate: true }
 		);
 
-		const currentStack = computed( () => getStack( props.modelValue, props.presets, props.fallback, fileFamily.value ) );
+		const currentStack = computed( () => getStack(
+			props.modelValue,
+			props.presets,
+			props.fallback,
+			fileFamily.value
+		) );
 
 		const selected = computed( () => {
 			const { type, value } = props.modelValue;

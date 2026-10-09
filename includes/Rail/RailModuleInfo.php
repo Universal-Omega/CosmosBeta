@@ -11,8 +11,8 @@ final readonly class RailModuleInfo {
 
 	public function __construct(
 		public string $id,
-		public RailModuleOrigin $origin,
-		public string $label,
+		private RailModuleOrigin $origin,
+		private string $label,
 	) {
 	}
 

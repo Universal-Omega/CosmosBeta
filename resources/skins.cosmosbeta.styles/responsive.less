@@ -1,3 +1,5 @@
+@import 'mediawiki.skin.variables.less';
+
 @media screen and ( min-width: 850px ) {
 	body {
 		& when not( @main-background-image = 0 ) {
@@ -58,8 +60,8 @@
 
 	.skin-cosmos-header__sitename {
 		max-height: 72px;
-		margin-top: 20px;
-		font-size: 24px;
+		margin-top: @spacing-125;
+		font-size: @font-size-xx-large;
 		white-space: normal;
 		word-wrap: break-word;
 	}
@@ -69,11 +71,11 @@
 	}
 
 	.skin-cosmos-header__counter-value {
-		font-size: 18px;
+		font-size: @font-size-large;
 	}
 
 	.skin-cosmos-header__counter-label {
-		font-size: 10px;
+		font-size: 0.625rem;
 	}
 }
 
@@ -81,7 +83,7 @@
 	.skin-cosmos-header__sitename {
 		a {
 			display: inline-block;
-			height: 100%;
+			height: @size-full;
 			line-height: 1.2;
 			text-decoration: none;
 		}
@@ -93,7 +95,7 @@
 @media only screen and ( max-width: 1023px ) {
 	.skin-cosmos-header__navigation {
 		.skin-cosmos-nav__label {
-			font-size: 10px;
+			font-size: 0.625rem;
 		}
 	}
 }
@@ -123,7 +125,7 @@
 @media only screen and ( max-width: 1083px ) {
 	#mw-content-wrapper {
 		width: auto;
-		padding: 0 24px;
+		padding: 0 @spacing-150;
 	}
 }
 
@@ -133,11 +135,11 @@
 
 		& when not( @content-width-1084 = auto ) {
 			max-width: 95%;
-			padding: 0 20px;
+			padding: 0 @spacing-125;
 		}
 
 		& when ( @content-width-1084 = auto ) {
-			padding: 0 10px;
+			padding: 0 @spacing-65;
 		}
 	}
 }
@@ -152,7 +154,7 @@
 		}
 
 		& when ( @content-width-1596 = auto ) {
-			padding: 0 20px;
+			padding: 0 @spacing-125;
 		}
 	}
 }

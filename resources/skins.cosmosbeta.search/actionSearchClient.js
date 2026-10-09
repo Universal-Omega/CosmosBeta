@@ -204,7 +204,9 @@ function actionSearchClient( config ) {
 				}
 			} );
 			const searchResponsePromise = result.fetch
-				.then( ( /** @type {ActionResponse} */ res ) => adaptApiResponse( config, query, res, showDescription ) );
+				.then( ( /** @type {ActionResponse} */ res ) => adaptApiResponse(
+					config, query, res, showDescription
+				) );
 			return {
 				abort: result.abort,
 				fetch: searchResponsePromise

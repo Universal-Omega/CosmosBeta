@@ -19,15 +19,19 @@ class ChromeComponent {
 	) {
 	}
 
+	/** @return array<string, mixed> */
 	public function getFooterData( array $footer ): array {
 		$settings = $this->theme->getFooterSettings();
 		return [
 			'array-info' => $this->getLinks( $footer['data-info']['array-items'] ?? [], $settings['hiddenLinks'] ),
 			'array-places' => $this->getLinks( $footer['data-places']['array-items'] ?? [], $settings['hiddenLinks'] ),
-			'array-icons' => $settings['showIcons'] ? $this->getIcons( $footer['data-icons']['array-items'] ?? [] ) : [],
+			'array-icons' => $settings['showIcons']
+				? $this->getIcons( $footer['data-icons']['array-items'] ?? [] )
+				: [],
 		];
 	}
 
+	/** @return list<array<string, mixed>> */
 	public function getToolItems( array $sidebar ): array {
 		$settings = $this->theme->getToolbarSettings();
 		$items = [];
@@ -42,6 +46,7 @@ class ChromeComponent {
 		return $items;
 	}
 
+	/** @return ?array<string, mixed> */
 	public function getToolbarData( array $sidebar ): ?array {
 		$settings = $this->theme->getToolbarSettings();
 		if ( !$settings['enabled'] || $settings['style'] === 'rail' ) {
@@ -56,10 +61,10 @@ class ChromeComponent {
 		) {
 			$action = $this->context->getRequest()->getText( 'action', 'view' );
 			$title = $this->context->getTitle();
-
-			if ( $action === 'view' || $action === 'purge' || !$title->isSpecialPage() ) {
+			if ( $title !== null && ( $action === 'view' || $action === 'purge' || !$title->isSpecialPage() ) ) {
 				$items[] = [
-					'redirect-url' => SpecialPage::getTitleFor( 'CreateRedirect', $title->getPrefixedText() )->getLocalURL(),
+					'redirect-url' => SpecialPage::getTitleFor( 'CreateRedirect', $title->getPrefixedText() )
+						->getLocalURL(),
 					'redirect-text' => $this->context->msg( 'createredirect' )->text(),
 				];
 			}
@@ -71,6 +76,7 @@ class ChromeComponent {
 		];
 	}
 
+	/** @return list<array<string, mixed>> */
 	private function getLinks( array $items, array $hidden ): array {
 		$links = [];
 		foreach ( $items as $item ) {
@@ -85,6 +91,7 @@ class ChromeComponent {
 		return $links;
 	}
 
+	/** @return list<array<string, mixed>> */
 	private function getIcons( array $items ): array {
 		$icons = [];
 		foreach ( $items as $item ) {

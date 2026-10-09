@@ -19,7 +19,7 @@
 
 		const key = value.trim().toLowerCase();
 
-		if ( key === '' || BLOCKED.indexOf( key ) !== -1 || !/^[#a-z0-9(),.%\s/-]+$/.test( key ) ) {
+		if ( key === '' || BLOCKED.includes( key ) || !/^[#a-z0-9(),.%\s/-]+$/.test( key ) ) {
 			return null;
 		}
 
@@ -168,6 +168,7 @@
 	 * Transparent and unreadable values count as dark too.
 	 *
 	 * @param {string} value
+	 * @param {number} [threshold] Lightness limit, defaults to 0.179
 	 * @return {boolean}
 	 */
 	function isDark( value, threshold ) {
@@ -178,12 +179,13 @@
 		}
 
 		const linear = [ color.r, color.g, color.b ].map( ( channel ) => {
-			const value = channel / 255;
+			const scaled = channel / 255;
 
-			return value <= 0.03928 ? value / 12.92 : Math.pow( ( value + 0.055 ) / 1.055, 2.4 );
+			return scaled <= 0.03928 ? scaled / 12.92 : Math.pow( ( scaled + 0.055 ) / 1.055, 2.4 );
 		} );
+		const luminance = 0.2126 * linear[ 0 ] + 0.7152 * linear[ 1 ] + 0.0722 * linear[ 2 ];
 
-		return 0.2126 * linear[ 0 ] + 0.7152 * linear[ 1 ] + 0.0722 * linear[ 2 ] < ( threshold || 0.179 );
+		return luminance < ( threshold || 0.179 );
 	}
 
 	function readableOn( value ) {
@@ -226,7 +228,9 @@
 			} else if ( slot === 'toolbar' ) {
 				next = { h: 0, s: 0, l: 0 };
 			} else if ( surfaces[ slot ] ) {
-				next.l = surfaces[ slot ][ 0 ] + ( 1 - hsl.l ) * ( surfaces[ slot ][ 1 ] - surfaces[ slot ][ 0 ] );
+				const [ low, high ] = surfaces[ slot ];
+
+				next.l = low + ( 1 - hsl.l ) * ( high - low );
 			} else if ( slot === 'button' ) {
 				next = { h: hsl.h, s: hsl.s, l: clamp( hsl.l, 0.38, 0.5 ) };
 			} else if ( slot === 'link' ) {

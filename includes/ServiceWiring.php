@@ -25,11 +25,13 @@ use MediaWiki\Skin\Cosmos\Theme\ConfigDefaults;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\Cosmos\Theme\ThemeDefaults;
 use MediaWiki\Skin\Cosmos\Theme\ThemeStore;
+use Wikimedia\Assert\Assert;
 
 // PHPUnit does not understand coverage for this file.
 // It is covered though, see ServiceWiringTest.
 // @codeCoverageIgnoreStart
 
+/** @phpcs-require-sorted-array */
 return [
 	'Cosmos.AdminDashboardControls' => static function ( MediaWikiServices $services ): DashboardControlRegistry {
 		return new DashboardControlRegistry(
@@ -61,6 +63,7 @@ return [
 
 	'Cosmos.BackgroundLookup' => static function ( MediaWikiServices $services ): BackgroundLookup {
 		$theme = $services->get( 'Cosmos.EffectiveTheme' );
+		Assert::postcondition( $theme instanceof EffectiveTheme, 'Cosmos.EffectiveTheme is an EffectiveTheme' );
 		return new BackgroundLookup(
 			$services->getRepoGroup(),
 			$services->getTitleFactory(),
@@ -160,7 +163,8 @@ return [
 
 	'Cosmos.ThemeDefaults' => static function ( MediaWikiServices $services ): ThemeDefaults {
 		$configDefaults = $services->get( 'Cosmos.ConfigDefaults' );
-		return $configDefaults->isThemeDesignerOnly() ? new ThemeDefaults() : $configDefaults->getDefaults();
+		Assert::postcondition( $configDefaults instanceof ConfigDefaults, 'Cosmos.ConfigDefaults is a config' );
+		return $configDefaults->isThemeDesignerOnly() ? ThemeDefaults::newBuiltIn() : $configDefaults->getDefaults();
 	},
 
 	'Cosmos.ThemeStore' => static function ( MediaWikiServices $services ): ThemeStore {
@@ -173,10 +177,12 @@ return [
 	},
 
 	'Cosmos.WordmarkLookup' => static function ( MediaWikiServices $services ): WordmarkLookup {
+		$theme = $services->get( 'Cosmos.EffectiveTheme' );
+		Assert::postcondition( $theme instanceof EffectiveTheme, 'Cosmos.EffectiveTheme is an EffectiveTheme' );
 		return new WordmarkLookup(
 			$services->getRepoGroup(),
 			$services->getTitleFactory(),
-			$services->get( 'Cosmos.EffectiveTheme' )->getWordmark()
+			$theme->getWordmark()
 		);
 	},
 ];

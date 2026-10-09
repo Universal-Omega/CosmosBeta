@@ -33,7 +33,10 @@
 				>
 			</template>
 		</div>
-		<cdx-message v-if="error" type="error" :inline="true">
+		<cdx-message
+			v-if="error"
+			type="error"
+			:inline="true">
 			{{ error }}
 		</cdx-message>
 	</div>
@@ -89,7 +92,7 @@ module.exports = exports = defineComponent( {
 		function search( term ) {
 			const id = ++counter;
 
-			if ( term.trim() === '' || /^(https?:)?\/\//i.test( term ) ) {
+			if ( term.trim() === '' || /^(?:https?:\/\/|\/\/)/i.test( term ) ) {
 				items.value = [];
 				return;
 			}

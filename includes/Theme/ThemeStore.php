@@ -14,9 +14,10 @@ use Wikimedia\Rdbms\DBError;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\IReadableDatabase;
 use Wikimedia\Rdbms\SelectQueryBuilder;
+use Wikimedia\Timestamp\TimestampFormat;
+use function mb_strcut;
 use function sha1;
 use function wfTimestamp;
-use const TS_MW;
 
 /**
  * Stores every published theme as a row. The newest row is the live theme,
@@ -51,6 +52,7 @@ class ThemeStore {
 			$value = $this->cache->getWithSetCallback(
 				$this->getCacheKey(),
 				WANObjectCache::TTL_DAY,
+				/** @param mixed $oldValue @phan-unused-param */
 				function ( mixed $oldValue, int &$ttl, array &$setOpts ): array {
 					$dbr = $this->dbProvider->getReplicaDatabase();
 					$setOpts += Database::getCacheSetOptions( $dbr );
@@ -67,10 +69,14 @@ class ThemeStore {
 						return [ 'id' => 0, 'json' => '', 'ts' => '' ];
 					}
 
+					if ( !$row ) {
+						return [ 'id' => 0, 'json' => '', 'ts' => '' ];
+					}
+
 					return [
-						'id' => $row ? (int)$row->cth_id : 0,
-						'json' => $row ? (string)$row->cth_data : '',
-						'ts' => $row ? (string)wfTimestamp( TS_MW, $row->cth_timestamp ) : '',
+						'id' => (int)$row->cth_id,
+						'json' => (string)$row->cth_data,
+						'ts' => (string)wfTimestamp( TimestampFormat::MW, $row->cth_timestamp ),
 					];
 				},
 				[
@@ -96,7 +102,7 @@ class ThemeStore {
 		return $this->currentTimestamp;
 	}
 
-	public function getRevision( int $id ): ?ThemeSettings {
+	private function getRevision( int $id ): ?ThemeSettings {
 		$row = $this->dbProvider->getReplicaDatabase()->newSelectQueryBuilder()
 			->select( [ 'cth_id', 'cth_data' ] )
 			->from( self::TABLE )
@@ -107,7 +113,9 @@ class ThemeStore {
 		return $row ? ThemeSettings::newFromJson( (string)$row->cth_data, (int)$row->cth_id ) : null;
 	}
 
-	/** @return array[] Newest first, each with id, timestamp, user and comment */
+	/**
+	 * @return list<array<string, mixed>> Newest first, each with id, timestamp, user and comment
+	 */
 	public function getHistory( int $limit ): array {
 		$res = $this->dbProvider->getReplicaDatabase()->newSelectQueryBuilder()
 			->select( [ 'cth_id', 'cth_timestamp', 'cth_comment', 'actor_name' ] )
@@ -120,9 +128,13 @@ class ThemeStore {
 
 		$history = [];
 		foreach ( $res as $row ) {
+			if ( !$row instanceof stdClass ) {
+				continue;
+			}
+
 			$history[] = [
 				'id' => (int)$row->cth_id,
-				'timestamp' => wfTimestamp( TS_MW, $row->cth_timestamp ),
+				'timestamp' => wfTimestamp( TimestampFormat::MW, $row->cth_timestamp ),
 				'user' => $row->actor_name,
 				'comment' => (string)$row->cth_comment,
 			];
@@ -192,7 +204,10 @@ class ThemeStore {
 		$this->currentTimestamp = '';
 	}
 
-	/** @param string[] $fields */
+	/**
+	 * @param IReadableDatabase $db
+	 * @param string[] $fields
+	 */
 	private function fetchLatest( IReadableDatabase $db, array $fields ): stdClass|false {
 		return $db->newSelectQueryBuilder()
 			->select( $fields )

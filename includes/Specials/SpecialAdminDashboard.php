@@ -90,9 +90,9 @@ class SpecialAdminDashboard extends SpecialPage {
 		$out->addHTML( $this->templateParser->processTemplate( 'AdminDashboard', $this->getTemplateData( $tab ) ) );
 	}
 
+	/** @return array<string, mixed> */
 	private function getTemplateData( DashboardTab $tab ): array {
 		$controls = $this->controlRegistry->getControls( $this->getUser(), $this );
-
 		return [
 			'is-general' => $tab === DashboardTab::General,
 			'is-advanced' => $tab === DashboardTab::Advanced,
@@ -105,11 +105,15 @@ class SpecialAdminDashboard extends SpecialPage {
 
 	/**
 	 * @param DashboardControl[] $controls
+	 * @return list<array<string, mixed>>
 	 */
 	private function getSections( array $controls ): array {
 		$sections = [];
 		foreach ( DashboardSection::cases() as $section ) {
-			$items = array_filter( $controls, static fn ( DashboardControl $control ): bool => $control->section === $section );
+			$items = array_filter(
+				$controls,
+				static fn ( DashboardControl $control ): bool => $control->section === $section
+			);
 			if ( !$items ) {
 				continue;
 			}
@@ -124,6 +128,7 @@ class SpecialAdminDashboard extends SpecialPage {
 		return $sections;
 	}
 
+	/** @return array<string, mixed> */
 	private function getControlData( DashboardControl $control ): array {
 		return [
 			'id' => $control->id,
@@ -137,6 +142,7 @@ class SpecialAdminDashboard extends SpecialPage {
 
 	/**
 	 * @param DashboardControl[] $controls
+	 * @return list<array<string, mixed>>
 	 */
 	private function getGroups( array $controls ): array {
 		$excluded = array_values( array_filter( array_map(
@@ -164,6 +170,7 @@ class SpecialAdminDashboard extends SpecialPage {
 		return $groups;
 	}
 
+	/** @return array<string, mixed> */
 	private function getStatsData( DashboardStats $stats ): array {
 		$language = $this->getLanguage();
 		$format = $this->msg( 'cosmos-admindashboard-stats-date-format' )->plain();

@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace MediaWiki\Skin\Cosmos\Legacy;
 
 use function array_keys;
-use function array_sum;
 use function in_array;
 use function ksort;
 use function ltrim;
@@ -13,6 +12,7 @@ use function max;
 use function min;
 use function preg_match;
 use function preg_replace_callback;
+use function rtrim;
 use function sort;
 use function str_contains;
 use function str_replace;
@@ -27,18 +27,24 @@ use function substr;
  */
 final class LegacyConverter {
 
-	private const string SELECTOR_CALL = '/(?:\$|jQuery|\.(?:find|closest|is|not|filter|has|children|parents|parentsUntil|parent|siblings|next|prev|nextAll|prevAll|nextUntil|prevUntil|querySelector|querySelectorAll|matches))\s*\(\s*$/';
+	private const string SELECTOR_CALL = '/(?:\$|jQuery|\.(?:find|closest|is|not|filter|has|children|parents|' .
+		'parentsUntil|parent|siblings|next|prev|nextAll|prevAll|nextUntil|prevUntil|' .
+		'querySelector|querySelectorAll|matches))\s*\(\s*$/';
+	private const string CLASS_ATTR_SELECTOR = '/\G\[\s*class\s*~=\s*([\'"]?)([^\'"\]\s]+)\1/';
 	private const string DELEGATE_CALL = '/\.(?:on|off|one|delegate)\s*\(\s*(?:\'[^\']*\'|"[^"]*")\s*,\s*$/';
-	private const string CLASS_CALL = '/(?:\.(?:addClass|removeClass|toggleClass|hasClass|getElementsByClassName)|classList\s*\.\s*(?:add|remove|toggle|contains|replace))\s*\(\s*(?:(?:\'[^\']*\'|"[^"]*")\s*,\s*)*$/';
-	private const string CLASS_ASSIGN = '/(?:\.className\s*=|\bclass[\'"]?\s*:|setAttribute\s*\(\s*[\'"]class[\'"]\s*,)\s*$/';
+	private const string CLASS_CALL = '/(?:\.(?:addClass|removeClass|toggleClass|hasClass|getElementsByClassName)|' .
+		'classList\s*\.\s*(?:add|remove|toggle|contains|replace))\s*\(\s*' .
+		'(?:(?:\'[^\']*\'|"[^"]*")\s*,\s*)*$/';
+	private const string CLASS_ASSIGN = '/(?:\.className\s*=|\bclass[\'"]?\s*:|' .
+		'setAttribute\s*\(\s*[\'"]class[\'"]\s*,)\s*$/';
 
-	/** @var array<string,int> */
+	/** @var array<string, int> */
 	private array $replacements = [];
 
-	/** @var array<string,string> */
+	/** @var array<string, string> */
 	private array $mappedTo = [];
 
-	/** @var array<string,true> */
+	/** @var array<string, true> */
 	private array $iconClasses = [];
 
 	public function convertCss( string $css ): LegacyConversionResult {
@@ -181,9 +187,10 @@ final class LegacyConverter {
 				$out .= substr( $prelude, $last, $i - $last ) . $this->mapId( $m[1] );
 				$i += strlen( $m[0] );
 				$last = $i;
-			} elseif ( $char === '[' && preg_match( '/\G\[\s*class\s*~=\s*([\'"]?)([^\'"\]\s]+)\1/', $prelude, $m, 0, $i ) ) {
+			} elseif ( $char === '[' && preg_match( self::CLASS_ATTR_SELECTOR, $prelude, $m, 0, $i ) ) {
 				$mapped = $this->mapClass( $m[2] );
-				$out .= substr( $prelude, $last, $i - $last ) . str_replace( $m[2], $mapped, $m[0] );
+				$out .= substr( $prelude, $last, $i - $last ) .
+					str_replace( $m[2], $mapped, $m[0] );
 				$i += strlen( $m[0] );
 				$last = $i;
 			} else {
@@ -254,6 +261,7 @@ final class LegacyConverter {
 			return true;
 		}
 
+		// @phan-suppress-next-line PhanParamSuspiciousOrder
 		return str_contains( '(,=:[!&|?{};+-*%<>~^', substr( $before, -1 ) );
 	}
 

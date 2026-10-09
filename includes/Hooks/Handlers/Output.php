@@ -54,7 +54,7 @@ class Output implements
 			$classes[] = "skin-cosmos-buttons--$buttonStyle";
 		}
 
-		if ( $out->getTitle()->isMainPage() ) {
+		if ( $out->getTitle()?->isMainPage() ) {
 			$classes[] = 'mainpage skin-cosmos-is-main-page';
 		}
 
@@ -72,8 +72,8 @@ class Output implements
 			$out->setProperty( 'norail', true );
 		}
 
-		$additional = $parserOutput->getPageProperty( 'additionalBodyClass' );
-		if ( $additional ) {
+		$additional = (string)$parserOutput->getPageProperty( 'additionalBodyClass' );
+		if ( $additional !== '' ) {
 			$out->setProperty( 'additionalBodyClass', $additional );
 		}
 	}

@@ -127,7 +127,9 @@ function restSearchClient( config ) {
 				}
 			} );
 			const searchResponsePromise = result.fetch
-				.then( ( /** @type {RestResponse} */ res ) => adaptApiResponse( config, q, res, showDescription ) );
+				.then( ( /** @type {RestResponse} */ res ) => adaptApiResponse(
+					config, q, res, showDescription
+				) );
 			return {
 				abort: result.abort,
 				fetch: searchResponsePromise

@@ -18,6 +18,7 @@ use MediaWiki\Title\TitleValue;
 use MediaWiki\User\UserFactory;
 use MediaWiki\User\UserIdentityValue;
 use MediaWiki\Utils\MWTimestamp;
+use stdClass;
 use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Rdbms\SelectQueryBuilder;
@@ -75,7 +76,7 @@ class RailBuilder {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
-	public static function getSidebarModuleId( string $name ): string {
+	private static function getSidebarModuleId( string $name ): string {
 		return 'sidebar-' . trim( (string)preg_replace( '/[^a-z0-9._-]+/', '-', strtolower( $name ) ), '-' );
 	}
 
@@ -84,6 +85,7 @@ class RailBuilder {
 	}
 
 	/**
+	 * @param bool $enabled
 	 * @param array<int, array{html-item: string}> $items
 	 */
 	public function setToolsModule( bool $enabled, array $items ): self {
@@ -158,7 +160,7 @@ class RailBuilder {
 	/**
 	 * Whether the rail as a whole is off, whatever the page. Modules can still be hidden one by one.
 	 */
-	public function isHidden(): bool {
+	private function isHidden(): bool {
 		$settings = $this->theme->getRailSettings();
 		return !$settings['enabled'] ||
 			( $settings['hideForAnons'] && !$this->context->getUser()->isNamed() ) ||
@@ -168,7 +170,7 @@ class RailBuilder {
 	/**
 	 * Whether the rail may show this module on the current page.
 	 */
-	public function isModuleAllowed( string $id ): bool {
+	private function isModuleAllowed( string $id ): bool {
 		return !$this->isHidden() && $this->isAllowed( $id );
 	}
 
@@ -209,11 +211,10 @@ class RailBuilder {
 		return $modules;
 	}
 
-	/**
-	 * @return RailModule[]
-	 */
+	/** @return RailModule[] */
 	private function getModules(): array {
-		return $this->modules ??= ( $this->isHidden() ? [] : $this->resolveModules() );
+		$this->modules ??= $this->isHidden() ? [] : $this->resolveModules();
+		return $this->modules;
 	}
 
 	/**
@@ -235,9 +236,7 @@ class RailBuilder {
 		return $modules;
 	}
 
-	/**
-	 * @return RailModule[]
-	 */
+	/** @return RailModule[] */
 	private function collectModules(): array {
 		$modules = [ ...$this->getBaseModules(), ...$this->sidebarModules ];
 		if ( $this->toolsInRail ) {
@@ -275,7 +274,8 @@ class RailBuilder {
 		}
 
 		$this->hookRunner->onCosmosRailBuilder( $list, $this->context->getSkin() );
-		return $this->baseModules = $list->getAll();
+		$this->baseModules = $list->getAll();
+		return $this->baseModules;
 	}
 
 	private function isAllowed( string $id ): bool {
@@ -284,16 +284,19 @@ class RailBuilder {
 		$settings = $this->theme->getRailSettings();
 		$defaults = $this->theme->getDefaults();
 
+		$title = $this->context->getTitle();
+		if ( $title === null ) {
+			return false;
+		}
+
 		return $this->theme->getRailRules( $id )->isShownOn(
-			$this->context->getTitle(),
+			$title,
 			$settings['disabledNamespaces'] ?? ( $isEverywhere ? [] : $defaults->railDisabledNamespaces ),
 			$settings['disabledPages'] ?? ( $isEverywhere ? [] : $defaults->railDisabledPages )
 		);
 	}
 
-	/**
-	 * @param RailModule[] $modules
-	 */
+	/** @param RailModule[] $modules */
 	private function setSidebarModules( array $modules ): self {
 		$this->sidebarModules = $modules;
 		$this->modules = null;
@@ -323,6 +326,8 @@ class RailBuilder {
 	}
 
 	/**
+	 * @param string $name
+	 * @param string $label
 	 * @param array<int, array{html-item: string}> $items
 	 */
 	private function newSidebarModule( string $name, string $label, array $items ): RailModule {
@@ -335,9 +340,7 @@ class RailBuilder {
 		);
 	}
 
-	/**
-	 * @return RailModule[]
-	 */
+	/** @return list<RailModule> */
 	private function newInterfaceModules(): array {
 		$modules = [];
 		foreach ( $this->theme->getDefaults()->interfaceModules as $message => $type ) {
@@ -350,9 +353,7 @@ class RailBuilder {
 		return $modules;
 	}
 
-	/**
-	 * @return RailModule[]
-	 */
+	/** @return list<RailModule> */
 	private function newCustomModules(): array {
 		$modules = [];
 		foreach ( $this->theme->getCustomRailModules() as $custom ) {
@@ -455,11 +456,15 @@ class RailBuilder {
 					] )
 					->orderBy( 'rc_timestamp', SelectQueryBuilder::SORT_DESC )
 					->limit( self::RECENT_CHANGES_LIMIT )
-					->caller( __METHOD__ )
+					->caller( self::class . '::getRecentChanges' )
 					->fetchResultSet();
 
 				$changes = [];
 				foreach ( $rows as $row ) {
+					if ( !$row instanceof stdClass ) {
+						continue;
+					}
+
 					$performer = $this->userFactory->newFromUserIdentity(
 						new UserIdentityValue( (int)$row->actor_user, $row->actor_name )
 					);
@@ -478,6 +483,7 @@ class RailBuilder {
 		);
 	}
 
+	/** @return array<string, mixed> */
 	private function getTemplateData( RailModule $module ): array {
 		return [
 			'class' => $this->getClasses( $module->classes ),
@@ -489,9 +495,7 @@ class RailBuilder {
 		];
 	}
 
-	/**
-	 * @param string[] $classes
-	 */
+	/** @param string[] $classes */
 	private function getClasses( array $classes ): string {
 		$all = [];
 		foreach ( $classes as $class ) {

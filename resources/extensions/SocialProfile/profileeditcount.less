@@ -1,19 +1,22 @@
+@import 'mediawiki.skin.variables.less';
+
 #profile-top .skin-cosmos-profile__tally {
-	padding-bottom: 10px;
-	padding-left: 2px;
+	padding-bottom: @spacing-65;
+	padding-left: @spacing-12;
 	margin-bottom: 22px;
-	font-size: 10px;
+	font-size: 0.625rem;
 	letter-spacing: 0.28px;
 	line-height: 1.3em;
 	text-transform: uppercase;
+	// stylelint-disable-next-line plugin/no-unsupported-browser-features
 	zoom: 1;
 }
 
 #profile-top .skin-cosmos-profile__tally em {
-	margin-right: 5px;
+	margin-right: @spacing-30;
 	float: left;
-	font-size: 30px;
+	font-size: 1.875rem;
 	font-style: normal;
 	letter-spacing: -1px;
-	line-height: 26px;
+	line-height: @line-height-medium;
 }

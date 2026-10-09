@@ -31,6 +31,7 @@ use function strlen;
 use function strtolower;
 use function substr;
 use function trim;
+use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 
@@ -44,10 +45,10 @@ class ThemeSettings {
 
 	public const string MODE_LIGHT = 'light';
 	public const string MODE_DARK = 'dark';
-	public const string MODE_AUTO = 'auto';
+	private const string MODE_AUTO = 'auto';
 
 	public const array MODES = [ self::MODE_LIGHT, self::MODE_DARK ];
-	public const array DEFAULT_MODES = [ self::MODE_LIGHT, self::MODE_DARK, self::MODE_AUTO ];
+	private const array DEFAULT_MODES = [ self::MODE_LIGHT, self::MODE_DARK, self::MODE_AUTO ];
 
 	public const array COLOR_SLOTS = [
 		'banner',
@@ -82,10 +83,10 @@ class ThemeSettings {
 		'toolbar' => '#000000',
 	];
 
-	public const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
-	public const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
-	public const array BUTTON_STYLES = [ 'default', 'slim', 'pill', 'text' ];
-	public const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
+	private const array BACKGROUND_SIZES = [ 'auto', 'contain', 'cover' ];
+	private const array CONTENT_WIDTHS = [ 'default', 'large', 'full' ];
+	private const array BUTTON_STYLES = [ 'default', 'slim', 'pill', 'text' ];
+	private const array TOOLBAR_STYLES = [ 'floating', 'bar', 'rail' ];
 
 	private const int MAX_LIST_ITEMS = 100;
 	private const int MAX_RAIL_MODULES = 50;
@@ -146,6 +147,7 @@ class ThemeSettings {
 		], 0 );
 	}
 
+	/** @return array<string, mixed> */
 	public static function getDefaults(): array {
 		return [
 			'version' => self::SCHEMA_VERSION,
@@ -202,7 +204,7 @@ class ThemeSettings {
 		];
 	}
 
-	public static function normalize( array $raw ): array {
+	private static function normalize( array $raw ): array {
 		$data = self::getDefaults();
 		$mode = $raw['colorMode'] ?? [];
 		if ( is_array( $mode ) ) {
@@ -290,7 +292,10 @@ class ThemeSettings {
 
 		$extensions = $raw['extensions'] ?? [];
 		if ( is_array( $extensions ) ) {
-			$data['extensions']['portableInfoboxEuropa'] = self::toBool( $extensions['portableInfoboxEuropa'] ?? null, null );
+			$data['extensions']['portableInfoboxEuropa'] = self::toBool(
+				$extensions['portableInfoboxEuropa'] ?? null,
+				null
+			);
 		}
 
 		$rail = $raw['rail'] ?? [];
@@ -307,7 +312,7 @@ class ThemeSettings {
 	}
 
 	/**
-	 * @return int[]|null Null when the value is not a list, so the wiki default applies
+	 * @return ?list<int> Null when the value is not a list, so the wiki default applies
 	 */
 	private static function normalizeNamespaceList( mixed $value ): ?array {
 		if ( !is_array( $value ) ) {
@@ -325,7 +330,7 @@ class ThemeSettings {
 	}
 
 	/**
-	 * @return string[]|null Null when the value is not a list, so the wiki default applies
+	 * @return ?list<non-empty-string> Null when the value is not a list, so the wiki default applies
 	 */
 	private static function normalizePageList( mixed $value ): ?array {
 		if ( !is_array( $value ) ) {
@@ -346,7 +351,7 @@ class ThemeSettings {
 	/**
 	 * Keeps only the rules a module really sets, keyed by module id.
 	 *
-	 * @return array<string, array>
+	 * @return array<string, array<string, mixed>>
 	 */
 	private static function normalizeRailModules( array $rail ): array {
 		$raw = is_array( $rail['modules'] ?? null ) ? $rail['modules'] : [];
@@ -376,9 +381,9 @@ class ThemeSettings {
 		return is_string( $value ) ? RailModuleType::tryFrom( $value ) : null;
 	}
 
+	/** @return array<string, mixed> */
 	private static function normalizeRailRules( array $raw ): array {
 		$rules = [];
-
 		$enabled = self::toBool( $raw['enabled'] ?? null, null );
 		if ( $enabled !== null ) {
 			$rules['enabled'] = $enabled;
@@ -467,7 +472,7 @@ class ThemeSettings {
 	/**
 	 * Accepts a file name or a http(s) URL.
 	 */
-	public static function normalizeImage( mixed $value ): string {
+	private static function normalizeImage( mixed $value ): string {
 		if ( !is_string( $value ) ) {
 			return '';
 		}
@@ -537,7 +542,7 @@ class ThemeSettings {
 	}
 
 	public function toJson(): string {
-		return json_encode( $this->data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+		return json_encode( $this->data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR );
 	}
 
 	public function getRevisionId(): int {
@@ -586,12 +591,19 @@ class ThemeSettings {
 		}
 
 		$images = &$data['images'];
-		foreach ( [ 'wordmark' => $defaults->wordmark, 'header' => $defaults->headerImage, 'background' => $defaults->backgroundImage ] as $key => $value ) {
+		$fallbacks = [
+			'wordmark' => $defaults->wordmark,
+			'header' => $defaults->headerImage,
+			'background' => $defaults->backgroundImage,
+		];
+		foreach ( $fallbacks as $key => $value ) {
 			$images[$key] = $images[$key] !== '' ? $images[$key] : self::normalizeImage( $value );
 		}
 
 		$images['backgroundSize'] = $images['backgroundSize'] !== '' ? $images['backgroundSize'] :
-			( in_array( $defaults->backgroundSize, self::BACKGROUND_SIZES, true ) ? $defaults->backgroundSize : 'cover' );
+			( in_array( $defaults->backgroundSize, self::BACKGROUND_SIZES, true )
+				? $defaults->backgroundSize
+				: 'cover' );
 		$images['backgroundRepeat'] ??= $defaults->backgroundRepeat;
 		$images['backgroundFixed'] ??= $defaults->backgroundFixed;
 		unset( $images );
@@ -606,14 +618,15 @@ class ThemeSettings {
 		$data['rail']['disabledNamespaces'] ??= $defaults->railDisabledNamespaces;
 		$data['rail']['disabledPages'] ??= $defaults->railDisabledPages;
 
-		$modules = $data['rail']['modules'];
+		$rail = $data['rail'];
+		$modules = $rail['modules'] ?? [];
 		$modules[RailModule::ID_RECENT_CHANGES] = array_merge(
 			[ 'enabled' => $defaults->recentChanges, 'type' => $defaults->recentChangesType->value ],
 			$modules[RailModule::ID_RECENT_CHANGES] ?? []
 		);
 
 		$custom = [];
-		foreach ( $data['rail']['customModules'] as $module ) {
+		foreach ( $rail['customModules'] ?? [] as $module ) {
 			$custom[$module['id']] = $module;
 		}
 

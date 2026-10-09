@@ -1,13 +1,16 @@
+@import 'mediawiki.skin.variables.less';
+
+// stylelint-disable-next-line plugin/no-unsupported-browser-features
 .mw-pt-languages {
 	display: flex;
 	width: auto;
 	flex-direction: column;
-	padding: 12px 0;
+	padding: @spacing-75 0;
 	border: 0;
 	background-color: transparent;
 	color: var( --skin-cosmos-font-color );
 	font-size: 0.875em;
-	gap: 8px;
+	gap: @spacing-50;
 }
 
 .mw-pt-languages-label {
@@ -18,12 +21,13 @@
 	font-weight: 500;
 }
 
+// stylelint-disable-next-line plugin/no-unsupported-browser-features
 .mw-pt-languages .mw-pt-languages-list {
 	display: flex;
 	flex-wrap: wrap;
 	padding: 0;
 	margin: 0;
-	gap: 8px;
+	gap: @spacing-50;
 	list-style: none;
 }
 
@@ -35,8 +39,8 @@
 	a.new,
 	.mw-pt-progress {
 		display: flex;
-		padding: 6px 16px;
-		border: 1px solid var( --skin-cosmos-border-color );
+		padding: @spacing-35 @spacing-100;
+		border: @border-width-base solid var( --skin-cosmos-border-color );
 		border-radius: 999px;
 		text-decoration: none;
 	}

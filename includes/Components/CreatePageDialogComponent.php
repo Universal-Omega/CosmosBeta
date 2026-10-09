@@ -13,6 +13,7 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Specials\SpecialWantedPages;
 use MediaWiki\Title\TitleFactory;
+use stdClass;
 use function count;
 use function in_array;
 use function preg_match;
@@ -27,6 +28,7 @@ class CreatePageDialogComponent {
 	) {
 	}
 
+	/** @return array<string, mixed> */
 	public function getTemplateData(): array {
 		$wantedPagesEnabled = (bool)$this->config->get( ConfigNames::EnableWantedPages );
 		$wantedPagesMessage = $wantedPagesEnabled ?
@@ -67,6 +69,10 @@ class CreatePageDialogComponent {
 		$pages = [];
 
 		foreach ( $rows as $row ) {
+			if ( !$row instanceof stdClass ) {
+				continue;
+			}
+
 			if ( count( $pages ) >= $max ) {
 				break;
 			}

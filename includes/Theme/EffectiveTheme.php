@@ -32,7 +32,7 @@ class EffectiveTheme {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
-	public function getTheme(): ThemeSettings {
+	private function getTheme(): ThemeSettings {
 		return $this->themeStore->getCurrent();
 	}
 
@@ -161,6 +161,7 @@ class EffectiveTheme {
 		return $this->getTheme()->getSection( 'toolbar' );
 	}
 
+	/** @return array<string, mixed> */
 	public function getFooterSettings(): array {
 		$settings = $this->getTheme()->getSection( 'footer' );
 		$settings['hiddenLinks'] = array_values(

@@ -34,11 +34,11 @@ class WordmarkLookup {
 		return $this->wordmark;
 	}
 
-	public function isWordmarkUrl(): bool {
+	private function isWordmarkUrl(): bool {
 		return (bool)preg_match( '%^(?:(http|https|ftp):|)//(?:www\.)?.*$%i', $this->wordmark );
 	}
 
-	public function getWordmarkFile(): ?File {
+	private function getWordmarkFile(): ?File {
 		$title = $this->titleFactory->makeTitle( NS_FILE, $this->wordmark );
 		return $this->repoGroup->findFile( $title ) ?: null;
 	}

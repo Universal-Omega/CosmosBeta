@@ -33,7 +33,10 @@ class SpecialLegacyConverter extends SpecialPage {
 		return $this->msg( 'cosmos-legacyconverter' );
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 * @param ?string $subPage @phan-unused-param
+	 */
 	public function execute( $subPage ): void {
 		$this->setHeaders();
 		$this->getOutput()->addWikiMsg( 'cosmos-legacyconverter-intro' );

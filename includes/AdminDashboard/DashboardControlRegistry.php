@@ -102,7 +102,12 @@ final readonly class DashboardControlRegistry {
 		);
 	}
 
-	private function interfacePage( string $id, DashboardSection $section, string $text, User $user ): ?DashboardControl {
+	private function interfacePage(
+		string $id,
+		DashboardSection $section,
+		string $text,
+		User $user
+	): ?DashboardControl {
 		$title = $this->titleFactory->makeTitleSafe( NS_MEDIAWIKI, $text );
 		if ( !$title || !$this->permissionManager->userCan( 'edit', $user, $title ) ) {
 			return null;

@@ -34,10 +34,15 @@ class ImportConfigTheme extends Maintenance {
 	public function execute(): void {
 		$this->initServices();
 
+		$user = User::newSystemUser( 'Cosmos ThemeDesigner', [ 'steal' => true ] );
+		if ( $user === null ) {
+			$this->fatalError( 'The Cosmos ThemeDesigner system user could not be created.' );
+		}
+
 		$current = $this->themeStore->getCurrent();
 		$id = $this->themeStore->save(
 			$current->withDefaults( $this->configDefaults->getDefaults() ),
-			User::newSystemUser( 'Cosmos ThemeDesigner', [ 'steal' => true ] ),
+			$user,
 			'Imported from the wiki configuration'
 		);
 

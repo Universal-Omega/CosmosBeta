@@ -6,12 +6,13 @@ namespace MediaWiki\Skin\Cosmos\Components;
 
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Language\LanguageCode;
-use MediaWiki\Languages\LanguageNameUtils;
+use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Title\TitleFactory;
 use function array_slice;
+use function array_values;
 use function count;
 use function implode;
-use function reset;
+use function in_array;
 use function str_contains;
 use function str_starts_with;
 use const CONTENT_MODEL_WIKITEXT;
@@ -31,6 +32,7 @@ class PageHeaderComponent {
 	) {
 	}
 
+	/** @return array<string, mixed> */
 	public function getTemplateData( array $portlets ): array {
 		return [
 			'data-categories' => $this->getCategories(),
@@ -40,10 +42,11 @@ class PageHeaderComponent {
 		];
 	}
 
+	/** @return ?array<string, mixed> */
 	private function getAssociatedTabs( array $portlets ): ?array {
 		$tabs = [];
 		foreach ( PortletReader::getItems( $portlets, [ 'data-associated-pages' ] ) as $key => $item ) {
-			if ( !str_starts_with( $key, self::ASSOCIATED_PREFIX ) || $item['href'] === null ) {
+			if ( !str_starts_with( (string)$key, self::ASSOCIATED_PREFIX ) || $item['href'] === null ) {
 				continue;
 			}
 
@@ -61,10 +64,10 @@ class PageHeaderComponent {
 		] : null;
 	}
 
+	/** @return ?array<string, mixed> */
 	private function getCategories(): ?array {
 		$out = $this->context->getOutput();
 		$titles = [];
-
 		foreach ( $out->getCategories( 'normal' ) as $name ) {
 			$title = $this->titleFactory->newFromText( $name, NS_CATEGORY );
 			if ( $title ) {
@@ -106,10 +109,10 @@ class PageHeaderComponent {
 		];
 	}
 
+	/** @return ?array<string, mixed> */
 	private function getInterlang( array $portlets ): ?array {
 		$variants = PortletReader::getItems( $portlets, [ 'data-variants' ] );
 		$languages = PortletReader::getItems( $portlets, [ 'data-languages' ] );
-
 		if ( !$variants && !$languages ) {
 			return null;
 		}
@@ -132,9 +135,10 @@ class PageHeaderComponent {
 
 		if ( $languages ) {
 			$title = $this->context->getTitle();
-			$code = $title->getPageLanguage()->getCode();
-			if ( $title->isSpecialPage() || !$title->hasContentModel( CONTENT_MODEL_WIKITEXT ) ) {
+			if ( $title === null || $title->isSpecialPage() || !$title->hasContentModel( CONTENT_MODEL_WIKITEXT ) ) {
 				$code = $this->contentLanguageCode->toString();
+			} else {
+				$code = $title->getPageLanguage()->getCode();
 			}
 
 			$data['data-languages'] = [
@@ -146,6 +150,7 @@ class PageHeaderComponent {
 		return $data;
 	}
 
+	/** @return list<array<string, mixed>> */
 	private function toLinks( array $items ): array {
 		$links = [];
 		foreach ( $items as $item ) {
@@ -163,16 +168,17 @@ class PageHeaderComponent {
 		return $links;
 	}
 
+	/** @return array<string, mixed> */
 	private function getActions( array $portlets ): array {
 		$items = PortletReader::getItems( $portlets, [ 'data-associated-pages', 'data-views', 'data-actions' ] );
-		$title = $this->context->getTitle();
+		$title = $this->context->getTitle() ?? $this->titleFactory->newMainPage();
 
 		$edit = $talk = $view = null;
 		$dropdown = [];
 		$isEditing = $isViewSource = $isHistory = $isSpecialAction = false;
 
 		foreach ( $items as $key => $item ) {
-			if ( str_starts_with( $key, self::ASSOCIATED_PREFIX ) ) {
+			if ( str_starts_with( (string)$key, self::ASSOCIATED_PREFIX ) ) {
 				continue;
 			}
 
@@ -197,9 +203,9 @@ class PageHeaderComponent {
 						$item['text'] = $this->context->msg( 'cosmos-action-addsection' )->text();
 					}
 
-					if ( str_starts_with( $key, 'nstab-' ) ) {
+					if ( str_starts_with( (string)$key, 'nstab-' ) ) {
 						$view = $item;
-					} elseif ( !str_starts_with( $key, 'varlang-' ) ) {
+					} elseif ( !str_starts_with( (string)$key, 'varlang-' ) ) {
 						if ( !$selected ) {
 							$dropdown[$key] = $item;
 						} elseif ( $key === 'history' ) {
@@ -216,7 +222,6 @@ class PageHeaderComponent {
 		$talkUrl = $title->getTalkPageIfDefined()?->getLinkURL();
 		$pageUrl = $title->getLinkURL();
 		$backToPage = $view ? $this->context->msg( 'cosmos-action-backtopage', $view['text'] )->text() : '';
-		$primary = $secondary = null;
 
 		if ( $isEditPage || $isSpecialAction ) {
 			if ( $isTalkPage ) {
@@ -268,7 +273,7 @@ class PageHeaderComponent {
 		}
 
 		if ( $primary === null && count( $dropdown ) === 1 ) {
-			$primary = reset( $dropdown );
+			$primary = array_values( $dropdown )[0];
 			$dropdown = [];
 		}
 
@@ -282,6 +287,7 @@ class PageHeaderComponent {
 		];
 	}
 
+	/** @return ?array<string, mixed> */
 	private function toButton( ?array $item, string $variant, bool $single ): ?array {
 		if ( !$item ) {
 			return null;
@@ -296,9 +302,9 @@ class PageHeaderComponent {
 		if ( $single && $variant === 'primary' ) {
 			$classes[] = 'skin-cosmos-button--single';
 		}
+
 		$sourceId = $item['id'] ?? '';
 		$id = ( $item['icon'] ?? '' ) === 'close' ? 'cosmos-actions-cancel' : $sourceId;
-
 		if ( str_starts_with( $sourceId, 'ca-nstab-' ) ) {
 			$classes[] = 'skin-cosmos-button--view cosmos-actions-view';
 		} elseif ( $sourceId === 'ca-talk' ) {
@@ -317,6 +323,7 @@ class PageHeaderComponent {
 		];
 	}
 
+	/** @return list<array<string, mixed>> */
 	private function toDropdown( array $items ): array {
 		$list = [];
 		foreach ( $items as $item ) {

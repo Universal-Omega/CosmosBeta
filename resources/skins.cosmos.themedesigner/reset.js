@@ -5,7 +5,10 @@ const KEY = 'themedesigner-reset';
 // An empty map arrives from the server as an empty list
 const emptyAsMap = ( key, value ) => Array.isArray( value ) && value.length === 0 ? {} : value;
 
-const getPath = ( object, path ) => path.split( '/' ).reduce( ( value, key ) => value?.[ key ], object ),
+const getPath = ( object, path ) => path.split( '/' ).reduce(
+		( value, key ) => value === undefined || value === null ? undefined : value[ key ],
+		object
+	),
 	same = ( a, b ) => JSON.stringify( a, emptyAsMap ) === JSON.stringify( b, emptyAsMap );
 
 function setPath( object, path, value ) {
@@ -30,8 +33,12 @@ function setPath( object, path, value ) {
 function provideReset( state, defaults, isDisabled ) {
 	provide( KEY, {
 		isDisabled,
-		isCustom: ( paths ) => [].concat( paths ).some( ( path ) => !same( getPath( state, path ), getPath( defaults, path ) ) ),
-		reset: ( paths ) => [].concat( paths ).forEach( ( path ) => setPath( state, path, getPath( defaults, path ) ) )
+		isCustom: ( paths ) => [].concat( paths ).some(
+			( path ) => !same( getPath( state, path ), getPath( defaults, path ) )
+		),
+		reset: ( paths ) => [].concat( paths ).forEach(
+			( path ) => setPath( state, path, getPath( defaults, path ) )
+		)
 	} );
 }
 

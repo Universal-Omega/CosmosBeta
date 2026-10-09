@@ -34,16 +34,12 @@ class RailModuleList {
 		return $this->modules[$id] ?? null;
 	}
 
-	/**
-	 * @return string[]
-	 */
+	/** @return list<string> */
 	public function getIds(): array {
 		return array_keys( $this->modules );
 	}
 
-	/**
-	 * @return RailModule[]
-	 */
+	/** @return list<RailModule> */
 	public function getAll(): array {
 		return array_values( $this->modules );
 	}

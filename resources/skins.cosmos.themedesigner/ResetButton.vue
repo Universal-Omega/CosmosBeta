@@ -42,6 +42,7 @@ module.exports = exports = defineComponent( {
 		const { isCustom, isDisabled, reset } = useReset();
 
 		function onClick() {
+			// eslint-disable-next-line no-alert
 			if ( props.confirm !== '' && !window.confirm( msg( props.confirm ) ) ) {
 				return;
 			}
