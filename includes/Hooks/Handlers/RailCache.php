@@ -4,10 +4,13 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
+use MediaWiki\Block\DatabaseBlock;
 use MediaWiki\RenameUser\Hook\RenameUserCompleteHook;
 use MediaWiki\RevisionDelete\Hook\ArticleRevisionVisibilitySetHook;
 use MediaWiki\Skin\Cosmos\Rail\RailBuilder;
 use MediaWiki\Specials\Hook\BlockIpCompleteHook;
+use MediaWiki\Title\Title;
+use MediaWiki\User\User;
 use Wikimedia\ObjectCache\WANObjectCache;
 
 /**
@@ -26,7 +29,9 @@ class RailCache implements
 
 	/**
 	 * @inheritDoc
-	 * @suppress PhanUnusedPublicMethodParameter
+	 * @param Title $title @phan-unused-param
+	 * @param int[] $ids @phan-unused-param
+	 * @param array<int, array{oldBits: int, newBits: int}> $visibilityChangeMap @phan-unused-param
 	 */
 	public function onArticleRevisionVisibilitySet( $title, $ids, $visibilityChangeMap ): void {
 		$this->purge();
@@ -34,7 +39,8 @@ class RailCache implements
 
 	/**
 	 * @inheritDoc
-	 * @suppress PhanUnusedPublicMethodParameter
+	 * @param User $user @phan-unused-param
+	 * @param ?DatabaseBlock $priorBlock @phan-unused-param
 	 */
 	public function onBlockIpComplete( $block, $user, $priorBlock ): void {
 		if ( $block->getHideName() ) {
@@ -44,7 +50,9 @@ class RailCache implements
 
 	/**
 	 * @inheritDoc
-	 * @suppress PhanUnusedPublicMethodParameter
+	 * @param int $uid @phan-unused-param
+	 * @param string $old @phan-unused-param
+	 * @param string $new @phan-unused-param
 	 */
 	public function onRenameUserComplete( int $uid, string $old, string $new ): void {
 		$this->purge();
