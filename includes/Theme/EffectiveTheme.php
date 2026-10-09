@@ -32,7 +32,7 @@ class EffectiveTheme {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
-	public function getTheme(): ThemeSettings {
+	private function getTheme(): ThemeSettings {
 		return $this->themeStore->getCurrent();
 	}
 
