@@ -1,3 +1,4 @@
+// stylelint-disable plugin/no-unsupported-browser-features
 .skin-cosmos-themedesigner {
 	max-width: 1100px;
 }
@@ -9,13 +10,13 @@
 }
 
 .skin-cosmos-themedesigner__panel {
-	flex: 1 1 380px;
 	min-width: 0;
+	flex: 1 1 380px;
 }
 
 .skin-cosmos-themedesigner__side {
-	flex: 0 1 340px;
 	min-width: 260px;
+	flex: 0 1 340px;
 }
 
 .skin-cosmos-themedesigner .cdx-tabs__header {
@@ -35,8 +36,8 @@
 }
 
 .skin-cosmos-themedesigner__filefield-lookup {
-	flex: 1 1 220px;
 	min-width: 0;
+	flex: 1 1 220px;
 }
 
 .skin-cosmos-themedesigner__filefield-file {
@@ -47,8 +48,8 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 8px;
 	margin-bottom: 8px;
+	gap: 8px;
 }
 
 .skin-cosmos-themedesigner__alpha {
@@ -71,8 +72,8 @@
 	}
 
 	.cdx-text-input {
-		flex: 1;
 		min-width: 0;
+		flex: 1;
 	}
 }
 
@@ -98,20 +99,20 @@
 
 .skin-cosmos-themedesigner__presets {
 	display: grid;
-	grid-template-columns: repeat( auto-fill, minmax( 150px, 1fr ) );
 	gap: 10px;
+	grid-template-columns: repeat( auto-fill, minmax( 150px, 1fr ) );
 }
 
 .skin-cosmos-themedesigner__preset {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
 	padding: 10px;
 	border: 2px solid #c8ccd1;
 	border-radius: 6px;
 	background: #fff;
 	color: #202122;
 	cursor: pointer;
+	gap: 6px;
 	text-align: left;
 
 	&.skin-cosmos-is-active {
@@ -121,9 +122,9 @@
 
 .skin-cosmos-themedesigner__preset-swatches {
 	display: flex;
+	overflow: hidden;
 	width: 100%;
 	height: 22px;
-	overflow: hidden;
 	border-radius: 4px;
 }
 
@@ -144,20 +145,20 @@
 
 .skin-cosmos-themedesigner__fonts {
 	display: grid;
-	grid-template-columns: repeat( auto-fill, minmax( 130px, 1fr ) );
 	gap: 10px;
+	grid-template-columns: repeat( auto-fill, minmax( 130px, 1fr ) );
 }
 
 .skin-cosmos-themedesigner__font {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
 	padding: 10px 12px;
 	border: 2px solid #c8ccd1;
 	border-radius: 6px;
 	background: #fff;
 	color: #202122;
 	cursor: pointer;
+	gap: 4px;
 	text-align: left;
 
 	&.skin-cosmos-is-active {
@@ -179,10 +180,10 @@
 }
 
 .skin-cosmos-themedesigner__font-preview {
-	margin: 12px 0 0;
 	padding: 12px;
 	border: 1px solid #c8ccd1;
 	border-radius: 6px;
+	margin: 12px 0 0;
 	background: #fff;
 	color: #202122;
 	font-size: 1.15em;
@@ -196,8 +197,8 @@
 
 .skin-cosmos-themedesigner__rail-modules {
 	display: grid;
-	gap: 8px;
 	margin-bottom: 8px;
+	gap: 8px;
 }
 
 .skin-cosmos-themedesigner__rail-module .cdx-field {
@@ -206,9 +207,9 @@
 
 .skin-cosmos-themedesigner__rail-origin {
 	padding: 1px 8px;
+	border-radius: 999px;
 	margin-left: 8px;
 	background: #eaecf0;
-	border-radius: 999px;
 	color: #54595d;
 	font-size: 0.8em;
 	font-weight: normal;
@@ -222,9 +223,9 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 4px 10px;
 		padding: 8px 0;
 		border-bottom: 1px solid #eaecf0;
+		gap: 4px 10px;
 	}
 }
 
@@ -246,7 +247,7 @@
 	overflow: hidden;
 	border: 1px solid #a2a9b1;
 	border-radius: 6px;
-	font-size: 13px;
+	font-size: 0.8125rem;
 }
 
 .skin-cosmos-themedesigner__preview-banner,
@@ -258,8 +259,8 @@
 
 .skin-cosmos-themedesigner__preview-body {
 	display: flex;
-	gap: 8px;
 	padding: 10px;
+	gap: 8px;
 }
 
 .skin-cosmos-themedesigner__preview-main {
@@ -275,8 +276,8 @@
 
 .skin-cosmos-themedesigner__preview-rail-tools {
 	padding: 4px 6px;
-	margin-top: 6px;
 	border-radius: 3px;
+	margin-top: 6px;
 }
 
 .skin-cosmos-themedesigner__preview-heading {
@@ -302,8 +303,8 @@
 
 .skin-cosmos-themedesigner__preview-toolbar--floating {
 	width: fit-content;
-	margin: 0 10px 10px auto;
 	border-radius: 999px;
+	margin: 0 10px 10px auto;
 }
 
 .skin-cosmos-themedesigner__advanced {
@@ -317,8 +318,8 @@
 .skin-cosmos-themedesigner__publish {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
 	margin-top: 16px;
+	gap: 8px;
 
 	.cdx-text-input {
 		flex: 1 1 260px;
