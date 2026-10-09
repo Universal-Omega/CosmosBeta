@@ -32,10 +32,7 @@ class PageHeaderComponent {
 	) {
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	public function getTemplateData( array $portlets ): array {
 		return [
 			'data-categories' => $this->getCategories(),
@@ -45,10 +42,7 @@ class PageHeaderComponent {
 		];
 	}
 
-	/**
-	 * @return ?array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return ?array<string, mixed> */
 	private function getAssociatedTabs( array $portlets ): ?array {
 		$tabs = [];
 		foreach ( PortletReader::getItems( $portlets, [ 'data-associated-pages' ] ) as $key => $item ) {
@@ -70,10 +64,7 @@ class PageHeaderComponent {
 		] : null;
 	}
 
-	/**
-	 * @return ?array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return ?array<string, mixed> */
 	private function getCategories(): ?array {
 		$out = $this->context->getOutput();
 		$titles = [];
@@ -118,10 +109,7 @@ class PageHeaderComponent {
 		];
 	}
 
-	/**
-	 * @return ?array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return ?array<string, mixed> */
 	private function getInterlang( array $portlets ): ?array {
 		$variants = PortletReader::getItems( $portlets, [ 'data-variants' ] );
 		$languages = PortletReader::getItems( $portlets, [ 'data-languages' ] );
@@ -180,10 +168,7 @@ class PageHeaderComponent {
 		return $links;
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function getActions( array $portlets ): array {
 		$items = PortletReader::getItems( $portlets, [ 'data-associated-pages', 'data-views', 'data-actions' ] );
 		$title = $this->context->getTitle() ?? $this->titleFactory->newMainPage();
