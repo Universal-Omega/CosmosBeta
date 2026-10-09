@@ -25,6 +25,7 @@ module.exports = exports = defineComponent( {
 	name: 'NamespaceLookup',
 	components: { CdxMultiselectLookup },
 	props: {
+		// eslint-disable-next-line vue/no-unused-properties
 		modelValue: {
 			type: Array,
 			required: true
@@ -40,7 +41,9 @@ module.exports = exports = defineComponent( {
 	},
 	emits: [ 'update:modelValue' ],
 	setup( props, { emit } ) {
-		const labels = Object.fromEntries( props.namespaces.map( ( ns ) => [ ns.value, ns.label ] ) ),
+		const labels = Object.fromEntries(
+				props.namespaces.map( ( ns ) => [ ns.value, ns.label ] )
+			),
 			{ selected, chips, input } = useChipList(
 				props,
 				emit,
