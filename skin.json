@@ -953,6 +953,7 @@
 				"Cosmos.TemplateParser",
 				"TitleFactory",
 				"UserGroupManager",
+				"UserRegistrationLookup",
 				"WikiPageFactory"
 			]
 		}
