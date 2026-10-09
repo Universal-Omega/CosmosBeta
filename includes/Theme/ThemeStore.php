@@ -52,7 +52,8 @@ class ThemeStore {
 			$value = $this->cache->getWithSetCallback(
 				$this->getCacheKey(),
 				WANObjectCache::TTL_DAY,
-				// @phan-suppress-next-line PhanPluginMoreSpecificActualReturnType, PhanUnusedClosureParameter
+				/** @param mixed $oldValue @phan-unused-param */
+				// @phan-suppress-next-line PhanPluginMoreSpecificActualReturnType
 				function ( mixed $oldValue, int &$ttl, array &$setOpts ): array {
 					$dbr = $this->dbProvider->getReplicaDatabase();
 					$setOpts += Database::getCacheSetOptions( $dbr );
@@ -102,7 +103,7 @@ class ThemeStore {
 		return $this->currentTimestamp;
 	}
 
-	public function getRevision( int $id ): ?ThemeSettings {
+	private function getRevision( int $id ): ?ThemeSettings {
 		$row = $this->dbProvider->getReplicaDatabase()->newSelectQueryBuilder()
 			->select( [ 'cth_id', 'cth_data' ] )
 			->from( self::TABLE )
