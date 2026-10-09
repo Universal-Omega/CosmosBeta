@@ -123,7 +123,6 @@ class RailBuilder {
 		foreach ( $portlets as $portlet ) {
 			$name = $portlet ? $this->findSidebarName( $portlet ) : null;
 			$items = array_map(
-				// @phan-suppress-next-line PhanPluginMoreSpecificActualReturnType
 				static fn ( array $item ): array => [ 'html-item' => $item['html-item'] ?? '' ],
 				$portlet['array-items'] ?? []
 			);
@@ -444,7 +443,6 @@ class RailBuilder {
 		return $this->cache->getWithSetCallback(
 			self::getRecentChangesCacheKey( $this->cache ),
 			self::RECENT_CHANGES_CACHE_SECONDS,
-			// @phan-suppress-next-line PhanPluginMoreSpecificActualReturnType
 			function (): array {
 				$rows = $this->dbProvider->getReplicaDatabase()->newSelectQueryBuilder()
 					->select( [ 'actor_name', 'actor_user', 'rc_namespace', 'rc_title', 'rc_timestamp' ] )
@@ -485,10 +483,7 @@ class RailBuilder {
 		);
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function getTemplateData( RailModule $module ): array {
 		return [
 			'class' => $this->getClasses( $module->classes ),
