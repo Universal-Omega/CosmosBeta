@@ -147,10 +147,7 @@ class ThemeSettings {
 		], 0 );
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	public static function getDefaults(): array {
 		return [
 			'version' => self::SCHEMA_VERSION,
@@ -355,7 +352,6 @@ class ThemeSettings {
 	 * Keeps only the rules a module really sets, keyed by module id.
 	 *
 	 * @return array<string, array<string, mixed>>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	private static function normalizeRailModules( array $rail ): array {
 		$raw = is_array( $rail['modules'] ?? null ) ? $rail['modules'] : [];
@@ -385,10 +381,7 @@ class ThemeSettings {
 		return is_string( $value ) ? RailModuleType::tryFrom( $value ) : null;
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private static function normalizeRailRules( array $raw ): array {
 		$rules = [];
 		$enabled = self::toBool( $raw['enabled'] ?? null, null );
