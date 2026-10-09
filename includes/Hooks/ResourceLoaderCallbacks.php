@@ -12,8 +12,8 @@ use MediaWiki\Skin\Cosmos\ConfigNames;
 class ResourceLoaderCallbacks {
 
 	/**
+	 * @param Context $context @phan-unused-param
 	 * @return array<string, mixed>
-	 * @suppress PhanUnusedPublicNoOverrideMethodParameter
 	 */
 	public static function getCosmosResourceLoaderConfig( Context $context, Config $config ): array {
 		return [
@@ -22,7 +22,7 @@ class ResourceLoaderCallbacks {
 		];
 	}
 
-	/** @suppress PhanUnusedPublicNoOverrideMethodParameter */
+	/** @param Context $context @phan-unused-param */
 	public static function getCosmosSearchResourceLoaderConfig( Context $context, Config $config ): array {
 		return [
 			'wgCosmosSearchDescriptionSource' => $config->get( ConfigNames::SearchDescriptionSource ),
