@@ -22,6 +22,7 @@ final readonly class AdvancedSectionBuilder {
 	}
 
 	/**
+	 * @param IContextSource $context
 	 * @param string[] $excluded Canonical names of special pages shown on the general tab
 	 * @return array<string, list<array{url: string, text: string, isRestricted: bool}>> Pages by group name
 	 */
