@@ -30,6 +30,7 @@ module.exports = exports = defineComponent( {
 	name: 'PageLookup',
 	components: { CdxMultiselectLookup },
 	props: {
+		// eslint-disable-next-line vue/no-unused-properties
 		modelValue: {
 			type: Array,
 			required: true
