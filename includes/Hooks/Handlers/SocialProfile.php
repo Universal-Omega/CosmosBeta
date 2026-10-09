@@ -15,14 +15,17 @@ use MediaWiki\Skin\Cosmos\ConfigNames;
 use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
+use MediaWiki\User\Registration\UserRegistrationLookup;
 use MediaWiki\User\User;
 use MediaWiki\User\UserGroupManager;
 use UserProfilePage;
+use Wikimedia\Assert\Assert;
+use Wikimedia\Timestamp\TimestampFormat;
 use function count;
 use function date;
 use function in_array;
-use function strtotime;
 use function ucfirst;
+use function wfTimestamp;
 use const NS_USER;
 
 class SocialProfile {
@@ -41,6 +44,7 @@ class SocialProfile {
 		private readonly TemplateParser $templateParser,
 		private readonly TitleFactory $titleFactory,
 		private readonly UserGroupManager $userGroupManager,
+		private readonly UserRegistrationLookup $userRegistrationLookup,
 		private readonly WikiPageFactory $wikiPageFactory,
 	) {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
@@ -51,6 +55,7 @@ class SocialProfile {
 		TemplateParser $templateParser,
 		TitleFactory $titleFactory,
 		UserGroupManager $userGroupManager,
+		UserRegistrationLookup $userRegistrationLookup,
 		WikiPageFactory $wikiPageFactory
 	): self {
 		return new self(
@@ -61,27 +66,29 @@ class SocialProfile {
 			$templateParser,
 			$titleFactory,
 			$userGroupManager,
+			$userRegistrationLookup,
 			$wikiPageFactory,
 		);
 	}
-
 
 	/** @inheritDoc */
 	public function onUserProfileGetProfileTitle( UserProfilePage $userProfilePage, string &$profileTitle ): void {
 		$showTags = (bool)$this->options->get( ConfigNames::SocialProfileShowGroupTags );
 		$showEdits = (bool)$this->options->get( ConfigNames::SocialProfileShowEditCount );
 		$allowBio = (bool)$this->options->get( ConfigNames::SocialProfileAllowBio );
-
 		if ( !$showTags && !$showEdits && !$allowBio ) {
 			return;
 		}
 
+		// @phan-suppress-next-line PhanUndeclaredMethod
 		$context = $userProfilePage->getContext();
+		Assert::postcondition( $context instanceof IContextSource, 'The profile page has a context' );
 		if ( !$context->getSkin() instanceof SkinCosmos ) {
 			return;
 		}
 
 		$owner = $userProfilePage->profileOwner;
+		Assert::postcondition( $owner instanceof User, 'The profile page has an owner' );
 
 		$profileTitle = $this->templateParser->processTemplate( 'ProfileHeader', [
 			'name' => $owner->getName(),
@@ -91,15 +98,20 @@ class SocialProfile {
 		] );
 	}
 
+	/** @return array<string, string> */
 	private function getEditCount( IContextSource $context, User $owner ): array {
+		$registration = $this->userRegistrationLookup->getFirstRegistration( $owner );
 		return [
 			'url' => SpecialPage::getTitleFor( 'Contributions', $owner->getName() )->getFullURL(),
 			'count' => (string)$owner->getEditCount(),
 			'label' => $context->msg( 'cosmos-editcount-label' )->text(),
-			'registration' => date( 'F j, Y', strtotime( (string)$owner->getRegistration() ) ),
+			'registration' => $registration === null ?
+				'' :
+				date( 'F j, Y', (int)wfTimestamp( TimestampFormat::UNIX, $registration ) ),
 		];
 	}
 
+	/** @return list<array<string, string>> */
 	private function getUserGroupTags( IContextSource $context, User $owner ): array {
 		if ( $owner->getBlock() ) {
 			return [ [
@@ -118,9 +130,9 @@ class SocialProfile {
 			}
 
 			$message = $context->msg( "group-$group-member" );
-
 			$tags[] = [
-				'class' => 'skin-cosmos-profile__tag--' . Sanitizer::escapeClass( $group ) . ' tag-' . Sanitizer::escapeClass( $group ),
+				'class' => 'skin-cosmos-profile__tag--' . Sanitizer::escapeClass( $group ) .
+					' tag-' . Sanitizer::escapeClass( $group ),
 				'text' => ucfirst( $message->isDisabled() ? $group : $message->text() ),
 			];
 		}
@@ -135,14 +147,11 @@ class SocialProfile {
 		}
 
 		$content = $this->wikiPageFactory->newFromTitle( $title )->getContent();
-
-		if (
-			$this->options->get( ConfigNames::SocialProfileFollowBioRedirects ) &&
-			$title->isRedirect() &&
-			$content?->getRedirectTarget()?->isKnown() &&
-			$content->getRedirectTarget()->inNamespace( NS_USER )
-		) {
-			$content = $this->wikiPageFactory->newFromTitle( $content->getRedirectTarget() )->getContent();
+		if ( $this->options->get( ConfigNames::SocialProfileFollowBioRedirects ) && $title->isRedirect() ) {
+			$target = $content?->getRedirectTarget();
+			if ( $target !== null && $target->isKnown() && $target->inNamespace( NS_USER ) ) {
+				$content = $this->wikiPageFactory->newFromTitle( $target )->getContent();
+			}
 		}
 
 		return $content instanceof TextContent ? $content->getText() : null;
