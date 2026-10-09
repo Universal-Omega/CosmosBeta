@@ -22,13 +22,13 @@ class AltModules {
 	) {
 	}
 
-	/** @return array<string,array> Twin module name to its definition */
+	/** @return array<string, array> Twin module name to its definition */
 	public function getDefinitions(): array {
 		if ( $this->definitions === null ) {
 			$this->definitions = [];
 			foreach ( $this->extensionRegistry->getAttribute( 'ResourceModules' ) as $name => $definition ) {
 				if (
-					str_starts_with( $name, 'skins.cosmosbeta.' ) &&
+					str_starts_with( (string)$name, 'skins.cosmosbeta.' ) &&
 					( $definition['factory'] ?? null ) === CosmosResourceLoaderModule::class . '::factory'
 				) {
 					$this->definitions[$name . self::SUFFIX] = [ 'variant' => 'alt' ] + $definition;
