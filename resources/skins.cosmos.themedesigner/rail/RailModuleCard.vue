@@ -2,7 +2,9 @@
 	<cdx-accordion class="skin-cosmos-themedesigner__rail-module">
 		<template #title>
 			{{ title }}
-			<span class="skin-cosmos-themedesigner__rail-origin">{{ msg( 'rail-origin-' + entry.origin ) }}</span>
+			<span class="skin-cosmos-themedesigner__rail-origin">
+				{{ msg( 'rail-origin-' + entry.origin ) }}
+			</span>
 		</template>
 		<template v-if="summary !== ''" #description>
 			{{ summary }}
@@ -147,10 +149,15 @@ module.exports = exports = defineComponent( {
 		] );
 
 		// What a module does not set follows its default
-		const display = computed( () => ( props.rules.enabled ?? props.defaults.enabled ) ? 'show' : 'hide' ),
-			type = computed( () => props.rules.type ?? props.defaults.type );
+		const getRule = ( key ) => props.rules[ key ] === undefined || props.rules[ key ] === null ?
+			props.defaults[ key ] :
+			props.rules[ key ];
 
-		const hasPlaces = computed( () => props.rules.disabledNamespaces !== null || props.rules.disabledPages !== null );
+		const display = computed( () => getRule( 'enabled' ) ? 'show' : 'hide' ),
+			type = computed( () => getRule( 'type' ) );
+
+		const hasPlaces = computed( () => props.rules.disabledNamespaces !== null ||
+			props.rules.disabledPages !== null );
 
 		const summary = computed( () => [
 			display.value === 'hide' ? msg( 'rail-display-hide' ) : null,
