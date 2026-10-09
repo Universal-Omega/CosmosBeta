@@ -269,7 +269,7 @@ class CosmosNavigation {
 	 * @return array<string, mixed>
 	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
-	public function parseLine( MessageLocalizer $localizer, string $line ): array {
+	private function parseLine( MessageLocalizer $localizer, string $line ): array {
 		$icon = null;
 		if ( preg_match( self::ICON_PATTERN, $line, $matches ) ) {
 			$icon = in_array( $matches[1], $this->getAllowedIcons(), true ) ? $matches[1] : null;
@@ -353,7 +353,7 @@ class CosmosNavigation {
 	}
 
 	/** @return string[] Icons that the skin icon module provides */
-	public function getAllowedIcons(): array {
+	private function getAllowedIcons(): array {
 		$modules = $this->extensionRegistry->getAttribute( 'ResourceModules' );
 		return $modules['skins.cosmos.icons']['icons'] ?? [];
 	}
