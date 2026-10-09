@@ -1,3 +1,4 @@
+// stylelint-disable declaration-no-important
 .skin-cosmos-header__sitename a,
 .skin-cosmos-header__navigation,
 .skin-cosmos-header__wordmark,
@@ -88,8 +89,8 @@ div.thumb {
 	max-height: 300px;
 	padding: 7px 0;
 	border: 1px solid #ccc;
-	background-color: #fff;
 	border-radius: 4px;
+	background-color: #fff;
 	box-shadow: 0 8px 16px 0 rgba( 0, 0, 0, 0.3 );
 
 	&__item {
@@ -129,7 +130,7 @@ div.thumb {
 }
 
 .skin-cosmos-mobile-menu__button {
-	font-size: 18px;
+	font-size: 1.125rem;
 	font-weight: bold;
 	transform: scale( 1.4, 1 );
 }
@@ -172,10 +173,10 @@ div.thumb {
 }
 
 .skin-cosmos-navigation-preview {
-	margin: 1em 0;
 	border: 1px solid var( --skin-cosmos-border-color );
-	background-color: var( --skin-cosmos-content-background );
 	border-radius: 4px;
+	margin: 1em 0;
+	background-color: var( --skin-cosmos-content-background );
 
 	.skin-cosmos-header__navigation {
 		display: block;
@@ -195,7 +196,6 @@ div.thumb {
 	.skin-cosmos-nav__item .skin-cosmos-nav__label {
 		border-bottom-color: var( --skin-cosmos-border-color );
 	}
-
 
 	.skin-cosmos-menu__content a {
 		color: var( --skin-cosmos-link-color );
@@ -229,7 +229,7 @@ body:not( .skin-cosmos-buttons--slim ):not( .skin-cosmos-buttons--text ) #cosmos
 	.skin-cosmos-button {
 		height: 20px;
 		padding: 5px 12px;
-		font-size: 12px;
+		font-size: 0.75rem;
 	}
 
 	.skin-cosmos-button__icon {
