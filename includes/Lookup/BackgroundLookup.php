@@ -28,11 +28,11 @@ class BackgroundLookup {
 		return $this->resolve( $this->wikiHeader );
 	}
 
-	public function isBackgroundUrl( string $background ): bool {
+	private function isBackgroundUrl( string $background ): bool {
 		return (bool)preg_match( '%^(?:(http|https|ftp):|)//(?:www\.)?.*$%i', $background );
 	}
 
-	public function getBackgroundFile( string $background ): ?File {
+	private function getBackgroundFile( string $background ): ?File {
 		$title = $this->titleFactory->makeTitle( NS_FILE, $background );
 		return $this->repoGroup->findFile( $title ) ?: null;
 	}
