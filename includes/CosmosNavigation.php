@@ -14,8 +14,10 @@ use MediaWiki\SpecialPage\SpecialPage;
 use MediaWiki\Title\TitleFactory;
 use MediaWiki\Utils\UrlUtils;
 use Wikimedia\ObjectCache\WANObjectCache;
+use function array_keys;
 use function array_map;
 use function array_merge;
+use function array_reverse;
 use function count;
 use function explode;
 use function htmlspecialchars;
@@ -68,6 +70,7 @@ class CosmosNavigation {
 	 * Adds links that hooks put into the sidebar, such as the ones from extensions, to the tree.
 	 * Links that are already in the tree are left out, and sections that are shown elsewhere are skipped.
 	 *
+	 * @param array[] $tree
 	 * @param array[] $portlets Sidebar portlets from the skin template data
 	 */
 	public function mergeSidebar( array $tree, array $portlets ): array {
@@ -197,6 +200,7 @@ class CosmosNavigation {
 		return $tree;
 	}
 
+	/** @return list<array<string, mixed>> */
 	private function buildChildren( array $nodes, array $children ): array {
 		$items = [];
 		foreach ( $children as $position => $index ) {
@@ -219,6 +223,7 @@ class CosmosNavigation {
 		return $items;
 	}
 
+	/** @return array<int, array<string, mixed>> */
 	public function parse( MessageLocalizer $localizer, array $lines ): array {
 		$nodes = [];
 		$lastDepth = 0;
@@ -239,8 +244,8 @@ class CosmosNavigation {
 			} else {
 				$node['parentIndex'] = 0;
 
-				for ( $x = $i; $x > 0; $x-- ) {
-					if ( $nodes[$x]['depth'] === $node['depth'] - 1 ) {
+				foreach ( array_reverse( array_keys( $nodes ) ) as $x ) {
+					if ( $x > 0 && ( $nodes[$x]['depth'] ?? null ) === $node['depth'] - 1 ) {
 						$node['parentIndex'] = $x;
 						break;
 					}
@@ -260,6 +265,10 @@ class CosmosNavigation {
 		return $nodes;
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	public function parseLine( MessageLocalizer $localizer, string $line ): array {
 		$icon = null;
 		if ( preg_match( self::ICON_PATTERN, $line, $matches ) ) {
@@ -280,7 +289,6 @@ class CosmosNavigation {
 
 		$labelMessage = $localizer->msg( $label );
 		$text = $labelMessage->exists() ? $labelMessage->text() : $label;
-
 		if ( !$localizer->msg( trim( $parts[0] ) )->exists() ) {
 			$link = $parts[0];
 		}
@@ -308,6 +316,7 @@ class CosmosNavigation {
 		return $this->extract( $localizer->msg( self::MESSAGE )->inContentLanguage()->text() );
 	}
 
+	/** @return list<string> */
 	public function extract( string $navigation ): array {
 		$exploreChildUrl = null;
 		$exploreChildText = null;
@@ -343,9 +352,7 @@ class CosmosNavigation {
 		return $message !== '' && $message !== '-' ? explode( "\n", $message ) : [];
 	}
 
-	/**
-	 * @return string[] Icons that the skin icon module provides
-	 */
+	/** @return string[] Icons that the skin icon module provides */
 	public function getAllowedIcons(): array {
 		$modules = $this->extensionRegistry->getAttribute( 'ResourceModules' );
 		return $modules['skins.cosmos.icons']['icons'] ?? [];
@@ -356,7 +363,8 @@ class CosmosNavigation {
 			return true;
 		}
 
-		return in_array( strtoupper( $name ), array_map( strtoupper( ... ), (array)$this->options->get( ConfigNames::RailSidebarPortlets ) ), true );
+		$railNames = (array)$this->options->get( ConfigNames::RailSidebarPortlets );
+		return in_array( strtoupper( $name ), array_map( strtoupper( ... ), $railNames ), true );
 	}
 
 	private function getCacheKey(): string {
