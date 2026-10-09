@@ -44,6 +44,10 @@ class WikiHeaderComponent {
 		return $canRead ? $data + $this->getButtons( !$user->isNamed() ) : $data;
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	private function getButtons( bool $isAnon ): array {
 		$user = $this->context->getUser();
 		$can = fn ( string $right ): bool => $this->permissionManager->userHasRight( $user, $right );
@@ -61,7 +65,6 @@ class WikiHeaderComponent {
 			SpecialPage::getTitleFor( 'Upload' )->getFullURL();
 		$recentChangesUrl = SpecialPage::getTitleFor( 'Recentchanges' )->getFullURL();
 
-		$createText = null;
 		if ( $canViewAdminLinks ) {
 			$createText = $isAnon ? $addNewPage->text() : null;
 		} else {
@@ -85,8 +88,10 @@ class WikiHeaderComponent {
 			'recentchanges-text' => $onlyRead ? $recentChanges->text() : null,
 			'recentchanges-url' => $recentChangesUrl,
 			'recentchanges-title' => ucwords( $recentChanges->text() ),
-			'has-admin' => $canViewDashboard || ( $canViewAdminLinks && $this->extensionRegistry->isLoaded( 'Admin Links' ) ),
-			'admin-url' => SpecialPage::getTitleFor( $canViewDashboard ? 'AdminDashboard' : 'AdminLinks' )->getFullURL(),
+			'has-admin' => $canViewDashboard ||
+				( $canViewAdminLinks && $this->extensionRegistry->isLoaded( 'Admin Links' ) ),
+			'admin-url' => SpecialPage::getTitleFor( $canViewDashboard ? 'AdminDashboard' : 'AdminLinks' )
+				->getFullURL(),
 			'admin-title' => $canViewDashboard ?
 				$this->context->msg( 'cosmos-admindashboard' )->text() :
 				ucwords( $this->context->msg( 'adminlinks' )->text() ),
