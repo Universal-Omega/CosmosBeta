@@ -1,3 +1,5 @@
+@import 'mediawiki.skin.variables.less';
+
 /* Styles for printing */
 
 .skin-cosmos-header,
@@ -15,7 +17,7 @@
 
 .toc,
 body {
-	padding: 10px;
+	padding: @spacing-65;
 	font-family: serif;
 }
 
@@ -37,12 +39,12 @@ img {
 }
 
 .mw-body a:not( .image ) {
-	border-bottom: 1px solid #aaa;
+	border-bottom: @border-width-base solid #aaa;
 }
 
 .firstHeading {
-	padding-bottom: 5px;
-	margin-bottom: 20px;
+	padding-bottom: @spacing-30;
+	margin-bottom: @spacing-125;
 	font-size: 25pt;
 	line-height: 28pt;
 }
@@ -50,7 +52,7 @@ img {
 .firstHeading,
 h2 {
 	overflow: hidden;
-	border-bottom: 2px solid #000;
+	border-bottom: @border-width-thick solid #000;
 }
 
 h3,
@@ -88,7 +90,7 @@ h6 {
 }
 
 p {
-	margin-top: 5px;
+	margin-top: @spacing-30;
 	font-size: 12pt;
 	line-height: 16pt;
 	text-align: justify;
@@ -103,17 +105,17 @@ p {
 }
 
 blockquote {
-	padding-left: 20px;
-	border-left: 2px solid #000;
+	padding-left: @spacing-125;
+	border-left: @border-width-thick solid #000;
 }
 
 ol,
 ul {
 	padding: 0;
-	margin: 10px 0 0 1.6em;
+	margin: @spacing-65 0 0 1.6em;
 
 	li {
-		padding: 2px 0;
+		padding: @spacing-12 0;
 		font-size: 12pt;
 
 		table & {
@@ -131,13 +133,13 @@ ul {
 
 	a {
 		border: 0;
-		font-weight: normal;
+		font-weight: @font-weight-normal;
 	}
 
 	> ul {
 		> li {
-			margin-bottom: 4px;
-			font-weight: bold;
+			margin-bottom: @spacing-25;
+			font-weight: @font-weight-bold;
 		}
 	}
 
@@ -153,7 +155,7 @@ ul {
 	li.toclevel-1 {
 		> a {
 			font-size: 12pt;
-			font-weight: bold;
+			font-weight: @font-weight-bold;
 		}
 	}
 }
@@ -164,17 +166,17 @@ ul {
 }
 
 .printfooter {
-	padding-top: 10px;
+	padding-top: @spacing-65;
 	border-top: 3px solid #000;
-	margin-top: 10px;
+	margin-top: @spacing-65;
 	clear: both;
 	font-size: 10pt;
 }
 
 #cosmos-footer {
-	padding-top: 5px;
-	border-top: 1px solid #eee;
-	margin-top: 12px;
+	padding-top: @spacing-30;
+	border-top: @border-width-base solid #eee;
+	margin-top: @spacing-75;
 }
 
 #footer-info {
@@ -183,7 +185,7 @@ ul {
 
 	li {
 		display: block;
-		padding-bottom: 10px;
+		padding-bottom: @spacing-65;
 		color: #999;
 		font-size: 10pt;
 		list-style: none;
@@ -198,5 +200,5 @@ ul {
 #footer-info > .skin-cosmos-footer__links-item:nth-of-type( 1 ) {
 	color: #000;
 	font-size: 12pt;
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 }
