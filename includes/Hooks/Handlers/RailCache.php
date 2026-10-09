@@ -24,19 +24,28 @@ class RailCache implements
 	) {
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 * @suppress PhanUnusedPublicMethodParameter
+	 */
 	public function onArticleRevisionVisibilitySet( $title, $ids, $visibilityChangeMap ): void {
 		$this->purge();
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 * @suppress PhanUnusedPublicMethodParameter
+	 */
 	public function onBlockIpComplete( $block, $user, $priorBlock ): void {
 		if ( $block->getHideName() ) {
 			$this->purge();
 		}
 	}
 
-	/** @inheritDoc */
+	/**
+	 * @inheritDoc
+	 * @suppress PhanUnusedPublicMethodParameter
+	 */
 	public function onRenameUserComplete( int $uid, string $old, string $new ): void {
 		$this->purge();
 	}
