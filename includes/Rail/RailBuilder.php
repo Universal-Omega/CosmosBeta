@@ -76,7 +76,7 @@ class RailBuilder {
 		$options->assertRequiredOptions( self::CONSTRUCTOR_OPTIONS );
 	}
 
-	public static function getSidebarModuleId( string $name ): string {
+	private static function getSidebarModuleId( string $name ): string {
 		return 'sidebar-' . trim( (string)preg_replace( '/[^a-z0-9._-]+/', '-', strtolower( $name ) ), '-' );
 	}
 
@@ -161,7 +161,7 @@ class RailBuilder {
 	/**
 	 * Whether the rail as a whole is off, whatever the page. Modules can still be hidden one by one.
 	 */
-	public function isHidden(): bool {
+	private function isHidden(): bool {
 		$settings = $this->theme->getRailSettings();
 		return !$settings['enabled'] ||
 			( $settings['hideForAnons'] && !$this->context->getUser()->isNamed() ) ||
@@ -171,7 +171,7 @@ class RailBuilder {
 	/**
 	 * Whether the rail may show this module on the current page.
 	 */
-	public function isModuleAllowed( string $id ): bool {
+	private function isModuleAllowed( string $id ): bool {
 		return !$this->isHidden() && $this->isAllowed( $id );
 	}
 
