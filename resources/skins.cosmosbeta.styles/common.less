@@ -692,7 +692,7 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-buttons--slim #cosmos-articleHeader-actions {
+body #cosmos-articleHeader-actions when ( @button-style = slim ) {
 	.skin-cosmos-button {
 		height: @size-200;
 		box-sizing: border-box;
@@ -717,7 +717,7 @@ body > .suggestions {
 	}
 }
 
-.skin-cosmos-buttons--pill #cosmos-articleHeader-actions {
+body #cosmos-articleHeader-actions when ( @button-style = pill ) {
 	.skin-cosmos-button {
 		border-radius: 999px;
 	}
@@ -740,7 +740,7 @@ body > .suggestions {
 	display: none;
 }
 
-.skin-cosmos-buttons--text #cosmos-articleHeader-actions {
+body #cosmos-articleHeader-actions when ( @button-style = text ) {
 	gap: @spacing-25 0;
 
 	> a {
@@ -2564,10 +2564,6 @@ body h6 {
 	display: none;
 }
 
-#mw-data-after-content .mw-cookiewarning-container {
-	display: none;
-}
-
 .skin-cosmos-toolbar__tools {
 	display: -webkit-box;
 	display: flex;
@@ -2604,17 +2600,33 @@ body h6 {
 	}
 }
 
-#cosmos-content-siteNotice {
+#localNotice,
+.mw-dismissable-notice {
 	min-height: 36px;
-	padding: 15px 15px 15px 15px;
+	padding: 15px;
 	border: @border-width-base solid @button-font-color;
 	margin: 0 15px 15px 15px;
 	background-color: @button-background-color;
 	color: @button-font-color;
 }
 
-#cosmos-content-siteNotice * {
+#localNotice *,
+.mw-dismissable-notice *,
+.mw-dismissable-notice .mw-dismissable-notice-close a {
 	color: @button-font-color;
+}
+
+// The dismissable wrapper is the box, so what sits inside it is left plain.
+.mw-dismissable-notice #localNotice {
+	min-height: 0;
+	padding: 0;
+	border: 0;
+	margin: 0;
+	background-color: transparent;
+}
+
+#cosmos-pageBody-content .mw-dismissable-notice-body {
+	margin: 0;
 }
 
 #cosmos-pageBody-content {
@@ -2633,16 +2645,6 @@ body h6 {
 
 body:not( .mw-special-Preferences ) #cosmos-pageBody-content {
 	overflow: auto hidden;
-}
-
-#cosmos-siteNotice-closeButton {
-	position: relative;
-	z-index: 2;
-	float: right;
-}
-
-#localNotice {
-	margin-bottom: 11px;
 }
 
 .skin-cosmos-header__button .skin-cosmos-icon-articleAdd {
