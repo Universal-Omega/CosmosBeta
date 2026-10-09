@@ -204,7 +204,8 @@ module.exports = exports = defineComponent( {
 			emit( 'update:modelValue', Object.assign( {}, rail.value, patch ) );
 		}
 
-		// Recent changes and interface modules take their defaults from the wiki, the rest are on and normal
+		// Recent changes and interface modules take their defaults from the wiki.
+		// The rest are on and normal
 		function getModuleDefaults( id ) {
 			const defaults = props.designer.effective.rail;
 
@@ -242,7 +243,9 @@ module.exports = exports = defineComponent( {
 
 		function removeCustomModule( entry ) {
 			update( {
-				customModules: customModules.value.filter( ( custom ) => getModuleId( custom ) !== entry.id ),
+				customModules: customModules.value.filter(
+					( custom ) => getModuleId( custom ) !== entry.id
+				),
 				modules: removeRules( rail.value.modules, entry.id )
 			} );
 		}
