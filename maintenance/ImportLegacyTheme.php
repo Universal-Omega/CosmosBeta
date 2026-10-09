@@ -59,9 +59,14 @@ class ImportLegacyTheme extends LoggedUpdateMaintenance {
 			return LoggedUpdateOutcome::COMPLETE;
 		}
 
+		$user = User::newSystemUser( 'Cosmos ThemeDesigner', [ 'steal' => true ] );
+		if ( $user === null ) {
+			$this->fatalError( 'The Cosmos ThemeDesigner system user could not be created.' );
+		}
+
 		$this->themeStore->save(
 			ThemeSettings::newFromLegacy( $values ),
-			User::newSystemUser( 'Cosmos ThemeDesigner', [ 'steal' => true ] ),
+			$user,
 			'Imported from a theme file'
 		);
 
