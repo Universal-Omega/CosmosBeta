@@ -13,7 +13,11 @@ final readonly class RailModule {
 	public const string ID_RECENT_CHANGES = 'recentchanges';
 
 	/**
+	 * @param string $id
+	 * @param RailModuleType $type
 	 * @param string[] $classes
+	 * @param string|null $header
+	 * @param string $body
 	 * @param array<int, array{html-item: string}> $tools
 	 * @param array<int, array{html-page: string, html-user: string, time: string}> $recentChanges
 	 */
@@ -39,6 +43,10 @@ final readonly class RailModule {
 	}
 
 	/**
+	 * @param string $id
+	 * @param RailModuleType $type
+	 * @param string $class
+	 * @param string $header
 	 * @param array<int, array{html-item: string}> $tools
 	 */
 	public static function newWithTools(
@@ -52,6 +60,7 @@ final readonly class RailModule {
 	}
 
 	/**
+	 * @param RailModuleType $type
 	 * @param array<int, array{html-page: string, html-user: string, time: string}> $entries
 	 */
 	public static function newWithRecentChanges( RailModuleType $type, array $entries ): self {
