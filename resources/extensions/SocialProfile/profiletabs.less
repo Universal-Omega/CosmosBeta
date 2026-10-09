@@ -1,3 +1,5 @@
+@import 'mediawiki.skin.variables.less';
+
 .profile-actions {
 	display: flex;
 	flex-flow: row wrap;
@@ -19,10 +21,10 @@
 	margin: 0;
 	cursor: pointer;
 	float: left;
-	font-size: 0.875rem;
-	font-weight: bold;
+	font-size: @font-size-small;
+	font-weight: @font-weight-bold;
 	text-transform: uppercase;
-	transition: filter 0.25s ease-out;
+	transition: filter @transition-duration-medium @transition-timing-function-user;
 }
 
 #profile-right {

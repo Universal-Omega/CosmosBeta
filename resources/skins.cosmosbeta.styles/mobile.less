@@ -1,4 +1,6 @@
 // stylelint-disable declaration-no-important
+@import 'mediawiki.skin.variables.less';
+
 .skin-cosmos-header__sitename a,
 .skin-cosmos-header__navigation,
 .skin-cosmos-header__wordmark,
@@ -12,9 +14,9 @@
 
 #cosmos-toolbar {
 	position: static;
-	width: 100%;
+	width: @size-full;
 	max-width: unset;
-	padding: 5px;
+	padding: @spacing-30;
 	border-radius: 0;
 }
 
@@ -56,19 +58,19 @@ div.thumb {
 
 	/* Keep images from overflowing */
 	a > img {
-		max-width: 100% !important;
+		max-width: @size-full !important;
 		height: auto !important;
 	}
 }
 
 #mw-content {
-	padding: 0 20px;
+	padding: 0 @spacing-125;
 }
 
 /* Table of contents */
 .toc,
 .mw-warning {
-	width: 100%;
+	width: @size-full;
 	box-sizing: border-box;
 }
 
@@ -88,7 +90,7 @@ div.thumb {
 	overflow: auto;
 	max-height: 300px;
 	padding: 7px 0;
-	border: 1px solid #ccc;
+	border: @border-width-base solid #ccc;
 	border-radius: 4px;
 	background-color: #fff;
 	box-shadow: 0 8px 16px 0 rgba( 0, 0, 0, 0.3 );
@@ -97,7 +99,7 @@ div.thumb {
 		margin: 0 9px;
 
 		.skin-cosmos-nav__label {
-			border-bottom: 1px solid #eee;
+			border-bottom: @border-width-base solid #eee;
 		}
 	}
 }
@@ -130,8 +132,8 @@ div.thumb {
 }
 
 .skin-cosmos-mobile-menu__button {
-	font-size: 1.125rem;
-	font-weight: bold;
+	font-size: @font-size-large;
+	font-weight: @font-weight-bold;
 	transform: scale( 1.4, 1 );
 }
 
@@ -173,7 +175,7 @@ div.thumb {
 }
 
 .skin-cosmos-navigation-preview {
-	border: 1px solid var( --skin-cosmos-border-color );
+	border: @border-width-base solid var( --skin-cosmos-border-color );
 	border-radius: 4px;
 	margin: 1em 0;
 	background-color: var( --skin-cosmos-content-background );
@@ -227,18 +229,18 @@ div.thumb {
 /* Smaller default and rounded buttons, the slim and text styles have their own sizes */
 body:not( .skin-cosmos-buttons--slim ):not( .skin-cosmos-buttons--text ) #cosmos-articleHeader-actions {
 	.skin-cosmos-button {
-		height: 20px;
-		padding: 5px 12px;
-		font-size: 0.75rem;
+		height: @size-125;
+		padding: @spacing-30 @spacing-75;
+		font-size: @font-size-x-small;
 	}
 
 	.skin-cosmos-button__icon {
-		width: 16px;
-		height: 16px;
-		margin: 0 4px 0 -2px;
+		width: @size-100;
+		height: @size-100;
+		margin: 0 @spacing-25 0 -2px;
 	}
 
 	#cosmos-actionsList-button {
-		padding: 5px 8px;
+		padding: @spacing-30 @spacing-50;
 	}
 }

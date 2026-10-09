@@ -1,9 +1,11 @@
-.mainpage .skin-cosmos-rail {
+@import 'mediawiki.skin.variables.less';
+
+.skin-cosmos-is-main-page .skin-cosmos-rail {
 	display: none;
 }
 
-.mainpage #cosmos-pageBody-content {
-	width: 100%;
+.skin-cosmos-is-main-page #cosmos-pageBody-content {
+	width: @size-full;
 }
 
 .main-page-tag-rcs {
@@ -20,14 +22,14 @@
 
 .main-page-tag-lcs-exploded {
 	position: relative;
-	width: 100%;
+	width: @size-full;
 	float: left;
 }
 
 @media only screen and ( max-width: 1083px ) {
 	.main-page-tag-lcs-exploded,
 	.lcs-container {
-		width: 100%;
+		width: @size-full;
 	}
 }
 
@@ -46,7 +48,7 @@
 @media only screen and ( max-width: 1023px ) {
 	.main-page-tag-rcs {
 		width: auto;
-		padding: 13px 10px 0;
+		padding: 13px @spacing-65 0;
 		clear: both;
 		-moz-column-count: 2;
 		-webkit-column-count: 2;
