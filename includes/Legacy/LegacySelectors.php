@@ -10,7 +10,6 @@ namespace MediaWiki\Skin\Cosmos\Legacy;
 final class LegacySelectors {
 
 	public const array CLASSES = [
-		'CosmosRail' => 'skin-cosmos-rail',
 		'articleProposals' => 'skin-cosmos-article-proposals',
 		'contributions-details' => 'skin-cosmos-profile__tally',
 		'cosmos-actions-edit' => 'skin-cosmos-button--edit',
@@ -65,6 +64,7 @@ final class LegacySelectors {
 		'cosmos-typeahead-search' => 'skin-cosmos-typeahead-search',
 		'cosmos-userButton-label' => 'skin-cosmos-personal-tools__user-label',
 		'cosmos-userOptions-personalTools' => 'skin-cosmos-personal-tools',
+		'CosmosRail' => 'skin-cosmos-rail',
 		'create-page-dialog__button' => 'skin-cosmos-create-dialog__button',
 		'create-page-dialog__close' => 'skin-cosmos-create-dialog__close',
 		'create-page-dialog__proposals' => 'skin-cosmos-create-dialog__proposals',
