@@ -90,10 +90,7 @@ class SpecialAdminDashboard extends SpecialPage {
 		$out->addHTML( $this->templateParser->processTemplate( 'AdminDashboard', $this->getTemplateData( $tab ) ) );
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function getTemplateData( DashboardTab $tab ): array {
 		$controls = $this->controlRegistry->getControls( $this->getUser(), $this );
 		return [
@@ -109,7 +106,6 @@ class SpecialAdminDashboard extends SpecialPage {
 	/**
 	 * @param DashboardControl[] $controls
 	 * @return list<array<string, mixed>>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	private function getSections( array $controls ): array {
 		$sections = [];
@@ -132,10 +128,7 @@ class SpecialAdminDashboard extends SpecialPage {
 		return $sections;
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function getControlData( DashboardControl $control ): array {
 		return [
 			'id' => $control->id,
@@ -150,7 +143,6 @@ class SpecialAdminDashboard extends SpecialPage {
 	/**
 	 * @param DashboardControl[] $controls
 	 * @return list<array<string, mixed>>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	private function getGroups( array $controls ): array {
 		$excluded = array_values( array_filter( array_map(
@@ -165,7 +157,6 @@ class SpecialAdminDashboard extends SpecialPage {
 				'id' => $group,
 				'title' => $message->exists() ? $message->text() : $group,
 				'array-links' => array_map(
-					// @phan-suppress-next-line PhanPluginMoreSpecificActualReturnType
 					static fn ( array $page ): array => [
 						'url' => $page['url'],
 						'text' => $page['text'],
@@ -179,10 +170,7 @@ class SpecialAdminDashboard extends SpecialPage {
 		return $groups;
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function getStatsData( DashboardStats $stats ): array {
 		$language = $this->getLanguage();
 		$format = $this->msg( 'cosmos-admindashboard-stats-date-format' )->plain();
@@ -206,7 +194,6 @@ class SpecialAdminDashboard extends SpecialPage {
 			'msg-uploads' => $this->msg( 'cosmos-admindashboard-stats-uploads' )->text(),
 			'msg-week' => $this->msg( 'cosmos-admindashboard-stats-week' )->text(),
 			'array-totals' => array_values( array_map(
-				// @phan-suppress-next-line PhanPluginMoreSpecificActualReturnType
 				fn ( string $id, int $value ): array => [
 					'id' => $id,
 					'label' => $this->msg( "cosmos-admindashboard-stats-total-$id" )->text(),
@@ -216,7 +203,6 @@ class SpecialAdminDashboard extends SpecialPage {
 				$totals
 			) ),
 			'array-days' => array_map(
-				// @phan-suppress-next-line PhanPluginMoreSpecificActualReturnType
 				static fn ( $day ): array => [
 					'date' => $language->sprintfDate( $format, $day->day . '000000' ),
 					'edits' => $number( $day->edits ),
