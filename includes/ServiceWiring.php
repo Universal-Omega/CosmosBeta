@@ -31,6 +31,7 @@ use Wikimedia\Assert\Assert;
 // It is covered though, see ServiceWiringTest.
 // @codeCoverageIgnoreStart
 
+/** @phpcs-require-sorted-array */
 return [
 	'Cosmos.AdminDashboardControls' => static function ( MediaWikiServices $services ): DashboardControlRegistry {
 		return new DashboardControlRegistry(
