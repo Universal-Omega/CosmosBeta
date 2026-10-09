@@ -31,6 +31,7 @@ use function strlen;
 use function strtolower;
 use function substr;
 use function trim;
+use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 
@@ -146,6 +147,10 @@ class ThemeSettings {
 		], 0 );
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	public static function getDefaults(): array {
 		return [
 			'version' => self::SCHEMA_VERSION,
@@ -290,7 +295,10 @@ class ThemeSettings {
 
 		$extensions = $raw['extensions'] ?? [];
 		if ( is_array( $extensions ) ) {
-			$data['extensions']['portableInfoboxEuropa'] = self::toBool( $extensions['portableInfoboxEuropa'] ?? null, null );
+			$data['extensions']['portableInfoboxEuropa'] = self::toBool(
+				$extensions['portableInfoboxEuropa'] ?? null,
+				null
+			);
 		}
 
 		$rail = $raw['rail'] ?? [];
@@ -307,7 +315,7 @@ class ThemeSettings {
 	}
 
 	/**
-	 * @return int[]|null Null when the value is not a list, so the wiki default applies
+	 * @return ?list<int> Null when the value is not a list, so the wiki default applies
 	 */
 	private static function normalizeNamespaceList( mixed $value ): ?array {
 		if ( !is_array( $value ) ) {
@@ -325,7 +333,7 @@ class ThemeSettings {
 	}
 
 	/**
-	 * @return string[]|null Null when the value is not a list, so the wiki default applies
+	 * @return ?list<non-empty-string> Null when the value is not a list, so the wiki default applies
 	 */
 	private static function normalizePageList( mixed $value ): ?array {
 		if ( !is_array( $value ) ) {
@@ -346,7 +354,8 @@ class ThemeSettings {
 	/**
 	 * Keeps only the rules a module really sets, keyed by module id.
 	 *
-	 * @return array<string, array>
+	 * @return array<string, array<string, mixed>>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
 	 */
 	private static function normalizeRailModules( array $rail ): array {
 		$raw = is_array( $rail['modules'] ?? null ) ? $rail['modules'] : [];
@@ -376,9 +385,12 @@ class ThemeSettings {
 		return is_string( $value ) ? RailModuleType::tryFrom( $value ) : null;
 	}
 
+	/**
+	 * @return array<string, mixed>
+	 * @suppress PhanPluginMoreSpecificActualReturnType
+	 */
 	private static function normalizeRailRules( array $raw ): array {
 		$rules = [];
-
 		$enabled = self::toBool( $raw['enabled'] ?? null, null );
 		if ( $enabled !== null ) {
 			$rules['enabled'] = $enabled;
@@ -537,7 +549,7 @@ class ThemeSettings {
 	}
 
 	public function toJson(): string {
-		return json_encode( $this->data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+		return json_encode( $this->data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR );
 	}
 
 	public function getRevisionId(): int {
@@ -586,12 +598,19 @@ class ThemeSettings {
 		}
 
 		$images = &$data['images'];
-		foreach ( [ 'wordmark' => $defaults->wordmark, 'header' => $defaults->headerImage, 'background' => $defaults->backgroundImage ] as $key => $value ) {
+		$fallbacks = [
+			'wordmark' => $defaults->wordmark,
+			'header' => $defaults->headerImage,
+			'background' => $defaults->backgroundImage,
+		];
+		foreach ( $fallbacks as $key => $value ) {
 			$images[$key] = $images[$key] !== '' ? $images[$key] : self::normalizeImage( $value );
 		}
 
 		$images['backgroundSize'] = $images['backgroundSize'] !== '' ? $images['backgroundSize'] :
-			( in_array( $defaults->backgroundSize, self::BACKGROUND_SIZES, true ) ? $defaults->backgroundSize : 'cover' );
+			( in_array( $defaults->backgroundSize, self::BACKGROUND_SIZES, true )
+				? $defaults->backgroundSize
+				: 'cover' );
 		$images['backgroundRepeat'] ??= $defaults->backgroundRepeat;
 		$images['backgroundFixed'] ??= $defaults->backgroundFixed;
 		unset( $images );
@@ -606,14 +625,15 @@ class ThemeSettings {
 		$data['rail']['disabledNamespaces'] ??= $defaults->railDisabledNamespaces;
 		$data['rail']['disabledPages'] ??= $defaults->railDisabledPages;
 
-		$modules = $data['rail']['modules'];
+		$rail = $data['rail'];
+		$modules = $rail['modules'] ?? [];
 		$modules[RailModule::ID_RECENT_CHANGES] = array_merge(
 			[ 'enabled' => $defaults->recentChanges, 'type' => $defaults->recentChangesType->value ],
 			$modules[RailModule::ID_RECENT_CHANGES] ?? []
 		);
 
 		$custom = [];
-		foreach ( $data['rail']['customModules'] as $module ) {
+		foreach ( $rail['customModules'] ?? [] as $module ) {
 			$custom[$module['id']] = $module;
 		}
 
