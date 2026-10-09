@@ -21,8 +21,8 @@ final readonly class RailRules {
 	public function __construct(
 		public ?bool $enabled,
 		public ?RailModuleType $type,
-		public ?array $disabledNamespaces,
-		public ?array $disabledPages,
+		private ?array $disabledNamespaces,
+		private ?array $disabledPages,
 	) {
 	}
 
