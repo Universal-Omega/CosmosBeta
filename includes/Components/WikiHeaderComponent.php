@@ -44,10 +44,7 @@ class WikiHeaderComponent {
 		return $canRead ? $data + $this->getButtons( !$user->isNamed() ) : $data;
 	}
 
-	/**
-	 * @return array<string, mixed>
-	 * @suppress PhanPluginMoreSpecificActualReturnType
-	 */
+	/** @return array<string, mixed> */
 	private function getButtons( bool $isAnon ): array {
 		$user = $this->context->getUser();
 		$can = fn ( string $right ): bool => $this->permissionManager->userHasRight( $user, $right );
