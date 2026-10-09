@@ -1,4 +1,6 @@
 // stylelint-disable plugin/no-unsupported-browser-features
+@import 'mediawiki.skin.variables.less';
+
 .skin-cosmos-themedesigner {
 	max-width: 1100px;
 }
@@ -6,7 +8,7 @@
 .skin-cosmos-themedesigner__layout {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 24px;
+	gap: @spacing-150;
 }
 
 .skin-cosmos-themedesigner__panel {
@@ -20,19 +22,19 @@
 }
 
 .skin-cosmos-themedesigner .cdx-tabs__header {
-	margin-bottom: 12px;
+	margin-bottom: @spacing-75;
 }
 
 .skin-cosmos-themedesigner__filefield {
 	display: grid;
-	gap: 8px;
+	gap: @spacing-50;
 }
 
 .skin-cosmos-themedesigner__filefield-row {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;
-	gap: 8px;
+	gap: @spacing-50;
 }
 
 .skin-cosmos-themedesigner__filefield-lookup {
@@ -48,25 +50,25 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	margin-bottom: 8px;
-	gap: 8px;
+	margin-bottom: @spacing-50;
+	gap: @spacing-50;
 }
 
 .skin-cosmos-themedesigner__alpha {
-	margin-top: 6px;
+	margin-top: @spacing-35;
 	font-size: 0.9em;
 }
 
 .skin-cosmos-themedesigner__colorinputs {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: @spacing-50;
 
 	input[ type='color' ] {
-		width: 44px;
-		height: 32px;
+		width: @size-275;
+		height: @size-200;
 		padding: 0;
-		border: 1px solid #a2a9b1;
+		border: @border-width-base solid #a2a9b1;
 		background: none;
 		cursor: pointer;
 	}
@@ -80,7 +82,7 @@
 .skin-cosmos-themedesigner__range {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: @spacing-65;
 
 	input {
 		flex: 1;
@@ -99,20 +101,20 @@
 
 .skin-cosmos-themedesigner__presets {
 	display: grid;
-	gap: 10px;
+	gap: @spacing-65;
 	grid-template-columns: repeat( auto-fill, minmax( 150px, 1fr ) );
 }
 
 .skin-cosmos-themedesigner__preset {
 	display: flex;
 	flex-direction: column;
-	padding: 10px;
-	border: 2px solid #c8ccd1;
+	padding: @spacing-65;
+	border: @border-width-thick solid #c8ccd1;
 	border-radius: 6px;
 	background: #fff;
 	color: #202122;
 	cursor: pointer;
-	gap: 6px;
+	gap: @spacing-35;
 	text-align: left;
 
 	&.skin-cosmos-is-active {
@@ -123,19 +125,19 @@
 .skin-cosmos-themedesigner__preset-swatches {
 	display: flex;
 	overflow: hidden;
-	width: 100%;
+	width: @size-full;
 	height: 22px;
 	border-radius: 4px;
 }
 
 .skin-cosmos-themedesigner__swatch {
-	min-width: 20px;
+	min-width: @size-125;
 	height: 22px;
 	flex: 1 0 20px;
 }
 
 .skin-cosmos-themedesigner__preset-name {
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 }
 
 .skin-cosmos-themedesigner__preset-mode {
@@ -145,20 +147,20 @@
 
 .skin-cosmos-themedesigner__fonts {
 	display: grid;
-	gap: 10px;
+	gap: @spacing-65;
 	grid-template-columns: repeat( auto-fill, minmax( 130px, 1fr ) );
 }
 
 .skin-cosmos-themedesigner__font {
 	display: flex;
 	flex-direction: column;
-	padding: 10px 12px;
-	border: 2px solid #c8ccd1;
+	padding: @spacing-65 @spacing-75;
+	border: @border-width-thick solid #c8ccd1;
 	border-radius: 6px;
 	background: #fff;
 	color: #202122;
 	cursor: pointer;
-	gap: 4px;
+	gap: @spacing-25;
 	text-align: left;
 
 	&.skin-cosmos-is-active {
@@ -180,39 +182,39 @@
 }
 
 .skin-cosmos-themedesigner__font-preview {
-	padding: 12px;
-	border: 1px solid #c8ccd1;
+	padding: @spacing-75;
+	border: @border-width-base solid #c8ccd1;
 	border-radius: 6px;
-	margin: 12px 0 0;
+	margin: @spacing-75 0 0;
 	background: #fff;
 	color: #202122;
 	font-size: 1.15em;
 }
 
 .skin-cosmos-themedesigner__rail-heading {
-	margin: 24px 0 4px;
+	margin: @spacing-150 0 @spacing-25;
 	font-size: 1.1em;
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 }
 
 .skin-cosmos-themedesigner__rail-modules {
 	display: grid;
-	margin-bottom: 8px;
-	gap: 8px;
+	margin-bottom: @spacing-50;
+	gap: @spacing-50;
 }
 
 .skin-cosmos-themedesigner__rail-module .cdx-field {
-	margin-top: 12px;
+	margin-top: @spacing-75;
 }
 
 .skin-cosmos-themedesigner__rail-origin {
-	padding: 1px 8px;
+	padding: @spacing-6 @spacing-50;
 	border-radius: 999px;
-	margin-left: 8px;
+	margin-left: @spacing-50;
 	background: #eaecf0;
 	color: #54595d;
 	font-size: 0.8em;
-	font-weight: normal;
+	font-weight: @font-weight-normal;
 }
 
 .skin-cosmos-themedesigner__history {
@@ -223,18 +225,18 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		padding: 8px 0;
-		border-bottom: 1px solid #eaecf0;
-		gap: 4px 10px;
+		padding: @spacing-50 0;
+		border-bottom: @border-width-base solid #eaecf0;
+		gap: @spacing-25 @spacing-65;
 	}
 }
 
 .skin-cosmos-themedesigner__history-main {
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 }
 
 .skin-cosmos-themedesigner__badge {
-	padding: 1px 8px;
+	padding: @spacing-6 @spacing-50;
 	border-radius: 999px;
 	background: #14866d;
 	color: #fff;
@@ -245,7 +247,7 @@
 	position: sticky;
 	top: 12px;
 	overflow: hidden;
-	border: 1px solid #a2a9b1;
+	border: @border-width-base solid #a2a9b1;
 	border-radius: 6px;
 	font-size: 0.8125rem;
 }
@@ -254,46 +256,46 @@
 .skin-cosmos-themedesigner__preview-header,
 .skin-cosmos-themedesigner__preview-footer,
 .skin-cosmos-themedesigner__preview-toolbar {
-	padding: 8px 12px;
+	padding: @spacing-50 @spacing-75;
 }
 
 .skin-cosmos-themedesigner__preview-body {
 	display: flex;
-	padding: 10px;
-	gap: 8px;
+	padding: @spacing-65;
+	gap: @spacing-50;
 }
 
 .skin-cosmos-themedesigner__preview-main {
 	flex: 3;
-	padding: 10px;
+	padding: @spacing-65;
 }
 
 .skin-cosmos-themedesigner__preview-rail {
 	flex: 1;
-	padding: 10px;
+	padding: @spacing-65;
 	font-size: 0.85em;
 }
 
 .skin-cosmos-themedesigner__preview-rail-tools {
-	padding: 4px 6px;
+	padding: @spacing-25 @spacing-35;
 	border-radius: 3px;
-	margin-top: 6px;
+	margin-top: @spacing-35;
 }
 
 .skin-cosmos-themedesigner__preview-heading {
-	margin-bottom: 4px;
+	margin-bottom: @spacing-25;
 	font-size: 1.3em;
-	font-weight: bold;
+	font-weight: @font-weight-bold;
 }
 
 .skin-cosmos-themedesigner__preview-link {
-	margin: 6px 0;
+	margin: @spacing-35 0;
 	text-decoration: underline;
 }
 
 .skin-cosmos-themedesigner__preview-button {
 	display: inline-block;
-	padding: 4px 12px;
+	padding: @spacing-25 @spacing-75;
 	border-radius: 3px;
 }
 
@@ -302,13 +304,13 @@
 }
 
 .skin-cosmos-themedesigner__preview-toolbar--floating {
-	width: fit-content;
+	width: @size-content-fit;
 	border-radius: 999px;
-	margin: 0 10px 10px auto;
+	margin: 0 @spacing-65 @spacing-65 auto;
 }
 
 .skin-cosmos-themedesigner__advanced {
-	margin-top: 20px;
+	margin-top: @spacing-125;
 
 	textarea {
 		font-family: monospace;
@@ -318,8 +320,8 @@
 .skin-cosmos-themedesigner__publish {
 	display: flex;
 	flex-wrap: wrap;
-	margin-top: 16px;
-	gap: 8px;
+	margin-top: @spacing-100;
+	gap: @spacing-50;
 
 	.cdx-text-input {
 		flex: 1 1 260px;
@@ -327,5 +329,5 @@
 }
 
 .skin-cosmos-themedesigner__reset {
-	margin-inline-start: 8px;
+	margin-inline-start: @spacing-50;
 }
