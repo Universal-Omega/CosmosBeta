@@ -13,8 +13,10 @@ use function in_array;
 final readonly class RailRules {
 
 	/**
-	 * @param string[]|null $disabledPages Full page names, or "mainpage" for the main page
+	 * @param bool|null $enabled
+	 * @param RailModuleType|null $type
 	 * @param int[]|null $disabledNamespaces
+	 * @param string[]|null $disabledPages Full page names, or "mainpage" for the main page
 	 */
 	public function __construct(
 		public ?bool $enabled,
@@ -40,6 +42,7 @@ final readonly class RailRules {
 	/**
 	 * A list of its own replaces the rail wide one, so an empty list shows the module everywhere.
 	 *
+	 * @param Title $title
 	 * @param int[] $defaultNamespaces Rail wide namespaces without a rail
 	 * @param string[] $defaultPages Rail wide pages without a rail
 	 */
