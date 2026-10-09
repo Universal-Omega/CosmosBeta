@@ -21,6 +21,7 @@ use function round;
 use function sprintf;
 use function strtolower;
 
+/** @suppress PhanAccessClassInternal */
 class CosmosResourceLoaderModule extends SkinModule {
 
 	private readonly bool $isAlt;
@@ -60,7 +61,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		];
 
 		foreach ( $urls as $url ) {
-			if ( $url ) {
+			if ( $url !== null && $url !== '' ) {
 				$preloadLinks[$url] = [ 'as' => 'image' ];
 			}
 		}
@@ -71,7 +72,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 	/** @inheritDoc */
 	protected function getLessVars( Context $context ): array {
 		$lessVars = parent::getLessVars( $context );
-
 		$mode = $this->isAlt ? $this->theme->getAltMode() : $this->theme->getDefaultMode();
 
 		$mainBackground = $this->backgroundLookup->getMainBackgroundUrl();
@@ -84,15 +84,21 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['banner-background-color'] = $bannerColor;
 
 		[ $br, $bg, $bb, $ba ] = $this->resolveColor( $bannerColor );
-		$lessVars['banner-background-color-fallback'] = $this->getFallbackColor( $br, $bg, $bb, $ba, $this->theme->getBackdropBlur() );
+		$lessVars['banner-background-color-fallback'] = $this->getFallbackColor(
+			$br,
+			$bg,
+			$bb,
+			$ba,
+			$this->theme->getBackdropBlur()
+		);
 
-		if ( $mainBackground ) {
+		if ( $mainBackground !== null && $mainBackground !== '' ) {
 			$lessVars['main-background-image'] = CSSMin::buildUrlValue( $mainBackground );
 		} else {
 			$lessVars['main-background-image'] = 0;
 		}
 
-		if ( $wikiHeaderBackground ) {
+		if ( $wikiHeaderBackground !== null && $wikiHeaderBackground !== '' ) {
 			$lessVars['wiki-header-background-image'] = CSSMin::buildUrlValue( $wikiHeaderBackground );
 		} else {
 			$lessVars['wiki-header-background-image'] = 0;
@@ -103,8 +109,8 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['main-background-image-size'] = $this->theme->getBackgroundImageSize();
 
 		$contentWidth = $this->theme->getContentWidth();
-		$lessVars['content-width-1084'] = $contentWidth === 'auto' ? 'auto' : 1024 + $contentWidth . 'px';
-		$lessVars['content-width-1596'] = $contentWidth === 'auto' ? 'auto' : 1178 + $contentWidth . 'px';
+		$lessVars['content-width-1084'] = $contentWidth === 'auto' ? 'auto' : 1024 + (int)$contentWidth . 'px';
+		$lessVars['content-width-1596'] = $contentWidth === 'auto' ? 'auto' : 1178 + (int)$contentWidth . 'px';
 
 		$fontUrl = $this->fontLookup->getUrl( $this->theme->getFont()->getFileName() );
 		$lessVars['font-family'] = $this->theme->getFontFamily( $fontUrl !== null );
@@ -167,7 +173,9 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['header-background-color2'] = "$rightGradient,$leftGradient";
 
 		$lessVars['header-background-solid-color'] = $headerBackgroundColor;
-		$lessVars['header-font-color'] = $this->lessUtil->isDark( 'header', $mode, LessUtil::CHROME_THRESHOLD ) ? '#fff' : '#000';
+		$lessVars['header-font-color'] = $this->lessUtil->isDark( 'header', $mode, LessUtil::CHROME_THRESHOLD )
+			? '#fff'
+			: '#000';
 
 		return array_merge(
 			$lessVars,
@@ -183,7 +191,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 	 */
 	private function getFallbackColor( int $r, int $g, int $b, float $alpha, int $blur ): string {
 		$boosted = $blur > 0 ? $alpha + ( 1 - $alpha ) * 0.6 : $alpha;
-		return sprintf( 'rgba(%d, %d, %d, %s)', $r, $g, $b, round( $boosted, 3 ) );
+		return sprintf( 'rgba(%d, %d, %d, %s)', $r, $g, $b, (string)round( $boosted, 3 ) );
 	}
 
 	private function getToolbarFallback( string $color ): string {
@@ -200,6 +208,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		return array_values( LessUtil::parseColor( $color ) ?? [ 'r' => 0, 'g' => 0, 'b' => 0, 'a' => 0.0 ] );
 	}
 
+	/** @return array<string, int|string> */
 	private function getToolbarVars( string $mode ): array {
 		$toolbarBackgroundColor = $this->theme->getColor( 'toolbar', $mode );
 		return [
@@ -209,11 +218,14 @@ class CosmosResourceLoaderModule extends SkinModule {
 				in_array( strtolower( $toolbarBackgroundColor ), [ '#000', '#000000', 'black' ], true ) ?
 					'#404040' :
 					'#000',
-			'toolbar-font-color' => $this->lessUtil->isDark( 'toolbar', $mode, LessUtil::CHROME_THRESHOLD ) ? '#fff' : '#000',
+			'toolbar-font-color' => $this->lessUtil->isDark( 'toolbar', $mode, LessUtil::CHROME_THRESHOLD )
+				? '#fff'
+				: '#000',
 			'toolbar-icon-invert' => $this->lessUtil->isDark( 'toolbar', $mode, LessUtil::CHROME_THRESHOLD ) ? 1 : 0,
 		];
 	}
 
+	/** @return array<string, int|string> */
 	private function getContentVars( string $mode ): array {
 		$isContentBackgroundColorDark = $this->lessUtil->isDark( 'content', $mode, LessUtil::CONTENT_THRESHOLD );
 		return [
@@ -229,6 +241,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		];
 	}
 
+	/** @return array<string, int|string> */
 	private function getBannerVars( string $mode ): array {
 		$isBannerBackgroundColorDark = $this->lessUtil->isDark( 'banner', $mode, LessUtil::CHROME_THRESHOLD );
 		return [
@@ -246,6 +259,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 		];
 	}
 
+	/** @return array<string, string> */
 	private function getButtonVars( string $mode ): array {
 		$isButtonBackgroundColorDark = $this->lessUtil->isDark( 'button', $mode, LessUtil::CHROME_THRESHOLD );
 		return [
