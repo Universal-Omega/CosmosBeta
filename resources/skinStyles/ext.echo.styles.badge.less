@@ -16,7 +16,7 @@
 		}
 
 		li {
-			margin: 4px 0.4em 0 0;
+			margin: @spacing-25 0.4em 0 0;
 			float: left;
 		}
 	}
@@ -37,7 +37,7 @@
 		 * Remove all of this once the underlying OOUI issue is fixed in general for mobile displays.
 		 */
 		.mw-echo-ui-overlay {
-			margin: 0 10px;
+			margin: 0 @spacing-65;
 
 			.oo-ui-popupWidget-anchored > .oo-ui-popupWidget-anchor {
 				display: none;
@@ -46,7 +46,7 @@
 			.mw-echo-ui-notificationBadgeButtonPopupWidget-popup {
 				// stylelint-disable-next-line declaration-no-important
 				left: 0 !important;
-				width: 100%;
+				width: @size-full;
 
 				.oo-ui-popupWidget-popup {
 					// stylelint-disable-next-line declaration-no-important
@@ -55,7 +55,7 @@
 
 					.oo-ui-clippableElement-clippable {
 						// stylelint-disable-next-line declaration-no-important
-						width: 100% !important;
+						width: @size-full !important;
 					}
 				}
 			}
@@ -92,8 +92,8 @@
 // stylelint-disable-next-line plugin/no-unsupported-browser-features
 #cosmos-notification-icons {
 	display: flex;
-	height: 100%;
-	padding: 5px 18px 5px 2px;
+	height: @size-full;
+	padding: @spacing-30 18px @spacing-30 @spacing-12;
 	gap: 22px;
 	list-style: none;
 	place-items: center center;
