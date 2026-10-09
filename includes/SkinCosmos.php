@@ -9,7 +9,7 @@ use CookieWarning\Hooks as CookieWarningHooks;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\LanguageCode;
-use MediaWiki\Languages\LanguageNameUtils;
+use MediaWiki\Language\LanguageNameUtils;
 use MediaWiki\Permissions\PermissionManager;
 use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Cosmos\Components\BannerComponent;
@@ -265,18 +265,21 @@ class SkinCosmos extends SkinMustache {
 		return $modules;
 	}
 
+	/** @return ?non-empty-string */
 	private function getCookieWarning(): ?string {
 		if ( $this->cookieWarningDecisions === null ) {
 			return null;
 		}
 
 		$hooks = new CookieWarningHooks(
+			// @phan-suppress-next-line PhanTypeMismatchArgument
 			$this->getConfig(),
 			$this->cookieWarningDecisions,
 			$this->userOptionsManager
 		);
 
 		$html = '';
+		// @phan-suppress-next-line PhanTypeMismatchArgument
 		$hooks->onSkinAfterContent( $html, $this );
 		return $html !== '' ? $html : null;
 	}
