@@ -6,6 +6,7 @@ namespace MediaWiki\Skin\Cosmos\AdminDashboard;
 
 use MediaWiki\RecentChanges\RecentChange;
 use MediaWiki\SiteStats\SiteStats;
+use stdClass;
 use Wikimedia\ObjectCache\WANObjectCache;
 use Wikimedia\Rdbms\IConnectionProvider;
 use Wikimedia\Timestamp\ConvertibleTimestamp;
@@ -55,11 +56,20 @@ final readonly class AdminDashboardStats {
 		$day = $dbr->buildSubString( 'rc_timestamp', 1, 8 );
 
 		$res = $dbr->newSelectQueryBuilder()
-			->select( [ 'day' => $day, 'rc_source', 'rc_log_type', 'total' => 'COUNT(*)' ] )
+			->select( [
+				'day' => $day,
+				'rc_source' => 'rc_source',
+				'rc_log_type' => 'rc_log_type',
+				'total' => 'COUNT(*)',
+			] )
 			->from( 'recentchanges' )
 			->where( [
 				$dbr->expr( 'rc_timestamp', '>=', $dbr->timestamp( $days[self::DAYS - 1] . '000000' ) ),
-				$dbr->expr( 'rc_source', '=', [ RecentChange::SRC_EDIT, RecentChange::SRC_NEW, RecentChange::SRC_LOG ] ),
+				$dbr->expr(
+					'rc_source',
+					'=',
+					[ RecentChange::SRC_EDIT, RecentChange::SRC_NEW, RecentChange::SRC_LOG ]
+				),
 			] )
 			->groupBy( [ $day, 'rc_source', 'rc_log_type' ] )
 			->caller( __METHOD__ )
@@ -68,6 +78,10 @@ final readonly class AdminDashboardStats {
 		$activity = array_fill_keys( $days, [ 'edits' => 0, 'newPages' => 0, 'uploads' => 0 ] );
 
 		foreach ( $res as $row ) {
+			if ( !$row instanceof stdClass ) {
+				continue;
+			}
+
 			if ( !isset( $activity[$row->day] ) ) {
 				continue;
 			}
