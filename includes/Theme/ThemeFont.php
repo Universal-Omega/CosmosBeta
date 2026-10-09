@@ -22,9 +22,9 @@ use const PATHINFO_EXTENSION;
 
 final readonly class ThemeFont {
 
-	public const string PRESET = 'preset';
-	public const string FILE = 'file';
-	public const string CUSTOM = 'custom';
+	private const string PRESET = 'preset';
+	private const string FILE = 'file';
+	private const string CUSTOM = 'custom';
 
 	public const string FILE_FAMILY = 'Cosmos Uploaded Font';
 
