@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skin\Cosmos\Hooks\Handlers;
 
+use MediaWiki\Actions\ActionEntryPoint;
 use MediaWiki\Content\WikitextContent;
 use MediaWiki\Context\IContextSource;
 use MediaWiki\Hook\AlternateEditPreviewHook;
@@ -16,6 +17,7 @@ use MediaWiki\Skin\Cosmos\CosmosNavigation;
 use MediaWiki\Skin\Cosmos\SkinCosmos;
 use MediaWiki\Title\Title;
 use MediaWiki\Title\TitleFactory;
+use MediaWiki\User\User;
 use function trim;
 use const NS_MEDIAWIKI;
 
@@ -57,7 +59,8 @@ class Navigation implements
 
 	/**
 	 * @inheritDoc
-	 * @suppress PhanUnusedPublicMethodParameter
+	 * @param User $user @phan-unused-param
+	 * @param ActionEntryPoint $mediaWikiEntryPoint @phan-unused-param
 	 */
 	public function onBeforeInitialize(
 		$title,
@@ -66,7 +69,7 @@ class Navigation implements
 		$output,
 		$user,
 		$request,
-		$mediaWiki
+		$mediaWikiEntryPoint
 	): void {
 		if ( $output->getSkin() instanceof SkinCosmos && $this->isNavigationPage( $title ) ) {
 			$request->setVal( 'wteswitched', '1' );
@@ -75,7 +78,8 @@ class Navigation implements
 
 	/**
 	 * @inheritDoc
-	 * @suppress PhanUnusedPublicMethodParameter
+	 * @param string $title @phan-unused-param
+	 * @param string $text @phan-unused-param
 	 */
 	public function onMessageCacheReplace( $title, $text ): void {
 		$this->navigation->purge();
