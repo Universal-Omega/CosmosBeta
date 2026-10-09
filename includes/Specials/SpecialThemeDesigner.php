@@ -360,13 +360,6 @@ class SpecialThemeDesigner extends SpecialPage {
 			}
 		}
 
-		if ( $this->extensionRegistry->isLoaded( 'CreateRedirect' ) ) {
-			$tools['createredirect'] ??= [
-				'name' => 'createredirect',
-				'label' => $this->msg( 'createredirect' )->text(),
-			];
-		}
-
 		$protected = $this->theme->getFooterProtectedLinks();
 		$links = [];
 		foreach ( [ 'data-info' => 'info', 'data-places' => 'places' ] as $key => $group ) {

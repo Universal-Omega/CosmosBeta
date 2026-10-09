@@ -132,19 +132,6 @@
 		$module.attr( 'style', 'top: ' + ( $top + 60 ) + 'px;' );
 	} );
 
-	/**
-	 * Closes the site notice
-	 */
-	function closeSiteNotice() {
-		const $siteNotice = $( '#cosmos-content-siteNotice' );
-		$siteNotice.remove();
-		mw.cookie.set( 'CosmosSiteNoticeState', 'closed', { expires: 604800 } );
-	}
-
-	$( () => {
-		$( '#cosmos-siteNotice-closeButton' ).on( 'click', closeSiteNotice );
-	} );
-
 	$( () => {
 		if (
 			mw.config.get( 'wgVisualEditorConfig' ) &&

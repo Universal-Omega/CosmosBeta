@@ -26,11 +26,7 @@
 				"LanguageNameUtils",
 				"PermissionManager",
 				"SpecialPageFactory",
-				"TitleFactory",
-				"UserOptionsManager"
-			],
-			"optional_services": [
-				"CookieWarning.Decisions"
+				"TitleFactory"
 			],
 			"args": [
 				{
@@ -179,7 +175,6 @@
 			],
 			"dependencies": [
 				"mediawiki.api",
-				"mediawiki.cookie",
 				"mediawiki.user"
 			],
 			"messages": [

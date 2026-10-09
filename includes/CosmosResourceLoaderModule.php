@@ -263,6 +263,7 @@ class CosmosResourceLoaderModule extends SkinModule {
 	private function getButtonVars( string $mode ): array {
 		$isButtonBackgroundColorDark = $this->lessUtil->isDark( 'button', $mode, LessUtil::CHROME_THRESHOLD );
 		return [
+			'button-style' => $this->theme->getButtonStyle(),
 			'notice-close-button-color' => $isButtonBackgroundColorDark ? 'fff' : '111',
 			'button-font-color' => $isButtonBackgroundColorDark ? '#fff' : '#000',
 		];
