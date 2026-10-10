@@ -117,9 +117,6 @@ class CosmosResourceLoaderModule extends SkinModule {
 		$lessVars['font-file'] = $fontUrl !== null ? CSSMin::buildUrlValue( $fontUrl ) : 0;
 		$lessVars['font-file-family'] = "'" . ThemeFont::FILE_FAMILY . "'";
 		$lessVars['link-color'] = $this->theme->getColor( 'link', $mode );
-		$linkIsDark = $this->lessUtil->isDark( 'link', $mode, LessUtil::CONTENT_THRESHOLD );
-		$lessVars['link-contrast-color'] = $linkIsDark ? '#fff' : '#202122';
-		$lessVars['link-contrast-invert'] = $linkIsDark ? 1 : 0;
 		$lessVars['button-background-color'] = $this->theme->getColor( 'button', $mode );
 
 		if ( $this->theme->getBackgroundImageRepeat() ) {
