@@ -2,6 +2,8 @@
 
 declare( strict_types = 1 );
 
+namespace MediaWiki\Skin\Cosmos;
+
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Context\RequestContext;
@@ -11,10 +13,8 @@ use MediaWiki\MediaWikiServices;
 use MediaWiki\Skin\Cosmos\AdminDashboard\AdminDashboardStats;
 use MediaWiki\Skin\Cosmos\AdminDashboard\AdvancedSectionBuilder;
 use MediaWiki\Skin\Cosmos\AdminDashboard\DashboardControlRegistry;
-use MediaWiki\Skin\Cosmos\CosmosNavigation;
 use MediaWiki\Skin\Cosmos\Hooks\HookRunner;
 use MediaWiki\Skin\Cosmos\Legacy\LegacyConverter;
-use MediaWiki\Skin\Cosmos\LessUtil;
 use MediaWiki\Skin\Cosmos\Lookup\BackgroundLookup;
 use MediaWiki\Skin\Cosmos\Lookup\FontLookup;
 use MediaWiki\Skin\Cosmos\Lookup\WordmarkLookup;
