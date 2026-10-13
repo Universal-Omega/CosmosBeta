@@ -2,7 +2,7 @@
 	<div id="p-tb" class="skin-cosmos-toolbar__tools cosmos-toolbar-tools">
 		<div class="body skin-cosmos-toolbar__list cosmos-tools-list">
 			<ul>
-				{{#array-items}}{{#html-item}}{{{.}}}{{/html-item}}{{#redirect-url}}<li id="t-createredirect"><a href="{{.}}">{{redirect-text}}</a></li>{{/redirect-url}}{{/array-items}}
+				{{#array-items}}{{{html-item}}}{{/array-items}}
 			</ul>
 		</div>
 	</div>

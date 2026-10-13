@@ -227,7 +227,7 @@ div.thumb {
 }
 
 /* Smaller default and rounded buttons, the slim and text styles have their own sizes */
-body:not( .skin-cosmos-buttons--slim ):not( .skin-cosmos-buttons--text ) #cosmos-articleHeader-actions {
+body #cosmos-articleHeader-actions when ( @button-style = default ), ( @button-style = pill ) {
 	.skin-cosmos-button {
 		height: @size-125;
 		padding: @spacing-30 @spacing-75;

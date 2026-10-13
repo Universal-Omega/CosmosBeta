@@ -14,10 +14,9 @@
 						<article id="cosmos-pageBody-content">
 							{{#html-subtitle}}<div id="cosmos-pageContent-subtitle">{{{.}}}</div>{{/html-subtitle}}
 							{{#html-undelete-link}}<div id="cosmos-pageContent-undelete">{{{.}}}</div>{{/html-undelete-link}}
-							{{> SiteNotice}}
+							{{{html-site-notice}}}
 							{{{html-body-content}}}
 							{{#html-categories}}<span id="cosmos-content-categories">{{{.}}}</span>{{/html-categories}}
-							{{#html-after-content}}<span id="cosmos-content-additionalContent">{{{.}}}</span>{{/html-after-content}}
 						</article>
 						{{{html-cosmos-rail}}}
 					</div>
@@ -28,4 +27,4 @@
 	</div>
 </div>
 {{#data-cosmos-toolbar}}{{> Toolbar}}{{/data-cosmos-toolbar}}
-{{{html-cosmos-cookiewarning}}}
+{{{html-after-content}}}

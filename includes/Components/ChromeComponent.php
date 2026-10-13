@@ -4,18 +4,13 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skin\Cosmos\Components;
 
-use MediaWiki\Context\IContextSource;
-use MediaWiki\Registration\ExtensionRegistry;
 use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
-use MediaWiki\SpecialPage\SpecialPage;
 use function in_array;
 
 class ChromeComponent {
 
 	public function __construct(
-		private readonly IContextSource $context,
 		private readonly EffectiveTheme $theme,
-		private readonly ExtensionRegistry $extensionRegistry,
 	) {
 	}
 
@@ -53,26 +48,9 @@ class ChromeComponent {
 			return null;
 		}
 
-		$items = $this->getToolItems( $sidebar );
-
-		if (
-			$this->extensionRegistry->isLoaded( 'CreateRedirect' ) &&
-			!in_array( 'createredirect', $settings['hiddenItems'], true )
-		) {
-			$action = $this->context->getRequest()->getText( 'action', 'view' );
-			$title = $this->context->getTitle();
-			if ( $title !== null && ( $action === 'view' || $action === 'purge' || !$title->isSpecialPage() ) ) {
-				$items[] = [
-					'redirect-url' => SpecialPage::getTitleFor( 'CreateRedirect', $title->getPrefixedText() )
-						->getLocalURL(),
-					'redirect-text' => $this->context->msg( 'createredirect' )->text(),
-				];
-			}
-		}
-
 		return [
 			'style' => $settings['style'],
-			'array-items' => $items,
+			'array-items' => $this->getToolItems( $sidebar ),
 		];
 	}
 

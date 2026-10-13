@@ -4,8 +4,6 @@ declare( strict_types = 1 );
 
 namespace MediaWiki\Skin\Cosmos;
 
-use CookieWarning\Decisions as CookieWarningDecisions;
-use CookieWarning\Hooks as CookieWarningHooks;
 use MediaWiki\Config\Config;
 use MediaWiki\Config\ServiceOptions;
 use MediaWiki\Language\LanguageCode;
@@ -24,11 +22,9 @@ use MediaWiki\Skin\Cosmos\Theme\EffectiveTheme;
 use MediaWiki\Skin\SkinMustache;
 use MediaWiki\SpecialPage\SpecialPageFactory;
 use MediaWiki\Title\TitleFactory;
-use MediaWiki\User\Options\UserOptionsManager;
 use UserProfilePage;
 use function array_merge;
 use function class_exists;
-use function hash;
 
 class SkinCosmos extends SkinMustache {
 
@@ -53,9 +49,7 @@ class SkinCosmos extends SkinMustache {
 		private readonly ServiceOptions $serviceOptions,
 		private readonly SpecialPageFactory $specialPageFactory,
 		private readonly TitleFactory $titleFactory,
-		private readonly UserOptionsManager $userOptionsManager,
 		private readonly WordmarkLookup $wordmarkLookup,
-		private readonly ?CookieWarningDecisions $cookieWarningDecisions,
 		array $options,
 	) {
 		parent::__construct( $options );
@@ -75,8 +69,6 @@ class SkinCosmos extends SkinMustache {
 		PermissionManager $permissionManager,
 		SpecialPageFactory $specialPageFactory,
 		TitleFactory $titleFactory,
-		UserOptionsManager $userOptionsManager,
-		?CookieWarningDecisions $cookieWarningDecisions,
 		array $options
 	): self {
 		return new self(
@@ -95,9 +87,7 @@ class SkinCosmos extends SkinMustache {
 			),
 			$specialPageFactory,
 			$titleFactory,
-			$userOptionsManager,
 			$wordmarkLookup,
-			$cookieWarningDecisions,
 			$options
 		);
 	}
@@ -140,11 +130,7 @@ class SkinCosmos extends SkinMustache {
 			$this->titleFactory
 		);
 
-		$chrome = new ChromeComponent(
-			$context,
-			$this->theme,
-			$this->extensionRegistry
-		);
+		$chrome = new ChromeComponent( $this->theme );
 
 		$this->railBuilder->setSidebarModulesFromPortlets( $sidebar );
 		$toolsInRail = $this->railBuilder->shouldPutToolsInRail();
@@ -155,12 +141,7 @@ class SkinCosmos extends SkinMustache {
 			array_merge( [ $sidebar['data-portlets-first'] ?? [] ], $sidebar['array-portlets-rest'] ?? [] )
 		);
 
-		$siteNotice = $data['html-site-notice'] ?? null;
-		// Core wraps the site notice in its container even when nothing is in it
-		$hasNotice = $siteNotice !== null && $siteNotice !== '<div id="siteNotice"></div>';
 		$search = $this->getSearchData( $data['data-search-box'] ?? [] );
-		$dismissable = $this->extensionRegistry->isLoaded( 'DismissableSiteNotice' );
-		$noticeClosed = $this->getRequest()->getCookie( 'CosmosSiteNoticeState' ) === 'closed';
 
 		return [ 'data-search-box' => $search ] + $data + [
 			'data-cosmos-navigation' => $tree,
@@ -174,11 +155,6 @@ class SkinCosmos extends SkinMustache {
 			'data-cosmos-footer' => $chrome->getFooterData( $data['data-footer'] ?? [] ),
 			'data-cosmos-toolbar' => $chrome->getToolbarData( $sidebar ),
 			'html-cosmos-rail' => $this->railBuilder->buildRail(),
-			'html-cosmos-cookiewarning' => $this->getCookieWarning(),
-			'is-cosmos-dismissable-notice' => $hasNotice && $dismissable,
-			'is-cosmos-closable-notice' => $hasNotice && !$dismissable && !$noticeClosed,
-			'is-cosmos-empty-notice' => !$hasNotice,
-			'cosmos-notice-hash' => $hasNotice ? hash( 'crc32b', $siteNotice ) : null,
 			'msg-cosmos-tagline' => $this->msg( 'cosmos-tagline' )->escaped(),
 		];
 	}
@@ -263,24 +239,5 @@ class SkinCosmos extends SkinMustache {
 		}
 
 		return $modules;
-	}
-
-	/** @return ?non-empty-string */
-	private function getCookieWarning(): ?string {
-		if ( $this->cookieWarningDecisions === null ) {
-			return null;
-		}
-
-		$hooks = new CookieWarningHooks(
-			// @phan-suppress-next-line PhanTypeMismatchArgument
-			$this->getConfig(),
-			$this->cookieWarningDecisions,
-			$this->userOptionsManager
-		);
-
-		$html = '';
-		// @phan-suppress-next-line PhanTypeMismatchArgument
-		$hooks->onSkinAfterContent( $html, $this );
-		return $html !== '' ? $html : null;
 	}
 }
