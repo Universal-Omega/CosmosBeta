@@ -1,11 +1,48 @@
 // stylelint-disable declaration-no-important
 @import 'mediawiki.skin.variables.less';
 
-.skin-cosmos-header__sitename a,
+// .skin-cosmos-header__sitename a,
 .skin-cosmos-header__navigation,
 .skin-cosmos-header__wordmark,
 #cosmos-search-buttonContainer {
 	display: none;
+}
+
+@media (width < 550px) {
+	.skin-cosmos-header__top {
+		flex:column nowrap;
+		height:auto;
+		padding:10px;
+		gap:10px;
+
+		> * {
+			margin:0;
+		}
+	}
+
+	.skin-cosmos-header__counter, 
+	.skin-cosmos-header__sitename {
+		text-align:center;
+		margin:0 1rem;
+		padding:10px 0 0 0;
+	}
+
+	.skin-cosmos-header__counter {
+		justify-content:center;
+		gap:0.2em;
+		display:flex;
+		align-items:baseline;
+	}
+
+	.skin-cosmos-header__buttons { 
+		display:flex;
+		justify-content: center;
+		padding-top:10px;
+
+		> .skin-cosmos-header__button {
+			margin-left:0;
+		}
+	}
 }
 
 #cosmos-banner {
@@ -88,7 +125,7 @@ div.thumb {
 	left: 16px;
 	display: none;
 	overflow: auto;
-	max-height: 300px;
+	max-height: calc(85vh - 55px); /* subtract cosmos-banner height. should make variable for that */
 	padding: 7px 0;
 	border: @border-width-base solid #ccc;
 	border-radius: 4px;
@@ -157,6 +194,12 @@ div.thumb {
 	-moz-column-count: 1 !important;
 	-webkit-column-count: 1 !important;
 	column-count: 1 !important;
+
+	.skin-cosmos-rail__module {
+		max-width:100%;
+		padding:10px;
+		margin-inline:0;
+	}
 }
 
 #p-search .cdx-button {

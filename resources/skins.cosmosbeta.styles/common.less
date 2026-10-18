@@ -174,7 +174,12 @@ body .skin-cosmos-footer__icons-item a.cdx-button {
 	font-family: inherit;
 }
 
+html {
+	height:100%;
+}
+
 body {
+	min-height:100%;
 	background: @main-background-color;
 }
 
@@ -311,6 +316,7 @@ body > #mw-content-container {
 	border: 0;
 	border-radius: 0;
 	margin: 0;
+	appearance:none;
 	-webkit-appearance: none;
 	background: @banner-search-background;
 	box-shadow: none;
@@ -990,6 +996,7 @@ body > .suggestions {
 	border-style: solid;
 	border-radius: 3px;
 	margin: 0;
+	appearance:none;
 	-webkit-appearance: none;
 	background: 0 0;
 	cursor: default;
@@ -2433,6 +2440,7 @@ body {
 		font-style: italic;
 		line-height: 1rem;
 		overflow-wrap: anywhere;
+		word-break:break-all;
 		-ms-word-break: break-all;
 
 		> :last-child {
